@@ -1,7 +1,6 @@
 function Footer () {
   return (
     <>
-    <h1>Ciao Luca</h1>
     </>
   )
 }
