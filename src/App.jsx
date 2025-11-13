@@ -6,8 +6,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './layout/Layout.jsx'
 //todo Improto componenti delle pagine
 import HomePage from './pages/HomePage.jsx'
-//todo Importo la pagina 
-import SingleExp from './pages/SingleExp.jsx'
 //todo Importo la pagina Dettagli
 import Dettagli from './pages/Details.jsx'
 //todo importo la pagina Shop
@@ -23,8 +21,7 @@ function App() {
             <Routes>
               <Route element={<Layout />}>
                 <Route index element={<HomePage />} />
-                <Route path='/exp/:id' element={<SingleExp />} />
-                <Route path='/experience' element={<Dettagli />} />
+                <Route path='/exp/:id' element={<Dettagli />} />
                 <Route path='/shop' element={<Shop />} />
                 <Route path='*' element={<NotFoundPage />} />
               </Route>
