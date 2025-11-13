@@ -30,9 +30,12 @@ export default function EmailSender() {
     emailjs
     //todo Invio dell'email utilizzando il servizio, template e user ID di EmailJS
       .send(
+        //todo Qui va impostato l'email service Gmail
         "service_yrfxb13",
-        "service_yrfxb13",
+        //todo Qui va impostato il template creato su EmailJS
+        "template_93d9uh2",
         formData,
+        //todo Qui viene impostata la key
         "-wnk8k24vEMFJaNQS"
       )
     //todo Gestione del successo o fallimento dell'invio
@@ -47,7 +50,6 @@ export default function EmailSender() {
 
   return (
     <div>
-        //todo Messaggio di stato dell'invio
       <form onSubmit={sendEmail}>
         <input
           type="text"
