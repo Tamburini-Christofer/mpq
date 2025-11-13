@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage.jsx'
 //todo Importo la pagina 
 import SingleExp from './pages/SingleExp.jsx'
 //todo Importo la pagina Dettagli
-import Dettagli from './pages/Dettagli.jsx'
+import Dettagli from './pages/Details.jsx'
 //todo importo la pagina Shop
 import Shop from './pages/Shop.jsx'
 //todo Importo la pagina NotFoundPage
