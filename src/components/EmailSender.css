@@ -1,0 +1,343 @@
+/* todo: Variabili colore per mantenere coerenza con il tema dell'app */
+:root {
+  --email-purple: #6c21ff;
+  --email-gold: #d8a928;
+  --email-dark: #141218;
+  --email-light: #ffffff;
+  --email-gray: #8e8e93;
+  --email-success: #4caf50;
+  --email-error: #ff4757;
+  --email-card-bg: #1c1a24;
+  --email-input-bg: #2a2636;
+}
+
+/* todo: Container principale del form email */
+.email-sender-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--email-dark) 0%, #1a1720 50%, var(--email-dark) 100%);
+  padding: 20px;
+  font-family: "Inter", sans-serif;
+}
+
+/* todo: Card contenente il form */
+.email-form-card {
+  background: var(--email-card-bg);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(216, 169, 40, 0.1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* todo: Effetto brillante sul bordo della card */
+.email-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--email-purple), var(--email-gold), var(--email-purple));
+  z-index: -1;
+  margin: -2px;
+  border-radius: 20px;
+  opacity: 0.8;
+}
+
+/* todo: Logo MyPocketQuest */
+.logo-box {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.logo-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--email-light);
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo-title span {
+  color: var(--email-gold);
+  background: linear-gradient(135deg, var(--email-gold), #f1c935);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.logo-subtitle {
+  font-size: 14px;
+  color: var(--email-gray);
+  margin: 5px 0 0 0;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+/* todo: Titolo del form */
+.email-form-title {
+  color: var(--email-light);
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, var(--email-light), var(--email-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* todo: Sottotitolo del form */
+.email-form-subtitle {
+  color: var(--email-gray);
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+/* todo: Stili del form */
+.email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* todo: Gruppi di input per migliore organizzazione */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* todo: Label degli input */
+.input-label {
+  color: var(--email-light);
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* todo: Stili base per input e textarea */
+.email-input,
+.email-textarea {
+  background: var(--email-input-bg);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 16px 20px;
+  color: var(--email-light);
+  font-size: 16px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+  position: relative;
+}
+
+/* todo: Placeholder styling */
+.email-input::placeholder,
+.email-textarea::placeholder {
+  color: var(--email-gray);
+  opacity: 0.8;
+}
+
+/* todo: Focus states per input */
+.email-input:focus,
+.email-textarea:focus {
+  border-color: var(--email-purple);
+  box-shadow: 
+    0 0 0 3px rgba(108, 33, 255, 0.1),
+    0 8px 25px rgba(108, 33, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* todo: Stili specifici per textarea */
+.email-textarea {
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* todo: Bottone di invio */
+.email-submit-btn {
+  background: linear-gradient(135deg, var(--email-purple), #8c4dff);
+  border: none;
+  border-radius: 12px;
+  padding: 18px 30px;
+  color: var(--email-light);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+/* todo: Effetto hover sul bottone */
+.email-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(108, 33, 255, 0.4);
+}
+
+/* todo: Effetto attivo sul bottone */
+.email-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+/* todo: Stato disabilitato del bottone */
+.email-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* todo: Messaggio di stato */
+.status-message {
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 20px;
+  animation: fadeInUp 0.5s ease;
+}
+
+/* todo: Stato di successo */
+.status-success {
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid var(--email-success);
+  color: var(--email-success);
+}
+
+/* todo: Stato di errore */
+.status-error {
+  background: rgba(255, 71, 87, 0.1);
+  border: 2px solid var(--email-error);
+  color: var(--email-error);
+}
+
+/* todo: Stato di loading */
+.status-loading {
+  background: rgba(216, 169, 40, 0.1);
+  border: 2px solid var(--email-gold);
+  color: var(--email-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* todo: Spinner di caricamento */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* todo: Animazioni */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* todo: Responsive design per tablet */
+@media (max-width: 768px) {
+  .email-sender-container {
+    padding: 15px;
+  }
+  
+  .email-form-card {
+    padding: 30px 25px;
+  }
+  
+  .email-form-title {
+    font-size: 24px;
+  }
+  
+  .email-form-subtitle {
+    font-size: 14px;
+  }
+}
+
+/* todo: Responsive design per mobile */
+@media (max-width: 480px) {
+  .email-form-card {
+    padding: 25px 20px;
+    border-radius: 15px;
+  }
+  
+  .logo-title {
+    font-size: 28px;
+  }
+  
+  .logo-subtitle {
+    font-size: 12px;
+  }
+  
+  .icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .icon::before {
+    font-size: 20px;
+  }
+  
+  .email-form-title {
+    font-size: 20px;
+  }
+  
+  .email-input,
+  .email-textarea,
+  .email-submit-btn {
+    padding: 14px 16px;
+  }
+  
+  .email-textarea {
+    min-height: 100px;
+  }
+}
+
+/* todo: Accessibilità - Focus visibile per navigazione da tastiera */
+.email-input:focus-visible,
+.email-textarea:focus-visible,
+.email-submit-btn:focus-visible {
+  outline: 3px solid var(--email-gold);
+  outline-offset: 2px;
+}
+
+/* todo: Stili per alta risoluzione */
+@media (min-resolution: 2dppx) {
+  .email-form-card {
+    box-shadow: 
+      0 25px 80px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(216, 169, 40, 0.15);
+  }
+}
