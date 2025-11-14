@@ -11,7 +11,7 @@ import Dettagli from './pages/Details.jsx'
 //todo importo la pagina Shop
 import Shop from './pages/Shop.jsx'
 //todo Importo la pagina NotFoundPage
-import NotFoundPage from './pages/NotFoundPage.jsx'
+import NotFoundPages from './pages/NotFoundPages.jsx'
 
 function App() {
 
@@ -23,7 +23,7 @@ function App() {
                 <Route index element={<HomePage />} />
                 <Route path='/exp/:id' element={<Dettagli />} />
                 <Route path='/shop' element={<Shop />} />
-                <Route path='*' element={<NotFoundPage />} />
+                <Route path='*' element={<NotFoundPages />} />
               </Route>
             </Routes>
           </BrowserRouter>
