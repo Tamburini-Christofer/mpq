@@ -171,6 +171,9 @@
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: #1c1a24;
   border: 2px solid var(--purple);
   padding: 20px;
@@ -178,6 +181,7 @@
   width: 200px;
   text-align: center;
   box-shadow: 0 0 12px rgba(108, 33, 255, 0.3);
+  height: 200px;
 }
 
 .card .price {
