@@ -2,75 +2,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
 body {
     background-color: #121212;
     color: #ffffff;
-}
-
-/* ------------- STILE NAV BAR ----------- */
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
-    background-color: #1a1a1a;
-    border-bottom: 1px solid #333;
-}
-
-.navbar-logo {
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-.logo-icon {
-    width: 30px; /* Dimensione del logo nell'immagine */
-    height: 30px;
-    margin-right: 10px;
-}
-
-.navbar-links {
-    list-style: none; /* Rimuove i pallini */
-    display: flex;
-    gap: 30px; /* Spazio tra i link */
-    margin: 0;
-    padding: 0;
-}
-
-.navbar-links a {
-    color: #ffffff;
-    text-decoration: none; /* Rimuove la sottolineatura */
-    font-size: 1rem;
-    transition: color 0.2s;
-}
-
-.navbar-links a:hover {
-    color: #FFD700; /* Giallo al passaggio del mouse */
-}
-
-.navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.cart-icon {
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.btn-levelup {
-    background-color: #FFD700; /* Il pulsante giallo */
-    color: #121212;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: uppercase;
 }
