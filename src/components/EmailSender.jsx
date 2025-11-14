@@ -61,7 +61,13 @@ export default function EmailSender() {
   return (
     <div className="email-sender-container">
       <div className="email-form-card">
-        <h2 className="email-form-title">Unisciti a MyPocketQuest!</h2>
+        {/* todo: Logo MyPocketQuest */}
+        <div className="logo-box">
+          <h1 className="logo-title">MyPocket<span>Quest</span></h1>
+          <p className="logo-subtitle">Next Level: Real Life</p>
+        </div>
+        
+        <h2 className="email-form-title">Unisciti alla Missione!</h2>
         <p className="email-form-subtitle">
           Registrati per ricevere la tua email di benvenuto e per iniziare a livellare
         </p>
