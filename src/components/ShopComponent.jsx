@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
-import "./Shop.css"; 
+import "./ShopComponent.css"; 
 
 //todo: Creo il componente principale Shop
 const Shop = () => {
@@ -60,9 +60,9 @@ const Shop = () => {
 
     //todo: Mostro una notifica diversa a seconda se era già nel carrello
     if (wasInCart) {
-      showNotification(`Quantità di "${product.name}" aumentata nel carrello!`);
+      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
     } else {
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      showNotification(`"${product.name}" aggiunto al carretto!`);
     }
   };
 
@@ -75,7 +75,7 @@ const Shop = () => {
     
     //todo: Mostro notifica di rimozione in rosso
     if (productToRemove) {
-      showNotification(`"${productToRemove.name}" rimosso dal carrello!`, 'error');
+      showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
     }
   };
 
@@ -101,7 +101,7 @@ const Shop = () => {
     
     //todo: Mostro notifica se il prodotto è stato completamente rimosso
     if (willBeRemoved && productToCheck) {
-      showNotification(`"${productToCheck.name}" rimosso dal carrello!`, 'error');
+      showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
     }
   };
 
@@ -158,7 +158,7 @@ const Shop = () => {
             className={activeTab === "cart" ? "menu-btn active" : "menu-btn"}
             onClick={() => setActiveTab("cart")}
           >
-            Carrello ({cart.length})
+            Carretto ({cart.length})
           </button>
 
           <button
@@ -195,13 +195,14 @@ const Shop = () => {
         {/* todo: Sezione Carrello */}
         {activeTab === "cart" && (
           <div className="cart-section">
-            <h2 className="section-title">Carrello</h2>
+            <h2 className="section-title">Carretto</h2>
 
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-cart">
-                <p>Il carrello è vuoto.</p>
+                <p>Il carretto è vuoto.</p>
                 <p>Vai al Shop per aggiungere prodotti!</p>
+                <img src="/public/icon/EmptyShop.png" alt="Il logo del carrello vuoto" />
               </div>
             ) : (
               //todo: Lista prodotti nel carrello
@@ -248,7 +249,7 @@ const Shop = () => {
                 {/* todo: Mostro totale del carrello */}
                 <div className="cart-total">
                   <strong>
-                    Totale Carrello: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
+                    Totale Carretto: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
                   </strong>
                 </div>
               </div>
@@ -264,8 +265,9 @@ const Shop = () => {
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-checkout">
-                <p>Il carrello è vuoto.</p>
-                <p>Aggiungi prodotti per procedere al checkout.</p>
+                <p>Il carretto è vuoto.</p>
+                <p>Aggiungi prodotti al carretto per procedere al checkout.</p>
+                <img src="/public/icon/InShop.png" alt="Il logo del carrello vuoto" />
               </div>
             ) : (
               <>
@@ -289,7 +291,7 @@ const Shop = () => {
                         <button
                           className="checkout-remove-btn"
                           onClick={() => removeFromCart(item.id)}
-                          title="Rimuovi dal carrello"
+                          title="Rimuovi dal carretto"
                         >
                           ✕
                         </button>
@@ -312,13 +314,13 @@ const Shop = () => {
                       onClick={() => {
                         const itemCount = cart.length;
                         setCart([]);
-                        showNotification(`Carrello svuotato! ${itemCount} prodotti rimossi.`, 'error');
+                        showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
                       }}
                     >
-                      Svuota Carrello
+                      Svuota Carretto
                     </button>
                     <button className="confirm-btn">
-                      Conferma Acquisto
+                      Conferma Acquisto e parti per la tua prossima avventura
                     </button>
                   </div>
                 </div>
