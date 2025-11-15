@@ -202,6 +202,7 @@ const Shop = () => {
               <div className="empty-cart">
                 <p>Il carretto è vuoto.</p>
                 <p>Vai al Shop per aggiungere prodotti!</p>
+                <img src="/public/icon/EmptyShop.png" alt="Il logo del carrello vuoto" />
               </div>
             ) : (
               //todo: Lista prodotti nel carrello
@@ -266,6 +267,7 @@ const Shop = () => {
               <div className="empty-checkout">
                 <p>Il carretto è vuoto.</p>
                 <p>Aggiungi prodotti al carretto per procedere al checkout.</p>
+                <img src="/public/icon/InShop.png" alt="Il logo del carrello vuoto" />
               </div>
             ) : (
               <>
