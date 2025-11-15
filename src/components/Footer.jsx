@@ -1,4 +1,4 @@
-import Shop from "./Shop.jsx";
+import Shop from "./ShopComponent.jsx";
 
 function Footer () {
   return (
