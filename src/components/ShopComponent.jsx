@@ -4,6 +4,9 @@ import React, { useState } from "react";
 //todo: Importiamo il CSS del componente Shop per lo stile
 import "./ShopComponent.css"; 
 
+//todo: Importiamo il componente CheckoutForm
+import CheckoutForm from "./CheckoutForm";
+
 //todo: Creo il componente principale Shop
 const Shop = () => {
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
@@ -11,6 +14,9 @@ const Shop = () => {
   
   //todo: Stato per la modalità di visualizzazione (grid o list)
   const [viewMode, setViewMode] = useState("grid");
+  
+  //todo: Stato per mostrare/nascondere il form di checkout
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
     const products = [
@@ -353,7 +359,10 @@ const Shop = () => {
                     >
                       Svuota Carretto
                     </button>
-                    <button className="confirm-btn">
+                    <button 
+                      className="confirm-btn"
+                      onClick={() => setShowCheckoutForm(true)}
+                    >
                       Conferma Acquisto e parti per la tua prossima avventura
                     </button>
                   </div>
@@ -363,6 +372,15 @@ const Shop = () => {
           </div>
         )}
       </main>
+      
+      {/* todo: Overlay form checkout */}
+      {showCheckoutForm && (
+        <CheckoutForm
+          onClose={() => setShowCheckoutForm(false)}
+          totalAmount={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
+          cartItems={cart}
+        />
+      )}
     </div>
   );
 };
