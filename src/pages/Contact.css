@@ -67,6 +67,7 @@
   border-radius: 12px;
   border: 1px solid rgba(216, 169, 40, 0.2);
   transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
 .contact-detail-item:hover {
@@ -86,6 +87,10 @@
   background: linear-gradient(135deg, var(--contact-purple), #8c4dff);
   border-radius: 12px;
   flex-shrink: 0;
+}
+
+.contact-icon img {
+  max-width: 100%;
 }
 
 .contact-detail-item h3 {
