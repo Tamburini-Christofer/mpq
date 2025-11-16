@@ -8,6 +8,9 @@ import "./ShopComponent.css";
 const Shop = () => {
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
+  
+  //todo: Stato per la modalità di visualizzazione (grid o list)
+  const [viewMode, setViewMode] = useState("grid");
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
     const products = [
@@ -177,8 +180,25 @@ const Shop = () => {
         {/* todo: Sezione Shop */}
         {activeTab === "shop" && (
           <div className="shop-section">
+            {/* todo: Controlli per cambiare visualizzazione */}
+            <div className="view-controls">
+              <button 
+                className={viewMode === "grid" ? "view-btn active" : "view-btn"}
+                onClick={() => setViewMode("grid")}
+                title="Visualizzazione a griglia"
+              >
+                <span className="view-icon">⊞</span> Griglia
+              </button>
+              <button 
+                className={viewMode === "list" ? "view-btn active" : "view-btn"}
+                onClick={() => setViewMode("list")}
+                title="Visualizzazione a lista"
+              >
+                <span className="view-icon">☰</span> Lista
+              </button>
+            </div>
 
-            <div className="products">
+            <div className={`products ${viewMode}`}>
               {products.map((p) => (
                 <div key={p.id} className="card fancy-card">
                   
@@ -189,10 +209,15 @@ const Shop = () => {
                   <div className="card-body">
                     <h3>{p.name}</h3>
                     <p className="price">{p.price.toFixed(2)}€</p>
+                    {viewMode === "list" && (
+                      <div className="card-details">
+                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
+                      </div>
+                    )}
                   </div>
 
                   <button className="buy-btn" onClick={() => addToCart(p)}>
-                    Aggiungi
+                    {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
                   </button>
                 </div>
               ))}
