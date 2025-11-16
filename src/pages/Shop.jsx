@@ -1,7 +1,7 @@
 function Shop() {
   return (
     <>
-    Prova
+    
     </>
   )
 }

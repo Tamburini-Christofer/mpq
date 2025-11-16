@@ -57,23 +57,24 @@ export default function Contact() {
             Hai bisogno di aiuto? Il nostro team di supporto è qui per assisterti.
             Compila il form e ti risponderemo il prima possibile.
           </p>
-          
-          <div className="contact-details">
+
             <div className="contact-detail-item">
-              <div className="contact-icon">✉️</div>
-              <div>
-                <h3>Email</h3>
-                <p>mypocketfive@gmail.com</p>
-              </div>
-            </div>
-            
-            <div className="contact-detail-item">
-              <div className="contact-icon">💬</div>
+              <div className="contact-icon"><img src="/public/icon/EmailOffice.png" alt="" /></div>
               <div>
                 <h3>Tempo di risposta</h3>
                 <p>Entro 24-48 ore</p>
               </div>
             </div>
+          
+          <div className="contact-details">
+            <div className="contact-detail-item">
+              <div className="contact-icon"><img src="/public/icon/EmailSend.png" alt="" /></div>
+              <div>
+                <h3>Email</h3>
+                <p>mypocketfive@gmail.com</p>
+              </div>
+            </div>
+          
           </div>
         </div>
 
