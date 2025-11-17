@@ -14,6 +14,8 @@ import Dettagli from './pages/Details.jsx'
 import Shop from './pages/Shop.jsx'
 //todo Importo la pagina Contatti
 import Contact from './pages/Contact.jsx'
+//todo Importo la pagina Staff
+import Staff from './pages/Staff.jsx'
 //todo Importo la pagina NotFoundPage
 import NotFoundPages from './pages/NotFoundPages.jsx'
 //todo Importo il componente EmailSender per il modal di benvenuto
@@ -53,6 +55,7 @@ function App() {
             <Route path='/exp/:id' element={<Dettagli />} />
             <Route path='/shop' element={<Shop />} />
             <Route path='/contatti' element={<Contact />} />
+            <Route path='/staff' element={<Staff />} />
             <Route path='*' element={<NotFoundPages />} />
           </Route>
         </Routes>

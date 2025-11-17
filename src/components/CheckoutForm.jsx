@@ -4,6 +4,7 @@
    ======================================== */
 
 import { useState } from "react";
+import PaymentButton from "./PaymentButton";
 import "./CheckoutForm.css";
 
 /**
@@ -284,6 +285,9 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
                 rows="3"
               />
             </div>
+            
+            {/* Componente Pagamento Stripe */}
+            <PaymentButton totalAmount={totalAmount} cartItems={cartItems} />
           </div>
 
           {/* SEZIONE 5: RIEPILOGO ORDINE */}
