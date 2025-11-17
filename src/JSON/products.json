@@ -4,7 +4,7 @@
         "category_id":  1,
         "category_name": "film",
         "name":  "Il Padrino",
-        "image":  "/img/opera_1.jpg",
+        "image":  "https://i.pinimg.com/originals/1b/5b/e2/1b5be281fbcf69074d33dfec00950fa3.jpg",
         "description":  "In \u0027Il Padrino\u0027, mentre la famiglia Corleone combatte per mantenere il controllo del proprio impero, un giovane contabile di origini modeste viene assunto per tenere in ordine i registri di una piccola attività di facciata. Convinto di essere solo un impiegato di periferia, si ritrova lentamente coinvolto in cene di famiglia, trattative sussurrate e messaggi da recapitare a persone che non compaiono mai nei documenti ufficiali. Nel tentativo di restare onesto, inizia a compilare un quaderno segreto in cui annota alleanze, tradimenti e strani passaggi di denaro, costruendo involontariamente la mappa più completa del potere Corleone. Quando gli equilibri interni degenerano e la violenza diventa inevitabile, il contabile si ritrova a dover scegliere se consegnare il suo quaderno a chi vuole distruggere la famiglia o usarlo per contrattare la salvezza propria e delle persone a cui si è affezionato. La sua storia scorre parallela a quella di Michael, osservando gli stessi eventi da stanze secondarie, corridoi affollati e piccoli uffici pieni di fumo.",
         "price":  4.49,
         "min_age":  7
@@ -13,7 +13,7 @@
         "id":  2,
         "category_id":  2,
         "name":  "Le ali della libertà",
-        "image":  "/img/opera_2.jpg",
+        "image":  "https://i.redd.it/jh326nczz2y31.png",
         "description":  "In \u0027Le ali della libertà\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.49,
         "min_age":  7
@@ -22,7 +22,7 @@
         "id":  3,
         "category_id":  3,
         "name":  "Il Padrino – Parte II",
-        "image":  "/img/opera_3.jpg",
+        "image":  "https://i.pinimg.com/736x/b7/a8/85/b7a8857bec049603c01c6902f0d69d4a.jpg",
         "description":  "In \u0027Il Padrino\u0027, mentre la famiglia Corleone combatte per mantenere il controllo del proprio impero, un giovane contabile di origini modeste viene assunto per tenere in ordine i registri di una piccola attività di facciata. Convinto di essere solo un impiegato di periferia, si ritrova lentamente coinvolto in cene di famiglia, trattative sussurrate e messaggi da recapitare a persone che non compaiono mai nei documenti ufficiali. Nel tentativo di restare onesto, inizia a compilare un quaderno segreto in cui annota alleanze, tradimenti e strani passaggi di denaro, costruendo involontariamente la mappa più completa del potere Corleone. Quando gli equilibri interni degenerano e la violenza diventa inevitabile, il contabile si ritrova a dover scegliere se consegnare il suo quaderno a chi vuole distruggere la famiglia o usarlo per contrattare la salvezza propria e delle persone a cui si è affezionato. La sua storia scorre parallela a quella di Michael, osservando gli stessi eventi da stanze secondarie, corridoi affollati e piccoli uffici pieni di fumo.",
         "price":  5.99,
         "min_age":  16
@@ -31,7 +31,7 @@
         "id":  4,
         "category_id":  4,
         "name":  "Il Cavaliere Oscuro",
-        "image":  "/img/opera_4.jpg",
+        "image":  "https://i.pinimg.com/564x/98/8c/36/988c36319b7e0f7f1da9c12c1449252a.jpg",
         "description":  "In \u0027Il Cavaliere Oscuro\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  12
@@ -40,7 +40,7 @@
         "id":  5,
         "category_id":  5,
         "name":  "Pulp Fiction",
-        "image":  "/img/opera_5.jpg",
+        "image":  "https://pbs.twimg.com/media/GGJ5LfqWkAEUhmn.jpg",
         "description":  "In \u0027Pulp Fiction\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  12
@@ -48,8 +48,8 @@
     {
         "id":  6,
         "category_id":  6,
-        "name":  "Il Signore degli Anelli: Il ritorno del re",
-        "image":  "/img/opera_6.jpg",
+        "name":  "Il Signore degli Anelli",
+        "image":  "https://i.redd.it/bstm10dwckz61.gif",
         "description":  "Durante le grandi battaglie de \u0027Il Signore degli Anelli: Il ritorno del re\u0027, mentre gli eroi più noti marciano verso il destino della Terra di Mezzo, un giovane scriba di Minas Tirith riceve l’incarico di registrare tutto ciò che accade per gli archivi reali. Timido e poco incline al combattimento, inizia a seguire da lontano le truppe, annotando discorsi, paure e piccoli gesti di coraggio che nessuno noterà mai nei canti epici. Quando la città viene assediata, lo scriba rimane intrappolato tra le mura interne e, per puro caso, si ritrova a collaborare con messaggeri, guaritori e soldati semplici, diventando un punto di riferimento silenzioso per chi cerca notizie dei propri cari al fronte. Il suo viaggio lo porta dalle biblioteche polverose fino alle terrazze più alte della città, dove assiste da lontano ai bagliori delle battaglie e alle fiamme che divorano i campi. Nel frattempo, scopre un vecchio manoscritto dimenticato che parla di un presagio parallelo alla profezia dell’Anello, costringendolo a chiedersi se la storia che tutti conoscono sia davvero completa.",
         "price":  4.99,
         "min_age":  14
@@ -58,7 +58,7 @@
         "id":  7,
         "category_id":  7,
         "name":  "Schindler\u0027s List",
-        "image":  "/img/opera_7.jpg",
+        "image":  "https://images.ctfassets.net/qpn1gztbusu2/zt6m2e4KRGHFtWY8vZ68t/ed8bf1d460f827bc5f99c667f7bd4a09/Audiolibri_Olocausto.webp",
         "description":  "In \u0027Schindler\u0027s List\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  7
@@ -67,7 +67,7 @@
         "id":  8,
         "category_id":  2,
         "name":  "2001: Odissea nello spazio",
-        "image":  "/img/opera_8.jpg",
+        "image":  "https://imgcdn.stablediffusionweb.com/2024/9/11/a689d7e8-914b-4ae2-b936-103bb8f7d263.jpg",
         "description":  "In \u00272001: Odissea nello spazio\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  14
@@ -76,7 +76,7 @@
         "id":  9,
         "category_id":  6,
         "name":  "Quei bravi ragazzi",
-        "image":  "/img/opera_9.jpg",
+        "image":  "https://pics.craiyon.com/2024-05-26/bPL8MGopRSeLWuU1zQRNdg.webp",
         "description":  "In \u0027Quei bravi ragazzi\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.49,
         "min_age":  16
@@ -85,7 +85,7 @@
         "id":  10,
         "category_id":  2,
         "name":  "Matrix",
-        "image":  "/img/opera_10.jpg",
+        "image":  "https://creator.nightcafe.studio/jobs/OQtsAsaNYLQpI8iZ4IJi/OQtsAsaNYLQpI8iZ4IJi--1--xjs1z.jpg",
         "description":  "In una linea temporale parallela a quella di \u0027Matrix\u0027, mentre Neo scopre la verità sulla realtà simulata, un tecnico di sistema quasi invisibile agli occhi degli altri lavora nei livelli più bassi della rete. Analizzando anomalie nel codice, scopre un quartiere nascosto della Matrix, un luogo in cui le regole sono ancora in fase di scrittura e i glitch assumono forma fisica. Curioso, inizia a esplorarlo insieme a piccoli programmi ribelli che si comportano come guide turistiche del caos digitale. Quando le azioni di Neo iniziano a scuotere l’intero sistema, il tecnico deve decidere se restare nell’ombra a osservare il mito nascere oppure utilizzare quel quartiere instabile come via di fuga per gli umani intrappolati che non sono mai stati contattati da Morpheus. La sua avventura si sviluppa tra incontri segreti con l’Oracolo, colloqui sfuggenti con un giovane Neo inconsapevole e inseguimenti tra palazzi che cambiano forma, mentre la guerra tra uomini e macchine viene raccontata da un punto di vista laterale, ironico e profondamente umano.",
         "price":  5.99,
         "min_age":  12
@@ -94,7 +94,7 @@
         "id":  11,
         "category_id":  1,
         "name":  "Il silenzio degli innocenti",
-        "image":  "/img/opera_11.jpg",
+        "image":  "https://mir-s3-cdn-cf.behance.net/project_modules/hd/0d827e36118893.560637af825b1.jpg",
         "description":  "In \u0027Il silenzio degli innocenti\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.49,
         "min_age":  7
@@ -103,7 +103,7 @@
         "id":  12,
         "category_id":  2,
         "name":  "Parasite",
-        "image":  "/img/opera_12.jpg",
+        "image":  "https://i.pinimg.com/236x/44/39/44/443944e4e7b872a1c447a171802082fd.jpg",
         "description":  "In \u0027Parasite\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.49,
         "min_age":  18
@@ -112,7 +112,7 @@
         "id":  13,
         "category_id":  3,
         "name":  "Casablanca",
-        "image":  "/img/opera_13.jpg",
+        "image":  "https://gateway.moonsama.com/ipfs/QmSHmTFKh6faQVihQBTx7JhwbPEEW26CWTcyTky2wyCHJ3?img-width=512&img-height=512&img-quality=90&img-fit=cover",
         "description":  "In \u0027Casablanca\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  14
@@ -121,7 +121,7 @@
         "id":  14,
         "category_id":  4,
         "name":  "Quarto potere",
-        "image":  "/img/opera_14.jpg",
+        "image":  "https://movieplayer.net-cdn.it/t/images/2021/05/01/quarto-potere-capolavoro-orson-welles_jpg_1200x0_crop_q85.jpg",
         "description":  "In \u0027Quarto potere\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  10.49,
         "min_age":  16
@@ -130,7 +130,7 @@
         "id":  15,
         "category_id":  5,
         "name":  "Apocalypse Now",
-        "image":  "/img/opera_15.jpg",
+        "image":  "https://art.ngfiles.com/thumbnails/873000/873812_full.png?f1559259843",
         "description":  "In \u0027Apocalypse Now\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  12
@@ -139,7 +139,7 @@
         "id":  16,
         "category_id":  2,
         "name":  "Interstellar",
-        "image":  "/img/opera_16.jpg",
+        "image":  "https://www.pixelempire.com/cdn/shop/products/Poster_2_a741eebb-7bdf-46b5-b014-658d9049ed50_600x.jpg?v=1572180883",
         "description":  "In \u0027Interstellar\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  12
@@ -148,7 +148,7 @@
         "id":  17,
         "category_id":  7,
         "name":  "Inception",
-        "image":  "/img/opera_17.jpg",
+        "image":  "https://i.pinimg.com/736x/69/55/c2/6955c2fbcce75aaa95b5601f2965fb72.jpg",
         "description":  "In \u0027Inception\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  14
@@ -157,7 +157,7 @@
         "id":  18,
         "category_id":  8,
         "name":  "Fight Club",
-        "image":  "/img/opera_18.jpg",
+        "image":  "https://cdnb.artstation.com/p/assets/images/images/043/136/849/original/alan-mealor-fightclubanim.gif?1636414936",
         "description":  "In \u0027Fight Club\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  12
@@ -166,7 +166,7 @@
         "id":  19,
         "category_id":  9,
         "name":  "Forrest Gump",
-        "image":  "/img/opera_19.jpg",
+        "image":  "https://i.pinimg.com/736x/d1/b3/e6/d1b3e6d676a5212798ef838582c71b9e.jpg",
         "description":  "In \u0027Forrest Gump\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.49,
         "min_age":  12
@@ -175,7 +175,7 @@
         "id":  20,
         "category_id":  10,
         "name":  "The Social Network",
-        "image":  "/img/opera_20.jpg",
+        "image":  "https://i.pinimg.com/736x/79/51/05/795105bdfe8bb26e8cf5e1ea088f61d1.jpg",
         "description":  "In \u0027The Social Network\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  7
@@ -184,7 +184,7 @@
         "id":  21,
         "category_id":  1,
         "name":  "La La Land",
-        "image":  "/img/opera_21.jpg",
+        "image":  "https://i.pinimg.com/736x/c8/68/0a/c8680adc16b33587b9cfca5e4b86661f.jpg",
         "description":  "In \u0027La La Land\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  16
@@ -193,7 +193,7 @@
         "id":  22,
         "category_id":  2,
         "name":  "Joker",
-        "image":  "/img/opera_22.jpg",
+        "image":  "https://i.redd.it/l00r2hm5ca751.png",
         "description":  "In \u0027Joker\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.99,
         "min_age":  18
@@ -202,7 +202,7 @@
         "id":  23,
         "category_id":  3,
         "name":  "Whiplash",
-        "image":  "/img/opera_23.jpg",
+        "image":  "https://i.pinimg.com/originals/a3/dd/64/a3dd6458f32e0700d96689accd731a7f.gif",
         "description":  "In \u0027Whiplash\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  16
@@ -211,7 +211,7 @@
         "id":  24,
         "category_id":  4,
         "name":  "The Truman Show",
-        "image":  "/img/opera_24.jpg",
+        "image":  "https://i.redd.it/rs2t9u5xcfv41.png",
         "description":  "In \u0027The Truman Show\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.49,
         "min_age":  14
@@ -220,7 +220,7 @@
         "id":  25,
         "category_id":  5,
         "name":  "Blade Runner",
-        "image":  "/img/opera_25.jpg",
+        "image":  "https://cdnb.artstation.com/p/assets/images/images/070/345/941/large/manmari-bladrunner-sheet.jpg?1703512832",
         "description":  "In \u0027Blade Runner\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  12
@@ -229,7 +229,7 @@
         "id":  26,
         "category_id":  6,
         "name":  "Blade Runner 2049",
-        "image":  "/img/opera_26.jpg",
+        "image":  "https://images.steamusercontent.com/ugc/922549154593386271/8A610868DC556EFA9DB80D465DD5244FE6903B2C/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
         "description":  "In \u0027Blade Runner 2049\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  10.49,
         "min_age":  14
@@ -238,7 +238,7 @@
         "id":  27,
         "category_id":  7,
         "name":  "The Revenant",
-        "image":  "/img/opera_27.jpg",
+        "image":  "https://art.ngfiles.com/thumbnails/1581000/1581132_full.png?f1610123100",
         "description":  "In \u0027The Revenant\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  18
@@ -247,7 +247,7 @@
         "id":  28,
         "category_id":  8,
         "name":  "Shutter Island",
-        "image":  "/img/opera_28.jpg",
+        "image":  "https://zxart.ee/zxscreen/border:0/mode:mix/pal:srgb/type:standard/zoom:2/id:54761/",
         "description":  "In \u0027Shutter Island\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.99,
         "min_age":  7
@@ -256,7 +256,7 @@
         "id":  29,
         "category_id":  9,
         "name":  "Django Unchained",
-        "image":  "/img/opera_29.jpg",
+        "image":  "https://i.redd.it/cfs4z4dqptvb1.png",
         "description":  "In \u0027Django Unchained\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  18
@@ -265,7 +265,7 @@
         "id":  30,
         "category_id":  10,
         "name":  "Inglourious Basterds",
-        "image":  "/img/opera_30.jpg",
+        "image":  "https://cdn.dribbble.com/userupload/41771230/file/original-8028f5ef11b3cf895a883da5c7a9094c.png",
         "description":  "In \u0027Inglourious Basterds\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  14
@@ -274,7 +274,7 @@
         "id":  31,
         "category_id":  1,
         "name":  "Terminator 2",
-        "image":  "/img/opera_31.jpg",
+        "image":  "https://i.pinimg.com/1200x/e2/ea/a0/e2eaa0bc4a2f9c15db120616fb791507.jpg",
         "description":  "In \u0027Terminator 2\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  20.49,
         "min_age":  18
@@ -283,7 +283,7 @@
         "id":  32,
         "category_id":  4,
         "name":  "Alien",
-        "image":  "/img/opera_32.jpg",
+        "image":  "https://i.pinimg.com/474x/a3/bf/77/a3bf7769acd26870da3b0bd7de9ebc3a.jpg",
         "description":  "In \u0027Alien\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.49,
         "min_age":  18
@@ -292,7 +292,7 @@
         "id":  33,
         "category_id":  4,
         "name":  "Aliens",
-        "image":  "/img/opera_33.jpg",
+        "image":  "https://i.redd.it/27jjzpayrb471.jpg",
         "description":  "In \u0027Aliens\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  7
@@ -301,7 +301,7 @@
         "id":  34,
         "category_id":  4,
         "name":  "Heat",
-        "image":  "/img/opera_34.jpg",
+        "image":  "https://mir-s3-cdn-cf.behance.net/projects/404/3bb46d80385649.Y3JvcCwxMjQ2LDk3NCwxNTEsMTA1OA.png",
         "description":  "In \u0027Heat\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  12
@@ -310,7 +310,7 @@
         "id":  35,
         "category_id":  5,
         "name":  "Se7en",
-        "image":  "/img/opera_35.jpg",
+        "image":  "https://bloody-disgusting.com/wp-content/uploads/2014/08/Se7en_8Bit.jpg",
         "description":  "In \u0027Se7en\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  18
@@ -319,7 +319,7 @@
         "id":  36,
         "category_id":  6,
         "name":  "The Prestige",
-        "image":  "/img/opera_36.jpg",
+        "image":  "https://posterspy.com/wp-content/uploads/2023/04/the_prestige.jpg",
         "description":  "In \u0027The Prestige\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.99,
         "min_age":  12
@@ -328,7 +328,7 @@
         "id":  37,
         "category_id":  7,
         "name":  "Mad Max: Fury Road",
-        "image":  "/img/opera_37.jpg",
+        "image":  "https://i.redd.it/9fx9877f9tc81.gif",
         "description":  "In \u0027Mad Max: Fury Road\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  12
@@ -337,7 +337,7 @@
         "id":  38,
         "category_id":  8,
         "name":  "Oldboy",
-        "image":  "/img/opera_38.jpg",
+        "image":  "https://posterspy.com/wp-content/uploads/2025/01/OLDBOY-1.jpg",
         "description":  "In \u0027Oldboy\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.49,
         "min_age":  18
@@ -346,7 +346,7 @@
         "id":  39,
         "category_id":  9,
         "name":  "C\u0027era una volta in America",
-        "image":  "/img/opera_39.jpg",
+        "image":  "https://pm1.aminoapps.com/6696/e78ef2dbcafa3a1af6ad5f6d703bbed0d8897b0f_hq.jpg",
         "description":  "In \u0027C\u0027era una volta in America\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.49,
         "min_age":  16
@@ -355,7 +355,7 @@
         "id":  40,
         "category_id":  4,
         "name":  "La cosa (The Thing)",
-        "image":  "/img/opera_40.jpg",
+        "image":  "https://preview.redd.it/the-thing-poster-in-pixel-art-v0-dy0h68q41hda1.png?width=640&crop=smart&auto=webp&s=e08547c47a09a4443b9e861310d1c34f7da02a42",
         "description":  "In \u0027La cosa (The Thing)\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  16
@@ -364,7 +364,7 @@
         "id":  41,
         "category_id":  1,
         "name":  "Her",
-        "image":  "/img/opera_41.jpg",
+        "image":  "https://images.fineartamerica.com/images/artworkimages/mediumlarge/3/her-film-minimalist-livia-lazaro.jpg",
         "description":  "In \u0027Her\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  18
@@ -373,7 +373,7 @@
         "id":  42,
         "category_id":  2,
         "name":  "Gravity",
-        "image":  "/img/opera_42.jpg",
+        "image":  "https://64.media.tumblr.com/db4349ff05509b84a7d0b52dd5fe81a1/915dd2dd7f5e633a-84/s1280x1920/b2062324cd2daf15fe941a9e38935459da7baaf0.gif",
         "description":  "In \u0027Gravity\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  14
@@ -382,7 +382,7 @@
         "id":  43,
         "category_id":  2,
         "name":  "Arrival",
-        "image":  "/img/opera_43.jpg",
+        "image":  "https://i.pinimg.com/736x/7a/4b/bc/7a4bbc40631e597e2304703b53aa1872.jpg",
         "description":  "In \u0027Arrival\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  18
@@ -391,7 +391,7 @@
         "id":  44,
         "category_id":  4,
         "name":  "The Hateful Eight",
-        "image":  "/img/opera_44.jpg",
+        "image":  "https://i.pinimg.com/564x/3a/eb/45/3aeb45600f57ea32f27254252f78c72f.jpg",
         "description":  "In \u0027The Hateful Eight\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  20.49,
         "min_age":  18
@@ -400,7 +400,7 @@
         "id":  45,
         "category_id":  8,
         "name":  "Gladiator",
-        "image":  "/img/opera_45.jpg",
+        "image":  "https://i.redd.it/42fkmegbzwi21.png",
         "description":  "In \u0027Gladiator\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  7
@@ -409,7 +409,7 @@
         "id":  46,
         "category_id":  8,
         "name":  "Braveheart",
-        "image":  "/img/opera_46.jpg",
+        "image":  "https://image.tmdb.org/t/p/original/3G7tmGGAu4ISpgfietlQtO5eFN.jpg",
         "description":  "In \u0027Braveheart\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  7
@@ -418,7 +418,7 @@
         "id":  47,
         "category_id":  7,
         "name":  "Titanic",
-        "image":  "/img/opera_47.jpg",
+        "image":  "https://pixelhobby-shop.de/cdn/shop/products/118-047-009-dc-titanic_9f289572-513c-4ef8-b6f0-0b4ba055a527.jpg?v=1679691467",
         "description":  "In \u0027Titanic\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  18
@@ -427,7 +427,7 @@
         "id":  48,
         "category_id":  8,
         "name":  "I soliti sospetti",
-        "image":  "/img/opera_48.jpg",
+        "image":  "https://i.etsystatic.com/33061839/r/il/274fcb/6138913625/il_570xN.6138913625_6vsu.jpg",
         "description":  "In \u0027I soliti sospetti\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  13.49,
         "min_age":  7
@@ -436,7 +436,7 @@
         "id":  49,
         "category_id":  9,
         "name":  "Donnie Darko",
-        "image":  "/img/opera_49.jpg",
+        "image":  "https://mir-s3-cdn-cf.behance.net/project_modules/max_632_webp/abaffb16017119.56299f8564c5e.png",
         "description":  "In \u0027Donnie Darko\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  18
@@ -445,7 +445,7 @@
         "id":  50,
         "category_id":  10,
         "name":  "The Green Mile (Il miglio verde)",
-        "image":  "/img/opera_50.jpg",
+        "image":  "https://mir-s3-cdn-cf.behance.net/projects/404/96b1b928930551.55da0677e9b3d.png",
         "description":  "In \u0027The Green Mile (Il miglio verde)\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  16
@@ -454,7 +454,7 @@
         "id":  51,
         "category_id":  6,
         "name":  "Breaking Bad",
-        "image":  "/img/opera_51.jpg",
+        "image":  "https://cdn.dribbble.com/userupload/30167824/file/original-dd336823911b9da48d4680bae5375e2c.png?resize=752x&vertical=center",
         "description":  "Nel mondo di \u0027Breaking Bad\u0027, mentre Walter White intraprende la sua discesa nella criminalità, un insegnante supplente di arte della stessa scuola inizia a notare strani cambiamenti nell’atmosfera della città. Tra bidoni chimici abbandonati in periferia e conversazioni spezzate tra studenti preoccupati, l’insegnante sviluppa una teoria complottista su un misterioso ‘chimico fantasma’ che sta trasformando Albuquerque. Armato solo della propria curiosità e di uno sketchbook pieno di disegni, si mette a seguire tracce che lo portano vicino, ma mai troppo vicino, al vero Heisenberg. Nel tentativo di raccontare tutto in una graphic novel che nessuno vuole pubblicare, finisce coinvolto in situazioni sempre più assurde: incontri con piccoli spacciatori che posano per i suoi schizzi, fughe improvvisate durante operazioni della DEA e discussioni notturne con Saul Goodman che cerca di trasformare la sua storia in un film. La sua avventura parallela mostra il lato grottesco e umano di una città che cambia sotto il peso di una leggenda criminale.",
         "price":  13.49,
         "min_age":  16
@@ -463,7 +463,7 @@
         "id":  52,
         "category_id":  6,
         "name":  "The Sopranos",
-        "image":  "/img/opera_52.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSABv5mozlj5-aFm2BQirI6wyUYS-K7I7P_KQ&s",
         "description":  "In \u0027The Sopranos\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  14
@@ -472,7 +472,7 @@
         "id":  53,
         "category_id":  3,
         "name":  "The Wire",
-        "image":  "/img/opera_53.jpg",
+        "image":  "https://www.pixelpowerdesign.com/images/com_hikashop/upload/TV-F-0109gray.jpg",
         "description":  "In \u0027The Wire\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.49,
         "min_age":  12
@@ -481,7 +481,7 @@
         "id":  54,
         "category_id":  8,
         "name":  "Game of Thrones",
-        "image":  "/img/opera_54.jpg",
+        "image":  "https://images.steamusercontent.com/ugc/766098997043643649/3BB6F9CE88DE3F4BF24349A370EA8D19B52FD1CC/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true",
         "description":  "In \u0027Game of Thrones\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  14
@@ -490,7 +490,7 @@
         "id":  55,
         "category_id":  5,
         "name":  "Chernobyl",
-        "image":  "/img/opera_55.jpg",
+        "image":  "https://i.redd.it/h7a2pmtf96351.png",
         "description":  "In \u0027Chernobyl\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  18
@@ -499,7 +499,7 @@
         "id":  56,
         "category_id":  6,
         "name":  "Better Call Saul",
-        "image":  "/img/opera_56.jpg",
+        "image":  "https://i.redd.it/yq9ko4zavfq91.png",
         "description":  "In \u0027Better Call Saul\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.49,
         "min_age":  16
@@ -508,7 +508,7 @@
         "id":  57,
         "category_id":  7,
         "name":  "Friends",
-        "image":  "/img/opera_57.jpg",
+        "image":  "https://i.pinimg.com/236x/c6/9e/a5/c69ea59d4f7bc98b967c3b5636f3e5c7.jpg",
         "description":  "In \u0027Friends\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  18
@@ -517,7 +517,7 @@
         "id":  58,
         "category_id":  7,
         "name":  "I Simpson",
-        "image":  "/img/opera_58.jpg",
+        "image":  "https://i.ytimg.com/vi/FIZ_gDOrzGk/maxresdefault.jpg",
         "description":  "In \u0027I Simpson\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  16
@@ -526,7 +526,7 @@
         "id":  59,
         "category_id":  4,
         "name":  "Stranger Things",
-        "image":  "/img/opera_59.jpg",
+        "image":  "https://preview.redd.it/max-in-my-pixel-art-v0-fbpcurn3wp2c1.jpeg?auto=webp&s=34079029649ceb046850f2660aa012699d55a4fa",
         "description":  "In \u0027Stranger Things\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  7
@@ -535,7 +535,7 @@
         "id":  60,
         "category_id":  10,
         "name":  "Black Mirror",
-        "image":  "/img/opera_60.jpg",
+        "image":  "https://i.redd.it/hkipzx8jnfdc1.png",
         "description":  "In \u0027Black Mirror\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  7
@@ -544,7 +544,7 @@
         "id":  61,
         "category_id":  1,
         "name":  "Succession",
-        "image":  "/img/opera_61.jpg",
+        "image":  "https://i.etsystatic.com/19401651/r/il/f94ff8/3747227905/il_570xN.3747227905_pfin.jpg",
         "description":  "In \u0027Succession\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  14
@@ -553,7 +553,7 @@
         "id":  62,
         "category_id":  2,
         "name":  "Mad Men",
-        "image":  "/img/opera_62.jpg",
+        "image":  "https://www.brik.co/cdn/shop/articles/mad-men-pixel-art-pixel-art-logo-mad-men-tv-series-pixel-8bit_880x.png?v=1501223633",
         "description":  "In \u0027Mad Men\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.49,
         "min_age":  12
@@ -562,7 +562,7 @@
         "id":  63,
         "category_id":  7,
         "name":  "Fleabag",
-        "image":  "/img/opera_63.jpg",
+        "image":  "https://i.pinimg.com/736x/cf/14/cd/cf14cdfed8c9b9f9bc433184fc98b7d2.jpg",
         "description":  "In \u0027Fleabag\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  16
@@ -571,7 +571,7 @@
         "id":  64,
         "category_id":  4,
         "name":  "The Twilight Zone",
-        "image":  "/img/opera_64.jpg",
+        "image":  "https://i.pinimg.com/originals/06/16/74/0616742b149fddf9adfd07ce6915759d.gif",
         "description":  "In \u0027The Twilight Zone\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  7
@@ -580,7 +580,7 @@
         "id":  65,
         "category_id":  7,
         "name":  "Ted Lasso",
-        "image":  "/img/opera_65.jpg",
+        "image":  "https://i.redd.it/eq5kyzmvst081.png",
         "description":  "In \u0027Ted Lasso\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  7
@@ -589,7 +589,7 @@
         "id":  66,
         "category_id":  6,
         "name":  "Dark",
-        "image":  "/img/opera_66.jpg",
+        "image":  "https://i.redd.it/bsmgtk5qtg751.jpg",
         "description":  "In \u0027Dark\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  7
@@ -598,7 +598,7 @@
         "id":  67,
         "category_id":  7,
         "name":  "Peaky Blinders",
-        "image":  "/img/opera_67.jpg",
+        "image":  "https://pm1.aminoapps.com/7318/b3b39cac581325b3f75a32159d791d2d60b87f1cr1-640-640v2_hq.jpg",
         "description":  "In \u0027Peaky Blinders\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.99,
         "min_age":  16
@@ -607,7 +607,7 @@
         "id":  68,
         "category_id":  8,
         "name":  "The Boys",
-        "image":  "/img/opera_68.jpg",
+        "image":  "https://i.redd.it/wys70z5lmag31.png",
         "description":  "In \u0027The Boys\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.49,
         "min_age":  12
@@ -616,7 +616,7 @@
         "id":  69,
         "category_id":  9,
         "name":  "The Mandalorian",
-        "image":  "/img/opera_69.jpg",
+        "image":  "https://cdna.artstation.com/p/assets/images/images/026/429/288/large/efraitor-_-mandalorianofinalx4.jpg?1588762878",
         "description":  "In \u0027The Mandalorian\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  12
@@ -625,7 +625,7 @@
         "id":  70,
         "category_id":  10,
         "name":  "The Crown",
-        "image":  "/img/opera_70.jpg",
+        "image":  "https://static.vecteezy.com/system/resources/previews/031/713/263/non_2x/pixel-art-illustration-crown-pixelated-king-crown-king-royal-crown-icon-pixelated-for-the-pixel-art-game-and-icon-for-website-and-video-game-old-school-retro-vector.jpg",
         "description":  "In \u0027The Crown\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  18
@@ -634,7 +634,7 @@
         "id":  71,
         "category_id":  8,
         "name":  "The Last of Us",
-        "image":  "/img/opera_71.jpg",
+        "image":  "https://i.redd.it/jm2ri825s9851.png",
         "description":  "In \u0027The Last of Us\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  12
@@ -643,7 +643,7 @@
         "id":  72,
         "category_id":  2,
         "name":  "True Detective",
-        "image":  "/img/opera_72.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK6PP6P6HHF1St0ZWMEL6UjMy-NMEiuhHRDJ4TAQZClI6B6N0Azpm14rXH5vHSqCKmFH8&usqp=CAU",
         "description":  "In \u0027True Detective\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  16
@@ -652,7 +652,7 @@
         "id":  73,
         "category_id":  3,
         "name":  "Arcane",
-        "image":  "/img/opera_73.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbXMHcb_RXbGZLgRy4x7vl9GbDI3K7olo3Q7MA_q0eEbOZGcMA3dWH0kYyLrZcIrihrbE&usqp=CAU",
         "description":  "In \u0027Arcane\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  16
@@ -661,7 +661,7 @@
         "id":  74,
         "category_id":  2,
         "name":  "Westworld",
-        "image":  "/img/opera_74.jpg",
+        "image":  "https://i.redd.it/yx965dtxvku21.jpg",
         "description":  "In \u0027Westworld\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  7
@@ -670,7 +670,7 @@
         "id":  75,
         "category_id":  8,
         "name":  "Vikings",
-        "image":  "/img/opera_75.jpg",
+        "image":  "https://i.imgur.com/MNifIZf.png",
         "description":  "In \u0027Vikings\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  18
@@ -679,7 +679,7 @@
         "id":  76,
         "category_id":  6,
         "name":  "Lost",
-        "image":  "/img/opera_76.jpg",
+        "image":  "https://i.pinimg.com/736x/f2/39/b2/f239b23c06fd3b43b55cbc9824e5d21b.jpg",
         "description":  "In \u0027Lost\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  14
@@ -688,7 +688,7 @@
         "id":  77,
         "category_id":  7,
         "name":  "The Office (US)",
-        "image":  "/img/opera_77.jpg",
+        "image":  "https://i.redd.it/hi-im-making-a-pixel-art-series-of-the-office-characters-v0-gabx9iszkvwa1.png?width=1280&format=png&auto=webp&s=fb63c8d419e3d4970b2a48b00b68a74bdf25a095",
         "description":  "In \u0027The Office (US)\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.49,
         "min_age":  16
@@ -697,7 +697,7 @@
         "id":  78,
         "category_id":  7,
         "name":  "How I Met Your Mother",
-        "image":  "/img/opera_78.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlThY2tiQiZ948JnKQEN0TSSO4bMT1OpKxQQ&s",
         "description":  "In \u0027How I Met Your Mother\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  18
@@ -706,7 +706,7 @@
         "id":  79,
         "category_id":  9,
         "name":  "Sons of Anarchy",
-        "image":  "/img/opera_79.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDBrmLyxqDlHLdVw3YHbiUHkNc9J11dApJdw&s",
         "description":  "In \u0027Sons of Anarchy\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.49,
         "min_age":  18
@@ -715,7 +715,7 @@
         "id":  80,
         "category_id":  10,
         "name":  "Sherlock",
-        "image":  "/img/opera_80.jpg",
+        "image":  "https://i.redd.it/ffzmcyyr3ksc1.jpeg",
         "description":  "In \u0027Sherlock\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.49,
         "min_age":  14
@@ -724,7 +724,7 @@
         "id":  81,
         "category_id":  1,
         "name":  "House of Cards",
-        "image":  "/img/opera_81.jpg",
+        "image":  "https://i.pinimg.com/736x/b7/51/75/b7517546ba1ec6f978dccfd5a119926d.jpg",
         "description":  "In \u0027House of Cards\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.99,
         "min_age":  14
@@ -733,7 +733,7 @@
         "id":  82,
         "category_id":  2,
         "name":  "Better Than Us",
-        "image":  "/img/opera_82.jpg",
+        "image":  "https://lh4.googleusercontent.com/proxy/lBCt_fZknXG9-UzlOJjmvK6hQTbFmDJ2Ahq2uUZiGrRWfF4aAb6cZXWpkh8sVJDPyyTPwW9BIT3d1DkXko3YiRdyNLISJL_WAFpQZHRNIpp2gp2VtsO9pp6VRuMU2jJmnIp5MSxd946aN5jWCFByIqFDn5iaqg",
         "description":  "In \u0027Better Than Us\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  7
@@ -742,7 +742,7 @@
         "id":  83,
         "category_id":  6,
         "name":  "Narcos",
-        "image":  "/img/opera_83.jpg",
+        "image":  "https://i0.wp.com/bc-design.co/wp-content/uploads/2020/07/BC_Narcos_TrunkBlur.jpg?fit=1920%2C1080&ssl=1",
         "description":  "In \u0027Narcos\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  16
@@ -751,7 +751,7 @@
         "id":  84,
         "category_id":  4,
         "name":  "The Witcher",
-        "image":  "/img/opera_84.jpg",
+        "image":  "https://mir-s3-cdn-cf.behance.net/project_modules/max_632/efe6dd20182005.562e7d8443a20.gif",
         "description":  "In \u0027The Witcher\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.49,
         "min_age":  7
@@ -760,7 +760,7 @@
         "id":  85,
         "category_id":  5,
         "name":  "Hannibal",
-        "image":  "/img/opera_85.jpg",
+        "image":  "https://cdna.artstation.com/p/assets/images/images/048/167/864/original/anna-shchukina-1.gif?1649355540",
         "description":  "In \u0027Hannibal\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  12
@@ -769,7 +769,7 @@
         "id":  86,
         "category_id":  6,
         "name":  "Fargo",
-        "image":  "/img/opera_86.jpg",
+        "image":  "https://external-preview.redd.it/NSBROb4d4mrAdtuPY5gC5-munTG6ybnJjKqRakA3uL8.png?auto=webp&s=2a1a9c1b89129093e8f0d606d3718cd521434102",
         "description":  "In \u0027Fargo\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.49,
         "min_age":  16
@@ -778,7 +778,7 @@
         "id":  87,
         "category_id":  2,
         "name":  "The Expanse",
-        "image":  "/img/opera_87.jpg",
+        "image":  "https://i.redd.it/q2zgw5uyn7ka1.gif",
         "description":  "In \u0027The Expanse\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  16
@@ -787,7 +787,7 @@
         "id":  88,
         "category_id":  8,
         "name":  "Mr. Robot",
-        "image":  "/img/opera_88.jpg",
+        "image":  "https://mir-s3-cdn-cf.behance.net/project_modules/hd/8bd43448904239.58a531b0cc801.gif",
         "description":  "In \u0027Mr. Robot\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  16
@@ -796,7 +796,7 @@
         "id":  89,
         "category_id":  6,
         "name":  "Romanzo Criminale – La Serie",
-        "image":  "/img/opera_89.jpg",
+        "image":  "https://www.gamernews.it/public/upload/milanoir-01.jpg",
         "description":  "In \u0027Romanzo Criminale – La Serie\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  7
@@ -805,7 +805,7 @@
         "id":  90,
         "category_id":  10,
         "name":  "The Umbrella Academy",
-        "image":  "/img/opera_90.jpg",
+        "image":  "https://i.redd.it/utu6yqt617f51.png",
         "description":  "In \u0027The Umbrella Academy\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  7
@@ -814,7 +814,7 @@
         "id":  91,
         "category_id":  1,
         "name":  "The Leftovers",
-        "image":  "/img/opera_91.jpg",
+        "image":  "https://m.media-amazon.com/images/S/pv-target-images/314051fff8be3cebbf93f787acda375b0ed85bbdb0982097aeed6cdff87aec0e.jpg",
         "description":  "In \u0027The Leftovers\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  12
@@ -823,7 +823,7 @@
         "id":  92,
         "category_id":  2,
         "name":  "Ozark",
-        "image":  "/img/opera_92.jpg",
+        "image":  "https://pixelpalmer.com/cdn/shop/files/marty-byrde-ozark-jason-bateman-arts-crafts-713.jpg?v=1746651267&width=1946",
         "description":  "In \u0027Ozark\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.49,
         "min_age":  14
@@ -832,7 +832,7 @@
         "id":  93,
         "category_id":  3,
         "name":  "Mindhunter",
-        "image":  "/img/opera_93.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7O8RntbN1NqF2GSrnu7PYSfgNIpjYcBA7VA&s",
         "description":  "In \u0027Mindhunter\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  5.99,
         "min_age":  12
@@ -841,7 +841,7 @@
         "id":  94,
         "category_id":  4,
         "name":  "The Haunting of Hill House",
-        "image":  "/img/opera_94.jpg",
+        "image":  "https://preview.redd.it/hill-house-v0-bk5f1suhxume1.png?auto=webp&s=c8c022b500606787fdc98c24c9f72790c0ce9a2d",
         "description":  "In \u0027The Haunting of Hill House\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  18
@@ -850,7 +850,7 @@
         "id":  95,
         "category_id":  4,
         "name":  "Penny Dreadful",
-        "image":  "/img/opera_95.jpg",
+        "image":  "https://i.pinimg.com/564x/a4/c5/77/a4c57714b9ce54a5e1c8102dc70a4b0f.jpg",
         "description":  "In \u0027Penny Dreadful\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  16
@@ -859,7 +859,7 @@
         "id":  96,
         "category_id":  6,
         "name":  "Prison Break",
-        "image":  "/img/opera_96.jpg",
+        "image":  "https://i.redd.it/lchlkgmdyai51.jpg",
         "description":  "In \u0027Prison Break\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  20.49,
         "min_age":  14
@@ -868,7 +868,7 @@
         "id":  97,
         "category_id":  8,
         "name":  "Spartacus",
-        "image":  "/img/opera_97.jpg",
+        "image":  "https://preview.redd.it/glad-he-ate-her-helmet-v0-zvhx73dua3hb1.png?width=1080&crop=smart&auto=webp&s=f91ee5543212690efee071c7b2a57b23fcd032dd",
         "description":  "In \u0027Spartacus\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  18
@@ -877,7 +877,7 @@
         "id":  98,
         "category_id":  8,
         "name":  "Sense8",
-        "image":  "/img/opera_98.jpg",
+        "image":  "https://ih1.redbubble.net/image.566548896.6131/flat,750x,075,f-pad,750x1000,f8f8f8.u5.jpg",
         "description":  "In \u0027Sense8\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.49,
         "min_age":  14
@@ -886,7 +886,7 @@
         "id":  99,
         "category_id":  7,
         "name":  "The Good Place",
-        "image":  "/img/opera_99.jpg",
+        "image":  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ0DjbN0wxv6bpG0pLVzV9CG5aFA80_a215A&s",
         "description":  "In \u0027The Good Place\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  13.49,
         "min_age":  18
@@ -895,7 +895,7 @@
         "id":  100,
         "category_id":  7,
         "name":  "Rick and Morty",
-        "image":  "/img/opera_100.jpg",
+        "image":  "https://www.diamondartclub.com/cdn/shop/products/rick-and-morty-diamond-art-painting-33240468979905.jpg?v=1667779270&width=1200",
         "description":  "In \u0027Rick and Morty\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  7
@@ -904,7 +904,7 @@
         "id":  101,
         "category_id":  1,
         "name":  "Fullmetal Alchemist: Brotherhood",
-        "image":  "/img/opera_101.jpg",
+        "image":  "https://i.redd.it/s6phifu25xf91.png",
         "description":  "In \u0027Fullmetal Alchemist: Brotherhood\u0027, mentre gli Elric cercano la Pietra Filosofale, un giovane alchimista di campo viene assegnato all’esercito come semplice supporto logistico. Il suo compito ufficiale è catalogare tomi antichi e oggetti recuperati dalle aree di guerra, ma ben presto si accorge che molti di quegli artefatti sono legati agli stessi misteri che circondano gli esperimenti proibiti. Spinto da un misto di curiosità e senso di giustizia, inizia a seguire le tracce dei fratelli Elric, restando sempre un passo indietro, ma incrociando le conseguenze delle loro scelte: città ricostruite, laboratori distrutti, persone che parlano sottovoce di strani alchimisti bambini. Lavorando con una piccola squadra di soldati disillusi e civili che hanno perso la fiducia nel governo, il protagonista cerca di usare un tipo di alchimia meno spettacolare ma profondamente utile, in grado di riparare ponti, case e vite comuni. La sua storia diventa un filo nascosto che cuce le cicatrici lasciate dagli scontri principali, raccontando una Amestris vista dagli angoli che non finiscono mai nei resoconti ufficiali.",
         "price":  9.49,
         "min_age":  7
@@ -913,7 +913,7 @@
         "id":  102,
         "category_id":  2,
         "name":  "Attack on Titan",
-        "image":  "/img/opera_102.jpg",
+        "image":  "https://external-preview.redd.it/BAvrGU_XXiPGXYjx_TI7Q8Wu-2i3h0v6Y9XHqOaiNvA.jpg?auto=webp&s=edb3ed075f88f2bca4e8c7f0a5cf03272d4c5a34",
         "description":  "In \u0027Attack on Titan\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  12
@@ -922,7 +922,7 @@
         "id":  103,
         "category_id":  3,
         "name":  "Death Note",
-        "image":  "/img/opera_103.jpg",
+        "image":  "https://pbs.twimg.com/media/ETe9s0RXsAAJBw6.png",
         "description":  "In \u0027Death Note\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  14
@@ -931,7 +931,7 @@
         "id":  104,
         "category_id":  2,
         "name":  "Cowboy Bebop",
-        "image":  "/img/opera_104.jpg",
+        "image":  "https://cdna.artstation.com/p/assets/images/images/009/769/154/large/sam-tsuka-img-20180309-222838-985.jpg?1520807105",
         "description":  "In \u0027Cowboy Bebop\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  7
@@ -940,7 +940,7 @@
         "id":  105,
         "category_id":  5,
         "name":  "Neon Genesis Evangelion",
-        "image":  "/img/opera_105.jpg",
+        "image":  "https://cdnb.artstation.com/p/assets/images/images/059/928/525/large/paulo-cm-eva.jpg?1677462780",
         "description":  "In \u0027Neon Genesis Evangelion\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.99,
         "min_age":  16
@@ -949,7 +949,7 @@
         "id":  106,
         "category_id":  6,
         "name":  "Steins;Gate",
-        "image":  "/img/opera_106.jpg",
+        "image":  "https://preview.redd.it/it5zucjxkyq51.png?width=640&crop=smart&auto=webp&s=4adf8b404bb4c8275d8f2d1c79754fbbedd4e7d6",
         "description":  "In \u0027Steins;Gate\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.49,
         "min_age":  16
@@ -958,7 +958,7 @@
         "id":  107,
         "category_id":  7,
         "name":  "Hunter x Hunter",
-        "image":  "/img/opera_107.jpg",
+        "image":  "https://i.pinimg.com/736x/76/00/30/7600303eca8f48c06bf4102d41098bb6.jpg",
         "description":  "In \u0027Hunter x Hunter\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.49,
         "min_age":  7
@@ -967,7 +967,7 @@
         "id":  108,
         "category_id":  8,
         "name":  "Code Geass",
-        "image":  "/img/opera_108.jpg",
+        "image":  "https://art.pixilart.com/thumb/4af446b48ec438e.png",
         "description":  "In \u0027Code Geass\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  20.49,
         "min_age":  7
@@ -976,7 +976,7 @@
         "id":  109,
         "category_id":  9,
         "name":  "One Piece",
-        "image":  "/img/opera_109.jpg",
+        "image":  "https://preview.redd.it/luffy-84x84-pixel-art-v0-floyaspvc7ld1.png?auto=webp&s=ee7b143898139185b35f10601ca7c7c6d09e03e1",
         "description":  "In \u0027One Piece\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  19.99,
         "min_age":  18
@@ -985,7 +985,7 @@
         "id":  110,
         "category_id":  8,
         "name":  "Vinland Saga",
-        "image":  "/img/opera_110.jpg",
+        "image":  "https://i.redd.it/5390l9uvv4m91.png",
         "description":  "In \u0027Vinland Saga\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.99,
         "min_age":  14
@@ -994,7 +994,7 @@
         "id":  111,
         "category_id":  1,
         "name":  "Jujutsu Kaisen",
-        "image":  "/img/opera_111.jpg",
+        "image":  "https://i.redd.it/nmzb67cvl3n61.png",
         "description":  "In \u0027Jujutsu Kaisen\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  14.49,
         "min_age":  16
@@ -1003,7 +1003,7 @@
         "id":  112,
         "category_id":  2,
         "name":  "Demon Slayer",
-        "image":  "/img/opera_112.jpg",
+        "image":  "https://i.pinimg.com/originals/0a/ae/43/0aae43fe0fccea680781d045eed04306.png",
         "description":  "In \u0027Demon Slayer\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  10.49,
         "min_age":  16
@@ -1012,7 +1012,7 @@
         "id":  113,
         "category_id":  3,
         "name":  "My Hero Academia",
-        "image":  "/img/opera_113.jpg",
+        "image":  "https://i.pinimg.com/236x/99/6e/9d/996e9d6b3910ead5cc1031461d555691.jpg",
         "description":  "In \u0027My Hero Academia\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  8.99,
         "min_age":  7
@@ -1021,7 +1021,7 @@
         "id":  114,
         "category_id":  4,
         "name":  "Dragon Ball Z",
-        "image":  "/img/opera_114.jpg",
+        "image":  "https://cdna.artstation.com/p/assets/images/images/027/576/878/large/daniel-pallares-db-final.jpg?1591918712",
         "description":  "In \u0027Dragon Ball Z\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  12.99,
         "min_age":  16
@@ -1030,7 +1030,7 @@
         "id":  115,
         "category_id":  5,
         "name":  "Dragon Ball Super",
-        "image":  "/img/opera_115.jpg",
+        "image":  "https://i.pinimg.com/736x/e5/5d/a8/e55da805de2dd2d6841ebda4cc3f8ffa.jpg",
         "description":  "In \u0027Dragon Ball Super\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  18.99,
         "min_age":  18
@@ -1039,7 +1039,7 @@
         "id":  116,
         "category_id":  6,
         "name":  "Naruto",
-        "image":  "/img/opera_116.jpg",
+        "image":  "https://i.pinimg.com/236x/f1/a4/3a/f1a43a6f0cbab4b4e975f042a2bff2a9.jpg",
         "description":  "In \u0027Naruto\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.49,
         "min_age":  14
@@ -1048,7 +1048,7 @@
         "id":  117,
         "category_id":  7,
         "name":  "Naruto Shippuden",
-        "image":  "/img/opera_117.jpg",
+        "image":  "https://pbs.twimg.com/media/ExQdfgVW8AcyBHo.jpg",
         "description":  "In \u0027Naruto Shippuden\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  20.49,
         "min_age":  16
@@ -1057,7 +1057,7 @@
         "id":  118,
         "category_id":  8,
         "name":  "Bleach",
-        "image":  "/img/opera_118.jpg",
+        "image":  "https://art.pixilart.com/076f85ec9c79f8c.png",
         "description":  "In \u0027Bleach\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  9.49,
         "min_age":  14
@@ -1066,7 +1066,7 @@
         "id":  119,
         "category_id":  4,
         "name":  "Chainsaw Man",
-        "image":  "/img/opera_119.jpg",
+        "image":  "https://preview.redd.it/denji-from-chainsaw-man-v0-zzqokjiwvfrb1.jpg?auto=webp&s=2c770c1940533b828604c275a55d6da62d853991",
         "description":  "In \u0027Chainsaw Man\u0027, questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price":  4.49,
         "min_age":  7

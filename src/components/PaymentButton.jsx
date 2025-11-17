@@ -65,7 +65,6 @@ export default function PaymentButton({ totalAmount, cartItems }) {
         </>
       ) : (
         <>
-          <img src="/public/icon/FullShop.png" alt="Procedi al pagamento" />
           <span>Paga con Stripe</span>
         </>
       )}
