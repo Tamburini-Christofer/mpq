@@ -1,33 +1,25 @@
-const getAllProducts = async (req, res) => {
+const db = require('../config/connection');
+
+exports.getProducts = async (req, res) => {
     try {
-        const rows = await db.query(`
-      SELECT p.*, c.name as category_name 
-      FROM Products p 
-      LEFT JOIN Category c ON p.category_id = c.id
-    `);
+        const { category_id } = req.query;
+        let query = `
+        SELECT p.*, c.name as category_name
+        FROM products P
+        JOIN category c ON p.category_id = c.id
+        `;
+
+        const params = []
+
+        if (category_id) {
+            query += "WHERE p.category_id = ?";
+            params.push(category_id);
+        }
+
+        const [rows] = await db.query(query, params);
         res.json(rows);
-    } catch (err) {
+            } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-//GET: prodotto singolo
-
-const getBySlug = async (req, res) => {
-    const { slug } = req.params;
-    try {
-        const [rows] = await db.query(`
-            SELECT p.*, c.name as category_name
-            FROM Products p
-            JOIN Category c on p.category_id = c.id
-            WHERE p.slug = ?
-             `, [slug])
-
-
-        if (!rows.length) return res.status(404).json({ error: 'Prodotto non trovato' });
-
-        res.json(response[0])
-    } catch (err) {
-        res.status(500).json({error: err.message})
-    }
-}
