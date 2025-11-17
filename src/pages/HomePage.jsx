@@ -1,4 +1,5 @@
 import './HomePage.css'
+import heroVideo from '../videos/video-for-hero.mp4';
 
 const questData = [
     {
@@ -102,22 +103,17 @@ const questData = [
 
 function HomePage() {
 
-    // !!! RIMOZIONE: I Ref non sono più qui !!!
-    // const latestRef = useRef(null);
-    // const bestSellersRef = useRef(null);
-
     const latestArrivals = questData.filter(quest => quest.isNew);
     const bestSellers = questData.filter(quest => quest.isBestSeller);
 
-    // FUNZIONE DI SCORRIMENTO AGGIUSTATA: Usa l'ID del contenitore (come nel tuo onClick)
     const scrollListById = (id, direction) => {
         // 1. Troviamo l'elemento DOM usando l'ID
         const listElement = document.getElementById(id); 
 
         // 2. Controlliamo che l'elemento sia stato trovato
         if (listElement) { 
-            // Larghezza di scorrimento (4 card * 280px)
-            const scrollAmount = 4 * 280; 
+            // Larghezza di scorrimento (4 card * 270px)
+            const scrollAmount = 4 * 270; 
             
             // 3. Eseguiamo lo scorrimento
             listElement.scrollBy({
@@ -137,11 +133,23 @@ function HomePage() {
             {/*HERO SECTION*/}
             <section className="hero-section">
                 <div className="hero-left">
-                    <h1 className="hero-title">NEXT LEVEL: <br /> REAL LIFE</h1>
+                    <h1 className="hero-title">NEXT LEVEL: <br /> <span className='hero-title-purple'>REAL LIFE</span></h1>
                     <button className="btn-get-started">GET STARTED</button>
                 </div>
                 <div className="hero-right">
                     {/* Placeholder */}
+                    {/* ELEMENTO VIDEO */}
+                <video 
+                    autoPlay 
+                    loop 
+                    muted 
+                    playsInline
+                    className="hero-video" 
+                >
+                    {/* UTILIZZO DELLA VARIABILE IMPORTATA */}
+                    <source src={heroVideo} type="video/mp4" />
+                    Il tuo browser non supporta il tag video.
+                </video>
                 </div>
             </section>
 

@@ -1,10 +1,10 @@
 /* --- CONTENITORE PRINCIPALE --- */
 .homepage {
-    max-width: 1400px;
+    /* max-width: 1400px; */
     margin: 0 auto;
     /* FIX CRUCIALE: Aggiungiamo padding laterale per centrare il contenuto 
        e lasciare spazio ai pulsanti di scorrimento. */
-    padding: 0 50px; 
+    padding: 0 50px;
 }
 
 /* --- HERO SECTION --- */
@@ -13,19 +13,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    min-height: 500px; 
+    min-height: 500px;
     padding-top: 50px;
     margin-bottom: 80px;
 }
 
 .hero-title {
     font-family: "Pixelify Sans", sans-serif;
-    font-size: 5rem; 
-    /* MIGLIORAMENTO: Più impatto per un titolo Hero */
-    font-weight: 900; 
+    font-size: 5rem;
+    font-weight: 900;
     line-height: 1.1;
     color: #FFD700;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.hero-title-purple {
+    color: #772284;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .btn-get-started {
@@ -40,20 +44,32 @@
     font-size: 1.2rem;
     margin-top: 20px;
     transition: background-color 0.2s;
-    text-transform: uppercase; /* SUGGERIMENTO: Lo rende più CTA (Call to Action) */
 }
 
 .btn-get-started:hover {
-    /* Manteniamo l'hover più vicino al giallo originale */
-    background-color: #e6c200; 
+    background-color: #836b0d;
 }
 
 .hero-right {
-    width: 550px;
-    height: 400px;
-    background-color: #333; 
+    flex-grow: 1; /* Permette di espandersi nello spazio disponibile */
+    max-width: 50%; /* Limita l'espansione a metà schermo */
+    margin-left: 50px; /* Spazio tra testo e video */
+    height: 500px;
     border-radius: 10px;
     overflow: hidden;
+    position: relative;
+}
+
+/* --- ELEMENTO VIDEO --- */
+.hero-video {
+    /* **MODIFICA 2: Stile per l'elemento <video> ** */
+    display: block;
+    width: 100%;
+    height: 100%;
+    
+    /* ESSENZIALE: Assicura che il video copra il 100% dell'area 
+       di .hero-right senza deformarsi, tagliando i bordi in eccesso. */
+    object-fit: cover; 
 }
 
 
@@ -72,13 +88,11 @@
 
 .cards-list {
     display: flex;
-    gap: 30px; 
-    overflow-x: auto; 
-    padding-bottom: 20px; 
-    margin-bottom: 0; 
-
-    /* FIX FONDAMENTALE: Impedisce alle card di andare a capo */
-    flex-wrap: nowrap; 
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+    flex-wrap: nowrap;
 
     /* Nascondiamo la barra di scorrimento nativa */
     -ms-overflow-style: none;
@@ -92,7 +106,7 @@
 
 /* Stile per i placeholder temporanei (ora usati come card) */
 .card-placeholder {
-    min-width: 250px; 
+    width: 250px;
     height: 200px;
     background-color: #333;
     border-radius: 8px;
@@ -102,51 +116,45 @@
     justify-content: center;
     color: white;
     font-weight: bold;
-    /* FIX: Già presente, ma vitale per lo scorrimento */
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
 /* --- STILE PER LO SCORRIMENTO CONTROLLATO --- */
 
 .latest-section-wrapper,
 .best-sellers-section-wrapper {
-    position: relative; 
-    padding-top: 20px; 
-    /* Aggiungiamo un padding laterale negativo per compensare il padding di .homepage, 
-       in modo che le liste si estendano fino ai bordi dello schermo, ma solo se necessario. 
-       Per ora, lo scorrimento resta all'interno dei 1400px. */
+    position: relative;
+    padding-top: 20px;
 }
 
 .scroll-btn {
-    position: absolute; 
-    top: 40%; 
-    transform: translateY(-50%); 
-    
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+
     background-color: #FFD700;
     color: #121212;
     border: none;
-    border-radius: 50%; 
+    border-radius: 8px;
     width: 40px;
-    height: 40px;
+    height: 200px;
     font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
-    z-index: 10; 
+    z-index: 10;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     transition: background-color 0.2s;
 }
 
 .scroll-btn:hover {
-    background-color: #e6c200;
+    background-color: #836b0d;
 }
 
 /* Posizionamento dei pulsanti */
 .scroll-left {
-    /* FIX: Posizionato a sinistra del padding (50px) */
-    left: 0px; 
+    left: -45px;
 }
 
 .scroll-right {
-    /* FIX: Posizionato a destra del padding (50px) */
-    right: 0px; 
+    right: -45px;
 }
