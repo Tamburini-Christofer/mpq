@@ -15,11 +15,12 @@ function CardExp () {
           <div className="card-body">
             <h3>{p.name}</h3>
             <p className="price">{p.price.toFixed(2)}€</p>
-          </div>
-
-          <button className="buy-btn" onClick={() => addToCart(p)}>
+              <button className="buy-btn" onClick={() => addToCart(p)}>
             Aggiungi
           </button>
+          </div>
+
+        
         </div>
       ))}
     </div>

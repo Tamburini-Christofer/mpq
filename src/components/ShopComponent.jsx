@@ -4,14 +4,34 @@ import React, { useState } from "react";
 //todo: Importiamo il CSS del componente Shop per lo stile
 import "./ShopComponent.css"; 
 
+//todo: Importiamo il componente CheckoutForm
+import CheckoutForm from "./CheckoutForm";
+
 //todo: Creo il componente principale Shop
 const Shop = () => {
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
+  
+  //todo: Stato per la modalità di visualizzazione (grid o list)
+  const [viewMode, setViewMode] = useState("grid");
+  
+  //todo: Stato per mostrare/nascondere il form di checkout
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  
+  //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
+  const [visibleProducts, setVisibleProducts] = useState(10);
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
     const products = [
     { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
+    { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
+    { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
+    { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
+    { id: 4, name: "Football", price: 19.99 , image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
+    { id: 4, name: "Gigina la dinosaura", price: 19.99 , image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
+    { id: 4, name: "Samir Experience", price: 29.99 , image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
+    { id: 4, name: "El Trentin", price: 39.99 , image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
+        { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
     { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
     { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
     { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
@@ -116,6 +136,11 @@ const Shop = () => {
     );
   };
 
+  //todo: Funzione per caricare altri 10 prodotti
+  const loadMoreProducts = () => {
+    setVisibleProducts(prev => prev + 10);
+  };
+
   //todo: Inizio del render del componente
   return (
     <div className="shop-ui-container">
@@ -177,9 +202,26 @@ const Shop = () => {
         {/* todo: Sezione Shop */}
         {activeTab === "shop" && (
           <div className="shop-section">
+            {/* todo: Controlli per cambiare visualizzazione */}
+            <div className="view-controls">
+              <button 
+                className={viewMode === "grid" ? "view-btn active" : "view-btn"}
+                onClick={() => setViewMode("grid")}
+                title="Visualizzazione a griglia"
+              >
+                <span className="view-icon">⊞</span> Griglia
+              </button>
+              <button 
+                className={viewMode === "list" ? "view-btn active" : "view-btn"}
+                onClick={() => setViewMode("list")}
+                title="Visualizzazione a lista"
+              >
+                <span className="view-icon">☰</span> Lista
+              </button>
+            </div>
 
-            <div className="products">
-              {products.map((p) => (
+            <div className={`products ${viewMode}`}>
+              {products.slice(0, visibleProducts).map((p) => (
                 <div key={p.id} className="card fancy-card">
                   
                   <div className="card-image-wrapper">
@@ -189,14 +231,28 @@ const Shop = () => {
                   <div className="card-body">
                     <h3>{p.name}</h3>
                     <p className="price">{p.price.toFixed(2)}€</p>
+                    {viewMode === "list" && (
+                      <div className="card-details">
+                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
+                      </div>
+                    )}
                   </div>
 
                   <button className="buy-btn" onClick={() => addToCart(p)}>
-                    Aggiungi
+                    {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
                   </button>
                 </div>
               ))}
             </div>
+
+            {/* Pulsante per caricare altri prodotti */}
+            {visibleProducts < products.length && (
+              <div className="load-more-container">
+                <button className="load-more-btn" onClick={loadMoreProducts}>
+                  Carica altri 10 prodotti ({products.length - visibleProducts} rimanenti)
+                </button>
+              </div>
+            )}
 
           </div>
         )}
@@ -328,7 +384,10 @@ const Shop = () => {
                     >
                       Svuota Carretto
                     </button>
-                    <button className="confirm-btn">
+                    <button 
+                      className="confirm-btn"
+                      onClick={() => setShowCheckoutForm(true)}
+                    >
                       Conferma Acquisto e parti per la tua prossima avventura
                     </button>
                   </div>
@@ -338,6 +397,15 @@ const Shop = () => {
           </div>
         )}
       </main>
+      
+      {/* todo: Overlay form checkout */}
+      {showCheckoutForm && (
+        <CheckoutForm
+          onClose={() => setShowCheckoutForm(false)}
+          totalAmount={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
+          cartItems={cart}
+        />
+      )}
     </div>
   );
 };

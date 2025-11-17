@@ -7,7 +7,7 @@ import emailjs from "emailjs-com";
 import "./EmailSender.css";
 
 //todo Componente per l'invio di email tramite un form
-export default function EmailSender() {
+export default function EmailSender({ onClose }) {
     //todo Stato per i dati del form
   const [formData, setFormData] = useState({
     name: "",
@@ -69,18 +69,17 @@ export default function EmailSender() {
         
         <h2 className="email-form-title">Unisciti alla Missione!</h2>
         <p className="email-form-subtitle">
-          Registrati per ricevere la tua email di benvenuto e per iniziare a livellare
+          Compila il form per ricevere la tua email di benvenuto
         </p>
         
         <form className="email-form" onSubmit={sendEmail}>
           <div className="input-group">
-            <label className="input-label" htmlFor="name">Il Vostro nome, My Lord</label>
             <input
               id="name"
               className="email-input"
               type="text"
               name="name"
-              placeholder="Chi siete Voi?"
+              placeholder="Il Vostro nome, My Lord"
               value={formData.name}
               onChange={handleChange}
               required
@@ -88,13 +87,12 @@ export default function EmailSender() {
           </div>
 
           <div className="input-group">
-            <label className="input-label" htmlFor="email">La Vostra email, Mio Sire</label>
             <input
               id="email"
               className="email-input"
               type="email"
               name="email"
-              placeholder="Qual'è la Vostra email?"
+              placeholder="La Vostra email, Mio Sire"
               value={formData.email}
               onChange={handleChange}
               required
@@ -109,13 +107,22 @@ export default function EmailSender() {
             {status === "Registrazione in corso..." ? (
               <>
                 <span className="loading-spinner"></span>
-                Registrazione...
+                Invio email tramite piccione viaggiatore...
               </>
             ) : (
-              "Registrati Ora!"
+              "Voglio la mia email di benvenuto!"
             )}
           </button>
         </form>
+        
+        {/* todo: Pulsante per saltare la registrazione */}
+        <button
+          className="skip-btn"
+          type="button"
+          onClick={onClose}
+        >
+          Salta presentazioni e partiamo subito con l'avventura!
+        </button>
         
         {/* todo: Mostro il messaggio di stato se presente */}
         {status && (

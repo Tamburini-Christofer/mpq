@@ -1,10 +1,11 @@
+/* todo: Reset CSS globale per rimuovere margini e padding di default */
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* todo: colori base */
+/* todo: Variabili colore globali del progetto */
 :root {
   --purple: #6c21ff;
   --gold: #d8a928;
@@ -12,7 +13,7 @@
   --light: #ffffff;
 }
 
-/* todo: layout generale */
+/* todo: Layout generale del container principale */
 .shop-ui-container {
   display: flex;
   background: var(--dark);
@@ -22,7 +23,7 @@
   position: relative;
 }
 
-/* todo: notifiche popup */
+/* todo: Notifiche popup in alto a destra */
 .notification {
   position: fixed;
   top: 20px;
@@ -95,7 +96,7 @@
   }
 }
 
-/* todo: sidebar */
+/* todo: Sidebar laterale con logo e menu di navigazione */
 .sidebar {
   width: 280px;
   background: #1a1720;
@@ -104,28 +105,32 @@
   box-shadow: 0 0 20px rgba(216, 169, 40, 0.2);
 }
 
-/* logo e titolo */
+/* todo: Contenitore logo e titolo del brand */
 .logo-box {
   text-align: center;
   margin-bottom: 40px;
 }
 
+/* todo: Titolo principale MyPocketQuest */
 .title {
   font-size: 24px;
   font-weight: 800;
   color: var(--light);
 }
 
+/* todo: Parte "Quest" del titolo in oro */
 .title span {
   color: var(--gold);
 }
 
+/* todo: Sottotitolo "Next Level: Real Life" */
 .subtitle {
   font-size: 12px;
   opacity: 0.7;
 }
 
-/* menu */
+/* todo: Pulsanti del menu di navigazione */
+/* todo: Stile base per i pulsanti di menu (Shop, Carrello, Checkout) */
 .menu-btn {
   width: 100%;
   padding: 12px;
@@ -140,29 +145,31 @@
   transition: 0.2s;
 }
 
+/* todo: Effetto hover sui pulsanti menu */
 .menu-btn:hover {
   background: rgba(108, 33, 255, 0.1);
 }
 
+/* todo: Stile per il pulsante menu attivo (bordo oro a sinistra) */
 .menu-btn.active {
   border-left: 3px solid var(--gold);
   color: var(--gold);
 }
 
-/* todo: contenuto */
+/* todo: Area contenuto principale a destra della sidebar */
 .content {
   flex: 1;
   padding: 40px;
 }
 
-/* titoli sezioni */
+/* todo: Titoli delle sezioni principali (Carrello, Checkout) */
 .section-title {
   font-size: 28px;
   color: var(--gold);
   margin-bottom: 20px;
 }
 
-/* cards prodotti */
+/* todo: Container delle card prodotti */
 .products {
   display: flex;
   justify-content: center;
@@ -204,7 +211,7 @@
   background: #8c4dff;
 }
 
-/* carrello */
+/* todo: Stile per carrello vuoto (messaggio centrale) */
 .empty-cart {
   display: flex;
   flex-direction: column;
@@ -214,6 +221,7 @@
   color: #888;
 }
 
+/* todo: Immagine decorativa per carrello e checkout vuoti */
 .empty-cart img,
 .empty-checkout img {
   max-width: 15%;
@@ -221,16 +229,19 @@
   margin: 0 auto;
 }
 
+/* todo: Paragrafi nel messaggio carrello vuoto */
 .empty-cart p {
   margin-bottom: 10px;
 }
 
+/* todo: Container lista prodotti nel carrello */
 .cart-items {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
+/* todo: Singolo item nel carrello con layout orizzontale */
 .cart-item {
   background: #1c1a24;
   padding: 20px;
@@ -242,6 +253,7 @@
   gap: 15px;
 }
 
+/* todo: Sezione informazioni prodotto (nome e prezzo) */
 .item-info {
   display: flex;
   flex-direction: column;
@@ -249,22 +261,26 @@
   flex: 1;
 }
 
+/* todo: Nome del prodotto nel carrello */
 .item-name {
   font-size: 16px;
   font-weight: 600;
 }
 
+/* todo: Prezzo singolo del prodotto */
 .item-price {
   color: var(--gold);
   font-size: 14px;
 }
 
+/* todo: Container per i controlli + e - della quantità */
 .quantity-controls {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
+/* todo: Pulsanti + e - per modificare la quantità */
 .quantity-btn {
   background: var(--purple);
   border: none;
@@ -278,10 +294,12 @@
   transition: 0.2s;
 }
 
+/* todo: Effetto hover sui pulsanti quantità */
 .quantity-btn:hover {
   background: #8c4dff;
 }
 
+/* todo: Display del numero di quantità corrente */
 .quantity {
   font-size: 16px;
   font-weight: 600;
@@ -289,6 +307,7 @@
   text-align: center;
 }
 
+/* todo: Sezione totale e pulsante rimuovi a destra dell'item */
 .item-total {
   display: flex;
   flex-direction: column;
@@ -296,12 +315,14 @@
   gap: 8px;
 }
 
+/* todo: Prezzo totale dell'item (prezzo x quantità) */
 .total-price {
   font-size: 18px;
   font-weight: 600;
   color: var(--gold);
 }
 
+/* todo: Pulsante per rimuovere completamente un prodotto dal carrello */
 .remove-btn {
   background: transparent;
   border: 1px solid #ff4757;
@@ -313,11 +334,13 @@
   transition: 0.2s;
 }
 
+/* todo: Effetto hover sul pulsante rimuovi (sfondo rosso) */
 .remove-btn:hover {
   background: #ff4757;
   color: var(--light);
 }
 
+/* todo: Box totale generale del carrello in basso */
 .cart-total {
   margin-top: 20px;
   padding: 15px;
@@ -328,32 +351,37 @@
   color: var(--gold);
 }
 
-/* checkout */
+/* todo: Container principale sezione checkout */
 .checkout-section {
   max-width: 600px;
   display: contents;
 }
 
+/* todo: Messaggio quando il checkout è vuoto */
 .empty-checkout {
   text-align: center;
   padding: 40px;
   color: #888;
 }
 
+/* todo: Paragrafi nel messaggio checkout vuoto */
 .empty-checkout p {
   margin-bottom: 10px;
 }
 
+/* todo: Sottotitolo "Riepilogo Ordine" nel checkout */
 .checkout-subtitle {
   color: var(--light);
   margin-bottom: 20px;
   font-size: 20px;
 }
 
+/* todo: Container lista prodotti nel checkout */
 .checkout-items {
   margin-bottom: 30px;
 }
 
+/* todo: Singolo item nel riepilogo checkout */
 .checkout-item {
   background: #1c1a24;
   padding: 15px 20px;
@@ -365,6 +393,7 @@
   align-items: center;
 }
 
+/* todo: Sezione info prodotto nel checkout (nome e dettagli) */
 .checkout-item-info {
   display: flex;
   flex-direction: column;
@@ -372,29 +401,34 @@
   flex: 1;
 }
 
+/* todo: Nome del prodotto nel checkout */
 .checkout-item-name {
   font-size: 16px;
   font-weight: 600;
   color: var(--light);
 }
 
+/* todo: Dettagli prodotto (quantità x prezzo) */
 .checkout-item-details {
   font-size: 14px;
   color: #888;
 }
 
+/* todo: Container per totale e pulsante rimuovi nel checkout */
 .checkout-item-actions {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
+/* todo: Totale del singolo prodotto nel checkout */
 .checkout-item-total {
   font-size: 16px;
   font-weight: 600;
   color: var(--gold);
 }
 
+/* todo: Pulsante X per rimuovere prodotto dal checkout (circolare) */
 .checkout-remove-btn {
   background: transparent;
   border: 1px solid #ff4757;
@@ -410,11 +444,13 @@
   transition: 0.2s;
 }
 
+/* todo: Effetto hover sul pulsante X del checkout */
 .checkout-remove-btn:hover {
   background: #ff4757;
   color: var(--light);
 }
 
+/* todo: Sezione riepilogo finale con totale e pulsanti */
 .checkout-summary {
   border-top: 2px solid var(--gold);
   padding-top: 20px;
@@ -423,23 +459,27 @@
   align-items: end;
 }
 
+/* todo: Container del totale ordine */
 .checkout-total {
   margin-bottom: 20px;
   text-align: center;
 }
 
+/* todo: Titolo con il totale generale dell'ordine */
 .checkout-total h3 {
   color: var(--gold);
   font-size: 24px;
   margin: 0;
 }
 
+/* todo: Container per i pulsanti finali (Svuota e Conferma) */
 .checkout-actions {
   display: flex;
   gap: 15px;
   justify-content: center;
 }
 
+/* todo: Pulsante "Svuota Carretto" (rosso, outline) */
 .clear-cart-btn {
   background: transparent;
   border: 2px solid #ff4757;
@@ -452,11 +492,13 @@
   transition: 0.2s;
 }
 
+/* todo: Effetto hover sul pulsante svuota (sfondo rosso) */
 .clear-cart-btn:hover {
   background: #ff4757;
   color: var(--light);
 }
 
+/* todo: Pulsante "Conferma Acquisto" (oro, principale) */
 .confirm-btn {
   background: var(--gold);
   border: none;
@@ -468,76 +510,139 @@
   transition: 0.2s;
 }
 
+/* todo: Effetto hover sul pulsante conferma (oro più chiaro) */
 .confirm-btn:hover {
   background: #e6b632;
 }
 
-/* Prova CSS per card prodotto */
-.products {
+/* todo: Layout griglia per visualizzazione card (default) */
+.products.grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
-/* CARD */
+/* todo: Layout lista per visualizzazione prodotti in linea orizzontale */
+.products.list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  max-width: 1200px;
+}
+
+/* todo: Container controlli per cambiare visualizzazione griglia/lista */
+.view-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  justify-content: flex-end;
+}
+
+/* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */
+.view-btn {
+  background: #1c1a24;
+  border: 2px solid var(--purple);
+  color: var(--light);
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  font-family: "Cinzel", serif;
+}
+
+/* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
+.view-btn:hover {
+  background: var(--purple);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+/* todo: Pulsante visualizzazione attivo (evidenziato in oro) */
+.view-btn.active {
+  background: var(--purple);
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* todo: Icona nei pulsanti visualizzazione (⊞ o ☰) */
+.view-icon {
+  font-size: 16px;
+}
+
+/* todo: Card prodotto in stile fantasy con altezza fissa */
 .fancy-card {
   background: #1a1a1a;
   border: 4px solid #c9a347;
   border-radius: 12px;
-  overflow: hidden;
   box-shadow: 0 0 25px rgba(0,0,0,0.8);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease;
+  height: 440px;
+  width: 100%;
+  overflow: hidden;
 }
 
+/* todo: Effetto hover sulla card (ingrandimento e glow dorato) */
 .fancy-card:hover {
   transform: scale(1.03);
   box-shadow: 0 0 35px rgba(255, 200, 100, 0.5);
 }
 
-/* CONTENITORE IMMAGINE */
+/* todo: Contenitore immagine con altezza fissa 320px */
 .card-image-wrapper {
   width: 100%;
-  aspect-ratio: 4 / 5; /* proporzioni tipo card fantasy */
-  overflow: hidden;
+  height: 230px;
   border-bottom: 3px solid #c9a347;
+  flex-shrink: 0;
 }
 
-/* IMMAGINE RESPONSIVA */
+/* todo: Immagine prodotto responsive che copre tutto il contenitore */
 .card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;    /* evita deformazioni */
+  object-fit: cover;
   object-position: center;
   display: block;
   filter: saturate(1.1) contrast(1.2);
 }
 
-/* TESTO DELLA CARD */
+/* todo: Corpo della card con nome e prezzo (font fantasy) */
 .card-body {
-  padding: 18px;
+  padding: 0;
   text-align: center;
   color: #e7d9b3;
   font-family: "Cinzel", serif;
+  flex: 0;
+  display: flex;
+  flex-direction: column;
 }
 
+/* todo: Titolo/nome del prodotto nella card */
 .card-body h3 {
-  font-size: 1.3rem;
+  font-size: 0.9rem;
   margin-bottom: 10px;
   text-shadow: 1px 1px 2px black;
 }
 
+/* todo: Prezzo del prodotto in oro */
 .price {
   font-size: 1.1rem;
   font-weight: bold;
   color: #ffdf7f;
 }
 
-/* BOTTONE */
+/* todo: Pulsante "Aggiungi" stile fantasy con gradiente scuro */
 .buy-btn {
-  margin: 10px auto 15px;
+  margin: 0;
   padding: 10px 18px;
   font-size: 1rem;
   border: 2px solid #c9a347;
@@ -549,11 +654,148 @@
   transition: 0.2s ease;
 }
 
+/* todo: Effetto hover sul pulsante aggiungi (sfondo oro scuro e glow) */
 .buy-btn:hover {
   background: #3a2a00;
   color: #ffe8b6;
   box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
 }
+
+/* todo: Card in modalità lista (layout orizzontale, senza bordi) */
+.products.list .fancy-card {
+  flex-direction: row;
+  align-items: center;
+  padding: 15px;
+  height: auto;
+  max-height: none;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* todo: Immagine piccola stile icona in modalità lista (90x90px) */
+.products.list .card-image-wrapper {
+  width: 90px;
+  min-width: 90px;
+  height: 90px;   
+  border-radius: 8px;
+  border-bottom: none;
+  border-right: none;
+}
+
+/* todo: Immagine in modalità lista (quadrata e arrotondata) */
+.products.list .card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* todo: Corpo card in lista (layout orizzontale con info affiancate) */
+.products.list .card-body {
+  flex: 1;
+  padding: 0 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+  justify-content: flex-start;
+}
+
+/* todo: Titolo prodotto in lista (allineato a sinistra) */
+.products.list .card-body h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+  min-width: 200px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* todo: Prezzo in lista (più grande e visibile) */
+.products.list .price {
+  font-size: 1.3rem;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+/* todo: Container dettagli aggiuntivi in lista (categoria, disponibilità) */
+.products.list .card-details {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  padding-left: 20px;
+  border-left: 2px solid rgba(201, 163, 71, 0.3);
+}
+
+/* todo: Dettagli nascosti in visualizzazione griglia */
+.card-details {
+  display: none;
+}
+
+/* todo: Dettagli visibili solo in visualizzazione lista */
+.products.list .card-details {
+  display: flex;
+}
+
+/* todo: Singolo dettaglio (ID, Categoria, Disponibilità) */
+.detail-item {
+  font-size: 0.9rem;
+  color: #b8a67d;
+  margin: 0;
+}
+
+/* todo: Label del dettaglio (in grassetto e oro) */
+.detail-label {
+  font-weight: bold;
+  color: #c9a347;
+  margin-right: 5px;
+}
+
+/* todo: Pulsante aggiungi in lista (più largo con testo completo) */
+.products.list .buy-btn {
+  margin: 0;
+  padding: 12px 25px;
+  font-size: 1rem;
+  white-space: nowrap;
+  min-width: 200px;
+}
+
+/* todo: Container per il pulsante "Carica altri prodotti" */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+  margin-top: 20px;
+}
+
+/* todo: Pulsante per caricare altri prodotti */
+.load-more-btn {
+  background: linear-gradient(135deg, #6c21ff, #8c4dff);
+  color: #ffffff;
+  border: none;
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Cinzel", serif;
+  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+}
+
+.load-more-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
+  background: linear-gradient(135deg, #7c31ff, #9c5dff);
+}
+
+.load-more-btn:active {
+  transform: translateY(-1px);
+}
+
+/* todo: Colore di sfondo generale della pagina */
 body {
   background-color: #141218;
 }

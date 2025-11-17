@@ -1,0 +1,397 @@
+/* todo: Variabili colore per la pagina contatti */
+:root {
+  --contact-purple: #6c21ff;
+  --contact-gold: #d8a928;
+  --contact-dark: #141218;
+  --contact-light: #ffffff;
+  --contact-gray: #8e8e93;
+  --contact-success: #4caf50;
+  --contact-error: #ff4757;
+  --contact-card-bg: #1c1a24;
+  --contact-input-bg: #2a2636;
+}
+
+/* todo: Container principale della pagina contatti */
+.contact-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--contact-dark) 0%, #1a1720 50%, var(--contact-dark) 100%);
+  padding: 80px 20px 40px;
+  font-family: "Inter", sans-serif;
+}
+
+/* todo: Content wrapper con layout a due colonne */
+.contact-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 60px;
+  align-items: start;
+}
+
+/* todo: Titolo principale */
+.contact-main-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--contact-light);
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--contact-light), var(--contact-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: "Cinzel", serif;
+}
+
+/* todo: Descrizione */
+.contact-description {
+  font-size: 18px;
+  color: var(--contact-gray);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* todo: Container dettagli contatto */
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* todo: Singolo item di dettaglio */
+.contact-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: rgba(28, 26, 36, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(216, 169, 40, 0.2);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.contact-detail-item:hover {
+  background: rgba(28, 26, 36, 0.8);
+  border-color: var(--contact-gold);
+  transform: translateX(5px);
+}
+
+/* todo: Icona nel dettaglio */
+.contact-icon {
+  font-size: 32px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--contact-purple), #8c4dff);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.contact-icon img {
+  max-width: 100%;
+}
+
+.contact-detail-item h3 {
+  color: var(--contact-light);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.contact-detail-item p {
+  color: var(--contact-gray);
+  font-size: 16px;
+}
+
+/* todo: Sezione form contatto (destra) */
+.contact-form-section {
+  width: 100%;
+}
+
+/* todo: Card contenente il form */
+.contact-form-card {
+  background: var(--contact-card-bg);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(216, 169, 40, 0.1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  overflow: hidden;
+}
+
+/* todo: Effetto brillante sul bordo della card */
+.contact-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--contact-purple), var(--contact-gold), var(--contact-purple));
+  z-index: -1;
+  margin: -2px;
+  border-radius: 20px;
+  opacity: 0.8;
+}
+
+/* todo: Titolo del form */
+.contact-form-title {
+  color: var(--contact-light);
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  font-family: "Cinzel", serif;
+}
+
+/* todo: Stili del form */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* todo: Riga del form per layout affiancato */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* todo: Gruppi di input */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* todo: Label degli input */
+.input-label {
+  color: var(--contact-light);
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 4px;
+}
+
+/* todo: Stili base per input e textarea */
+.contact-input,
+.contact-textarea {
+  background: var(--contact-input-bg);
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 5px 20px;
+  color: var(--contact-light);
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+/* todo: Placeholder styling */
+.contact-input::placeholder,
+.contact-textarea::placeholder {
+  color: var(--contact-gray);
+  opacity: 0.8;
+}
+
+/* todo: Focus states per input */
+.contact-input:focus,
+.contact-textarea:focus {
+  border-color: var(--contact-purple);
+  box-shadow: 
+    0 0 0 3px rgba(108, 33, 255, 0.1),
+    0 8px 25px rgba(108, 33, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* todo: Stili specifici per textarea */
+.contact-textarea {
+  line-height: 1.6;
+}
+
+/* todo: Bottone di invio */
+.contact-submit-btn {
+  background: linear-gradient(135deg, var(--contact-purple), #8c4dff);
+  border: none;
+  border-radius: 12px;
+  padding: 18px 30px;
+  color: var(--contact-light);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* todo: Effetto hover sul bottone */
+.contact-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(108, 33, 255, 0.4);
+}
+
+/* todo: Effetto attivo sul bottone */
+.contact-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+/* todo: Stato disabilitato del bottone */
+.contact-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* todo: Messaggio di stato */
+.status-message {
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 20px;
+  animation: fadeInUp 0.5s ease;
+}
+
+/* todo: Stato di successo */
+.status-success {
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid var(--contact-success);
+  color: var(--contact-success);
+}
+
+/* todo: Stato di errore */
+.status-error {
+  background: rgba(255, 71, 87, 0.1);
+  border: 2px solid var(--contact-error);
+  color: var(--contact-error);
+}
+
+/* todo: Stato di loading */
+.status-loading {
+  background: rgba(216, 169, 40, 0.1);
+  border: 2px solid var(--contact-gold);
+  color: var(--contact-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* todo: Spinner di caricamento */
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* todo: Animazioni */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* todo: Responsive design per tablet */
+@media (max-width: 1024px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .contact-info-section {
+    position: static;
+  }
+  
+  .contact-main-title {
+    font-size: 40px;
+  }
+}
+
+/* todo: Responsive design per mobile */
+@media (max-width: 768px) {
+  .contact-page-container {
+    padding: 60px 15px 30px;
+  }
+  
+  .contact-form-card {
+    padding: 30px 25px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .contact-main-title {
+    font-size: 32px;
+  }
+  
+  .contact-description {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-main-title {
+    font-size: 28px;
+  }
+  
+  .contact-form-card {
+    padding: 25px 20px;
+    border-radius: 15px;
+  }
+  
+  .contact-form-title {
+    font-size: 24px;
+  }
+  
+  .contact-input,
+  .contact-textarea,
+  .contact-submit-btn {
+    padding: 14px 16px;
+  }
+  
+  .contact-textarea {
+    min-height: 120px;
+  }
+  
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
+
+/* todo: Accessibilità - Focus visibile per navigazione da tastiera */
+.contact-input:focus-visible,
+.contact-textarea:focus-visible,
+.contact-submit-btn:focus-visible {
+  outline: 3px solid var(--contact-gold);
+  outline-offset: 2px;
+}
