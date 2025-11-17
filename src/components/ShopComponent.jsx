@@ -2,23 +2,26 @@
 import React, { useState } from "react";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
-import "./Shop.css"; 
+import "./ShopComponent.css"; 
 
 //todo: Creo il componente principale Shop
 const Shop = () => {
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
+  
+  //todo: Stato per la modalità di visualizzazione (grid o list)
+  const [viewMode, setViewMode] = useState("grid");
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
-  const products = [
-    { id: 1, name: "The Lord Of the Ring", price: 4.99 },
-    { id: 2, name: "Stranger Things", price: 9.99 },
-    { id: 3, name: "Harry Potter Collection", price: 69.99 },
-    { id: 4, name: "Anime Collection", price: 69.99 },
-    { id: 4, name: "Football", price: 19.99 },
-    { id: 4, name: "Gigina la dinosaura", price: 19.99 },
-    { id: 4, name: "Samir Experience", price: 29.99 },
-    { id: 4, name: "El Trentin", price: 39.99 },
+    const products = [
+    { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
+    { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
+    { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
+    { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
+    { id: 4, name: "Football", price: 19.99 , image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
+    { id: 4, name: "Gigina la dinosaura", price: 19.99 , image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
+    { id: 4, name: "Samir Experience", price: 29.99 , image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
+    { id: 4, name: "El Trentin", price: 39.99 , image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
   ];
 
   //todo: Stato per i prodotti aggiunti al carrello
@@ -60,9 +63,9 @@ const Shop = () => {
 
     //todo: Mostro una notifica diversa a seconda se era già nel carrello
     if (wasInCart) {
-      showNotification(`Quantità di "${product.name}" aumentata nel carrello!`);
+      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
     } else {
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      showNotification(`"${product.name}" aggiunto al carretto!`);
     }
   };
 
@@ -75,7 +78,7 @@ const Shop = () => {
     
     //todo: Mostro notifica di rimozione in rosso
     if (productToRemove) {
-      showNotification(`"${productToRemove.name}" rimosso dal carrello!`, 'error');
+      showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
     }
   };
 
@@ -101,7 +104,7 @@ const Shop = () => {
     
     //todo: Mostro notifica se il prodotto è stato completamente rimosso
     if (willBeRemoved && productToCheck) {
-      showNotification(`"${productToCheck.name}" rimosso dal carrello!`, 'error');
+      showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
     }
   };
 
@@ -158,7 +161,7 @@ const Shop = () => {
             className={activeTab === "cart" ? "menu-btn active" : "menu-btn"}
             onClick={() => setActiveTab("cart")}
           >
-            Carrello ({cart.length})
+            Carretto ({cart.length})
           </button>
 
           <button
@@ -177,31 +180,63 @@ const Shop = () => {
         {/* todo: Sezione Shop */}
         {activeTab === "shop" && (
           <div className="shop-section">
+            {/* todo: Controlli per cambiare visualizzazione */}
+            <div className="view-controls">
+              <button 
+                className={viewMode === "grid" ? "view-btn active" : "view-btn"}
+                onClick={() => setViewMode("grid")}
+                title="Visualizzazione a griglia"
+              >
+                <span className="view-icon">⊞</span> Griglia
+              </button>
+              <button 
+                className={viewMode === "list" ? "view-btn active" : "view-btn"}
+                onClick={() => setViewMode("list")}
+                title="Visualizzazione a lista"
+              >
+                <span className="view-icon">☰</span> Lista
+              </button>
+            </div>
 
-            <div className="products">
+            <div className={`products ${viewMode}`}>
               {products.map((p) => (
-                <div key={p.id} className="card">
-                  <h3>{p.name}</h3>
-                  <p className="price">{p.price.toFixed(2)}€</p>
+                <div key={p.id} className="card fancy-card">
+                  
+                  <div className="card-image-wrapper">
+                    <img src={p.image} alt={p.name} className="card-image" />
+                  </div>
+
+                  <div className="card-body">
+                    <h3>{p.name}</h3>
+                    <p className="price">{p.price.toFixed(2)}€</p>
+                    {viewMode === "list" && (
+                      <div className="card-details">
+                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
+                      </div>
+                    )}
+                  </div>
+
                   <button className="buy-btn" onClick={() => addToCart(p)}>
-                    Aggiungi
+                    {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
                   </button>
                 </div>
               ))}
             </div>
+
           </div>
         )}
 
         {/* todo: Sezione Carrello */}
         {activeTab === "cart" && (
           <div className="cart-section">
-            <h2 className="section-title">Carrello</h2>
+            <h2 className="section-title">Carretto</h2>
 
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-cart">
-                <p>Il carrello è vuoto.</p>
+                <p>Il carretto è vuoto.</p>
                 <p>Vai al Shop per aggiungere prodotti!</p>
+                <img src="/public/icon/EmptyShop.png" alt="Il logo del carrello vuoto" />
               </div>
             ) : (
               //todo: Lista prodotti nel carrello
@@ -248,7 +283,7 @@ const Shop = () => {
                 {/* todo: Mostro totale del carrello */}
                 <div className="cart-total">
                   <strong>
-                    Totale Carrello: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
+                    Totale Carretto: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
                   </strong>
                 </div>
               </div>
@@ -264,8 +299,9 @@ const Shop = () => {
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-checkout">
-                <p>Il carrello è vuoto.</p>
-                <p>Aggiungi prodotti per procedere al checkout.</p>
+                <p>Il carretto è vuoto.</p>
+                <p>Aggiungi prodotti al carretto per procedere al checkout.</p>
+                <img src="/public/icon/InShop.png" alt="Il logo del carrello vuoto" />
               </div>
             ) : (
               <>
@@ -289,7 +325,7 @@ const Shop = () => {
                         <button
                           className="checkout-remove-btn"
                           onClick={() => removeFromCart(item.id)}
-                          title="Rimuovi dal carrello"
+                          title="Rimuovi dal carretto"
                         >
                           ✕
                         </button>
@@ -312,13 +348,13 @@ const Shop = () => {
                       onClick={() => {
                         const itemCount = cart.length;
                         setCart([]);
-                        showNotification(`Carrello svuotato! ${itemCount} prodotti rimossi.`, 'error');
+                        showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
                       }}
                     >
-                      Svuota Carrello
+                      Svuota Carretto
                     </button>
                     <button className="confirm-btn">
-                      Conferma Acquisto
+                      Conferma Acquisto e parti per la tua prossima avventura
                     </button>
                   </div>
                 </div>
