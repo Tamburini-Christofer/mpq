@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
-import "./ShopComponent.css"; 
+import "./ShopComponent.css";
 
 //todo: Importiamo il componente CheckoutForm
 import CheckoutForm from "./CheckoutForm";
@@ -11,34 +11,34 @@ import CheckoutForm from "./CheckoutForm";
 const Shop = () => {
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
-  
+
   //todo: Stato per la modalità di visualizzazione (grid o list)
   const [viewMode, setViewMode] = useState("grid");
-  
+
   //todo: Stato per mostrare/nascondere il form di checkout
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-  
+
   //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
   const [visibleProducts, setVisibleProducts] = useState(10);
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
-    const products = [
-    { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
+  const products = [
+    { id: 1, name: "The Lord Of the Ring", price: 4.99, image: "https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
     { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
     { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
-    { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
-    { id: 4, name: "Football", price: 19.99 , image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
-    { id: 4, name: "Gigina la dinosaura", price: 19.99 , image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
-    { id: 4, name: "Samir Experience", price: 29.99 , image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
-    { id: 4, name: "El Trentin", price: 39.99 , image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
-        { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
-    { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
-    { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
-    { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
-    { id: 4, name: "Football", price: 19.99 , image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
-    { id: 4, name: "Gigina la dinosaura", price: 19.99 , image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
-    { id: 4, name: "Samir Experience", price: 29.99 , image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
-    { id: 4, name: "El Trentin", price: 39.99 , image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
+    { id: 4, name: "Anime Collection", price: 69.99, image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN" },
+    { id: 5, name: "Football", price: 19.99, image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg" },
+    { id: 6, name: "Gigina la dinosaura", price: 19.99, image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" },
+    { id: 7, name: "Samir Experience", price: 29.99, image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg" },
+    { id: 8, name: "El Trentin", price: 39.99, image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg" },
+    { id: 9, name: "The Lord Of the Ring", price: 4.99, image: "https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
+    { id: 10, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
+    { id: 11, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
+    { id: 12, name: "Anime Collection", price: 69.99, image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN" },
+    { id: 13, name: "Football", price: 19.99, image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg" },
+    { id: 14, name: "Gigina la dinosaura", price: 19.99, image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg" },
+    { id: 15, name: "Samir Experience", price: 29.99, image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg" },
+    { id: 16, name: "El Trentin", price: 39.99, image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg" },
   ];
 
   //todo: Stato per i prodotti aggiunti al carrello
@@ -60,11 +60,11 @@ const Shop = () => {
   const addToCart = (product) => {
     //todo: Controllo se il prodotto era già nel carrello
     const wasInCart = cart.find(item => item.id === product.id);
-    
+
     setCart((prev) => {
       //todo: Trovo se esiste già l'item nel carrello
       const existingItem = prev.find(item => item.id === product.id);
-      
+
       if (existingItem) {
         //todo: Se esiste, incremento la quantità di 1
         return prev.map(item =>
@@ -90,9 +90,9 @@ const Shop = () => {
   const removeFromCart = (id) => {
     //todo: Trovo il prodotto da rimuovere per mostrare il nome nella notifica
     const productToRemove = cart.find(item => item.id === id);
-    
+
     setCart((prev) => prev.filter((item) => item.id !== id));
-    
+
     //todo: Mostro notifica di rimozione in rosso
     if (productToRemove) {
       showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
@@ -104,7 +104,7 @@ const Shop = () => {
     //todo: Trovo il prodotto per controllare se sarà rimosso
     const productToCheck = cart.find(item => item.id === id);
     const willBeRemoved = productToCheck && productToCheck.quantity === 1;
-    
+
     setCart((prev) => {
       return prev.map(item => {
         if (item.id === id) {
@@ -118,7 +118,7 @@ const Shop = () => {
         return item;
       }).filter(Boolean); //todo: Rimuovo eventuali elementi null
     });
-    
+
     //todo: Mostro notifica se il prodotto è stato completamente rimosso
     if (willBeRemoved && productToCheck) {
       showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
@@ -127,7 +127,7 @@ const Shop = () => {
 
   //todo: Funzione per aumentare la quantità di un prodotto nel carrello
   const increaseQuantity = (id) => {
-    setCart((prev) => 
+    setCart((prev) =>
       prev.map(item =>
         item.id === id
           ? { ...item, quantity: item.quantity + 1 }
@@ -152,7 +152,7 @@ const Shop = () => {
               {notification.type === 'success' ? '✓' : 'ℹ'}
             </span>
             <span className="notification-message">{notification.message}</span>
-            <button 
+            <button
               className="notification-close"
               onClick={() => setNotification(null)}
             >
@@ -204,14 +204,14 @@ const Shop = () => {
           <div className="shop-section">
             {/* todo: Controlli per cambiare visualizzazione */}
             <div className="view-controls">
-              <button 
+              <button
                 className={viewMode === "grid" ? "view-btn active" : "view-btn"}
                 onClick={() => setViewMode("grid")}
                 title="Visualizzazione a griglia"
               >
                 <span className="view-icon">⊞</span> Griglia
               </button>
-              <button 
+              <button
                 className={viewMode === "list" ? "view-btn active" : "view-btn"}
                 onClick={() => setViewMode("list")}
                 title="Visualizzazione a lista"
@@ -223,7 +223,6 @@ const Shop = () => {
             <div className={`products ${viewMode}`}>
               {products.slice(0, visibleProducts).map((p) => (
                 <div key={p.id} className="card fancy-card">
-                  
                   <div className="card-image-wrapper">
                     <img src={p.image} alt={p.name} className="card-image" />
                   </div>
@@ -278,7 +277,7 @@ const Shop = () => {
                       <span className="item-name">{item.name}</span>
                       <span className="item-price">{item.price.toFixed(2)}€</span>
                     </div>
-                    
+
                     {/* todo: Controlli per cambiare la quantità */}
                     <div className="quantity-controls">
                       <button
@@ -310,7 +309,7 @@ const Shop = () => {
                     </div>
                   </div>
                 ))}
-                
+
                 {/* todo: Mostro totale del carrello */}
                 <div className="cart-total">
                   <strong>
@@ -326,7 +325,7 @@ const Shop = () => {
         {activeTab === "checkout" && (
           <div className="checkout-section">
             <h2 className="section-title">Checkout</h2>
-            
+
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-checkout">
@@ -339,7 +338,7 @@ const Shop = () => {
                 {/* todo: Riepilogo prodotti nel checkout */}
                 <div className="checkout-items">
                   <h3 className="checkout-subtitle">Riepilogo Ordine:</h3>
-                  
+
                   {cart.map((item) => (
                     <div key={item.id} className="checkout-item">
                       <div className="checkout-item-info">
@@ -348,7 +347,7 @@ const Shop = () => {
                           {item.quantity} x {item.price.toFixed(2)}€
                         </span>
                       </div>
-                      
+
                       <div className="checkout-item-actions">
                         <span className="checkout-item-total">
                           {(item.price * item.quantity).toFixed(2)}€
@@ -372,9 +371,9 @@ const Shop = () => {
                       Totale Ordine: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
                     </h3>
                   </div>
-                  
+
                   <div className="checkout-actions">
-                    <button 
+                    <button
                       className="clear-cart-btn"
                       onClick={() => {
                         const itemCount = cart.length;
@@ -384,7 +383,7 @@ const Shop = () => {
                     >
                       Svuota Carretto
                     </button>
-                    <button 
+                    <button
                       className="confirm-btn"
                       onClick={() => setShowCheckoutForm(true)}
                     >
@@ -397,7 +396,7 @@ const Shop = () => {
           </div>
         )}
       </main>
-      
+
       {/* todo: Overlay form checkout */}
       {showCheckoutForm && (
         <CheckoutForm

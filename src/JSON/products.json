@@ -2,6 +2,7 @@
     {
         "id":  1,
         "category_id":  1,
+        "category_name": "film",
         "name":  "Il Padrino",
         "image":  "/img/opera_1.jpg",
         "description":  "In \u0027Il Padrino\u0027, mentre la famiglia Corleone combatte per mantenere il controllo del proprio impero, un giovane contabile di origini modeste viene assunto per tenere in ordine i registri di una piccola attività di facciata. Convinto di essere solo un impiegato di periferia, si ritrova lentamente coinvolto in cene di famiglia, trattative sussurrate e messaggi da recapitare a persone che non compaiono mai nei documenti ufficiali. Nel tentativo di restare onesto, inizia a compilare un quaderno segreto in cui annota alleanze, tradimenti e strani passaggi di denaro, costruendo involontariamente la mappa più completa del potere Corleone. Quando gli equilibri interni degenerano e la violenza diventa inevitabile, il contabile si ritrova a dover scegliere se consegnare il suo quaderno a chi vuole distruggere la famiglia o usarlo per contrattare la salvezza propria e delle persone a cui si è affezionato. La sua storia scorre parallela a quella di Michael, osservando gli stessi eventi da stanze secondarie, corridoi affollati e piccoli uffici pieni di fumo.",
