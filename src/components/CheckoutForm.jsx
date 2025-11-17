@@ -64,7 +64,6 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
   return (
     // Overlay scuro di sfondo
     <div className="checkout-overlay" onClick={onClose}>
-      // Container principale del form (previene chiusura cliccando dentro)
       <div className="checkout-form-container" onClick={(e) => e.stopPropagation()}>
         
         {/* ===== HEADER ===== */}
@@ -122,20 +121,6 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
                   name="email"
                   placeholder="tua@email.com"
                   value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="input-group">
-                <label className="input-label" htmlFor="phone">Telefono *</label>
-                <input
-                  id="phone"
-                  className="checkout-input"
-                  type="tel"
-                  name="phone"
-                  placeholder="+39 123 456 7890"
-                  value={formData.phone}
                   onChange={handleChange}
                   required
                 />
@@ -205,7 +190,7 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
             </div>
           </div>
 
-          {/* CHECKBOX: Stesso indirizzo per fatturazione */}
+          {/* CHECKBOX: Stesso indirizzo per fatturazione
           <div className="checkbox-group">
             <input
               id="sameAsShipping"
@@ -217,7 +202,7 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
             <label htmlFor="sameAsShipping">
               Usa lo stesso indirizzo per la fatturazione
             </label>
-          </div>
+          </div> */}
 
           {/* SEZIONE 3: INDIRIZZO DI FATTURAZIONE (condizionale) */}
           {!formData.sameAsShipping && (
@@ -305,10 +290,15 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
           <div className="order-summary">
             <h3 className="section-title">Riepilogo Ordine</h3>
             <div className="summary-details">
-              <div className="summary-row">
-                <span>Prodotti ({cartItems.length})</span>
-                <span className="summary-value">{totalAmount.toFixed(2)}€</span>
-              </div>
+              {/* Lista prodotti nel carrello */}
+              {cartItems.map((item, index) => (
+                <div key={index} className="summary-row">
+                  <span>{item.name} x{item.quantity}</span>
+                  <span className="summary-value">{(item.price * item.quantity).toFixed(2)}€</span>
+                </div>
+              ))}
+              
+              {/* Riga totale */}
               <div className="summary-row total-row">
                 <span className="total-label">Totale</span>
                 <span className="total-value">{totalAmount.toFixed(2)}€</span>
