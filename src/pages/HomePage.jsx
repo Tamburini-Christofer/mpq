@@ -1,5 +1,8 @@
 import './HomePage.css'
-import heroVideo from '../videos/video-for-hero.mp4';
+import { useState } from 'react';
+import heroVideoAnime from '../videos/video-hero-anime.mp4';
+import heroVideoFilm from '../videos/video-hero-film.mp4';
+
 
 const questData = [
     {
@@ -103,25 +106,37 @@ const questData = [
 
 function HomePage() {
 
+    // Stato per tracciare il video corrente
+    const [currentVideoSrc, setCurrentVideoSrc] = useState(heroVideoAnime);
+
+    // FUNZIONE MODIFICATA PER IL LOOP
+    const handleVideoEnd = () => {
+        // Se il video corrente è l'Anime, passa al Film.
+        if (currentVideoSrc === heroVideoAnime) {
+            setCurrentVideoSrc(heroVideoFilm);
+        }
+        // Se il video corrente è il Film, torna all'Anime.
+        else if (currentVideoSrc === heroVideoFilm) {
+            setCurrentVideoSrc(heroVideoAnime);
+        }
+    };
+
     const latestArrivals = questData.filter(quest => quest.isNew);
     const bestSellers = questData.filter(quest => quest.isBestSeller);
 
     const scrollListById = (id, direction) => {
-        // 1. Troviamo l'elemento DOM usando l'ID
-        const listElement = document.getElementById(id); 
+        const listElement = document.getElementById(id);
 
-        // 2. Controlliamo che l'elemento sia stato trovato
-        if (listElement) { 
+
+        if (listElement) {
             // Larghezza di scorrimento (4 card * 270px)
-            const scrollAmount = 4 * 270; 
-            
-            // 3. Eseguiamo lo scorrimento
+            const scrollAmount = 4 * 270;
+
             listElement.scrollBy({
                 left: direction * scrollAmount,
                 behavior: 'smooth'
             });
         } else {
-            // Utile per il debug se l'ID non viene trovato
             console.error(`Elemento non trovato con ID: ${id}`);
         }
     };
@@ -137,19 +152,20 @@ function HomePage() {
                     <button className="btn-get-started">GET STARTED</button>
                 </div>
                 <div className="hero-right">
-                    {/* Placeholder */}
                     {/* ELEMENTO VIDEO */}
-                <video 
-                    autoPlay 
-                    loop 
-                    muted 
-                    playsInline
-                    className="hero-video" 
-                >
-                    {/* UTILIZZO DELLA VARIABILE IMPORTATA */}
-                    <source src={heroVideo} type="video/mp4" />
-                    Il tuo browser non supporta il tag video.
-                </video>
+                    <video
+                        autoPlay
+                        loop={false} // IMPORTANTE: Impostiamo loop su FALSE per entrambi
+                        muted
+                        playsInline
+                        className="hero-video"
+                        onEnded={handleVideoEnd} // Gestore di fine video
+                        key={currentVideoSrc} // Aggiungi la key per forzare il ricaricamento
+                        src={currentVideoSrc} // Sorgente dinamica
+                        disablepictureinpicture
+                    >
+                        Il tuo browser non supporta il tag video.
+                    </video>
                 </div>
             </section>
 
@@ -208,8 +224,6 @@ function HomePage() {
                     &gt;
                 </button>
             </section>
-
-
         </div>
     );
 }

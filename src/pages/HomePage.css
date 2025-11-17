@@ -2,25 +2,21 @@
 .homepage {
     /* max-width: 1400px; */
     margin: 0 auto;
-    /* FIX CRUCIALE: Aggiungiamo padding laterale per centrare il contenuto 
-       e lasciare spazio ai pulsanti di scorrimento. */
     padding: 0 50px;
 }
 
 /* --- HERO SECTION --- */
 
 .hero-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-height: 500px;
-    padding-top: 50px;
+    min-height: 80vh;
+    width: 100%;
     margin-bottom: 80px;
+    position: relative;
 }
 
 .hero-title {
     font-family: "Pixelify Sans", sans-serif;
-    font-size: 5rem;
+    font-size: 9rem;
     font-weight: 900;
     line-height: 1.1;
     color: #FFD700;
@@ -29,7 +25,7 @@
 
 .hero-title-purple {
     color: #772284;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .btn-get-started {
@@ -37,11 +33,11 @@
     color: #121212;
     font-weight: bold;
     font-family: "Pixelify Sans", sans-serif;
-    padding: 15px 40px;
+    padding: 30px 80px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 2rem;
     margin-top: 20px;
     transition: background-color 0.2s;
 }
@@ -50,26 +46,44 @@
     background-color: #836b0d;
 }
 
+/* --- HERO-RIGHT: Contenitore del Video (Sfondo) --- */
 .hero-right {
-    flex-grow: 1; /* Permette di espandersi nello spazio disponibile */
-    max-width: 50%; /* Limita l'espansione a metà schermo */
-    margin-left: 50px; /* Spazio tra testo e video */
-    height: 500px;
-    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: #121212;
     overflow: hidden;
-    position: relative;
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
 /* --- ELEMENTO VIDEO --- */
 .hero-video {
-    /* **MODIFICA 2: Stile per l'elemento <video> ** */
     display: block;
     width: 100%;
     height: 100%;
-    
-    /* ESSENZIALE: Assicura che il video copra il 100% dell'area 
-       di .hero-right senza deformarsi, tagliando i bordi in eccesso. */
-    object-fit: cover; 
+    object-fit: cover;
+    opacity: 0.2;
+}
+
+/* --- HERO-LEFT: Contenitore del Testo (Sopra il Video) --- */
+.hero-left {
+    position: relative;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    min-height: 80vh;
+
+    /* CENTRATURA DEL CONTENUTO */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
 }
 
 
@@ -93,7 +107,6 @@
     padding-bottom: 20px;
     margin-bottom: 0;
     flex-wrap: nowrap;
-
     /* Nascondiamo la barra di scorrimento nativa */
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -143,7 +156,19 @@
     cursor: pointer;
     z-index: 10;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, opacity 0.3s, visibility 0.3s;
+    /* Aggiungi transizione per l'effetto */
+
+    /* NASCONDI I PULSANTI DI DEFAULT */
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* MOSTRA I PULSANTI QUANDO SI PASSA SOPRA AL CONTENITORE PRINCIPALE */
+.latest-section-wrapper:hover .scroll-btn,
+.best-sellers-section-wrapper:hover .scroll-btn {
+    opacity: 1;
+    visibility: visible;
 }
 
 .scroll-btn:hover {
