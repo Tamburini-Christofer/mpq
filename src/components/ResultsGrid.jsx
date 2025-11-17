@@ -39,10 +39,10 @@ export default function ResultsGrid({ products = [], loading = false }) {
            - (product, index) => product è l'oggetto corrente, index la posizione
            - Ogni iterazione restituisce un componente <CardExp />
            - key è OBBLIGATORIO per React per ottimizzare il rendering
-           - Usiamo product.id se esiste, altrimenti l'index come fallback */}
+           - Usiamo product.id se esiste, altrimenti generiamo una chiave unica */}
       {products.map((product, index) => (
         <CardExp 
-          key={product.id || index} 
+          key={product.id ? `product-${product.id}` : `product-${index}-${product.name || 'unknown'}`} 
           product={product} 
         />
       ))}
@@ -62,15 +62,3 @@ export default function ResultsGrid({ products = [], loading = false }) {
    - Ogni caso è gestito esplicitamente
    - Evita if/else annidati complessi
    - Facile aggiungere nuovi stati (errore, etc.)
-   
-   STRUTTURA OGGETTO PRODUCT (esempio):
-   {
-     id: 1,
-     title: "Puzzle Naruto",
-     price: 25.99,
-     category: "anime",
-     difficulty: "medium",
-     image: "url...",
-     rating: 4.5
-   }
-*/

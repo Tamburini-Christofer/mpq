@@ -44,7 +44,7 @@ body {
 .filters-title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: #d4af37;
+  color: #D8A928;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -58,7 +58,7 @@ body {
 
 .filter-group h4 {
   margin-bottom: 1rem;
-  color: #d4af37;
+  color: #D8A928;
   font-weight: 600;
   font-size: 0.95rem;
   text-transform: uppercase;
@@ -77,7 +77,7 @@ body {
   height: 18px;
   margin-right: 0.75rem;
   cursor: pointer;
-  accent-color: #d4af37;
+  accent-color: #D8A928;
   border-radius: 3px;
 }
 
@@ -107,7 +107,7 @@ body {
   width: 100%;
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, #d4af37 0%, #d4af37 25%, #444 25%, #444 100%);
+  background: linear-gradient(to right, #D8A928 0%, #D8A928 25%, #444 25%, #444 100%);
   outline: none;
   -webkit-appearance: none;
   appearance: none;
@@ -122,7 +122,7 @@ body {
   height: 20px;
   border-radius: 50%;
   background: #000000;
-  border: 2px solid #d4af37;
+  border: 2px solid #D8A928;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
@@ -133,7 +133,7 @@ body {
   height: 20px;
   border-radius: 50%;
   background: #000000;
-  border: 2px solid #d4af37;
+  border: 2px solid #D8A928;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   border: none;
@@ -157,7 +157,7 @@ body {
 .apply-filters-btn {
   width: 100%;
   padding: 0.8rem 1rem;
-  background: linear-gradient(135deg, #d89a2e 0%, #d4af37 100%);
+  background: linear-gradient(135deg, #d89a2e 0%, #D8A928 100%);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -173,7 +173,7 @@ body {
 .apply-filters-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-  background: linear-gradient(135deg, #b414c3 0%, #d4af37 100%);
+  background: linear-gradient(135deg, #b414c3 0%, #D8A928 100%);
 }
 
 .apply-filters-btn:active {
@@ -218,7 +218,7 @@ body {
 
 .search-input:focus {
   outline: none;
-  border-color: #dede4a;
+  border-color: #D8A928;
   box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.2);
   background: rgba(42, 42, 64, 0.95);
 }
@@ -231,7 +231,7 @@ body {
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
-  color: #d4af37;
+  color: #D8A928;
   z-index: 1;
 }
 
@@ -244,7 +244,7 @@ body {
 }
 
 .sort-wrapper label {
-  color: #d4af37;
+  color: #D8A928;
   font-size: 0.9rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -281,14 +281,14 @@ body {
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
-  color: #d4af37;
+  color: #D8A928;
   pointer-events: none;
   z-index: 1;
 }
 
 .sort-select:focus {
   outline: none;
-  border-color: #d4af37;
+  border-color: #D8A928;
   box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2), 0 8px 25px rgba(0, 0, 0, 0.15);
   background-color: rgba(42, 42, 64, 0.95);
   transform: translateY(-1px);
@@ -313,7 +313,7 @@ body {
 }
 
 .sort-select option:checked {
-  background: #d4af37;
+  background: #D8A928;
   color: #000000;
 }
 
