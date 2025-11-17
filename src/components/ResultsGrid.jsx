@@ -61,4 +61,4 @@ export default function ResultsGrid({ products = [], loading = false }) {
    - Codice pulito e leggibile
    - Ogni caso è gestito esplicitamente
    - Evita if/else annidati complessi
-   - Facile aggiungere nuovi stati (errore, etc.)
+   - Facile aggiungere nuovi stati (errore, etc.)*/
