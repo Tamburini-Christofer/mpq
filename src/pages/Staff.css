@@ -1,0 +1,582 @@
+/* ========================================
+   VARIABILI GLOBALI
+   ======================================== */
+:root {
+  --staff-purple: #6c21ff;
+  --staff-gold: #d8a928;
+  --staff-dark: #141218;
+  --staff-light: #ffffff;
+  --staff-gray: #8e8e93;
+  --staff-card-bg: #1c1a24;
+  --staff-input-bg: #2a2636;
+}
+
+/* ========================================
+   CONTAINER PRINCIPALE
+   ======================================== */
+
+/* Container della pagina staff */
+.staff-page-container {
+  min-height: 100vh;
+  background: var(--staff-dark);
+  padding: 0;
+  font-family: "Inter", sans-serif;
+}
+
+/* ========================================
+   HEADER
+   ======================================== */
+
+/* Header della pagina con background separato */
+.staff-header {
+  background: linear-gradient(135deg, #1a1720 0%, var(--staff-dark) 100%);
+  padding: 20px;
+  text-align: center;
+  border-bottom: 3px solid rgba(216, 169, 40, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Titolo principale */
+.staff-main-title {
+  font-size: 64px;
+  font-weight: 900;
+  color: var(--staff-light);
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--staff-light), var(--staff-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: "Cinzel", serif;
+  position: relative;
+  z-index: 1;
+  letter-spacing: -1px;
+}
+
+/* Sottotitolo */
+.staff-subtitle {
+  font-size: 22px;
+  color: var(--staff-gray);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================
+   GRIGLIA TEAM
+   ======================================== */
+
+/* Griglia dei membri del team */
+.team-grid {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+
+/* Card del membro del team */
+.team-card {
+  background: var(--staff-card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid rgba(216, 169, 40, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.team-card:hover {
+  transform: translateY(-10px);
+  border-color: var(--staff-gold);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(216, 169, 40, 0.3);
+}
+
+/* Wrapper immagine */
+.team-card-image-wrapper {
+  position: relative;
+}
+
+/* Immagine del membro */
+.team-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+/* Overlay sull'immagine */
+.team-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, var(--staff-card-bg), transparent);
+  pointer-events: none;
+}
+
+/* Contenuto della card */
+.team-card-content {
+  padding: 16px;
+}
+
+/* Nome del membro */
+.team-member-name {
+  color: var(--staff-light);
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  font-family: "Cinzel", serif;
+}
+
+/* Ruolo del membro */
+.team-member-role {
+  color: var(--staff-gold);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Descrizione */
+.team-member-description {
+  color: var(--staff-gray);
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+/* Container skills */
+.team-member-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Badge skill */
+.skill-badge {
+  background: rgba(108, 33, 255, 0.2);
+  color: var(--staff-light);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid rgba(108, 33, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.skill-badge:hover {
+  background: rgba(108, 33, 255, 0.4);
+  border-color: var(--staff-purple);
+}
+
+/* ========================================
+   SEZIONE CARRIERE
+   ======================================== */
+
+/* Container sezione carriere */
+.careers-section {
+  background: linear-gradient(180deg, #0a0a0f 0%, #1a1720 50%, var(--staff-dark) 100%);
+  padding: 20px 50px;
+  margin-top: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Content wrapper */
+.careers-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* Informazioni carriere */
+.careers-info {
+  padding-right: 20px;
+}
+
+/* Titolo carriere */
+.careers-title {
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--staff-light);
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--staff-purple), var(--staff-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: "Cinzel", serif;
+  letter-spacing: -1px;
+}
+
+/* Descrizione carriere */
+.careers-description {
+  font-size: 14px;
+  color: var(--staff-gray);
+  line-height: 1.8;
+}
+
+/* Container benefici */
+.careers-benefits {
+  margin-top: 30px;
+}
+
+/* Titolo benefici */
+.benefits-title {
+  font-size: 28px;
+  color: var(--staff-light);
+  margin-bottom: 30px;
+  font-family: "Cinzel", serif;
+  background: linear-gradient(135deg, var(--staff-light), var(--staff-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Lista benefici */
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Singolo beneficio */
+.benefit-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 16px;
+  background: rgba(108, 33, 255, 0.08);
+  border-radius: 16px;
+  border: 2px solid rgba(108, 33, 255, 0.2);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefit-item:hover {
+  background: rgba(108, 33, 255, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(108, 33, 255, 0.3);
+}
+
+.benefit-item:hover::before {
+  transform: scaleX(1);
+}
+
+/* Icona beneficio */
+.benefit-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  filter: grayscale(0);
+  transition: transform 0.4s ease;
+}
+
+.benefit-item:hover .benefit-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.benefit-item strong {
+  color: var(--staff-light);
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Cinzel", serif;
+}
+
+.benefit-item p {
+  color: var(--staff-gray);
+  font-size: 13px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ========================================
+   FORM CARRIERE
+   ======================================== */
+
+/* Wrapper form */
+.careers-form-wrapper {
+  position: sticky;
+  top: 100px;
+}
+
+/* Card form */
+.careers-card {
+  background: linear-gradient(145deg, #1c1a24 0%, #221e30 100%);
+  border-radius: 24px;
+  padding: 40px;
+  border: 2px solid rgba(108, 33, 255, 0.3);
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(108, 33, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.careers-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--staff-purple), var(--staff-gold), var(--staff-purple));
+}
+
+/* Titolo card */
+.careers-card-title {
+  font-size: 28px;
+  color: var(--staff-light);
+  margin-bottom: 10px;
+  font-family: "Cinzel", serif;
+}
+
+/* Sottotitolo card */
+.careers-card-subtitle {
+  font-size: 15px;
+  color: var(--staff-gray);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+/* Form */
+.careers-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Riga form */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Gruppo input */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Label */
+.input-label {
+  color: var(--staff-light);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Input e select */
+.careers-input,
+.careers-textarea {
+  background: rgba(42, 38, 54, 0.8);
+  border: 2px solid rgba(108, 33, 255, 0.2);
+  border-radius: 12px;
+  color: var(--staff-light);
+  padding: 14px 18px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
+  font-family: inherit;
+}
+
+.careers-input:focus,
+.careers-textarea:focus {
+  border-color: var(--staff-purple);
+  background: rgba(42, 38, 54, 1);
+  box-shadow: 0 0 0 4px rgba(108, 33, 255, 0.15);
+}
+
+.careers-input::placeholder,
+.careers-textarea::placeholder {
+  color: var(--staff-gray);
+  opacity: 0.7;
+}
+
+/* Textarea */
+.careers-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+/* Pulsante submit */
+.careers-submit-btn {
+  background: linear-gradient(135deg, var(--staff-purple), #8c4dff);
+  color: var(--staff-light);
+  border: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Cinzel", serif;
+  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.careers-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
+}
+
+.careers-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+.btn-icon {
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.careers-submit-btn:hover .btn-icon {
+  transform: translateX(5px);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+/* Tablet (max 1024px) */
+@media (max-width: 1024px) {
+  .careers-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .careers-form-wrapper {
+    position: static;
+  }
+  
+  .careers-info {
+    padding-right: 0;
+  }
+}
+
+/* Tablet (max 768px) */
+@media (max-width: 768px) {
+  .staff-main-title {
+    font-size: 40px;
+  }
+  
+  .staff-subtitle {
+    font-size: 18px;
+  }
+  
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .careers-section {
+    padding: 60px 20px;
+  }
+  
+  .careers-content {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  
+  .careers-title {
+    font-size: 36px;
+  }
+  
+  .benefits-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .careers-card {
+    padding: 30px 20px;
+  }
+  
+  .careers-form-wrapper {
+    position: static;
+  }
+}
+
+/* Mobile (max 480px) */
+@media (max-width: 480px) {
+  .staff-header {
+    padding: 80px 15px 50px;
+  }
+  
+  .staff-main-title {
+    font-size: 32px;
+  }
+  
+  .staff-subtitle {
+    font-size: 16px;
+  }
+  
+  .team-grid {
+    padding: 40px 15px;
+  }
+  
+  .team-card-content {
+    padding: 20px;
+  }
+  
+  .team-member-name {
+    font-size: 20px;
+  }
+  
+  .careers-section {
+    padding: 50px 15px;
+  }
+  
+  .careers-title {
+    font-size: 28px;
+  }
+  
+  .benefits-title {
+    font-size: 22px;
+  }
+  
+  .benefits-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .benefit-item {
+    padding: 20px 15px;
+  }
+  
+  .benefit-icon {
+    font-size: 36px;
+  }
+  
+  .careers-card {
+    padding: 30px 20px;
+  }
+  
+  .careers-card-title {
+    font-size: 24px;
+  }
+}
