@@ -3,9 +3,11 @@
 import { useState } from "react";
 //todo Importo emailjs per l'invio delle email
 import emailjs from "emailjs-com";
+//todo Importo il CSS per gli stili del componente
+import "./EmailSender.css";
 
 //todo Componente per l'invio di email tramite un form
-export default function EmailSender() {
+export default function EmailSender({ onClose }) {
     //todo Stato per i dati del form
   const [formData, setFormData] = useState({
     name: "",
@@ -24,7 +26,7 @@ export default function EmailSender() {
     //todo Funzione per inviare l'email
   const sendEmail = (e) => {
     e.preventDefault();
-    setStatus("Invio...");
+    setStatus("Registrazione in corso...");
 
     //todo Configurazione EmailJS per inviare l'email
     emailjs
@@ -40,49 +42,96 @@ export default function EmailSender() {
       )
     //todo Gestione del successo o fallimento dell'invio
       .then(() => {
-        setStatus("Email inviata!");
+        setStatus("Registrazione completata! Controlla la tua email per il messaggio di benvenuto.");
         setFormData({ name: "", email: "", message: "" });
       })
       .catch(() => {
-        setStatus("Errore nell'invio");
+        setStatus("Errore nella registrazione. Riprova più tardi.");
       });
   };
 
+  //todo Funzione per determinare il tipo di classe del messaggio di stato
+  const getStatusClass = () => {
+    if (status.includes("completata")) return "status-success";
+    if (status.includes("Errore")) return "status-error";
+    if (status.includes("corso")) return "status-loading";
+    return "";
+  };
+
   return (
-    <div>
-      <form onSubmit={sendEmail}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Nome"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+    <div className="email-sender-container">
+      <div className="email-form-card">
+        {/* todo: Logo MyPocketQuest */}
+        <div className="logo-box">
+          <h1 className="logo-title">MyPocket<span>Quest</span></h1>
+          <p className="logo-subtitle">Next Level: Real Life</p>
+        </div>
+        
+        <h2 className="email-form-title">Unisciti alla Missione!</h2>
+        <p className="email-form-subtitle">
+          Compila il form per ricevere la tua email di benvenuto
+        </p>
+        
+        <form className="email-form" onSubmit={sendEmail}>
+          <div className="input-group">
+            <input
+              id="name"
+              className="email-input"
+              type="text"
+              name="name"
+              placeholder="Il Vostro nome, My Lord"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <input
-          type="email"
-          name="email"
-          placeholder="La tua email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
+          <div className="input-group">
+            <input
+              id="email"
+              className="email-input"
+              type="email"
+              name="email"
+              placeholder="La Vostra email, Mio Sire"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <textarea
-          name="message"
-          placeholder="Messaggio"
-          value={formData.message}
-          onChange={handleChange}
-          required
-        />
-
+          <button
+            className="email-submit-btn"
+            type="submit"
+            disabled={status === "Registrazione in corso..."}
+          >
+            {status === "Registrazione in corso..." ? (
+              <>
+                <span className="loading-spinner"></span>
+                Invio email tramite piccione viaggiatore...
+              </>
+            ) : (
+              "Voglio la mia email di benvenuto!"
+            )}
+          </button>
+        </form>
+        
+        {/* todo: Pulsante per saltare la registrazione */}
         <button
-          type="submit"
+          className="skip-btn"
+          type="button"
+          onClick={onClose}
         >
-          Invia
+          Salta presentazioni e partiamo subito con l'avventura!
         </button>
-      </form>
+        
+        {/* todo: Mostro il messaggio di stato se presente */}
+        {status && (
+          <div className={`status-message ${getStatusClass()}`}>
+            {status === "Registrazione in corso..." && <span className="loading-spinner"></span>}
+            {status}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
