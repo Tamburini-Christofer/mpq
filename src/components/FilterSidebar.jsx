@@ -119,12 +119,12 @@ export default function FilterSidebar({
         <div className="filter-option">
           <input 
             type="checkbox" 
-            id="cat-videogames" 
-            name="cat-videogames"
-            checked={selectedCategories.includes('videogames')}
-            onChange={() => handleCategoryChange('videogames')}
+            id="cat-film" 
+            name="cat-film"
+            checked={selectedCategories.includes('Film')}
+            onChange={() => handleCategoryChange('Film')}
           />
-          <label htmlFor="cat-videogames">Videogiochi</label>
+          <label htmlFor="cat-film">Film</label>
         </div>
         {/* ... Aggiungi altre categorie */}
       </div>
