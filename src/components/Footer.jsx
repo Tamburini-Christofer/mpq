@@ -1,7 +1,9 @@
+import Shop from "./ShopComponent.jsx";
+
 function Footer () {
   return (
     <>
-    <h1>Ciao Luca</h1>
+    <Shop />
     </>
   )
 }
