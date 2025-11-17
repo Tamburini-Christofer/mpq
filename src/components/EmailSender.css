@@ -77,10 +77,9 @@
 
 .logo-subtitle {
   font-size: 14px;
-  color: var(--email-gray);
+  color: var(--email-light);
   margin: 5px 0 0 0;
   opacity: 0.8;
-  font-style: italic;
 }
 
 /* todo: Titolo del form */

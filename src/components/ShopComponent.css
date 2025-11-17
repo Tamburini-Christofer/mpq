@@ -206,9 +206,19 @@
 
 /* carrello */
 .empty-cart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
   padding: 40px;
   color: #888;
+}
+
+.empty-cart img,
+.empty-checkout img {
+  max-width: 15%;
+  margin-top: 20px;
+  margin: 0 auto;
 }
 
 .empty-cart p {
