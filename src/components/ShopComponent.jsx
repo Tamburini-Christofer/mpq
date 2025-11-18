@@ -1,414 +1,71 @@
-//todo: Importiamo React e useState per creare componenti e gestire stati
-import React, { useState } from "react";
+// TODO: Importiamo React per creare componenti
+import React from 'react';
+// TODO: Importiamo il file CSS per gli stili di questa pagina
+import './ShopComponent.css'; 
+// TODO: Importiamo i componenti figli che verranno renderizzati in questa pagina
+import FilterSidebar from './FilterSidebar.jsx'; 
 
-//todo: Importiamo il CSS del componente Shop per lo stile
-import "./ShopComponent.css"; 
+// TODO: Componente principale della pagina Shop - è il "cervello" che coordina tutto
+// Questo è un componente PADRE che gestisce gli stati e li passa ai componenti FIGLI
+export default function Shop({ filters, onFiltersChange }) {
 
-//todo: Importiamo il componente CheckoutForm
-import CheckoutForm from "./CheckoutForm";
-
-//todo: Creo il componente principale Shop
-const Shop = () => {
-  //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
-  const [activeTab, setActiveTab] = useState("shop");
-  
-  //todo: Stato per la modalità di visualizzazione (grid o list)
-  const [viewMode, setViewMode] = useState("grid");
-  
-  //todo: Stato per mostrare/nascondere il form di checkout
-  const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-  
-  //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
-  const [visibleProducts, setVisibleProducts] = useState(10);
-
-  //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
-    const products = [
-    { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
-    { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
-    { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
-    { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
-    { id: 4, name: "Football", price: 19.99 , image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
-    { id: 4, name: "Gigina la dinosaura", price: 19.99 , image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
-    { id: 4, name: "Samir Experience", price: 29.99 , image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
-    { id: 4, name: "El Trentin", price: 39.99 , image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
-        { id: 1, name: "The Lord Of the Ring", price: 4.99, image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
-    { id: 2, name: "Stranger Things", price: 9.99, image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
-    { id: 3, name: "Harry Potter Collection", price: 69.99, image: "https://art.pixilart.com/c54917a56a375fc.gif" },
-    { id: 4, name: "Anime Collection", price: 69.99 , image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
-    { id: 4, name: "Football", price: 19.99 , image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
-    { id: 4, name: "Gigina la dinosaura", price: 19.99 , image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
-    { id: 4, name: "Samir Experience", price: 29.99 , image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
-    { id: 4, name: "El Trentin", price: 39.99 , image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
-  ];
-
-  //todo: Stato per i prodotti aggiunti al carrello
-  const [cart, setCart] = useState([]);
-
-  //todo: Stato per gestire le notifiche popup (es. "Prodotto aggiunto!")
-  const [notification, setNotification] = useState(null);
-
-  //todo: Funzione per mostrare una notifica
-  const showNotification = (message, type = 'success') => {
-    setNotification({ message, type });
-    //todo: La notifica scompare automaticamente dopo 3 secondi
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
-
-  //todo: Funzione per aggiungere un prodotto al carrello
-  const addToCart = (product) => {
-    //todo: Controllo se il prodotto era già nel carrello
-    const wasInCart = cart.find(item => item.id === product.id);
-    
-    setCart((prev) => {
-      //todo: Trovo se esiste già l'item nel carrello
-      const existingItem = prev.find(item => item.id === product.id);
+  // TODO: FUNZIONE PRINCIPALE - Gestisce i cambiamenti dei filtri dal FilterSidebar
+  // Questa è una funzione di callback che viene passata al FilterSidebar
+  // Parametri:
+  // - newFilters: oggetto con i nuovi filtri aggiornati
+  // - isExplicitApply: boolean che indica se l'utente ha cliccato "APPLICA FILTRI"
+  const handleFiltersChange = (newFilters, isExplicitApply = false) => {
+    // TODO: Applica i filtri solo quando l'utente clicca "APPLICA FILTRI"
+    if (isExplicitApply && onFiltersChange) {
+      onFiltersChange(newFilters);
       
-      if (existingItem) {
-        //todo: Se esiste, incremento la quantità di 1
-        return prev.map(item =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        //todo: Se non esiste, lo aggiungo con quantità iniziale 1
-        return [...prev, { ...product, quantity: 1 }];
-      }
-    });
-
-    //todo: Mostro una notifica diversa a seconda se era già nel carrello
-    if (wasInCart) {
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
-    } else {
-      showNotification(`"${product.name}" aggiunto al carretto!`);
+      // TODO: Log di debug per vedere cosa sta succedendo durante lo sviluppo
+      console.log('Filtri applicati:', newFilters);
     }
   };
 
-  //todo: Funzione per rimuovere completamente un prodotto dal carrello
-  const removeFromCart = (id) => {
-    //todo: Trovo il prodotto da rimuovere per mostrare il nome nella notifica
-    const productToRemove = cart.find(item => item.id === id);
-    
-    setCart((prev) => prev.filter((item) => item.id !== id));
-    
-    //todo: Mostro notifica di rimozione in rosso
-    if (productToRemove) {
-      showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
-    }
-  };
+  // TODO: FUNZIONI FUTURE PER IL DATABASE (attualmente commentate)
+  
+  // TODO: useEffect per fare fetch automatico quando cambiano search/sort
+  // useEffect si attiva automaticamente quando le dipendenze [searchValue, sortValue] cambiano
+  // Questo significa che ogni volta che l'utente digita o cambia ordinamento,
+  // verrà fatta automaticamente una nuova ricerca nel database
+  // useEffect(() => {
+  //   fetchProducts(searchValue, sortValue, filters);
+  // }, [searchValue, sortValue]);
 
-  //todo: Funzione per diminuire la quantità di un prodotto nel carrello
-  const decreaseQuantity = (id) => {
-    //todo: Trovo il prodotto per controllare se sarà rimosso
-    const productToCheck = cart.find(item => item.id === id);
-    const willBeRemoved = productToCheck && productToCheck.quantity === 1;
-    
-    setCart((prev) => {
-      return prev.map(item => {
-        if (item.id === id) {
-          if (item.quantity === 1) {
-            //todo: Se la quantità è 1, rimuovo il prodotto dal carrello
-            return null;
-          }
-          //todo: Altrimenti diminuisco la quantità di 1
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      }).filter(Boolean); //todo: Rimuovo eventuali elementi null
-    });
-    
-    //todo: Mostro notifica se il prodotto è stato completamente rimosso
-    if (willBeRemoved && productToCheck) {
-      showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
-    }
-  };
+  // TODO: Funzione asincrona per recuperare i prodotti dal backend
+  // Questa funzione farà una chiamata HTTP al server con i parametri di ricerca
+  // const fetchProducts = async (search, sort, filterParams) => {
+  //   setLoading(true);  // Mostra loading spinner
+  //   try {
+  //     // Chiamata API al backend con tutti i parametri
+  //     const response = await api.getProducts({ search, sort, ...filterParams });
+  //     setProducts(response.data);  // Aggiorna la lista prodotti
+  //   } catch (error) {
+  //     console.error('Errore fetch prodotti:', error);
+  //     // TODO: Gestire errori (mostrare messaggio all'utente)
+  //   } finally {
+  //     setLoading(false);  // Nasconde loading spinner
+  //   }
+  // };
 
-  //todo: Funzione per aumentare la quantità di un prodotto nel carrello
-  const increaseQuantity = (id) => {
-    setCart((prev) => 
-      prev.map(item =>
-        item.id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
-  };
-
-  //todo: Funzione per caricare altri 10 prodotti
-  const loadMoreProducts = () => {
-    setVisibleProducts(prev => prev + 10);
-  };
-
-  //todo: Inizio del render del componente
+  // TODO: RENDERING DEL COMPONENTE
+  // return restituisce la struttura JSX della pagina
   return (
-    <div className="shop-ui-container">
-      {/* todo: Mostro la notifica se esiste */}
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === 'success' ? '✓' : 'ℹ'}
-            </span>
-            <span className="notification-message">{notification.message}</span>
-            <button 
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+    // TODO: Container principale della pagina shop con layout a due colonne
+    <div className="shop-container"> 
 
-      {/* todo: Sidebar laterale con logo e menu */}
-      <aside className="sidebar">
-        <div className="logo-box">
-          <div className="icon"></div>
-          <h1 className="title">MyPocket<span>Quest</span></h1>
-          <p className="subtitle">Next Level: Real Life</p>
-        </div>
-
-        {/* todo: Menu dei tab per navigare tra Shop, Carrello e Checkout */}
-        <div className="menu">
-          <button
-            className={activeTab === "shop" ? "menu-btn active" : "menu-btn"}
-            onClick={() => setActiveTab("shop")}
-          >
-            Shop
-          </button>
-
-          <button
-            className={activeTab === "cart" ? "menu-btn active" : "menu-btn"}
-            onClick={() => setActiveTab("cart")}
-          >
-            Carretto ({cart.length})
-          </button>
-
-          <button
-            className={
-              activeTab === "checkout" ? "menu-btn active" : "menu-btn"
-            }
-            onClick={() => setActiveTab("checkout")}
-          >
-            Checkout
-          </button>
-        </div>
-      </aside>
-
-      {/* todo: Contenuto principale */}
-      <main className="content">
-        {/* todo: Sezione Shop */}
-        {activeTab === "shop" && (
-          <div className="shop-section">
-            {/* todo: Controlli per cambiare visualizzazione */}
-            <div className="view-controls">
-              <button 
-                className={viewMode === "grid" ? "view-btn active" : "view-btn"}
-                onClick={() => setViewMode("grid")}
-                title="Visualizzazione a griglia"
-              >
-                <span className="view-icon">⊞</span> Griglia
-              </button>
-              <button 
-                className={viewMode === "list" ? "view-btn active" : "view-btn"}
-                onClick={() => setViewMode("list")}
-                title="Visualizzazione a lista"
-              >
-                <span className="view-icon">☰</span> Lista
-              </button>
-            </div>
-
-            <div className={`products ${viewMode}`}>
-              {products.slice(0, visibleProducts).map((p) => (
-                <div key={p.id} className="card fancy-card">
-                  
-                  <div className="card-image-wrapper">
-                    <img src={p.image} alt={p.name} className="card-image" />
-                  </div>
-
-                  <div className="card-body">
-                    <h3>{p.name}</h3>
-                    <p className="price">{p.price.toFixed(2)}€</p>
-                    {viewMode === "list" && (
-                      <div className="card-details">
-                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <button className="buy-btn" onClick={() => addToCart(p)}>
-                    {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            {/* Pulsante per caricare altri prodotti */}
-            {visibleProducts < products.length && (
-              <div className="load-more-container">
-                <button className="load-more-btn" onClick={loadMoreProducts}>
-                  Carica altri 10 prodotti ({products.length - visibleProducts} rimanenti)
-                </button>
-              </div>
-            )}
-
-          </div>
-        )}
-
-        {/* todo: Sezione Carrello */}
-        {activeTab === "cart" && (
-          <div className="cart-section">
-            <h2 className="section-title">Carretto</h2>
-
-            {cart.length === 0 ? (
-              //todo: Messaggio se il carrello è vuoto
-              <div className="empty-cart">
-                <p>Il carretto è vuoto.</p>
-                <p>Vai al Shop per aggiungere prodotti!</p>
-                <img src="/public/icon/EmptyShop.png" alt="Il logo del carrello vuoto" />
-              </div>
-            ) : (
-              //todo: Lista prodotti nel carrello
-              <div className="cart-items">
-                {cart.map((item) => (
-                  <div key={item.id} className="cart-item">
-                    <div className="item-info">
-                      <span className="item-name">{item.name}</span>
-                      <span className="item-price">{item.price.toFixed(2)}€</span>
-                    </div>
-                    
-                    {/* todo: Controlli per cambiare la quantità */}
-                    <div className="quantity-controls">
-                      <button
-                        className="quantity-btn"
-                        onClick={() => decreaseQuantity(item.id)}
-                      >
-                        -
-                      </button>
-                      <span className="quantity">{item.quantity}</span>
-                      <button
-                        className="quantity-btn"
-                        onClick={() => increaseQuantity(item.id)}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    {/* todo: Mostra totale per prodotto e bottone per rimuovere */}
-                    <div className="item-total">
-                      <span className="total-price">
-                        {(item.price * item.quantity).toFixed(2)}€
-                      </span>
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        Rimuovi
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                
-                {/* todo: Mostro totale del carrello */}
-                <div className="cart-total">
-                  <strong>
-                    Totale Carretto: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
-                  </strong>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* todo: Sezione Checkout */}
-        {activeTab === "checkout" && (
-          <div className="checkout-section">
-            <h2 className="section-title">Checkout</h2>
-            
-            {cart.length === 0 ? (
-              //todo: Messaggio se il carrello è vuoto
-              <div className="empty-checkout">
-                <p>Il carretto è vuoto.</p>
-                <p>Aggiungi prodotti al carretto per procedere al checkout.</p>
-                <img src="/public/icon/InShop.png" alt="Il logo del carrello vuoto" />
-              </div>
-            ) : (
-              <>
-                {/* todo: Riepilogo prodotti nel checkout */}
-                <div className="checkout-items">
-                  <h3 className="checkout-subtitle">Riepilogo Ordine:</h3>
-                  
-                  {cart.map((item) => (
-                    <div key={item.id} className="checkout-item">
-                      <div className="checkout-item-info">
-                        <span className="checkout-item-name">{item.name}</span>
-                        <span className="checkout-item-details">
-                          {item.quantity} x {item.price.toFixed(2)}€
-                        </span>
-                      </div>
-                      
-                      <div className="checkout-item-actions">
-                        <span className="checkout-item-total">
-                          {(item.price * item.quantity).toFixed(2)}€
-                        </span>
-                        <button
-                          className="checkout-remove-btn"
-                          onClick={() => removeFromCart(item.id)}
-                          title="Rimuovi dal carretto"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* todo: Totale ordine e bottoni azioni */}
-                <div className="checkout-summary">
-                  <div className="checkout-total">
-                    <h3>
-                      Totale Ordine: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
-                    </h3>
-                  </div>
-                  
-                  <div className="checkout-actions">
-                    <button 
-                      className="clear-cart-btn"
-                      onClick={() => {
-                        const itemCount = cart.length;
-                        setCart([]);
-                        showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
-                      }}
-                    >
-                      Svuota Carretto
-                    </button>
-                    <button 
-                      className="confirm-btn"
-                      onClick={() => setShowCheckoutForm(true)}
-                    >
-                      Conferma Acquisto e parti per la tua prossima avventura
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </main>
+      {/* TODO: COLONNA SINISTRA - Filtri */}
+      {/* Passiamo props al FilterSidebar per la comunicazione bidirezionale:
+           - onFiltersChange: callback per ricevere i cambiamenti dei filtri
+           - initialFilters: stato attuale dei filtri per sincronizzazione */}
+      <FilterSidebar 
+        onFiltersChange={handleFiltersChange}  // Funzione che riceve i filtri aggiornati
+        initialFilters={filters}              // Stato corrente per sincronizzare i valori
+      />
       
-      {/* todo: Overlay form checkout */}
-      {showCheckoutForm && (
-        <CheckoutForm
-          onClose={() => setShowCheckoutForm(false)}
-          totalAmount={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
-          cartItems={cart}
-        />
-      )}
     </div>
   );
-};
+}
 
-//todo: Esporto il componente Shop così può essere usato in altre parti dell'app
-export default Shop;
