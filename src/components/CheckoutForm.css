@@ -148,7 +148,7 @@
 }
 
 /* Titolo sezione */
-.section-title {
+.section-title-form {
   color: var(--checkout-gold);
   font-size: 20px;
   font-weight: 600;
@@ -442,7 +442,7 @@
     gap: 20px;
   }
   
-  .section-title {
+  .section-title-form {
     font-size: 18px;
   }
   

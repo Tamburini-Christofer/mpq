@@ -212,7 +212,7 @@
 }
 
 /* todo: Titoli delle sezioni principali (Carrello, Checkout) */
-.section-title {
+.section-title-shop  {
   font-size: 28px;
   color: var(--gold);
   margin-bottom: 20px;

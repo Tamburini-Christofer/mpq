@@ -77,7 +77,7 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
           
           {/* SEZIONE 1: DATI PERSONALI */}
           <div className="form-section">
-            <h3 className="section-title">Dati Personali</h3>
+            <h3 className="section-title-form">Dati Personali</h3>
             
             <div className="form-row">
               <div className="input-group">
