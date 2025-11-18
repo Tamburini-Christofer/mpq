@@ -282,6 +282,18 @@
   color: var(--checkout-gold);
 }
 
+/* Riga subtotale */
+.subtotal-row {
+  padding-top: 8px;
+  border-top: 1px solid rgba(216, 169, 40, 0.2);
+  margin-top: 8px;
+}
+
+/* Riga spese di spedizione */
+.shipping-row {
+  padding-bottom: 8px;
+}
+
 .total-row {
   padding-top: 12px;
   border-top: 2px solid rgba(216, 169, 40, 0.3);

@@ -12,10 +12,14 @@ import "./CheckoutForm.css";
  * Form overlay per la raccolta dati di spedizione e fatturazione
  * 
  * @param {function} onClose - Funzione per chiudere l'overlay
- * @param {number} totalAmount - Importo totale dell'ordine
+ * @param {number} totalAmount - Importo totale dell'ordine (include spedizione)
  * @param {array} cartItems - Array di prodotti nel carrello
+ * @param {number} shippingCost - Costo spedizione (0 se promo applicata, default 4.99)
+ * @param {boolean} promoApplied - Se il codice promo è stato applicato (default false)
  */
-export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
+//todo: Funzione componente che riceve 5 props dal padre (Shop.jsx)
+//todo: shippingCost e promoApplied hanno valori di default nel caso non vengano passati
+export default function CheckoutForm({ onClose, totalAmount, cartItems, shippingCost = 4.99, promoApplied = false }) {
   
   /* ===== STATO DEL FORM ===== */
   const [formData, setFormData] = useState({
@@ -284,20 +288,54 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
             </div>
 
           {/* SEZIONE 5: RIEPILOGO ORDINE */}
+          {/* todo: Box riepilogo con lista prodotti, subtotale, spese spedizione e totale */}
           <div className="order-summary">
             <h3 className="section-title">Riepilogo Ordine</h3>
             <div className="summary-details">
               {/* Lista prodotti nel carrello */}
+              {/* todo: Mappiamo cartItems per mostrare ogni prodotto con nome, quantità e prezzo totale */}
               {cartItems.map((item, index) => (
                 <div key={index} className="summary-row">
                   <span>{item.name} x{item.quantity}</span>
+                  {/* todo: Prezzo totale per questo prodotto = prezzo unitario × quantità */}
                   <span className="summary-value">{(item.price * item.quantity).toFixed(2)}€</span>
                 </div>
               ))}
               
+              {/* Riga subtotale */}
+              {/* todo: Subtotale = somma di tutti i prodotti SENZA le spese di spedizione */}
+              <div className="summary-row subtotal-row">
+                <span>Subtotale</span>
+                <span className="summary-value">
+                  {/* todo: Usiamo reduce per sommare (prezzo × quantità) di ogni item del carrello */}
+                  {cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
+                </span>
+              </div>
+
+              {/* Riga spese di spedizione */}
+              {/* todo: Mostriamo le spese con logica condizionale: GRATIS se promo, 4.99€ altrimenti */}
+              <div className="summary-row shipping-row">
+                <span>Spese di spedizione</span>
+                <span className="summary-value">
+                  {/* todo: Controlliamo la prop promoApplied per decidere cosa mostrare */}
+                  {promoApplied ? (
+                    <>
+                      {/* todo: Se promo ATTIVO: prezzo originale barrato + scritta verde GRATIS */}
+                      <span style={{textDecoration: 'line-through', color: '#999', marginRight: '8px'}}>4.99€</span>
+                      <span style={{color: '#4ade80', fontWeight: 'bold'}}>GRATIS</span>
+                    </>
+                  ) : (
+                    /* todo: Se NO promo: mostriamo il costo normale dalla prop shippingCost */
+                    `${shippingCost.toFixed(2)}€`
+                  )}
+                </span>
+              </div>
+              
               {/* Riga totale */}
+              {/* todo: Totale finale = subtotale + spese spedizione (già calcolato in Shop.jsx) */}
               <div className="summary-row total-row">
                 <span className="total-label">Totale</span>
+                {/* todo: totalAmount arriva come prop e contiene già il calcolo finale */}
                 <span className="total-value">{totalAmount.toFixed(2)}€</span>
               </div>
             </div>

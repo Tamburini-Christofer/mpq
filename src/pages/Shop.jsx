@@ -93,6 +93,13 @@ const Shop = () => {
   //todo: Stato per gestire le notifiche popup (es. "Prodotto aggiunto!")
   const [notification, setNotification] = useState(null);
 
+  //todo: Stato per memorizzare il codice promozionale inserito dall'utente
+  const [promoCode, setPromoCode] = useState('');
+  //todo: Stato booleano che indica se il codice promozionale è stato applicato con successo
+  const [promoApplied, setPromoApplied] = useState(false);
+  //todo: Stato per il messaggio di feedback (successo/errore) del codice promozionale
+  const [promoMessage, setPromoMessage] = useState('');
+
   //todo: Funzione per mostrare una notifica
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type });
@@ -232,6 +239,30 @@ const Shop = () => {
   //todo: Funzione per caricare altri 10 prodotti
   const loadMoreProducts = () => {
     setVisibleProducts(prev => prev + 10);
+  };
+
+  //todo: Funzione per validare e applicare il codice promozionale inserito dall'utente
+  const applyPromoCode = () => {
+    //todo: Confrontiamo il codice inserito con 'WELCOMEQUEST' (case-insensitive)
+    if (promoCode.trim().toUpperCase() === 'WELCOMEQUEST') {
+      //todo: Verifichiamo che il codice non sia già stato applicato in precedenza
+      if (!promoApplied) {
+        //todo: Settiamo promoApplied a true per indicare che il codice è valido e attivo
+        setPromoApplied(true);
+        //todo: Mostriamo messaggio di successo con icona check (✓)
+        setPromoMessage('✓ Codice promozionale applicato! Spese di spedizione gratuite.');
+        //todo: Mostriamo notifica popup verde per confermare l'applicazione
+        showNotification('Codice promozionale applicato con successo!', 'success');
+      } else {
+        //todo: Se il codice è già stato applicato, mostriamo un avviso con icona warning (⚠)
+        setPromoMessage('⚠ Codice già applicato.');
+      }
+    } else {
+      //todo: Se il codice non corrisponde, mostriamo errore con icona X (✗)
+      setPromoMessage('✗ Codice promozionale non valido.');
+      //todo: Resettiamo promoApplied a false in caso di codice errato
+      setPromoApplied(false);
+    }
   };
 
   //todo: Inizio del render del componente
@@ -492,12 +523,81 @@ const Shop = () => {
                   ))}
                 </div>
 
+                {/* todo: Sezione per inserire il codice promozionale */}
+                <div className="promo-code-section">
+                  <h3 className="checkout-subtitle">Codice Promozionale:</h3>
+                  <div className="promo-code-input-group">
+                    {/*todo: Input di testo per inserire il codice promo (es: WELCOMEQUEST)*/}
+                    <input
+                      type="text"
+                      className="promo-code-input"
+                      placeholder="Inserisci codice (es: WELCOMEQUEST)"
+                      value={promoCode}
+                      onChange={(e) => setPromoCode(e.target.value)}
+                      disabled={promoApplied}
+                    />
+                    {/*todo: Bottone per applicare il codice, disabilitato se già applicato*/}
+                    <button
+                      className="promo-code-btn"
+                      onClick={applyPromoCode}
+                      disabled={promoApplied}
+                    >
+                      {/*todo: Cambia testo del bottone: "Applicato" se attivo, "Applica" se disponibile*/}
+                      {promoApplied ? 'Applicato' : 'Applica'}
+                    </button>
+                  </div>
+                  {/*todo: Mostra messaggio di feedback solo se presente (successo in verde, errore in rosso)*/}
+                  {promoMessage && (
+                    <p className={`promo-message ${promoApplied ? 'success' : 'error'}`}>
+                      {promoMessage}
+                    </p>
+                  )}
+                </div>
+
                 {/* todo: Totale ordine e bottoni azioni */}
                 <div className="checkout-summary">
                   <div className="checkout-total">
-                    <h3>
-                      Totale Ordine: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
-                    </h3>
+                    {/*todo: Usiamo una IIFE (Immediately Invoked Function Expression) per calcolare i totali*/}
+                    {(() => {
+                      //todo: Calcoliamo il subtotale sommando prezzo × quantità di ogni prodotto
+                      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                      //todo: Spese spedizione: 0€ se promo applicata, altrimenti 4.99€
+                      const shippingCost = promoApplied ? 0 : 4.99;
+                      //todo: Totale finale = subtotale + spese di spedizione
+                      const total = subtotal + shippingCost;
+                      
+                      return (
+                        <>
+                          {/*todo: Riga che mostra il subtotale (solo prodotti, senza spedizione)*/}
+                          <div className="checkout-subtotal">
+                            <span>Subtotale:</span>
+                            <span>{subtotal.toFixed(2)}€</span>
+                          </div>
+                          {/*todo: Riga spese di spedizione con logica promo*/}
+                          <div className="checkout-shipping">
+                            <span>Spese di spedizione:</span>
+                            <span className={promoApplied ? 'free-shipping' : ''}>
+                              {/*todo: Se promo applicata, mostra prezzo barrato + "GRATIS" in verde*/}
+                              {promoApplied ? (
+                                <>
+                                  <span style={{textDecoration: 'line-through', color: '#999'}}>4.99€</span>
+                                  {' '}
+                                  <span style={{color: '#4ade80'}}>GRATIS</span>
+                                </>
+                              ) : (
+                                //todo: Altrimenti mostra il costo normale 4.99€
+                                '4.99€'
+                              )}
+                            </span>
+                          </div>
+                          {/*todo: Riga totale finale con bordo superiore per evidenziare*/}
+                          <div className="checkout-total-final">
+                            <h3>Totale Ordine:</h3>
+                            <h3>{total.toFixed(2)}€</h3>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                   
                   <div className="checkout-actions">
@@ -526,11 +626,19 @@ const Shop = () => {
       </main>
       
       {/* todo: Overlay form checkout */}
+      {/* todo: Passiamo 4 props al CheckoutForm: totalAmount (con spedizione), cartItems, shippingCost e promoApplied */}
       {showCheckoutForm && (
         <CheckoutForm
+          /* todo: Funzione callback per chiudere l'overlay quando l'utente clicca su X o annulla */
           onClose={() => setShowCheckoutForm(false)}
-          totalAmount={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
+          /* todo: Calcoliamo totale: somma prodotti + (4.99 se NO promo, 0 se promo applicata) */
+          totalAmount={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (promoApplied ? 0 : 4.99)}
+          /* todo: Passiamo intero carrello per mostrare dettagli prodotti nel riepilogo */
           cartItems={cart}
+          /* todo: Costo spedizione: 0 se WELCOMEQUEST applicato, 4.99 altrimenti */
+          shippingCost={promoApplied ? 0 : 4.99}
+          /* todo: Stato booleano promo per mostrare "GRATIS" barrato nel form */
+          promoApplied={promoApplied}
         />
       )}
     </div>
