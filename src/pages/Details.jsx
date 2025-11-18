@@ -1,12 +1,18 @@
 import "./Details.css"
+//todo useParams: hook per estrarre parametri dinamici dalla URL (es: /exp/:id)
+//todo useNavigate: hook per navigazione programmatica
 import { useParams, useNavigate } from "react-router-dom"
 import { useState } from "react"
+//todo Importiamo il database dei prodotti
 import productsData from "../JSON/products.json"
 
 function Details() {
+  //todo Estraiamo l'id dalla URL (es: /exp/5 => id = "5")
   const { id } = useParams()
   const navigate = useNavigate()
-  const product = productsData.find(p => p.id === parseInt(id))
+  //todo Accediamo al prodotto usando l'indice dell'array (NON il campo id che è stato rimosso)
+  //todo parseInt converte la stringa "5" in numero 5
+  const product = productsData[parseInt(id)]
   
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
@@ -18,21 +24,25 @@ function Details() {
     }, 3000)
   }
 
+  //todo Funzione per aggiungere il prodotto al carrello dalla pagina Details
   const addToCart = () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]')
-    const existingItem = cart.find(item => item.id === product.id)
+    //todo Cerchiamo il prodotto nel carrello confrontando per nome (non per id)
+    const existingItem = cart.find(item => item.name === product.name)
     
     if (existingItem) {
+      //todo Se esiste già, aggiungiamo la quantità selezionata
       existingItem.quantity += quantity
       showNotification(`Quantità di "${product.name}" aumentata nel carrello!`)
     } else {
+      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con la quantità
       cart.push({ ...product, quantity })
       showNotification(`"${product.name}" aggiunto al carrello!`)
     }
     
     localStorage.setItem('cart', JSON.stringify(cart))
     
-    // Trigger storage event per sincronizzare con Shop
+    //todo Trigger storage event per sincronizzare con Shop e altre pagine aperte
     window.dispatchEvent(new Event('storage'))
   }
 

@@ -58,8 +58,9 @@ const Shop = () => {
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
   //todo: Array statico di prodotti demo (da collegare poi a un DB o API)
-    const products = productsData.map(p => ({
+    const products = productsData.map((p, index) => ({
       ...p,
+      originalIndex: index,
       category: p.category_id === 1 ? "film" : 
                 p.category_id === 2 ? "series" : 
                 p.category_id === 3 ? "anime" : "film"
@@ -103,17 +104,17 @@ const Shop = () => {
 
   //todo: Funzione per aggiungere un prodotto al carrello
   const addToCart = (product) => {
-    //todo: Controllo se il prodotto era già nel carrello
-    const wasInCart = cart.find(item => item.id === product.id);
+    //todo: Controllo se il prodotto era già nel carrello (confronto per nome)
+    const wasInCart = cart.find(item => item.name === product.name);
     
     setCart((prev) => {
       //todo: Trovo se esiste già l'item nel carrello
-      const existingItem = prev.find(item => item.id === product.id);
+      const existingItem = prev.find(item => item.name === product.name);
       
       if (existingItem) {
         //todo: Se esiste, incremento la quantità di 1
         return prev.map(item =>
-          item.id === product.id
+          item.name === product.name
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -132,11 +133,11 @@ const Shop = () => {
   };
 
   //todo: Funzione per rimuovere completamente un prodotto dal carrello
-  const removeFromCart = (id) => {
+  const removeFromCart = (productName) => {
     //todo: Trovo il prodotto da rimuovere per mostrare il nome nella notifica
-    const productToRemove = cart.find(item => item.id === id);
+    const productToRemove = cart.find(item => item.name === productName);
     
-    setCart((prev) => prev.filter((item) => item.id !== id));
+    setCart((prev) => prev.filter((item) => item.name !== productName));
     
     //todo: Mostro notifica di rimozione in rosso
     if (productToRemove) {
@@ -145,14 +146,14 @@ const Shop = () => {
   };
 
   //todo: Funzione per diminuire la quantità di un prodotto nel carrello
-  const decreaseQuantity = (id) => {
+  const decreaseQuantity = (productName) => {
     //todo: Trovo il prodotto per controllare se sarà rimosso
-    const productToCheck = cart.find(item => item.id === id);
+    const productToCheck = cart.find(item => item.name === productName);
     const willBeRemoved = productToCheck && productToCheck.quantity === 1;
     
     setCart((prev) => {
       return prev.map(item => {
-        if (item.id === id) {
+        if (item.name === productName) {
           if (item.quantity === 1) {
             //todo: Se la quantità è 1, rimuovo il prodotto dal carrello
             return null;
@@ -171,10 +172,10 @@ const Shop = () => {
   };
 
   //todo: Funzione per aumentare la quantità di un prodotto nel carrello
-  const increaseQuantity = (id) => {
+  const increaseQuantity = (productName) => {
     setCart((prev) => 
       prev.map(item =>
-        item.id === id
+        item.name === productName
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )
@@ -342,7 +343,7 @@ const Shop = () => {
 
             <div className={`products ${viewMode}`}>
               {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
-                <div key={p.id} className="card fancy-card">
+                <div key={p.name} className="card fancy-card">
                   
                   <div className="card-image-wrapper">
                     <img src={p.image} alt={p.name} className="card-image" />
@@ -359,7 +360,8 @@ const Shop = () => {
                   </div>
 
                   <div className="card-actions">
-                    <button className="details-btn" onClick={() => navigate(`/exp/${p.id}`)}>
+                    {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
+                    <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
                       Dettagli
                     </button>
                     <button className="buy-btn" onClick={() => addToCart(p)}>
@@ -408,14 +410,14 @@ const Shop = () => {
                     <div className="quantity-controls">
                       <button
                         className="quantity-btn"
-                        onClick={() => decreaseQuantity(item.id)}
+                        onClick={() => decreaseQuantity(item.name)}
                       >
                         -
                       </button>
                       <span className="quantity">{item.quantity}</span>
                       <button
                         className="quantity-btn"
-                        onClick={() => increaseQuantity(item.id)}
+                        onClick={() => increaseQuantity(item.name)}
                       >
                         +
                       </button>
@@ -428,7 +430,7 @@ const Shop = () => {
                       </span>
                       <button
                         className="remove-btn"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.name)}
                       >
                         Rimuovi
                       </button>
@@ -480,7 +482,7 @@ const Shop = () => {
                         </span>
                         <button
                           className="checkout-remove-btn"
-                          onClick={() => removeFromCart(item.id)}
+                          onClick={() => removeFromCart(item.name)}
                           title="Rimuovi dal carretto"
                         >
                           ✕
