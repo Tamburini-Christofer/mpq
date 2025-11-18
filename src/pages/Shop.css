@@ -629,6 +629,25 @@
   display: flex;
   gap: 15px;
   justify-content: center;
+  align-items: center;
+}
+
+/* todo: Icona FreeShipping mostrata quando il promo è attivo */
+.free-shipping-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+/* todo: Animazione bounce per l'icona FreeShipping */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* todo: Pulsante "Svuota Carretto" (rosso, outline) */

@@ -601,6 +601,15 @@ const Shop = () => {
                   </div>
                   
                   <div className="checkout-actions">
+                    {/*todo: Mostriamo l'icona FreeShipping solo se il codice promo è stato applicato*/}
+                    {promoApplied && (
+                      <img 
+                        src="/icon/FreeShipping.png" 
+                        alt="Spedizione Gratuita" 
+                        className="free-shipping-icon"
+                        title="Spedizione gratuita attiva!"
+                      />
+                    )}
                     <button 
                       className="clear-cart-btn"
                       onClick={() => {
