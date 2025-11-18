@@ -308,6 +308,7 @@
 /* Container pulsanti */
 .form-actions {
   display: flex;
+  justify-content: flex-end;
   flex-direction: column;
   gap: 15px;
   padding-top: 20px;

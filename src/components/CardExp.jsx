@@ -1,5 +1,6 @@
 import "./cardExp.css" 
 
+
 function CardExp ({ product }) {
   if (!product) return null;
 
@@ -14,6 +15,7 @@ function CardExp ({ product }) {
         <p className="price">{product.price.toFixed(2)}€</p>
       </div>
     </div>
+
   )
 }
 export default CardExp;

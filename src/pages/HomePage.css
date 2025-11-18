@@ -1,0 +1,181 @@
+/* --- CONTENITORE PRINCIPALE --- */
+.homepage {
+    /* max-width: 1400px; */
+    margin: 0 auto;
+    padding: 0 50px;
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+    min-height: 80vh;
+    width: 100%;
+    margin-bottom: 80px;
+    position: relative;
+}
+
+.hero-title {
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 9rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: #FFD700;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+.hero-title-purple {
+    color: #772284;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.btn-get-started {
+    background-color: #FFD700;
+    color: #772284;
+    font-weight: bold;
+    font-family: "Pixelify Sans", sans-serif;
+    padding: 30px 80px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 2rem;
+    margin-top: 20px;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+}
+
+.btn-get-started:hover {
+    transform: scale(1.1);
+}
+
+/* --- HERO-RIGHT: Contenitore del Video (Sfondo) --- */
+.hero-right {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: #121212;
+    overflow: hidden;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* --- ELEMENTO VIDEO --- */
+.hero-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.2;
+}
+
+/* --- HERO-LEFT: Contenitore del Testo (Sopra il Video) --- */
+.hero-left {
+    position: relative;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    min-height: 80vh;
+
+    /* CENTRATURA DEL CONTENUTO */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+}
+
+
+/* --- SEZIONI QUESTS (Latest Arrivals, Best Sellers) --- */
+
+.quests-section {
+    margin-bottom: 80px;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+.cards-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    margin-bottom: 0;
+    flex-wrap: nowrap;
+    /* Nascondiamo la barra di scorrimento nativa */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Nascondi la barra di scorrimento per Chrome, Safari e Opera */
+.cards-list::-webkit-scrollbar {
+    display: none;
+}
+
+/* Stile per i placeholder temporanei (ora usati come card) */
+.card-placeholder {
+    width: 250px;
+    height: 200px;
+    background-color: #333;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* --- STILE PER LO SCORRIMENTO CONTROLLATO --- */
+
+.latest-section-wrapper,
+.best-sellers-section-wrapper {
+    position: relative;
+    padding-top: 20px;
+}
+
+.scroll-btn {
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+
+    background-color: #FFD700;
+    color: #121212;
+    border: none;
+    border-radius: 8px;
+    width: 40px;
+    height: 200px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.2s, opacity 0.3s, visibility 0.3s;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* MOSTRA I PULSANTI QUANDO SI PASSA SOPRA AL CONTENITORE PRINCIPALE */
+.latest-section-wrapper:hover .scroll-btn,
+.best-sellers-section-wrapper:hover .scroll-btn {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-btn:hover {
+    background-color: #836b0d;
+}
+
+/* Posizionamento dei pulsanti */
+.scroll-left {
+    left: -45px;
+}
+
+.scroll-right {
+    right: -45px;
+}
