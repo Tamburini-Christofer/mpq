@@ -50,9 +50,9 @@ function App() {
       
       <BrowserRouter>
         <Routes>
+          <Route path='/exp/:id' element={<Dettagli />} />
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path='/exp/:id' element={<Dettagli />} />
             <Route path='/shop' element={<Shop />} />
             <Route path='/contatti' element={<Contact />} />
             <Route path='/staff' element={<Staff />} />

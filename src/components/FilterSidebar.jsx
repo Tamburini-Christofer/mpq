@@ -3,9 +3,9 @@ import { useState } from 'react';
 
 // todo: Oggetto con i valori iniziali dei filtri
 const DEFAULT_FILTERS = {
-  priceRange: { min: 0, max: 100, current: 50 }, // todo: Range di prezzo con valore corrente
+  priceRange: { min: 0, max: 100, current: 100 }, // todo: Range di prezzo con valore corrente a 100 per mostrare tutti
   categories: [],    // todo: Array vuoto per le categorie selezionate
-  difficulties: [], // todo: Array vuoto per le difficoltà selezionate
+  // difficulties: [], // todo: Array vuoto per le difficoltà selezionate
   matureContent: false, // todo: Booleano per contenuti +18
   accessibility: false // todo: Booleano per accessibilità
 };
@@ -73,15 +73,23 @@ export default function FilterSidebar({
   const handleApplyFilters = () => {
     // todo: Se esiste la funzione callback, chiamala passando i filtri attuali
     if (onFiltersChange) {
-      onFiltersChange(filters);
+      onFiltersChange(filters, true); // true = apply esplicito dall'utente
+    }
+  };
+
+  // todo: Funzione chiamata quando si clicca "Azzera filtri"
+  const handleResetFilters = () => {
+    // todo: Resetta i filtri ai valori di default
+    setFilters(DEFAULT_FILTERS);
+    // todo: Applica immediatamente i filtri resettati
+    if (onFiltersChange) {
+      onFiltersChange(DEFAULT_FILTERS, true);
     }
   };
 
   return (
     // todo: Container principale della sidebar dei filtri
     <aside className="filters-sidebar">
-      {/* todo: Titolo principale della sezione filtri */}
-      <h3 className="filters-title">FILTRI</h3>
 
       {/* todo: Sezione filtri per categoria */}
       <div className="filter-group">
@@ -150,10 +158,10 @@ export default function FilterSidebar({
         </div>
       </div>
 
-      {/* todo: Sezione filtri difficoltà con loop dinamico */}
+      {/* todo: Sezione filtri difficoltà con loop dinamico
       <div className="filter-group">
         <h4>Difficoltà</h4>
-        {/* todo: Crea checkbox per ogni livello usando map */}
+
         {['high', 'medium', 'low'].map((level) => (
           <div key={level} className="filter-option">
             <input 
@@ -165,12 +173,12 @@ export default function FilterSidebar({
               onChange={handleFilterChange}
             />
             <label htmlFor={`diff-${level}`}>
-              {/* todo: Operatore ternario per tradurre i valori in italiano */}
+              {/* todo: Operatore ternario per tradurre i valori in italiano
               {level === 'high' ? 'Difficile' : level === 'medium' ? 'Media' : 'Facile'}
             </label>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* todo: Sezione altri filtri (contenuti +18 e accessibilità) */}
       <div className="filter-group">
@@ -205,6 +213,14 @@ export default function FilterSidebar({
         onClick={handleApplyFilters} // todo: Chiama funzione quando cliccato
       >
         APPLICA FILTRI
+      </button>
+
+      {/* todo: Pulsante per azzerare tutti i filtri */}
+      <button 
+        className="apply-filters-btn reset-filters-btn"
+        onClick={handleResetFilters} // todo: Chiama funzione reset quando cliccato
+      >
+        AZZERA FILTRI
       </button>
     </aside>
   );

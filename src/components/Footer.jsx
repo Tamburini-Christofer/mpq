@@ -1,4 +1,4 @@
-import Shop from "./ShopComponent.jsx";
+import Shop from "../pages/Shop.jsx";
 import Contact from "../pages/Contact.jsx";
 import Staff from "../pages/Staff.jsx";
 

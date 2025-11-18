@@ -50,15 +50,12 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
   };
 
   /**
-   * Gestisce l'invio del form e procede al pagamento
-   * TODO: Integrare con gateway di pagamento reale
+   * Previene il submit del form principale
+   * Il pagamento viene gestito dal pulsante Stripe
    */
-  const handlePayment = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log("Dati ordine:", formData);
-    console.log("Totale:", totalAmount);
-    console.log("Prodotti:", cartItems);
-    alert(`Ordine confermato! Totale: ${totalAmount.toFixed(2)}€\nSarai reindirizzato al pagamento...`);
+    // Il form non fa submit, il pagamento è gestito dal PaymentButton
   };
 
   /* ===== RENDER ===== */
@@ -76,7 +73,7 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
         </div>
 
         {/* ===== FORM PRINCIPALE ===== */}
-        <form className="checkout-form" onSubmit={handlePayment}>
+        <form className="checkout-form" onSubmit={handleFormSubmit}>
           
           {/* SEZIONE 1: DATI PERSONALI */}
           <div className="form-section">
@@ -285,10 +282,6 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
                 rows="3"
               />
             </div>
-            
-            {/* Componente Pagamento Stripe */}
-            <PaymentButton totalAmount={totalAmount} cartItems={cartItems} />
-          </div>
 
           {/* SEZIONE 5: RIEPILOGO ORDINE */}
           <div className="order-summary">
@@ -312,13 +305,13 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
 
           {/* PULSANTI AZIONE */}
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Annulla
-            </button>
-            <button type="submit" className="payment-btn">
-              <img src="/public/icon/FullShop.png" alt="Omino felice" />
-              Procedi al Pagamento
-            </button>
+            <PaymentButton 
+              totalAmount={totalAmount} 
+              cartItems={cartItems}
+              formData={formData}
+              onClose={onClose}
+            />
+          </div>
           </div>
         </form>
       </div>
