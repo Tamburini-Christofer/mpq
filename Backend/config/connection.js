@@ -22,3 +22,4 @@ module.exports = pool.promise();
     console.error('ERRORE CONNESSIONE DB:', err.message);
   }
 })();
+
