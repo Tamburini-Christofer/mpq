@@ -68,4 +68,3 @@ export default function Shop({ filters, onFiltersChange }) {
     </div>
   );
 }
-
