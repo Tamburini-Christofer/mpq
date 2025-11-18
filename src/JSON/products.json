@@ -1477,8 +1477,8 @@
     },
     {
         "category_id": 3,
-        "name": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLx-zlJBZyRGGYlsNYT3iaoW_nqiehJJJ-YQ&s",
-        "image": "/img/opera_124.jpg",
+        "name": "Samurai Champloo",
+        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLx-zlJBZyRGGYlsNYT3iaoW_nqiehJJJ-YQ&s/img/opera_124.jpg",
         "description": "In 'Samurai Champloo', questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price": 14.99,
         "min_age": 13,
