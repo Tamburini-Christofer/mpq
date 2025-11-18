@@ -1,8 +1,67 @@
 import "./Details.css"
+import { useParams, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import productsData from "../JSON/products.json"
 
 function Details() {
+  const { id } = useParams()
+  const navigate = useNavigate()
+  const product = productsData.find(p => p.id === parseInt(id))
+  
+  const [quantity, setQuantity] = useState(1)
+  const [notification, setNotification] = useState(null)
+
+  const showNotification = (message, type = 'success') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 3000)
+  }
+
+  const addToCart = () => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]')
+    const existingItem = cart.find(item => item.id === product.id)
+    
+    if (existingItem) {
+      existingItem.quantity += quantity
+      showNotification(`Quantità di "${product.name}" aumentata nel carrello!`)
+    } else {
+      cart.push({ ...product, quantity })
+      showNotification(`"${product.name}" aggiunto al carrello!`)
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart))
+    
+    // Trigger storage event per sincronizzare con Shop
+    window.dispatchEvent(new Event('storage'))
+  }
+
+  if (!product) {
+    return <div className="product-page"><h1>Prodotto non trovato</h1></div>
+  }
   return (
     <>
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          <div className="notification-content">
+            <span className="notification-icon">
+              {notification.type === 'success' ? '✓' : 'ℹ'}
+            </span>
+            <span className="notification-message">{notification.message}</span>
+            <button 
+              className="notification-close"
+              onClick={() => setNotification(null)}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      <button className="back-to-home-btn" onClick={() => navigate('/')}>
+        ← Torna alla Home
+      </button>
+
 {/*     // TODO: wrapper principale della pagina prodotto
  */}<div className="product-page">
 
@@ -14,8 +73,8 @@ function Details() {
  */}    <div className="product-main-image">
 {/*       // TODO: immagine animata (GIF) visualizzata come anteprima principale
  */}      <img
-        src="https://i.redd.it/bstm10dwckz61.gif"
-        alt="Immagine principale prodotto"
+        src={product.image}
+        alt={product.name}
       />
     </div>
 
@@ -31,11 +90,11 @@ function Details() {
  */}      <div className="product-category">QUEST • ADVENTURE</div>
 
 {/*       // TODO: titolo principale del prodotto
- */}      <h1 className="product-title">Il Signore degli anelli</h1>
+ */}      <h1 className="product-title">{product.name}</h1>
 
 {/*       // TODO: breve descrizione subito sotto il titolo
  */}      <p className="product-subtitle">
-        Campagna epica e contenuti esclusivi.
+        Avventura epica e contenuti esclusivi.
       </p>
     </div>
 
@@ -53,8 +112,8 @@ function Details() {
 
 {/*       // TODO: sezione prezzo con prezzo nuovo + prezzo vecchio sbarrato
  */}      <div className="product-price-row">
-        <span className="product-price">$19.99</span>
-        <span className="product-old-price">$24.99</span>
+        <span className="product-price">{product.price.toFixed(2)}€</span>
+        <span className="product-old-price">{(product.price * 1.25).toFixed(2)}€</span>
       </div>
 
 {/*       // TODO: badge visuale che evidenzia la quest come “Featured”
@@ -65,10 +124,7 @@ function Details() {
 
 {/*     // TODO: descrizione principale del prodotto
  */}    <p className="product-short-desc">
-      Preparati a intraprendere missioni ispirate all’epica atmosfera della Terra di Mezzo.
-      Che tu sia un intrepido Hobbit, un curioso Elfo dei boschi o un viaggiatore solitario in cerca di avventure, queste quest trasformano la tua quotidianità in un viaggio eroico.
-
-      Ogni missione ti guiderà attraverso prove reali: esplorazioni all’aperto, sfide di coraggio, indovinelli da risolvere, ricerche di antichi reperti, momenti di collaborazione e gesti di saggezza degni dei grandi eroi dei racconti di Tolkien.
+      {product.description}
     </p>
 
     {/* Opzioni */}
@@ -112,13 +168,14 @@ function Details() {
           type="number"
           className="qty-input"
           min="1"
-          defaultValue="1"
+          value={quantity}
+          onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
         />
       </div>
 
 {/*       // TODO: pulsante che permette di aggiungere il prodotto al carrello
- */}      <button className="add-to-cart-btn">
-        <span>🪙 Aggiungi al carretto</span>
+ */}      <button className="add-to-cart-btn" onClick={addToCart}>
+        <span>🪙 Aggiungi al carrello</span>
       </button>
 
 {/*       // TODO: testo che indica la disponibilità del prodotto
