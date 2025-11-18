@@ -52,7 +52,7 @@ function HomePage() {
         originalIndex: productsData.findIndex(p => p.name === product.name)
     }));
     //todo Prendiamo i prodotti dal 12 al 23 (12 totali) per "Ultimi Arrivi"
-    const latestArrivals = randomProducts.slice(12, 24).map(product => ({
+    const latestArrivals = randomProducts.slice(12, 44).map(product => ({
         ...product,
         originalIndex: productsData.findIndex(p => p.name === product.name)
     }));
