@@ -6,7 +6,6 @@
 }
 
 /* --- HERO SECTION --- */
-
 .hero-section {
     min-height: 80vh;
     width: 100%;
@@ -30,7 +29,7 @@
 
 .btn-get-started {
     background-color: #FFD700;
-    color: #121212;
+    color: #772284;
     font-weight: bold;
     font-family: "Pixelify Sans", sans-serif;
     padding: 30px 80px;
@@ -39,11 +38,11 @@
     cursor: pointer;
     font-size: 2rem;
     margin-top: 20px;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
 }
 
 .btn-get-started:hover {
-    background-color: #836b0d;
+    transform: scale(1.1);
 }
 
 /* --- HERO-RIGHT: Contenitore del Video (Sfondo) --- */
@@ -157,9 +156,6 @@
     z-index: 10;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     transition: background-color 0.2s, opacity 0.3s, visibility 0.3s;
-    /* Aggiungi transizione per l'effetto */
-
-    /* NASCONDI I PULSANTI DI DEFAULT */
     opacity: 0;
     visibility: hidden;
 }

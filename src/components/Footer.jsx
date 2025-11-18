@@ -1,43 +1,41 @@
 import './Footer.css'
+import { FaInstagram } from "react-icons/fa";
+import { MdMailOutline } from "react-icons/md";
+import { FaFacebook } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 function Footer() {
-  // L'anno corrente può essere calcolato dinamicamente, un tocco in più
-  const currentYear = new Date().getFullYear();
 
   return (
     <>
       <footer className="app-footer">
         <div className="footer-content">
 
-          {/* Potremmo aggiungere colonne di link qui, ma per ora teniamo solo l'essenziale */}
           <div className="footer-links-section">
-            {/* Spazio per future sezioni: About Us, Privacy Policy, Terms */}
-            {/* <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a> */}
+            {/* aggiungere contenuti come link ad altre sezioniu, se e quando necessario */}
           </div>
 
-          {/* Sezione Social/Copyright */}
+          <div className="footer-divider" />
+
           <div className="footer-bottom">
 
-            {/* Icone Social che si vedono in basso a destra nella homepage.jpg */}
             <div className="social-icons">
-              {/* Usiamo dei placeholder per le icone, che potresti sostituire con Font Awesome o SVG */}
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <span role="img" aria-label="Twitter">🐦</span>
-              </a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <span role="img" aria-label="Instagram">📸</span>
+                <span role="img" aria-label="Instagram"><FaInstagram /></span>
+              </a>
+              <a href="https://gmail.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                <span role="img" aria-label="Gmail"><MdMailOutline /></span>
               </a>
               <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <span role="img" aria-label="Facebook">📘</span>
+                <span role="img" aria-label="Facebook"><FaFacebook /></span>
               </a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-                <span role="img" aria-label="YouTube">▶️</span>
+              <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-icon">
+                <span role="img" aria-label="X"><FaXTwitter /></span>
               </a>
             </div>
 
             <p className="footer-copyright">
-              &copy; {currentYear} My Pocket Quest! All rights reserved.
+              &copy; 2025 My Pocket Quest! All rights reserved.
             </p>
 
           </div>

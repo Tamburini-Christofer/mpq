@@ -1,4 +1,6 @@
 import './NavBar.css'
+import { NavLink } from 'react-router-dom';
+import { FaShoppingCart } from "react-icons/fa";
 
 function NavBar() {
 
@@ -6,17 +8,21 @@ function NavBar() {
     <>
       <nav className="navbar">
         <div className="navbar-logo">
-          <img src='../src/img/Logo_no_bg.png' alt="Logo" className="logo-icon" />
+          <NavLink to="/">
+            <img src="./src/img/Logo_no_bg.png" alt="Logo" className="logo-icon" />
+          </NavLink>
         </div>
 
         <ul className="navbar-links">
-          <li><a href="/shop">Shop</a></li>
-          <li><a href="/categories">Categories</a></li>
-          <li><a href="/daily-quests">Daily Quests</a></li>
+          <li><NavLink to="/">Home</NavLink></li>
+          <li><NavLink to="/shop">Shop</NavLink></li>
+          {/* <li><NavLink to="/categories">Categories</NavLink></li> */}
+          <li><NavLink to="/staff">Staff</NavLink></li>
+          <li><NavLink to="/contatti">Assistenza</NavLink></li>
         </ul>
 
         <div className="navbar-actions">
-          <span className="cart-icon">🛒</span>
+          <span className="cart-icon"><FaShoppingCart /></span>
 
           <button className="btn-levelup">Level Up!</button>
         </div>

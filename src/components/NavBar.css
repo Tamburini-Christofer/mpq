@@ -27,11 +27,41 @@
     padding: 0;
 }
 
+/* --- STILE PER I LINK E LA BARRA SOTTO --- */
 .navbar-links a {
-    color: #ffffff;
+    color: #FFD700;
+    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.2s;
+    font-weight: bold;
+    font-size: 1.3rem;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* 2. CREAZIONE DELLA BARRA SOTTO */
+.navbar-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #772284;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-out;
+    transform-origin: bottom center;
+}
+
+/* 3. CONDIZIONI PER MOSTRARE LA BARRA */
+.navbar-links a:hover::after {
+    transform: scaleX(1);
+}
+
+.navbar-links a.active::after {
+    transform: scaleX(1);
+    background-color: #FFD700;
 }
 
 .navbar-links a:hover {
@@ -47,19 +77,25 @@
 .cart-icon {
     font-size: 1.5rem;
     cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.cart-icon:hover {
+    color: #FFD700;
+    transform: scale(1.3);
 }
 
 .btn-levelup {
     background-color: #FFD700;
-    color: #121212;
+    color: #772284;
     font-weight: bold;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    text-transform: uppercase;
+    transition: color 0.2s, transform 0.2s;
 }
 
 .btn-levelup:hover {
-    background-color: #836b0d;
+    transform: scale(1.1);
 }
