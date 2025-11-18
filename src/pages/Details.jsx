@@ -24,13 +24,16 @@ function Details() {
     
     if (existingItem) {
       existingItem.quantity += quantity
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`)
+      showNotification(`Quantità di "${product.name}" aumentata nel carrello!`)
     } else {
       cart.push({ ...product, quantity })
-      showNotification(`"${product.name}" aggiunto al carretto!`)
+      showNotification(`"${product.name}" aggiunto al carrello!`)
     }
     
     localStorage.setItem('cart', JSON.stringify(cart))
+    
+    // Trigger storage event per sincronizzare con Shop
+    window.dispatchEvent(new Event('storage'))
   }
 
   if (!product) {
@@ -172,7 +175,7 @@ function Details() {
 
 {/*       // TODO: pulsante che permette di aggiungere il prodotto al carrello
  */}      <button className="add-to-cart-btn" onClick={addToCart}>
-        <span>🪙 Aggiungi al carretto</span>
+        <span>🪙 Aggiungi al carrello</span>
       </button>
 
 {/*       // TODO: testo che indica la disponibilità del prodotto

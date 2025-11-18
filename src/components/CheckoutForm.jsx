@@ -305,10 +305,6 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems }) {
 
           {/* PULSANTI AZIONE */}
           <div className="form-actions">
-            <button type="button" className="cancel-btn" onClick={onClose}>
-              Annulla Ordine
-            </button>
-            {/* Componente Pagamento Stripe */}
             <PaymentButton 
               totalAmount={totalAmount} 
               cartItems={cartItems}

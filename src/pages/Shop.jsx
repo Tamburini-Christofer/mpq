@@ -1,5 +1,5 @@
 //todo: Importiamo React e useState per creare componenti e gestire stati
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
@@ -65,8 +65,29 @@ const Shop = () => {
                 p.category_id === 3 ? "anime" : "film"
     }));
 
-  //todo: Stato per i prodotti aggiunti al carrello
-  const [cart, setCart] = useState([]);
+  //todo: Stato per i prodotti aggiunti al carrello (carica da localStorage se presente)
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem('cart');
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  //todo: Sincronizza il carrello con localStorage ogni volta che cambia
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
+  //todo: Ascolta i cambiamenti del localStorage da altre pagine (es. Details)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const savedCart = localStorage.getItem('cart');
+      if (savedCart) {
+        setCart(JSON.parse(savedCart));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   //todo: Stato per gestire le notifiche popup (es. "Prodotto aggiunto!")
   const [notification, setNotification] = useState(null);

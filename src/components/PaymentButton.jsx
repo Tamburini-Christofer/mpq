@@ -11,7 +11,7 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
   const handlePayClick = async () => {
     // Validazione dati form prima di procedere
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.shippingAddress || !formData.shippingCity || !formData.shippingPostalCode) {
-      setError("⚠️ Per favore completa tutti i campi obbligatori del form prima di procedere al pagamento");
+      setError("Per favore completa tutti i campi obbligatori del form prima di procedere al pagamento");
       return;
     }
 
@@ -51,15 +51,19 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
   return (
     <>
       {error && <div className="payment-error">{error}</div>}
-      
-      <button 
-        type="button"
-        className="pay-btn" 
-        onClick={handlePayClick}
-        disabled={loading}
-      >
-        {loading ? 'Reindirizzamento a Stripe...' : `Paga ${totalAmount.toFixed(2)}€`}
-      </button>
+      <div className="buttons-row">
+        <button type="button" className="cancel-btn" onClick={onClose}>
+          Annulla Ordine
+        </button>
+        <button 
+          type="button"
+          className="pay-btn" 
+          onClick={handlePayClick}
+          disabled={loading}
+        >
+          {loading ? 'Reindirizzamento a Stripe...' : `Paga ${totalAmount.toFixed(2)}€`}
+        </button>
+      </div>
     </>
   );
 }

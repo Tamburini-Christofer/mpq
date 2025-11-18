@@ -308,10 +308,16 @@
 /* Container pulsanti */
 .form-actions {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   gap: 15px;
   padding-top: 20px;
   border-top: 2px solid rgba(216, 169, 40, 0.2);
+}
+
+.buttons-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
 }
 
 /* Stili base pulsanti */
