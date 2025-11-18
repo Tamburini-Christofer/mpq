@@ -2,6 +2,213 @@
    PAYMENT BUTTON STYLES
    ======================================== */
 
+/* Overlay per la carta di credito */
+.card-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.card-overlay-content {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.card-overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.card-overlay-header h3 {
+  font-family: "Cinzel", serif;
+  font-size: 24px;
+  color: #1f2937;
+  margin: 0;
+}
+
+.card-close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.card-close-btn:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.card-overlay-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.cancel-card-btn,
+.confirm-pay-btn {
+  flex: 1;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Cinzel", serif;
+  border: none;
+}
+
+.cancel-card-btn {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.cancel-card-btn:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.confirm-pay-btn {
+  background: linear-gradient(135deg, #6c21ff, #8c4dff);
+  color: white;
+  box-shadow: 0 4px 12px rgba(108, 33, 255, 0.3);
+}
+
+.confirm-pay-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 33, 255, 0.4);
+}
+
+.confirm-pay-btn:disabled,
+.cancel-card-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Form Stripe */
+.stripe-form {
+  width: 100%;
+}
+
+.card-element-container {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+}
+
+.card-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+/* Stile per CardElement Stripe */
+.card-element-container .StripeElement {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  transition: border-color 0.2s;
+}
+
+.card-element-container .StripeElement--focus {
+  border-color: #6c21ff;
+  box-shadow: 0 0 0 3px rgba(108, 33, 255, 0.1);
+}
+
+.card-element-container .StripeElement--invalid {
+  border-color: #ef4444;
+}
+
+/* Messaggio di errore */
+.payment-error {
+  background: #fee2e2;
+  color: #991b1b;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  border-left: 4px solid #ef4444;
+}
+
+/* Pulsante Paga */
+.pay-btn {
+  background: linear-gradient(135deg, #6c21ff, #8c4dff);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "Cinzel", serif;
+  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+  width: 100%;
+}
+
+.pay-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
+  background: linear-gradient(135deg, #7c31ff, #9c5dff);
+}
+
+.pay-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.pay-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #9ca3af;
+}
+
 .payment-button {
   background: linear-gradient(135deg, #6c21ff, #8c4dff);
   color: white;

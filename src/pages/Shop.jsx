@@ -1,8 +1,15 @@
 //todo: Importiamo React e useState per creare componenti e gestire stati
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
 import "./Shop.css"; 
+
+//todo: Importiamo gli stili delle card
+import "../components/CardExp.css";
+
+//todo: Importiamo i prodotti dal file JSON
+import productsData from "../JSON/products.json";
 
 //todo: Importiamo il componente CheckoutForm
 import CheckoutForm from "../components/CheckoutForm";
@@ -15,6 +22,8 @@ import SearchSortBar from "../components/SearchSortBar";
 
 //todo: Creo il componente principale Shop
 const Shop = () => {
+  const navigate = useNavigate();
+  
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
   
@@ -48,24 +57,13 @@ const Shop = () => {
   const [visibleProducts, setVisibleProducts] = useState(10);
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
-    const products = [
-    { id: 1, name: "The Lord Of the Ring", price: 4.99, category: "film", image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
-    { id: 2, name: "Stranger Things", price: 9.99, category: "series", image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
-    { id: 3, name: "Harry Potter Collection", price: 69.99, category: "film", image: "https://art.pixilart.com/c54917a56a375fc.gif" },
-    { id: 4, name: "Anime Collection", price: 69.99, category: "anime", image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
-    { id: 5, name: "Football", price: 19.99, category: "film", image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
-    { id: 6, name: "Gigina la dinosaura", price: 19.99, category: "film", image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
-    { id: 7, name: "Samir Experience", price: 29.99, category: "anime", image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
-    { id: 8, name: "El Trentin", price: 39.99, category: "series", image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
-    { id: 9, name: "The Lord Of the Ring", price: 4.99, category: "film", image:"https://i.pinimg.com/736x/cc/46/97/cc46970d2822df62d24b1bddcc7a954e.jpg" },
-    { id: 10, name: "Stranger Things", price: 9.99, category: "series", image: "https://i.pinimg.com/736x/f2/be/e8/f2bee8d0313d774c36522a88eec3a5ac.jpg" },
-    { id: 11, name: "Harry Potter Collection", price: 69.99, category: "film", image: "https://art.pixilart.com/c54917a56a375fc.gif" },
-    { id: 12, name: "Anime Collection", price: 69.99, category: "anime", image: "https://play-lh.googleusercontent.com/Rv9O8Xg6o5wFMcDkLBoxCDOxqGPYGh5pzQyKSKvemuxiGOlyWZrOWt2vqqkOe52TvRWN"},
-    { id: 13, name: "Football", price: 19.99, category: "film", image: "https://i.pinimg.com/736x/0e/69/59/0e695915a40ac1006e88836f9b0cd189.jpg"},
-    { id: 14, name: "Gigina la dinosaura", price: 19.99, category: "film", image: "https://ih1.redbubble.net/image.4923453391.3760/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"},
-    { id: 15, name: "Samir Experience", price: 29.99, category: "anime", image: "https://previews.123rf.com/images/virtosmedia/virtosmedia2302/virtosmedia230286068/199315765-pixel-art-illustration-of-an-indian-warrior-with-a-sword-in-his-hand.jpg"},
-    { id: 16, name: "El Trentin", price: 39.99, category: "series", image: "https://i.pinimg.com/736x/1e/d5/22/1ed522c84c8285e88acb9cc26d86997a.jpg"},
-  ];
+  //todo: Array statico di prodotti demo (da collegare poi a un DB o API)
+    const products = productsData.map(p => ({
+      ...p,
+      category: p.category_id === 1 ? "film" : 
+                p.category_id === 2 ? "series" : 
+                p.category_id === 3 ? "anime" : "film"
+    }));
 
   //todo: Stato per i prodotti aggiunti al carrello
   const [cart, setCart] = useState([]);
@@ -339,9 +337,14 @@ const Shop = () => {
                     )}
                   </div>
 
-                  <button className="buy-btn" onClick={() => addToCart(p)}>
-                    {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
-                  </button>
+                  <div className="card-actions">
+                    <button className="details-btn" onClick={() => navigate(`/exp/${p.id}`)}>
+                      Dettagli
+                    </button>
+                    <button className="buy-btn" onClick={() => addToCart(p)}>
+                      {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

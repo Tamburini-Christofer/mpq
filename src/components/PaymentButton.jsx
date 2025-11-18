@@ -1,73 +1,65 @@
-/* ========================================
-   PAYMENT BUTTON COMPONENT
-   Bottone per iniziare il processo di pagamento Stripe
-   ======================================== */
+import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
+import './PaymentButton.css';
 
-import { useState } from "react";
-import "./PaymentButton.css";
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_YOUR_KEY');
 
-/**
- * Componente PaymentButton
- * Gestisce la creazione della sessione di pagamento Stripe
- * 
- * @param {number} totalAmount - Importo totale dell'ordine
- * @param {array} cartItems - Array di prodotti nel carrello
- */
-export default function PaymentButton({ totalAmount, cartItems }) {
-  const [isLoading, setIsLoading] = useState(false);
+export default function PaymentButton({ totalAmount, cartItems, formData, onClose }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  /**
-   * Funzione per avviare il processo di pagamento
-   * Crea una sessione di checkout Stripe e reindirizza l'utente
-   */
-  const handlePayment = async () => {
+  const handlePayClick = async () => {
+    // Validazione dati form prima di procedere
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.shippingAddress || !formData.shippingCity || !formData.shippingPostalCode) {
+      setError("⚠️ Per favore completa tutti i campi obbligatori del form prima di procedere al pagamento");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
     try {
-      setIsLoading(true);
-      
-      const res = await fetch("http://localhost:3000/create-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const stripe = await stripePromise;
+
+      // Crea una sessione di checkout Stripe
+      const response = await fetch('http://localhost:3000/payment/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          amount: totalAmount,
-          items: cartItems,
-        }),
+          cartItems: cartItems,
+          customerData: formData,
+          successUrl: `${window.location.origin}/`,
+          cancelUrl: `${window.location.origin}/shop`
+        })
       });
 
-      if (!res.ok) {
-        throw new Error("Errore nella creazione della sessione di pagamento");
-      }
+      const { sessionId } = await response.json();
 
-      const data = await res.json();
-      
-      // Reindirizza l'utente alla pagina di checkout Stripe
-      window.location.href = data.url;
-      
-    } catch (error) {
-      console.error("Errore nel pagamento:", error);
-      alert("Si è verificato un errore. Riprova più tardi.");
-      setIsLoading(false);
+      // Reindirizza a Stripe Checkout
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    } catch (err) {
+      setError(err.message || 'Errore durante il pagamento. Riprova.');
+      setLoading(false);
     }
   };
 
   return (
-    <button 
-      type="button"
-      className="payment-button" 
-      onClick={handlePayment}
-      disabled={isLoading}
-    >
-      {isLoading ? (
-        <>
-          <span className="payment-spinner"></span>
-          <span>Reindirizzamento...</span>
-        </>
-      ) : (
-        <>
-          <span>Paga con Stripe</span>
-        </>
-      )}
-    </button>
+    <>
+      {error && <div className="payment-error">{error}</div>}
+      
+      <button 
+        type="button"
+        className="pay-btn" 
+        onClick={handlePayClick}
+        disabled={loading}
+      >
+        {loading ? 'Reindirizzamento a Stripe...' : `Paga ${totalAmount.toFixed(2)}€`}
+      </button>
+    </>
   );
 }
