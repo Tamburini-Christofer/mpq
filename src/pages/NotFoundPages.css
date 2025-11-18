@@ -1,0 +1,25 @@
+.notfound{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    img{
+        width: 300px;
+    }
+
+    .notfoundbox{
+        display:flex;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 38px;
+        color:rgb(121, 36, 138);
+
+        button{
+            padding:5px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 5px;
+            color: rgb(255, 217, 0);
+            background-color:rgb(121, 36, 138);
+        }
+    }
+}
