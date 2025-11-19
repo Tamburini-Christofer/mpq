@@ -136,7 +136,17 @@ function HomePage() {
             <section className="hero-section">
                 <div className="hero-left">
                     <h1 className="hero-title">NEXT LEVEL: <br /> <span className='hero-title-purple'>REAL LIFE</span></h1>
-                    <button className="btn-get-started">GET STARTED</button>
+                    <button 
+                        className="btn-get-started"
+                        onClick={() => {
+                            document.querySelector('.best-sellers-section-wrapper')?.scrollIntoView({ 
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }}
+                    >
+                        GET STARTED
+                    </button>
                 </div>
                 <div className="hero-right">
                     {/* ELEMENTO VIDEO */}

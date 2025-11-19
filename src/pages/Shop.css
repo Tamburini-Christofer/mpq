@@ -208,7 +208,6 @@
   flex: 1;
   padding: 40px;
   margin-left: 280px;
-  margin-top: 100px;
 }
 
 /* todo: Titoli delle sezioni principali (Carrello, Checkout) */
@@ -691,7 +690,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
-  padding: 100px 20px;
+  padding: 0px 20px;
 
 }
 
@@ -700,21 +699,24 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  padding: 80px 20px;
+  padding: 0px 20px;
   max-width: 1200px;
 }
 
 /* todo: Container controlli per cambiare visualizzazione griglia/lista */
 .view-controls {
-  position: fixed;
-  background-color: #141218 ;
+  position: sticky;
+  top: 0;
+  background-color: #141218;
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
-  z-index: 3000;
+  z-index: 100;
+  padding: 15px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */

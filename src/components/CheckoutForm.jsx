@@ -5,6 +5,7 @@
 
 import { useState } from "react";
 import PaymentButton from "./PaymentButton";
+import FreeShippingBanner from "./FreeShippingBanner";
 import "./CheckoutForm.css";
 
 /**
@@ -14,12 +15,12 @@ import "./CheckoutForm.css";
  * @param {function} onClose - Funzione per chiudere l'overlay
  * @param {number} totalAmount - Importo totale dell'ordine (include spedizione)
  * @param {array} cartItems - Array di prodotti nel carrello
- * @param {number} shippingCost - Costo spedizione (0 se promo applicata, default 4.99)
- * @param {boolean} promoApplied - Se il codice promo è stato applicato (default false)
+ * @param {number} shippingCost - Costo spedizione (0 se sopra 40€ o promo, default 4.99)
+ * @param {boolean} isFreeShipping - Se la spedizione è gratuita (sopra 40€ o promo)
  */
 //todo: Funzione componente che riceve 5 props dal padre (Shop.jsx)
-//todo: shippingCost e promoApplied hanno valori di default nel caso non vengano passati
-export default function CheckoutForm({ onClose, totalAmount, cartItems, shippingCost = 4.99, promoApplied = false }) {
+//todo: shippingCost e isFreeShipping hanno valori di default nel caso non vengano passati
+export default function CheckoutForm({ onClose, totalAmount, cartItems, shippingCost = 4.99, isFreeShipping = false }) {
   
   /* ===== STATO DEL FORM ===== */
   const [formData, setFormData] = useState({
@@ -313,19 +314,19 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems, shipping
               </div>
 
               {/* Riga spese di spedizione */}
-              {/* todo: Mostriamo le spese con logica condizionale: GRATIS se promo, 4.99€ altrimenti */}
+              {/* todo: Mostriamo le spese con logica condizionale: GRATIS se sopra 40€ o promo, 4.99€ altrimenti */}
               <div className="summary-row shipping-row">
                 <span>Spese di spedizione</span>
                 <span className="summary-value">
-                  {/* todo: Controlliamo la prop promoApplied per decidere cosa mostrare */}
-                  {promoApplied ? (
+                  {/* todo: Controlliamo la prop isFreeShipping per decidere cosa mostrare */}
+                  {isFreeShipping ? (
                     <>
-                      {/* todo: Se promo ATTIVO: prezzo originale barrato + scritta verde GRATIS */}
+                      {/* todo: Se spedizione GRATUITA (sopra 40€ o promo): prezzo originale barrato + scritta verde GRATIS */}
                       <span style={{textDecoration: 'line-through', color: '#999', marginRight: '8px'}}>4.99€</span>
                       <span style={{color: '#4ade80', fontWeight: 'bold'}}>GRATIS</span>
                     </>
                   ) : (
-                    /* todo: Se NO promo: mostriamo il costo normale dalla prop shippingCost */
+                    /* todo: Se NO spedizione gratuita: mostriamo il costo normale dalla prop shippingCost */
                     `${shippingCost.toFixed(2)}€`
                   )}
                 </span>

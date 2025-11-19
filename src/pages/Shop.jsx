@@ -20,6 +20,9 @@ import ShopComponent from "../components/ShopComponent";
 //todo: Importiamo SearchSortBar per la barra di ricerca
 import SearchSortBar from "../components/SearchSortBar";
 
+//todo: Importiamo il componente FreeShippingBanner per la spedizione gratuita
+import FreeShippingBanner from "../components/FreeShippingBanner";
+
 //todo: Creo il componente principale Shop
 const Shop = () => {
   const navigate = useNavigate();
@@ -420,6 +423,15 @@ const Shop = () => {
           <div className="cart-section">
             <h2 className="section-title">Carretto</h2>
 
+            {/* todo: Banner spedizione gratuita */}
+            {cart.length > 0 && (
+              <FreeShippingBanner 
+                subtotal={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
+                threshold={40}
+                promoApplied={promoApplied}
+              />
+            )}
+
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-cart">
@@ -556,29 +568,30 @@ const Shop = () => {
 
                 {/* todo: Totale ordine e bottoni azioni */}
                 <div className="checkout-summary">
-                  <div className="checkout-total">
-                    {/*todo: Usiamo una IIFE (Immediately Invoked Function Expression) per calcolare i totali*/}
-                    {(() => {
-                      //todo: Calcoliamo il subtotale sommando prezzo × quantità di ogni prodotto
-                      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                      //todo: Spese spedizione: 0€ se promo applicata, altrimenti 4.99€
-                      const shippingCost = promoApplied ? 0 : 4.99;
-                      //todo: Totale finale = subtotale + spese di spedizione
-                      const total = subtotal + shippingCost;
-                      
-                      return (
-                        <>
+                  {/*todo: Calcoliamo i valori fuori dalla IIFE per usarli anche nelle azioni*/}
+                  {(() => {
+                    //todo: Calcoliamo il subtotale sommando prezzo × quantità di ogni prodotto
+                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    //todo: Spese spedizione: 0€ se sopra 40€ O se promo applicata, altrimenti 4.99€
+                    const isFreeShipping = subtotal >= 40 || promoApplied;
+                    const shippingCost = isFreeShipping ? 0 : 4.99;
+                    //todo: Totale finale = subtotale + spese di spedizione
+                    const total = subtotal + shippingCost;
+                    
+                    return (
+                      <>
+                        <div className="checkout-total">
                           {/*todo: Riga che mostra il subtotale (solo prodotti, senza spedizione)*/}
                           <div className="checkout-subtotal">
                             <span>Subtotale:</span>
                             <span>{subtotal.toFixed(2)}€</span>
                           </div>
-                          {/*todo: Riga spese di spedizione con logica promo*/}
+                          {/*todo: Riga spese di spedizione con logica promo e soglia 40€*/}
                           <div className="checkout-shipping">
                             <span>Spese di spedizione:</span>
-                            <span className={promoApplied ? 'free-shipping' : ''}>
-                              {/*todo: Se promo applicata, mostra prezzo barrato + "GRATIS" in verde*/}
-                              {promoApplied ? (
+                            <span className={isFreeShipping ? 'free-shipping' : ''}>
+                              {/*todo: Se spedizione gratuita (sopra 40€ o promo), mostra prezzo barrato + "GRATIS" in verde*/}
+                              {isFreeShipping ? (
                                 <>
                                   <span style={{textDecoration: 'line-through', color: '#999'}}>4.99€</span>
                                   {' '}
@@ -595,38 +608,45 @@ const Shop = () => {
                             <h3>Totale Ordine:</h3>
                             <h3>{total.toFixed(2)}€</h3>
                           </div>
-                        </>
-                      );
-                    })()}
-                  </div>
-                  
-                  <div className="checkout-actions">
-                    {/*todo: Mostriamo l'icona FreeShipping solo se il codice promo è stato applicato*/}
-                    {promoApplied && (
-                      <img 
-                        src="/icon/FreeShipping.png" 
-                        alt="Spedizione Gratuita" 
-                        className="free-shipping-icon"
-                        title="Spedizione gratuita attiva!"
-                      />
-                    )}
-                    <button 
-                      className="clear-cart-btn"
-                      onClick={() => {
-                        const itemCount = cart.length;
-                        setCart([]);
-                        showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
-                      }}
-                    >
-                      Svuota Carretto
-                    </button>
-                    <button 
-                      className="confirm-btn"
-                      onClick={() => setShowCheckoutForm(true)}
-                    >
-                      Conferma Acquisto e parti per la tua prossima avventura
-                    </button>
-                  </div>
+                        </div>
+                        
+                        {/* todo: Banner spedizione gratuita */}
+                        <FreeShippingBanner 
+                          subtotal={subtotal}
+                          threshold={40}
+                          promoApplied={promoApplied}
+                        />
+                        
+                        <div className="checkout-actions">
+                          {/*todo: Mostriamo l'icona FreeShipping se sopra 40€ o se il codice promo è stato applicato*/}
+                          {isFreeShipping && (
+                            <img 
+                              src="/icon/FreeShipping.png" 
+                              alt="Spedizione Gratuita" 
+                              className="free-shipping-icon"
+                              title="Spedizione gratuita attiva!"
+                            />
+                          )}
+                          <button 
+                            className="clear-cart-btn"
+                            onClick={() => {
+                              const itemCount = cart.length;
+                              setCart([]);
+                              showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
+                            }}
+                          >
+                            Svuota Carretto
+                          </button>
+                          <button 
+                            className="confirm-btn"
+                            onClick={() => setShowCheckoutForm(true)}
+                          >
+                            Conferma Acquisto e parti per la tua prossima avventura
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
               </>
             )}
@@ -635,21 +655,28 @@ const Shop = () => {
       </main>
       
       {/* todo: Overlay form checkout */}
-      {/* todo: Passiamo 4 props al CheckoutForm: totalAmount (con spedizione), cartItems, shippingCost e promoApplied */}
-      {showCheckoutForm && (
-        <CheckoutForm
-          /* todo: Funzione callback per chiudere l'overlay quando l'utente clicca su X o annulla */
-          onClose={() => setShowCheckoutForm(false)}
-          /* todo: Calcoliamo totale: somma prodotti + (4.99 se NO promo, 0 se promo applicata) */
-          totalAmount={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0) + (promoApplied ? 0 : 4.99)}
-          /* todo: Passiamo intero carrello per mostrare dettagli prodotti nel riepilogo */
-          cartItems={cart}
-          /* todo: Costo spedizione: 0 se WELCOMEQUEST applicato, 4.99 altrimenti */
-          shippingCost={promoApplied ? 0 : 4.99}
-          /* todo: Stato booleano promo per mostrare "GRATIS" barrato nel form */
-          promoApplied={promoApplied}
-        />
-      )}
+      {/* todo: Passiamo 4 props al CheckoutForm: totalAmount (con spedizione), cartItems, shippingCost e isFreeShipping */}
+      {showCheckoutForm && (() => {
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const isFreeShipping = subtotal >= 40 || promoApplied;
+        const shippingCost = isFreeShipping ? 0 : 4.99;
+        const totalAmount = subtotal + shippingCost;
+        
+        return (
+          <CheckoutForm
+            /* todo: Funzione callback per chiudere l'overlay quando l'utente clicca su X o annulla */
+            onClose={() => setShowCheckoutForm(false)}
+            /* todo: Totale calcolato con logica spedizione gratuita */
+            totalAmount={totalAmount}
+            /* todo: Passiamo intero carrello per mostrare dettagli prodotti nel riepilogo */
+            cartItems={cart}
+            /* todo: Costo spedizione: 0 se sopra 40€ o promo, 4.99 altrimenti */
+            shippingCost={shippingCost}
+            /* todo: Stato booleano per mostrare "GRATIS" barrato nel form */
+            isFreeShipping={isFreeShipping}
+          />
+        );
+      })()}
     </div>
   );
 };
