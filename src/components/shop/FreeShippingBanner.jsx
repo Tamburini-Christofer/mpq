@@ -3,7 +3,7 @@
    Banner informativo per spedizione gratuita sopra 40€
    ======================================== */
 
-import './FreeShippingBanner.css';
+import '../../styles/components/FreeShippingBanner.css';
 
 /**
  * Componente FreeShippingBanner

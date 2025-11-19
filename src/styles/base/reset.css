@@ -1,0 +1,52 @@
+/* ==========================================
+   RESET CSS
+   Reset degli stili di default del browser
+   ========================================== */
+
+/* todo: Reset globale per margini, padding e box-sizing */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* todo: Stile base del body */
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
+/* todo: Reset liste */
+ul, ol {
+  list-style: none;
+}
+
+/* todo: Reset link */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* todo: Reset pulsanti */
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* todo: Reset input e textarea */
+input, textarea, select {
+  font-family: inherit;
+}
+
+/* todo: Immagini responsive */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}

@@ -1,21 +1,40 @@
-import "./Details.css"
-//todo useParams: hook per estrarre parametri dinamici dalla URL (es: /exp/:id)
+import "../styles/pages/Details.css"
+//todo useParams: hook per estrarre parametri dinamici dalla URL (es: /details/:slug)
 //todo useNavigate: hook per navigazione programmatica
 import { useParams, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 //todo Importiamo il database dei prodotti
 import productsData from "../JSON/products.json"
 
+//todo Funzione per generare slug SEO-friendly dal nome prodotto (deve essere identica a ProductCard)
+const generateSlug = (name) => {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/[àáâãäå]/g, 'a')
+    .replace(/[èéêë]/g, 'e')
+    .replace(/[ìíîï]/g, 'i')
+    .replace(/[òóôõö]/g, 'o')
+    .replace(/[ùúûü]/g, 'u')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+};
+
 function Details() {
-  //todo Estraiamo l'id dalla URL (es: /exp/5 => id = "5")
-  const { id } = useParams()
+  //todo Estraiamo lo slug dalla URL (es: /details/il-padrino => slug = "il-padrino")
+  const { slug } = useParams()
   const navigate = useNavigate()
-  //todo Accediamo al prodotto usando l'indice dell'array (NON il campo id che è stato rimosso)
-  //todo parseInt converte la stringa "5" in numero 5
-  const product = productsData[parseInt(id)]
+  //todo Cerchiamo il prodotto confrontando lo slug generato dal nome con quello dell'URL
+  const product = productsData.find(p => generateSlug(p.name) === slug)
   
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
+
+  //todo Scroll istantaneo all'inizio della pagina quando si carica
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type })

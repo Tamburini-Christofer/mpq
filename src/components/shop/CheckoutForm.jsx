@@ -6,7 +6,7 @@
 import { useState } from "react";
 import PaymentButton from "./PaymentButton";
 import FreeShippingBanner from "./FreeShippingBanner";
-import "./CheckoutForm.css";
+import "../../styles/components/CheckoutForm.css";
 
 /**
  * Componente CheckoutForm

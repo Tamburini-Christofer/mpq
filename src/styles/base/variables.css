@@ -1,0 +1,80 @@
+/* ==========================================
+   VARIABILI CSS GLOBALI
+   Definizione di colori, dimensioni e valori riutilizzabili
+   ========================================== */
+
+:root {
+  /* Colori principali */
+  --color-primary: #D8A928;        /* Oro principale */
+  --color-primary-dark: #836b0d;   /* Oro scuro per hover */
+  --color-secondary: #772284;      /* Viola */
+  --color-secondary-light: #6c21ff; /* Viola chiaro */
+  
+  /* Colori di sfondo */
+  --bg-dark: #141218;              /* Sfondo principale scuro */
+  --bg-dark-card: #1a1a1a;         /* Sfondo card */
+  --bg-dark-secondary: #1c1a24;    /* Sfondo secondario */
+  --bg-gradient-card: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  
+  /* Colori testo */
+  --text-light: #ffffff;           /* Testo bianco */
+  --text-gray: #e0e0e0;            /* Testo grigio chiaro */
+  --text-gray-dark: #9ca3af;       /* Testo grigio scuro */
+  --text-muted: #6b7280;           /* Testo attenuato */
+  
+  /* Colori status */
+  --color-success: #4caf50;        /* Verde successo */
+  --color-error: #f44336;          /* Rosso errore */
+  --color-info: #4d82f4;           /* Blu info */
+  --color-warning: #d62121;        /* Rosso warning */
+  
+  /* Colori free shipping */
+  --color-free-shipping-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --color-free-shipping-active: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  --color-progress-bar: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
+  
+  /* Spaziature */
+  --spacing-xs: 5px;
+  --spacing-sm: 10px;
+  --spacing-md: 15px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-2xl: 50px;
+  
+  /* Border radius */
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* Font families */
+  --font-primary: "Inter", sans-serif;
+  --font-heading: "Cinzel", serif;
+  --font-pixel: "Pixelify Sans", sans-serif;
+  
+  /* Font sizes */
+  --font-xs: 0.75rem;
+  --font-sm: 0.85rem;
+  --font-md: 1rem;
+  --font-lg: 1.3rem;
+  --font-xl: 1.5rem;
+  --font-2xl: 2rem;
+  
+  /* Transizioni */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  
+  /* Ombre */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 12px 24px rgba(216, 169, 40, 0.3);
+  --shadow-xl: 0 4px 20px rgba(0, 0, 0, 0.3);
+  
+  /* Z-index layers */
+  --z-base: 1;
+  --z-dropdown: 10;
+  --z-sticky: 100;
+  --z-modal: 1000;
+  --z-notification: 2000;
+  --z-tooltip: 3000;
+}

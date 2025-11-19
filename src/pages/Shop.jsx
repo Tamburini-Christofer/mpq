@@ -3,29 +3,34 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
-import "./Shop.css"; 
+import "../styles/pages/Shop.css"; 
 
 //todo: Importiamo gli stili delle card
-import "../components/CardExp.css";
+import "../styles/components/cardExp.css";
 
 //todo: Importiamo i prodotti dal file JSON
 import productsData from "../JSON/products.json";
 
 //todo: Importiamo il componente CheckoutForm
-import CheckoutForm from "../components/CheckoutForm";
+import CheckoutForm from "../components/shop/CheckoutForm";
 
 //todo: Importiamo il componente ShopComponent per i filtri
-import ShopComponent from "../components/ShopComponent";
+import ShopComponent from "../components/shop/ShopComponent";
 
 //todo: Importiamo SearchSortBar per la barra di ricerca
-import SearchSortBar from "../components/SearchSortBar";
+import SearchSortBar from "../components/shop/SearchSortBar";
 
 //todo: Importiamo il componente FreeShippingBanner per la spedizione gratuita
-import FreeShippingBanner from "../components/FreeShippingBanner";
+import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
 //todo: Creo il componente principale Shop
 const Shop = () => {
   const navigate = useNavigate();
+  
+  //todo: Scroll istantaneo all'inizio della pagina quando si carica
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");

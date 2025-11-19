@@ -1,4 +1,4 @@
-import './HomePage.css'
+import '../styles/pages/HomePage.css'
 import { useState, useMemo, useRef } from 'react';
 //todo Importiamo useNavigate per navigare programmaticamente tra le pagine (es: da card a Details)
 import { useNavigate } from 'react-router-dom';
@@ -6,12 +6,25 @@ import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
 //todo Importiamo i dati dei prodotti dal file JSON per popolare i caroselli
 import productsData from '../JSON/products.json';
+//todo Importiamo ProductCard componente unificato per le card prodotto
+import ProductCard from '../components/common/ProductCard';
 
 
 function HomePage() {
 
     // Stato per tracciare il video corrente
     const [currentVideoSrc, setCurrentVideoSrc] = useState(heroVideoAnime);
+    
+    //todo Stato per gestire le notifiche quando si aggiunge un prodotto al carrello
+    const [notification, setNotification] = useState(null);
+    
+    //todo Funzione per mostrare notifiche temporanee (3 secondi)
+    const showNotification = (message, type = 'success') => {
+        setNotification({ message, type });
+        setTimeout(() => {
+            setNotification(null);
+        }, 3000);
+    };
 
     //todo Creiamo riferimenti (ref) per accedere direttamente agli elementi DOM dei caroselli
     //todo Questi ref vengono usati per controllare lo scroll orizzontale e gestire i touch events
@@ -102,9 +115,9 @@ function HomePage() {
     };
 
     //todo Funzione per navigare alla pagina dettagli del prodotto
-    //todo Usiamo originalIndex perché Details.jsx accede ai prodotti tramite indice array
-    const handleViewDetails = (product) => {
-        navigate(`/exp/${product.originalIndex}`);
+    //todo Riceve lo slug generato da ProductCard e naviga a /details/:slug
+    const handleViewDetails = (slug) => {
+        navigate(`/details/${slug}`);
     };
 
     //todo Funzione per aggiungere prodotto al carrello dal carosello HomePage
@@ -117,9 +130,11 @@ function HomePage() {
         //todo Se esiste già, incrementiamo la quantità
         if (existingItem) {
             existingItem.quantity += 1;
+            showNotification(`Quantità di "${product.name}" aumentata nel carrello!`);
         } else {
             //todo Altrimenti aggiungiamo il nuovo prodotto con quantità 1
             cart.push({ ...product, quantity: 1 });
+            showNotification(`"${product.name}" aggiunto al carrello!`);
         }
         
         //todo Salviamo il carrello aggiornato in localStorage
@@ -130,16 +145,35 @@ function HomePage() {
 
 
     return (
-        <div className="homepage">
+        <>
+            {/* todo: Notifica quando si aggiunge un prodotto al carrello */}
+            {notification && (
+                <div className={`notification ${notification.type}`}>
+                    <div className="notification-content">
+                        <span className="notification-icon">
+                            {notification.type === 'success' ? '✓' : 'ℹ'}
+                        </span>
+                        <span className="notification-message">{notification.message}</span>
+                        <button 
+                            className="notification-close"
+                            onClick={() => setNotification(null)}
+                        >
+                            ✕
+                        </button>
+                    </div>
+                </div>
+            )}
 
-            {/*HERO SECTION*/}
-            <section className="hero-section">
+            <div className="homepage">
+
+                {/*HERO SECTION*/}
+                <section className="hero-section">
                 <div className="hero-left">
                     <h1 className="hero-title">NEXT LEVEL: <br /> <span className='hero-title-purple'>REAL LIFE</span></h1>
                     <button 
                         className="btn-get-started"
                         onClick={() => {
-                            document.querySelector('.best-sellers-section-wrapper')?.scrollIntoView({ 
+                            document.querySelector('#prodotti')?.scrollIntoView({ 
                                 behavior: 'smooth',
                                 block: 'start'
                             });
@@ -167,8 +201,8 @@ function HomePage() {
             </section>
 
             {/*BEST SELLERS*/}
-            <section className="quests-section best-sellers-section-wrapper">
-                <h2 className="section-title">Più Popolari</h2>
+            <section className="quests-section best-sellers-section-wrapper" id="prodotti">
+                <h2 className="section-title" id="prodotti">Più Popolari</h2>
 
                 {/*todo Pulsante freccia sinistra per scrollare il carosello indietro*/}
                 <button
@@ -187,34 +221,14 @@ function HomePage() {
                     onTouchEnd={() => handleTouchEnd(bestSellersRef)}
                 >
                     {bestSellers.map((product, index) => (
-                        <div key={index} className="card-placeholder">
-                            {/*todo Label blu "POPOLARE" posizionata in alto a destra della card*/}
-                            <span className="card-label card-label-popular">POPOLARE</span>
-                            {/*todo Immagine del prodotto presa dal campo image del JSON*/}
-                            <img src={product.image} alt={product.name} className="card-image" />
-                            <div className="card-info">
-                                {/*todo Nome del prodotto (max 2 righe con ellipsis)*/}
-                                <h3 className="card-title">{product.name}</h3>
-                                {/*todo Prezzo formattato con 2 decimali*/}
-                                <p className="card-price">{product.price.toFixed(2)}€</p>
-                                <div className="card-buttons">
-                                    {/*todo Pulsante oro per navigare alla pagina Details del prodotto*/}
-                                    <button 
-                                        className="card-btn card-btn-details"
-                                        onClick={() => handleViewDetails(product)}
-                                    >
-                                        Dettagli
-                                    </button>
-                                    {/*todo Pulsante con bordo oro per aggiungere al carrello direttamente dalla HomePage*/}
-                                    <button 
-                                        className="card-btn card-btn-cart"
-                                        onClick={() => handleAddToCart(product)}
-                                    >
-                                        Acquista
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <ProductCard
+                            key={index}
+                            product={product}
+                            badge="popular"
+                            variant="carousel"
+                            onViewDetails={handleViewDetails}
+                            onAddToCart={handleAddToCart}
+                        />
                     ))}
                 </div>
 
@@ -246,34 +260,14 @@ function HomePage() {
                     onTouchEnd={() => handleTouchEnd(latestArrivalsRef)}
                 >
                     {latestArrivals.map((product, index) => (
-                        <div key={index} className="card-placeholder">
-                            {/*todo Label rossa "NUOVO ARRIVO" per distinguere dai prodotti popolari*/}
-                            <span className="card-label card-label-new">NUOVO ARRIVO</span>
-                            {/*todo Immagine del prodotto*/}
-                            <img src={product.image} alt={product.name} className="card-image" />
-                            <div className="card-info">
-                                {/*todo Nome del prodotto*/}
-                                <h3 className="card-title">{product.name}</h3>
-                                {/*todo Prezzo formattato*/}
-                                <p className="card-price">{product.price.toFixed(2)}€</p>
-                                <div className="card-buttons">
-                                    {/*todo Pulsante per vedere i dettagli completi del prodotto*/}
-                                    <button 
-                                        className="card-btn card-btn-details"
-                                        onClick={() => handleViewDetails(product)}
-                                    >
-                                        Dettagli
-                                    </button>
-                                    {/*todo Pulsante per aggiungere il prodotto al carrello*/}
-                                    <button 
-                                        className="card-btn card-btn-cart"
-                                        onClick={() => handleAddToCart(product)}
-                                    >
-                                        Acquista
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <ProductCard
+                            key={index}
+                            product={product}
+                            badge="new"
+                            variant="carousel"
+                            onViewDetails={handleViewDetails}
+                            onAddToCart={handleAddToCart}
+                        />
                     ))}
                 </div>
 
@@ -285,6 +279,7 @@ function HomePage() {
                 </button>
             </section>
         </div>
+        </>
     );
 }
 

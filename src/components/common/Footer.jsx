@@ -1,4 +1,4 @@
-import './Footer.css'
+import '../../styles/components/Footer.css'
 import { FaInstagram } from "react-icons/fa";
 import { MdMailOutline } from "react-icons/md";
 import { FaFacebook } from "react-icons/fa";

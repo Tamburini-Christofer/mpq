@@ -1,7 +1,7 @@
 // TODO: Importiamo React per creare componenti
 import React from 'react';
 // TODO: Importiamo il file CSS per gli stili di questa pagina
-import './ShopComponent.css'; 
+import '../../styles/components/ShopComponent.css'; 
 // TODO: Importiamo i componenti figli che verranno renderizzati in questa pagina
 import FilterSidebar from './FilterSidebar.jsx'; 
 
