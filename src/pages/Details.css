@@ -470,3 +470,27 @@ body {
     font-size: 1.6rem;
   }
 }
+
+/* debug css */
+
+.container{
+  display: flex;
+  gap:20px;
+}
+
+.cointainer_info{
+  display:flex;
+  align-items: center;
+}
+
+.title-info{
+  display:flex;
+  align-items:flex-start;
+  text-align: start;
+  flex-direction: column;
+  
+  .product-category{
+    color:rgb(121, 36, 138);
+    font-size: 15px;
+  }
+}

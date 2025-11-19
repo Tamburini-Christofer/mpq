@@ -1,6 +1,6 @@
 require('dotenv').config();
 const cors = require('cors');
-const db = require('./config/connection.js');
+const connection = require('./config/connection.js');
 const express = require('express');
 const app = express();
 const PORT = 3000;
@@ -26,6 +26,8 @@ app.use('/products', productRoutes);
 //uso della route
 app.use('/payment', paymentRoutes);
 
+//uso della route
+app.use('/orders', require('./routes/shopRouter.js'));
 //rotta home
 app.get("/", (req, res) => {
     console.log("hai richiesto la home page");
