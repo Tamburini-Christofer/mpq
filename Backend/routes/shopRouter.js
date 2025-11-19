@@ -1,4 +1,4 @@
-// Backend/routes/shopRouter.js  ← VERSIONE 100% FUNZIONANTE ORA
+
 const express = require('express');
 const router = express.Router();
 const db = require('../config/connection.js');
@@ -67,6 +67,7 @@ router.post('/', async (req, res) => {
     connection.release();
   }
 });
+
 
 // READ - Tutti gli ordini
 router.get('/', async (req, res) => {
