@@ -16,6 +16,7 @@ function HomePage() {
     //todo Creiamo riferimenti (ref) per accedere direttamente agli elementi DOM dei caroselli
     //todo Questi ref vengono usati per controllare lo scroll orizzontale e gestire i touch events
     const bestSellersRef = useRef(null);
+    const onSaleRef = useRef(null);  // Ref per il carosello promozioni
     const latestArrivalsRef = useRef(null);
 
     //todo Inizializziamo useNavigate per permettere la navigazione tra le route
@@ -51,6 +52,16 @@ function HomePage() {
         ...product,
         originalIndex: productsData.findIndex(p => p.name === product.name)
     }));
+
+    //todo Filtriamo e prendiamo i prodotti con sconto per la sezione promozioni
+    const onSaleProducts = productsData
+        .filter(product => product.discount && product.discount > 0)
+        .slice(0, 12)
+        .map(product => ({
+            ...product,
+            originalIndex: productsData.findIndex(p => p.name === product.name)
+        }));
+
     //todo Prendiamo i prodotti dal 12 al 23 (12 totali) per "Ultimi Arrivi"
     const latestArrivals = randomProducts.slice(12, 24).map(product => ({
         ...product,
@@ -176,17 +187,32 @@ function HomePage() {
                     onTouchMove={(e) => handleTouchMove(e, bestSellersRef)}
                     onTouchEnd={() => handleTouchEnd(bestSellersRef)}
                 >
-                    {bestSellers.map((product, index) => (
-                        <div key={index} className="card-placeholder">
-                            {/*todo Label blu "POPOLARE" posizionata in alto a destra della card*/}
-                            <span className="card-label card-label-popular">POPOLARE</span>
+                    {bestSellers.map((product, index) => {
+                        const hasDiscount = product.discount && product.discount > 0;
+                        const discountedPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product.price;
+                        
+                        return (
+                        <div key={index} className={`card-placeholder ${hasDiscount ? 'promotion-card' : ''}`}>
+                            {/*todo Mostra badge sconto se presente, altrimenti badge popolare*/}
+                            {hasDiscount ? (
+                                <span className="card-label card-label-sale">-{product.discount}%</span>
+                            ) : (
+                                <span className="card-label card-label-popular">POPOLARE</span>
+                            )}
                             {/*todo Immagine del prodotto presa dal campo image del JSON*/}
                             <img src={product.image} alt={product.name} className="card-image" />
                             <div className="card-info">
                                 {/*todo Nome del prodotto (max 2 righe con ellipsis)*/}
                                 <h3 className="card-title">{product.name}</h3>
-                                {/*todo Prezzo formattato con 2 decimali*/}
-                                <p className="card-price">{product.price.toFixed(2)}€</p>
+                                {/*todo Prezzi con gestione sconto*/}
+                                {hasDiscount ? (
+                                    <div className="price-section">
+                                        <p className="card-price discounted">{discountedPrice.toFixed(2)}€</p>
+                                        <p className="card-price original">{product.price.toFixed(2)}€</p>
+                                    </div>
+                                ) : (
+                                    <p className="card-price">{product.price.toFixed(2)}€</p>
+                                )}
                                 <div className="card-buttons">
                                     {/*todo Pulsante oro per navigare alla pagina Details del prodotto*/}
                                     <button 
@@ -205,7 +231,8 @@ function HomePage() {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 {/*todo Pulsante freccia destra per scrollare il carosello avanti*/}
@@ -215,6 +242,73 @@ function HomePage() {
                     &gt;
                 </button>
             </section>
+
+            {/*PROMOZIONI*/}
+            {onSaleProducts.length > 0 && (
+                <section className="quests-section promotions-section-wrapper">
+                    <h2 className="section-title">🔥 Offerte Speciali 🔥</h2>
+
+                    {/*todo Pulsante freccia sinistra per il carosello promozioni*/}
+                    <button
+                        className="scroll-btn scroll-left"
+                        onClick={() => scrollCarousel(onSaleRef, -1)}>
+                        &lt;
+                    </button>
+
+                    {/*todo Contenitore carosello promozioni con gestione touch*/}
+                    <div 
+                        ref={onSaleRef}
+                        className="cards-list promotions-list"
+                        onTouchStart={(e) => handleTouchStart(e, onSaleRef)}
+                        onTouchMove={(e) => handleTouchMove(e, onSaleRef)}
+                        onTouchEnd={() => handleTouchEnd(onSaleRef)}
+                    >
+                        {onSaleProducts.map((product, index) => {
+                            const discountedPrice = product.price * (1 - product.discount / 100);
+                            return (
+                                <div key={index} className="card-placeholder promotion-card">
+                                    {/*todo Badge sconto*/}
+                                    <span className="card-label card-label-sale">-{product.discount}%</span>
+                                    {/*todo Immagine del prodotto*/}
+                                    <img src={product.image} alt={product.name} className="card-image" />
+                                    <div className="card-info">
+                                        {/*todo Nome del prodotto*/}
+                                        <h3 className="card-title">{product.name}</h3>
+                                        {/*todo Prezzi scontato e originale*/}
+                                        <div className="price-section">
+                                            <p className="card-price discounted">{discountedPrice.toFixed(2)}€</p>
+                                            <p className="card-price original">{product.price.toFixed(2)}€</p>
+                                        </div>
+                                        <div className="card-buttons">
+                                            {/*todo Pulsante per vedere i dettagli*/}
+                                            <button 
+                                                className="card-btn card-btn-details"
+                                                onClick={() => handleViewDetails(product)}
+                                            >
+                                                Dettagli
+                                            </button>
+                                            {/*todo Pulsante per aggiungere al carrello*/}
+                                            <button 
+                                                className="card-btn card-btn-cart"
+                                                onClick={() => handleAddToCart(product)}
+                                            >
+                                                Acquista
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    {/*todo Pulsante freccia destra per scrollare le promozioni*/}
+                    <button
+                        className="scroll-btn scroll-right"
+                        onClick={() => scrollCarousel(onSaleRef, 1)}>
+                        &gt;
+                    </button>
+                </section>
+            )}
 
             {/*LATEST ARRIVALS*/}
             <section className="quests-section latest-section-wrapper">

@@ -178,6 +178,56 @@
   box-shadow: 0 2px 8px 2px rgba(220, 38, 38, 0.4);
 }
 
+/*todo Label arancione per i prodotti in sconto*/
+.card-label-sale {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: white;
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  font-size: 0.8rem;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+  box-shadow: 0 2px 8px 2px rgba(249, 115, 22, 0.4);
+}
+
+/*todo Animazione pulsante per le promozioni*/
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/*todo Card speciale per promozioni*/
+.promotion-card {
+  border: 2px solid #f97316 !important;
+  box-shadow: 0 4px 20px rgba(249, 115, 22, 0.3) !important;
+}
+
+/*todo Sezione prezzi per le promozioni*/
+.price-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/*todo Prezzo scontato in verde*/
+.card-price.discounted {
+  color: #ffffff !important;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+/*todo Prezzo originale sbarrato*/
+.card-price.original {
+  color: #9ca3af !important;
+  font-size: 0.9rem;
+  text-decoration: line-through;
+  margin: 0;
+}
+
 .card-image {
   width: 100%;
   height: 250px;

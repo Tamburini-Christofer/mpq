@@ -69,6 +69,8 @@ export default function SearchSortBar({
             <option value="price-asc">Prezzo (Crescente)</option>
             {/* TODO: 'price-desc' = prezzo decrescente (dal più caro al più economico) */}
             <option value="price-desc">Prezzo (Decrescente)</option>
+            {/* TODO: 'discount-desc' = sconto decrescente (sconti più alti prima) */}
+            <option value="discount-desc">Sconto (Maggiore)</option>
             {/* TODO: 'name-asc' = nome alfabetico A-Z */}
             <option value="name-asc">Nome (A-Z)</option>
             {/* TODO: 'name-desc' = nome alfabetico Z-A */}

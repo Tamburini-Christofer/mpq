@@ -18,6 +18,23 @@
   transition: transform 0.2s ease;
   height: 440px;
   width: 100%;
+  position: relative; /* Per posizionare il badge sconto */
+}
+
+/* todo: Badge sconto in alto a destra */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #e53e3e, #c53030);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(229, 62, 62, 0.4);
+  font-family: "Cinzel", serif;
 }
 
 /* todo: Effetto hover sulla card */
@@ -66,6 +83,29 @@
   font-size: 1.1rem;
   font-weight: bold;
   color: #ffdf7f;
+}
+
+/* todo: Container per prezzi con sconto */
+.price-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+/* todo: Prezzo scontato (più grande e colorato) */
+.discounted-price {
+  font-size: 1.3rem;
+  color: #4ade80;
+  margin: 0;
+}
+
+/* todo: Prezzo originale sbarrato */
+.original-price {
+  font-size: 0.9rem;
+  color: #9ca3af;
+  text-decoration: line-through;
+  margin: 0;
 }
 
 /* todo: Pulsante aggiungi al carrello */

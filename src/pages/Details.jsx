@@ -122,13 +122,24 @@ function Details() {
 
 {/*       // TODO: sezione prezzo con prezzo nuovo + prezzo vecchio sbarrato
  */}      <div className="product-price-row">
-        <span className="product-price">{product.price.toFixed(2)}€</span>
-        <span className="product-old-price">{(product.price * 1.25).toFixed(2)}€</span>
+        {product.discount && product.discount > 0 ? (
+          <>
+            <span className="product-price">{(product.price * (1 - product.discount / 100)).toFixed(2)}€</span>
+            <span className="product-old-price">{product.price.toFixed(2)}€</span>
+            <span className="discount-percentage">-{product.discount}%</span>
+          </>
+        ) : (
+          <span className="product-price">{product.price.toFixed(2)}€</span>
+        )}
       </div>
 
-{/*       // TODO: badge visuale che evidenzia la quest come “Featured”
+{/*       // TODO: badge visuale che evidenzia la quest come "Featured"
  */}      <div className="product-badge-wrapper">
-        <span className="product-badge">Featured Quest</span>
+        {product.discount && product.discount > 0 ? (
+          <span className="product-badge promo-badge">In Promozione</span>
+        ) : (
+          <span className="product-badge">Featured Quest</span>
+        )}
       </div>
     </div>
 
