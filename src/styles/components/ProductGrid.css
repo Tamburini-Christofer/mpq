@@ -1,0 +1,56 @@
+/* ==========================================
+   PRODUCT GRID - Griglia prodotti per Shop
+   ========================================== */
+
+/* todo: Container griglia responsive */
+.product-grid {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  width: 100%;
+}
+
+/* todo: Layout griglia standard (4 colonne desktop) */
+.product-grid--grid {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* todo: Layout compatto (5-6 colonne desktop) */
+.product-grid--compact {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+/* todo: Messaggio quando non ci sono prodotti */
+.product-grid__empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #888;
+  font-size: 1.2rem;
+}
+
+/* todo: Responsive - tablet */
+@media (max-width: 1024px) {
+  .product-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  
+  .product-grid--compact {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+/* todo: Responsive - mobile */
+@media (max-width: 768px) {
+  .product-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .product-grid--compact {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px;
+  }
+}

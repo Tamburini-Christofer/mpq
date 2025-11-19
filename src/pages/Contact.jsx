@@ -1,7 +1,7 @@
 //todo Importo useState per gestire lo stato del form
 import { useState } from "react";
 //todo Importo il CSS per gli stili del componente
-import "./Contact.css";
+import "../styles/pages/Contact.css";
 
 //todo Componente pagina contatti per assistenza
 export default function Contact() {

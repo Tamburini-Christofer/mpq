@@ -9,7 +9,7 @@ import Layout from './layout/Layout.jsx'
 //todo Improto componenti delle pagine
 import HomePage from './pages/HomePage.jsx'
 //todo Importo la pagina Dettagli
-import Details from './pages/Details.jsx'
+import Dettagli from './pages/Details.jsx'
 //todo importo la pagina Shop
 import Shop from './pages/Shop.jsx'
 //todo Importo la pagina Contatti
@@ -20,7 +20,6 @@ import Staff from './pages/Staff.jsx'
 import NotFoundPages from './pages/NotFoundPages.jsx'
 //todo Importo il componente EmailSender per il modal di benvenuto
 import EmailSender from './components/EmailSender.jsx'
-
 
 function App() {
   //todo Stato per controllare se mostrare il modal di benvenuto
@@ -51,7 +50,7 @@ function App() {
       
       <BrowserRouter>
         <Routes>
-          <Route path="/details/:slug" element={<Details />} />
+          <Route path='/details/:slug' element={<Dettagli />} />
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path='/shop' element={<Shop />} />

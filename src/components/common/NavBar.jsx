@@ -1,4 +1,4 @@
-import './NavBar.css'
+import '../../styles/components/NavBar.css'
 import { NavLink } from 'react-router-dom';
 import { FaShoppingCart } from "react-icons/fa";
 

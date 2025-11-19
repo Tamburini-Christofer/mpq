@@ -3,7 +3,7 @@
    Presentazione del team e sezione carriere
    ======================================== */
 
-import "./Staff.css";
+import "../styles/pages/Staff.css";
 
 /**
  * Componente Staff

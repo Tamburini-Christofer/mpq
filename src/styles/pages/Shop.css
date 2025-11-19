@@ -208,7 +208,6 @@
   flex: 1;
   padding: 40px;
   margin-left: 280px;
-  margin-top: 100px;
 }
 
 /* todo: Titoli delle sezioni principali (Carrello, Checkout) */
@@ -501,14 +500,124 @@
   align-items: end;
 }
 
+/* todo: Sezione codice promozionale */
+.promo-code-section {
+  width: 100%;
+  background: rgba(255, 215, 0, 0.05);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.promo-code-section h3 {
+  margin: 0 0 15px 0;
+  color: var(--gold);
+  font-size: 18px;
+}
+
+/* todo: Gruppo input + bottone per codice promozionale */
+.promo-code-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+/* todo: Input per inserire il codice */
+.promo-code-input {
+  flex: 1;
+  padding: 12px;
+  border: 2px solid var(--gold);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--light);
+  border-radius: 6px;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.promo-code-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.promo-code-input::placeholder {
+  color: #888;
+  text-transform: none;
+}
+
+/* todo: Bottone per applicare il codice */
+.promo-code-btn {
+  padding: 12px 24px;
+  background: var(--gold);
+  color: var(--dark);
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  white-space: nowrap;
+}
+
+.promo-code-btn:hover:not(:disabled) {
+  background: #e6c200;
+  transform: scale(1.05);
+}
+
+.promo-code-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* todo: Messaggio di successo/errore codice promo */
+.promo-message {
+  margin: 10px 0 0 0;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.promo-message.success {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid #4ade80;
+  color: #4ade80;
+}
+
+.promo-message.error {
+  background: rgba(255, 71, 87, 0.1);
+  border: 1px solid #ff4757;
+  color: #ff4757;
+}
+
 /* todo: Container del totale ordine */
 .checkout-total {
+  width: 100%;
   margin-bottom: 20px;
-  text-align: center;
+}
+
+/* todo: Subtotale, spese spedizione e totale finale */
+.checkout-subtotal,
+.checkout-shipping {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 16px;
+  color: var(--light);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.checkout-total-final {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 0;
+  margin-top: 10px;
+  border-top: 2px solid var(--gold);
 }
 
 /* todo: Titolo con il totale generale dell'ordine */
-.checkout-total h3 {
+.checkout-total h3,
+.checkout-total-final h3 {
   color: var(--gold);
   font-size: 24px;
   margin: 0;
@@ -519,6 +628,25 @@
   display: flex;
   gap: 15px;
   justify-content: center;
+  align-items: center;
+}
+
+/* todo: Icona FreeShipping mostrata quando il promo è attivo */
+.free-shipping-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+/* todo: Animazione bounce per l'icona FreeShipping */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 /* todo: Pulsante "Svuota Carretto" (rosso, outline) */
@@ -562,7 +690,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
-  padding: 100px 20px;
+  padding: 0px 20px;
 
 }
 
@@ -571,21 +699,24 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
-  padding: 80px 20px;
+  padding: 0px 20px;
   max-width: 1200px;
 }
 
 /* todo: Container controlli per cambiare visualizzazione griglia/lista */
 .view-controls {
-  position: fixed;
-  background-color: #141218 ;
+  position: sticky;
+  top: 0;
+  background-color: #141218;
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
-  z-index: 3000;
+  z-index: 100;
+  padding: 15px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */

@@ -4,7 +4,7 @@ import { useState } from "react";
 //todo Importo emailjs per l'invio delle email
 import emailjs from "emailjs-com";
 //todo Importo il CSS per gli stili del componente
-import "./EmailSender.css";
+import "../styles/components/EmailSender.css";
 
 //todo Componente per l'invio di email tramite un form
 export default function EmailSender({ onClose }) {

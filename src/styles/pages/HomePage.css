@@ -1,3 +1,80 @@
+/* --- NOTIFICHE --- */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease;
+  max-width: 400px;
+}
+
+.notification.success {
+  border-left: 4px solid #10b981;
+}
+
+.notification.error {
+  border-left: 4px solid #ef4444;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+}
+
+.notification-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.notification.success .notification-icon {
+  color: #10b981;
+}
+
+.notification.error .notification-icon {
+  color: #ef4444;
+}
+
+.notification-message {
+  flex: 1;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.notification-close:hover {
+  color: #374151;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
 /* --- CONTENITORE PRINCIPALE --- */
 .homepage {
   /* max-width: 1400px; */
@@ -18,7 +95,7 @@
   font-size: 9rem;
   font-weight: 900;
   line-height: 1.1;
-  color: #ffd700;
+  color: #D8A928;
   text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
 }
 
@@ -28,7 +105,7 @@
 }
 
 .btn-get-started {
-  background-color: #ffd700;
+  background-color: #D8A928;
   color: #772284;
   font-weight: bold;
   font-family: "Pixelify Sans", sans-serif;
@@ -124,8 +201,8 @@
 
 /*todo Stile per ogni singola card del carosello*/
 .card-placeholder {
-  width: 180px;
-  min-height: 200px;
+  width: 150px;
+  min-height: 180px;
   background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
   border-radius: 12px;
   /*todo overflow:visible permette di vedere elementi che escono dalla card (es: shadow al hover)*/
@@ -144,8 +221,8 @@
 
 .card-placeholder:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(255, 215, 0, 0.3);
-  border-color: #ffd700;
+  box-shadow: 0 12px 24px rgba(216, 169, 40, 0.3);
+  border-color: #D8A928;
 }
 
 /*todo Label "POPOLARE" o "NUOVO ARRIVO" in alto a destra della card*/
@@ -179,8 +256,9 @@
 }
 
 .card-image {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 120px !important;
+  object-fit: cover;
   display: block;
   border-radius: 10px 10px 0 0;
 }
@@ -198,7 +276,7 @@
 }
 
 .card-title {
-  color: #ffd700;
+  color: #D8A928;
   font-size: 1rem;
   font-weight: bold;
   margin: 0;
@@ -241,8 +319,8 @@
 /*todo Pulsante "Vedi Dettaglio" con background oro*/
 .card-btn-details {
   background-color: transparent;
-  color: #ffd700;
-  border: 2px solid #ffd700;
+  color: #D8A928;
+  border: 2px solid #D8A928;
 }
 
 .card-btn-details:hover {
@@ -254,13 +332,13 @@
 /*todo Pulsante "Aggiungi al Carrello" con bordo oro (trasparente)*/
 .card-btn-cart {
   background-color: transparent;
-  color: #ffd700;
-  border: 2px solid #ffd700;
+  color: #D8A928;
+  border: 2px solid #D8A928;
 }
 
 /*todo Al hover il pulsante carrello si riempie di oro*/
 .card-btn-cart:hover {
-  background-color: #ffd700;
+  background-color: #D8A928;
   color: #121212;
 }
 
@@ -277,7 +355,7 @@
   top: 60%;
   transform: translateY(-50%);
 
-  background-color: #ffd700;
+  background-color: #D8A928;
   color: #121212;
   border: none;
   border-radius: 8px;

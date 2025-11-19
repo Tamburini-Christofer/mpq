@@ -1,0 +1,89 @@
+/* ==========================================
+   PRODUCT CAROUSEL - Carosello scorrevole prodotti
+   ========================================== */
+
+/* todo: Container sezione carosello */
+.product-carousel {
+  margin-bottom: 80px;
+}
+
+/* todo: Titolo carosello */
+.product-carousel__title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 25px;
+}
+
+/* todo: Wrapper con frecce */
+.product-carousel__wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* todo: Lista scrollabile */
+.product-carousel__list {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 20px;
+  margin-bottom: 0;
+  flex-wrap: nowrap;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.product-carousel__list::-webkit-scrollbar {
+  display: none;
+}
+
+/* todo: Frecce navigazione */
+.product-carousel__arrow {
+  background-color: rgba(216, 169, 40, 0.2);
+  color: #D8A928;
+  border: 2px solid #D8A928;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.product-carousel__arrow:hover {
+  background-color: #D8A928;
+  color: #1a1a1a;
+  transform: scale(1.1);
+}
+
+.product-carousel__arrow:active {
+  transform: scale(0.95);
+}
+
+/* todo: Responsive - Mobile */
+@media (max-width: 768px) {
+  .product-carousel__title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .product-carousel__arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .product-carousel__wrapper {
+    gap: 10px;
+  }
+
+  .product-carousel__list {
+    gap: 15px;
+  }
+}
