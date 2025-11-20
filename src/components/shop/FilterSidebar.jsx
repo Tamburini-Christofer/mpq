@@ -7,7 +7,8 @@ const DEFAULT_FILTERS = {
   categories: [],    // todo: Array vuoto per le categorie selezionate
   // difficulties: [], // todo: Array vuoto per le difficoltà selezionate
   matureContent: false, // todo: Booleano per contenuti +18
-  accessibility: false // todo: Booleano per accessibilità
+  accessibility: false, // todo: Booleano per accessibilità
+  onSale: false // todo: Booleano per prodotti in promozione
 };
 
 // todo: Componente sidebar dei filtri che riceve funzioni dal parent
@@ -180,9 +181,20 @@ export default function FilterSidebar({
         ))}
       </div> */}
 
-      {/* todo: Sezione altri filtri (contenuti +18 e accessibilità) */}
+      {/* todo: Sezione altri filtri (contenuti +18, accessibilità e promozioni) */}
       <div className="filter-group">
         <h4>Altro</h4>
+        {/* todo: Checkbox per prodotti in promozione */}
+        <div className="filter-option">
+          <input 
+            type="checkbox" 
+            id="on-sale" 
+            name="onSale" // todo: Nome del campo booleano per promozioni
+            checked={filters.onSale} // todo: Stato del checkbox
+            onChange={handleFilterChange}
+          />
+          <label htmlFor="on-sale">Prodotti in Promozione</label>
+        </div>
         {/* todo: Checkbox per contenuti maturi */}
         <div className="filter-option">
           <input 

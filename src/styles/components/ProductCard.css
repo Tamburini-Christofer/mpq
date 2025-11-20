@@ -149,12 +149,55 @@
   -webkit-box-orient: vertical;
 }
 
+/* todo: Container per prezzi promozionali nella ProductCard */
+.product-card__price-container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 8px;
+}
+
+/* todo: Prezzo originale barrato nel ProductCard */
+.product-card__price--original {
+  font-size: 0.75rem !important;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+  opacity: 0.8 !important;
+}
+
+/* todo: Prezzo scontato nel ProductCard */
+.product-card__price--discount {
+  font-size: 1.3rem !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+}
+
 /* todo: Prezzo prodotto */
 .product-card__price {
   color: #fff;
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
+}
+
+/* Selettore più specifico per prezzo barrato */
+.product-card .product-card__price-container .product-card__price--original {
+  font-size: 0.75rem !important;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+  opacity: 0.8 !important;
+}
+
+/* Selettore con data attribute per massima specificità */
+.product-card span[data-original-price="true"] {
+  font-size: 0.75rem !important;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+  opacity: 0.8 !important;
 }
 
 /* todo: Container pulsanti azione */

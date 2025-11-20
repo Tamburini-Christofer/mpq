@@ -18,6 +18,30 @@
   transition: transform 0.2s ease;
   height: 440px;
   width: 100%;
+  position: relative;
+}
+
+/* todo: Badge promozione in alto a destra della card */
+.card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 6px;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* todo: Badge verde per prodotti in offerta */
+.card-badge--sale {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 2px 8px 2px rgba(16, 185, 129, 0.4);
 }
 
 /* todo: Card generica */
@@ -78,6 +102,50 @@
   font-weight: bold;
   color: #ffdf7f;
   margin-bottom: 10px;
+}
+
+/* todo: Container per prezzi in promozione (originale + scontato) */
+.price-container {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+/* todo: Prezzo originale barrato */
+.price--original {
+  font-size: 0.75rem !important;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+  opacity: 0.8 !important;
+}
+
+/* todo: Prezzo scontato */
+.price--discount {
+  font-size: 1.1rem !important;
+  color: #ffdf7f !important;
+  font-weight: bold !important;
+}
+
+/* Selettore più specifico per prezzo barrato nel Shop */
+.fancy-card .price-container .price--original {
+  font-size: 0.75rem !important;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+  opacity: 0.8 !important;
+}
+
+/* Selettore con data attribute per massima specificità nel Shop */
+.fancy-card span[data-original-price="true"] {
+  font-size: 0.75rem !important;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: normal !important;
+  opacity: 0.8 !important;
 }
 
 /* todo: Container pulsanti card */

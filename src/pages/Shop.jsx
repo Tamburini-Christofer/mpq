@@ -1,15 +1,15 @@
 //todo: Importiamo React e useState per creare componenti e gestire stati
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
 import "../styles/pages/Shop.css"; 
 
+//todo: Importiamo gli stili delle card
+import "../styles/components/cardExp.css";
+
 //todo: Importiamo i prodotti dal file JSON
 import productsData from "../JSON/products.json";
-
-//todo: Importiamo ProductCard unificato
-import ProductCard from "../components/common/ProductCard";
 
 //todo: Importiamo il componente CheckoutForm
 import CheckoutForm from "../components/shop/CheckoutForm";
@@ -23,46 +23,17 @@ import SearchSortBar from "../components/shop/SearchSortBar";
 //todo: Importiamo il componente FreeShippingBanner per la spedizione gratuita
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
-//todo Funzione per generare slug SEO-friendly dal nome prodotto
-const generateSlug = (name) => {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-};
-
 //todo: Creo il componente principale Shop
-function Shop() {
+const Shop = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   
   //todo: Scroll istantaneo all'inizio della pagina quando si carica
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   
-  //todo Naviga ai dettagli usando slug
-  const handleViewDetails = (slug) => {
-    navigate(`/details/${slug}`);
-  };
-  
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
-  
-  //todo: Leggi parametro tab dall'URL e imposta tab attiva
-  useEffect(() => {
-    const tabParam = searchParams.get('tab');
-    if (tabParam === 'cart') {
-      setActiveTab('cart');
-    }
-  }, [searchParams]);
   
   //todo: Stato per la modalità di visualizzazione (grid o list)
   const [viewMode, setViewMode] = useState("grid");
@@ -112,7 +83,6 @@ function Shop() {
   //todo: Sincronizza il carrello con localStorage ogni volta che cambia
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdate'));
   }, [cart]);
 
   //todo: Ascolta i cambiamenti del localStorage da altre pagine (es. Details)
@@ -410,15 +380,34 @@ function Shop() {
               />
             </div>
 
-            <div className={`products products-${viewMode}`}>
+            <div className={`products ${viewMode}`}>
               {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
-                <ProductCard
-                  key={p.name}
-                  product={p}
-                  variant={viewMode === "list" ? "compact" : "grid"}
-                  onViewDetails={handleViewDetails}
-                  onAddToCart={() => addToCart(p)}
-                />
+                <div key={p.name} className="card fancy-card">
+                  
+                  <div className="card-image-wrapper">
+                    <img src={p.image} alt={p.name} className="card-image" />
+                  </div>
+
+                  <div className="card-body">
+                    <h3>{p.name}</h3>
+                    <p className="price">{p.price.toFixed(2)}€</p>
+                    {viewMode === "list" && (
+                      <div className="card-details">
+                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="card-actions">
+                    {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
+                    <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
+                      Dettagli
+                    </button>
+                    <button className="buy-btn" onClick={() => addToCart(p)}>
+                      {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
 

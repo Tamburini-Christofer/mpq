@@ -6,7 +6,7 @@
         "description": "In 'Il Padrino', mentre la famiglia Corleone combatte per mantenere il controllo del proprio impero, un giovane contabile di origini modeste viene assunto per tenere in ordine i registri di una piccola attività di facciata. Convinto di essere solo un impiegato di periferia, si ritrova lentamente coinvolto in cene di famiglia, trattative sussurrate e messaggi da recapitare a persone che non compaiono mai nei documenti ufficiali. Nel tentativo di restare onesto, inizia a compilare un quaderno segreto in cui annota alleanze, tradimenti e strani passaggi di denaro, costruendo involontariamente la mappa più completa del potere Corleone. Quando gli equilibri interni degenerano e la violenza diventa inevitabile, il contabile si ritrova a dover scegliere se consegnare il suo quaderno a chi vuole distruggere la famiglia o usarlo per contrattare la salvezza propria e delle persone a cui si è affezionato. La sua storia scorre parallela a quella di Michael, osservando gli stessi eventi da stanze secondarie, corridoi affollati e piccoli uffici pieni di fumo.",
         "price": 4.49,
         "min_age": 7,
-        "discount": "",
+        "discount": 20,
         "popularity": 0,
         "disability": 0,
         "shipping_price": ""
@@ -18,7 +18,7 @@
         "description": "In 'Le ali della libertà', questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price": 9.49,
         "min_age": 2,
-        "discount": "",
+        "discount": 15,
         "popularity": 0,
         "disability": 0,
         "shipping_price": ""
@@ -42,7 +42,7 @@
         "description": "In 'Il Cavaliere Oscuro', questa versione alternativa segue un personaggio secondario che nel film o nella serie originale rimane quasi sempre ai margini della scena. Qui, invece, la sua vita viene raccontata in primo piano: mentre gli eventi che tutti conoscono scorrono sullo sfondo, lui o lei si ritrova coinvolto in piccoli incidenti, coincidenze e scelte che finiscono per intrecciarsi con la trama principale. La storia esplora corridoi, strade, stanze e luoghi che la camera non mostra mai, rivelando incontri inaspettati con i protagonisti, conversazioni spezzate che cambiano il corso di una giornata e dettagli che potrebbero riscrivere il finale se qualcuno li prendesse sul serio. Questa avventura parallela è fatta di fughe improvvisate, alleanze temporanee e momenti di quiete in cui il personaggio si chiede se il mondo stia davvero seguendo un copione o se, nel caos degli eventi, ci sia ancora spazio per una scelta personale che nessun narratore aveva previsto.",
         "price": 14.99,
         "min_age": 1,
-        "discount": "",
+        "discount": 30,
         "popularity": 0,
         "disability": 0,
         "shipping_price": ""

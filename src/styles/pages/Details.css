@@ -234,30 +234,47 @@ body {
 }
 
 /* Prezzo */
-.product-price-row {
+.product-page .product-price-row {
   display: flex;
   align-items: baseline;
   gap: 12px;
   margin-top: 6px;
 }
 
-.product-price {
+.product-page .product-price {
   font-size: 1.8rem;
   font-weight: 700;
   color: #facc15;
 }
 
-.product-old-price {
-  font-size: 0.95rem;
-  color: #6b7280;
-  text-decoration: line-through;
+.product-page .product-old-price {
+  font-size: 1.1rem;
+  color: #ff4444 !important;
+  text-decoration: line-through !important;
+  font-weight: 500;
+  opacity: 0.9;
 }
 
-.product-badge-wrapper {
+/* Selettore super specifico per forzare il prezzo barrato */
+.product-page .product-price-row .product-old-price {
+  text-decoration: line-through !important;
+  color: #ff4444 !important;
+}
+
+/* Selettore con attributo data per massima specificità */
+.product-page span[data-strikethrough="true"] {
+  text-decoration: line-through !important;
+  color: #ff4444 !important;
+  font-size: 1.1rem !important;
+  font-weight: 500 !important;
+  opacity: 0.9 !important;
+}
+
+.product-page .product-badge-wrapper {
   margin-top: 6px;
 }
 
-.product-badge {
+.product-page .product-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -269,6 +286,14 @@ body {
   padding: 4px 12px;
   border-radius: 999px;
   border: 1px solid rgba(251, 191, 36, 0.5);
+}
+
+/* todo: Badge specifico per prodotti in offerta */
+.product-page .product-badge[data-discount="true"] {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #fff !important;
+  border: 1px solid rgba(16, 185, 129, 0.5) !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .product-short-desc {
@@ -471,5 +496,34 @@ body {
   .product-category{
     color:rgb(121, 36, 138);
     font-size: 15px;
+  }
+}
+
+.related-cards-list {
+  display: flex;
+  justify-content: center;       /* Centra le card */
+  align-items: center;
+  flex-wrap: wrap;                /* ⬅️ Le fa andare a capo */
+  gap: 1.5rem;                    /* Spaziatura */
+  padding: 1.5rem 0;
+  width: 100%;
+}
+
+.related-section-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;            /* Centra tutta la sezione */
+  text-align: center;
+}
+
+.related-section-wrapper .section-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Nascondi le frecce se le card vanno a capo */
+@media (max-width: 900px) {
+  .scroll-btn {
+    display: none;
   }
 }
