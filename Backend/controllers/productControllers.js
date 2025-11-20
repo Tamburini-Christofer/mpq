@@ -6,6 +6,7 @@ const HttpError = require('../utils/HttpError');
 
 exports.getProducts = async (req, res, next) => {
     try {
+        console.log('📦 Richiesta GET /products ricevuta');
         const { category_id } = req.query;
         let query = `
         SELECT p.*, c.name as category_name
@@ -20,7 +21,9 @@ exports.getProducts = async (req, res, next) => {
             params.push(category_id);
         }
 
+        console.log('📝 Query SQL:', query);
         const [rows] = await db.query(query, params);
+        console.log('✅ Prodotti trovati:', rows.length);
         res.json(rows);
     } catch (err) {
         next(err);

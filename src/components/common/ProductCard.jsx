@@ -93,14 +93,21 @@ export default function ProductCard({
     sale: { className: "product-card__badge--sale", text: "OFFERTA" }
   };
 
-  const badgeData = badgeConfig[badge];
+  //todo Determina il badge da mostrare: se c'è sconto automatico, mostra badge sale
+  const hasDiscount = product.discount && typeof product.discount === 'number' && product.discount > 0;
+  const displayBadge = hasDiscount ? 'sale' : badge;
+  const badgeData = badgeConfig[displayBadge];
+
+  //todo Calcola prezzo originale e prezzo finale se c'è sconto
+  const originalPrice = product.price;
+  const finalPrice = hasDiscount ? originalPrice * (1 - product.discount / 100) : originalPrice;
 
   return (
     <div className={`product-card product-card--${variant}`}>
-      {/* todo: Badge se specificato */}
+      {/* todo: Badge se specificato o se c'è uno sconto */}
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
-          {badgeData.text}
+          {hasDiscount ? `-${product.discount}%` : badgeData.text}
         </span>
       )}
       
@@ -123,7 +130,23 @@ export default function ProductCard({
       {/* todo: Informazioni prodotto */}
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
-        <p className="product-card__price">{product.price.toFixed(2)}€</p>
+        
+        {/* todo: Mostra prezzi in base a presenza sconto */}
+        {hasDiscount ? (
+          <div className="product-card__price-container">
+            <span className="product-card__price product-card__price--discount">
+              {finalPrice.toFixed(2)}€
+            </span>
+            <span 
+              className="product-card__price product-card__price--original"
+              data-original-price="true"
+            >
+              {originalPrice.toFixed(2)}€
+            </span>
+          </div>
+        ) : (
+          <p className="product-card__price">{product.price.toFixed(2)}€</p>
+        )}
 
         {/* todo: Pulsanti azione (se abilitati) */}
         {showActions && (onViewDetails || onAddToCart) && (
