@@ -1,5 +1,6 @@
 //todo Importiamo gli stili della card prodotto
 import "../../styles/components/ProductCard.css";
+import { useState, useEffect } from "react";
 
 //todo Funzione per generare slug SEO-friendly dal nome prodotto
 //todo Converte "Il Padrino" → "il-padrino"
@@ -37,6 +38,53 @@ export default function ProductCard({
 
   //todo Genera lo slug dal nome del prodotto
   const productSlug = generateSlug(product.name);
+  
+  //todo Stato per tracciare se il prodotto è in wishlist
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  
+  //todo Controlla se il prodotto è in wishlist al mount e quando cambia
+  useEffect(() => {
+    checkWishlistStatus();
+    
+    //todo Listener per aggiornare stato quando cambia wishlist
+    const handleWishlistUpdate = () => checkWishlistStatus();
+    window.addEventListener('wishlistUpdate', handleWishlistUpdate);
+    window.addEventListener('storage', handleWishlistUpdate);
+    
+    return () => {
+      window.removeEventListener('wishlistUpdate', handleWishlistUpdate);
+      window.removeEventListener('storage', handleWishlistUpdate);
+    };
+  }, [product.name]);
+  
+  //todo Verifica se prodotto è in wishlist
+  const checkWishlistStatus = () => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const inWishlist = wishlist.some(item => item.name === product.name);
+    setIsInWishlist(inWishlist);
+  };
+  
+  //todo Toggle wishlist (aggiungi/rimuovi)
+  const toggleWishlist = (e) => {
+    e.stopPropagation(); //todo Previeni click su card
+    
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    
+    if (isInWishlist) {
+      //todo Rimuovi da wishlist
+      const updatedWishlist = wishlist.filter(item => item.name !== product.name);
+      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+      setIsInWishlist(false);
+    } else {
+      //todo Aggiungi a wishlist
+      wishlist.push(product);
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      setIsInWishlist(true);
+    }
+    
+    //todo Trigger evento per sincronizzare altre pagine
+    window.dispatchEvent(new Event('wishlistUpdate'));
+  };
 
   //todo Mappa i tipi di badge alle classi CSS e testi
   const badgeConfig = {
@@ -55,6 +103,15 @@ export default function ProductCard({
           {badgeData.text}
         </span>
       )}
+      
+      {/* todo: Pulsante wishlist */}
+      <button 
+        className={`product-card__wishlist-btn ${isInWishlist ? 'active' : ''}`}
+        onClick={toggleWishlist}
+        title={isInWishlist ? 'Rimuovi dalla wishlist' : 'Aggiungi alla wishlist'}
+      >
+        {isInWishlist ? '♥' : '♡'}
+      </button>
 
       {/* todo: Immagine prodotto */}
       <img 
