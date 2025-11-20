@@ -1,17 +1,15 @@
 //todo: Importiamo React e useState per creare componenti e gestire stati
 import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
 import "../styles/pages/Shop.css"; 
 
 //todo: Importiamo gli stili delle card
 import "../styles/components/cardExp.css";
+
 //todo: Importiamo i prodotti dal file JSON
 import productsData from "../JSON/products.json";
-
-//todo: Importiamo ProductCard unificato
-import ProductCard from "../components/common/ProductCard";
 
 //todo: Importiamo il componente CheckoutForm
 import CheckoutForm from "../components/shop/CheckoutForm";
@@ -25,46 +23,17 @@ import SearchSortBar from "../components/shop/SearchSortBar";
 //todo: Importiamo il componente FreeShippingBanner per la spedizione gratuita
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
-//todo Funzione per generare slug SEO-friendly dal nome prodotto
-const generateSlug = (name) => {
-  return name
-    .toLowerCase()
-    .trim()
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-};
-
 //todo: Creo il componente principale Shop
-function Shop() {
+const Shop = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   
   //todo: Scroll istantaneo all'inizio della pagina quando si carica
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
   
-  //todo Naviga ai dettagli usando slug
-  const handleViewDetails = (slug) => {
-    navigate(`/details/${slug}`);
-  };
-  
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
-  
-  //todo: Leggi parametro tab dall'URL e imposta tab attiva
-  useEffect(() => {
-    const tabParam = searchParams.get('tab');
-    if (tabParam === 'cart') {
-      setActiveTab('cart');
-    }
-  }, [searchParams]);
   
   //todo: Stato per la modalità di visualizzazione (grid o list)
   const [viewMode, setViewMode] = useState("grid");
@@ -95,42 +64,15 @@ function Shop() {
   //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
   const [visibleProducts, setVisibleProducts] = useState(10);
 
-  //todo: Stato per i prodotti caricati dinamicamente dal backend
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  //todo: useEffect per caricare i prodotti all'avvio del componente
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('http://localhost:3000/products');
-        if (!response.ok) {
-          throw new Error('Errore nel caricamento prodotti');
-        }
-        const data = await response.json();
-        
-        //todo: Mappiamo i dati per aggiungere originalIndex e category
-        const productsWithIndex = data.map((p, index) => ({
-          ...p,
-          originalIndex: index,
-          category: p.category_id === 1 ? "film" : 
-                    p.category_id === 2 ? "series" : 
-                    p.category_id === 3 ? "anime" : "film"
-        }));
-        
-        setProducts(productsWithIndex);
-      } catch (err) {
-        console.error('Errore fetch prodotti:', err);
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
+  //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
+  //todo: Array statico di prodotti demo (da collegare poi a un DB o API)
+    const products = productsData.map((p, index) => ({
+      ...p,
+      originalIndex: index,
+      category: p.category_id === 1 ? "film" : 
+                p.category_id === 2 ? "series" : 
+                p.category_id === 3 ? "anime" : "film"
+    }));
 
   //todo: Stato per i prodotti aggiunti al carrello (carica da localStorage se presente)
   const [cart, setCart] = useState(() => {
@@ -141,7 +83,6 @@ function Shop() {
   //todo: Sincronizza il carrello con localStorage ogni volta che cambia
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event('cartUpdate'));
   }, [cart]);
 
   //todo: Ascolta i cambiamenti del localStorage da altre pagine (es. Details)
@@ -181,9 +122,6 @@ function Shop() {
     //todo: Controllo se il prodotto era già nel carrello (confronto per nome)
     const wasInCart = cart.find(item => item.name === product.name);
     
-    //todo: Calcoliamo il prezzo finale considerando eventuali sconti
-    const finalPrice = calculateFinalPrice(product);
-    
     setCart((prev) => {
       //todo: Trovo se esiste già l'item nel carrello
       const existingItem = prev.find(item => item.name === product.name);
@@ -196,8 +134,8 @@ function Shop() {
             : item
         );
       } else {
-        //todo: Se non esiste, lo aggiungo con il prezzo finale (scontato se applicabile) e quantità iniziale 1
-        return [...prev, { ...product, price: finalPrice, quantity: 1 }];
+        //todo: Se non esiste, lo aggiungo con quantità iniziale 1
+        return [...prev, { ...product, quantity: 1 }];
       }
     });
 
@@ -259,18 +197,6 @@ function Shop() {
     );
   };
 
-  //todo: Funzione helper per calcolare il prezzo finale considerando lo sconto
-  const calculateFinalPrice = (product) => {
-    //todo: Se il prodotto ha uno sconto (valore numerico > 0), calcoliamo il prezzo scontato
-    if (product.discount && typeof product.discount === 'number' && product.discount > 0) {
-      //todo: Formula: prezzo originale * (1 - sconto/100)
-      //todo: Es: 10€ con sconto 20% = 10 * (1 - 20/100) = 10 * 0.8 = 8€
-      return product.price * (1 - product.discount / 100);
-    }
-    //todo: Se non c'è sconto, restituiamo il prezzo originale
-    return product.price;
-  };
-
   //todo: Funzione per filtrare e ordinare prodotti
   const getFilteredAndSortedProducts = () => {
     let filtered = [...products];
@@ -282,12 +208,11 @@ function Shop() {
       );
     }
 
-    // Filtro per prezzo (considerando prezzo finale scontato)
+    // Filtro per prezzo
     if (filters.priceRange) {
-      filtered = filtered.filter(p => {
-        const finalPrice = calculateFinalPrice(p);
-        return finalPrice <= filters.priceRange.current;
-      });
+      filtered = filtered.filter(p => 
+        p.price <= filters.priceRange.current
+      );
     }
 
     // Filtro per categorie
@@ -297,30 +222,13 @@ function Shop() {
       );
     }
 
-    // Filtro per prodotti in promozione
-    if (filters.onSale) {
-      filtered = filtered.filter(p => 
-        p.discount && typeof p.discount === 'number' && p.discount > 0
-      );
-    }
-
     // Ordinamento
     switch(sortValue) {
-      case 'discount-desc':
-        //todo: Ordinamento per sconto decrescente (maggiore sconto prima)
-        filtered.sort((a, b) => {
-          const aDiscount = (a.discount && typeof a.discount === 'number') ? a.discount : 0;
-          const bDiscount = (b.discount && typeof b.discount === 'number') ? b.discount : 0;
-          return bDiscount - aDiscount;
-        });
-        break;
       case 'price-asc':
-        //todo: Ordinamento per prezzo crescente (considerando prezzo finale scontato)
-        filtered.sort((a, b) => calculateFinalPrice(a) - calculateFinalPrice(b));
+        filtered.sort((a, b) => a.price - b.price);
         break;
       case 'price-desc':
-        //todo: Ordinamento per prezzo decrescente (considerando prezzo finale scontato)
-        filtered.sort((a, b) => calculateFinalPrice(b) - calculateFinalPrice(a));
+        filtered.sort((a, b) => b.price - a.price);
         break;
       case 'name-asc':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -437,51 +345,6 @@ function Shop() {
         {/* todo: Sezione Shop */}
         {activeTab === "shop" && (
           <div className="shop-section">
-            {/* todo: Gestione stati di caricamento e errore */}
-            {loading && (
-              <div style={{ 
-                textAlign: 'center', 
-                padding: '50px 20px',
-                fontSize: '18px',
-                color: 'var(--primary-color)'
-              }}>
-                <div style={{ marginBottom: '15px' }}>🔄</div>
-                Caricamento prodotti...
-              </div>
-            )}
-
-            {error && (
-              <div style={{ 
-                textAlign: 'center', 
-                padding: '50px 20px',
-                fontSize: '18px',
-                color: '#e74c3c',
-                backgroundColor: '#ffebee',
-                borderRadius: '8px',
-                margin: '20px 0'
-              }}>
-                <div style={{ marginBottom: '15px' }}>⚠️</div>
-                Errore: {error}
-                <div style={{ marginTop: '15px' }}>
-                  <button 
-                    onClick={() => window.location.reload()} 
-                    style={{
-                      padding: '10px 20px',
-                      backgroundColor: 'var(--primary-color)',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '5px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    Riprova
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {!loading && !error && (
-              <>
             {/* todo: Controlli per cambiare visualizzazione */}
             <div className="view-controls">
               <div style={{display: 'flex', gap: '10px'}}>
@@ -518,68 +381,33 @@ function Shop() {
             </div>
 
             <div className={`products ${viewMode}`}>
-              {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => {
-                //todo: Calcoliamo il prezzo finale e verifichiamo se c'è uno sconto attivo
-                const finalPrice = calculateFinalPrice(p);
-                const hasDiscount = p.discount && typeof p.discount === 'number' && p.discount > 0;
-                
-                return (
-                  <div key={p.name} className="card fancy-card">
-                    {/*todo: Badge OFFERTA se il prodotto ha uno sconto*/}
-                    {hasDiscount && (
-                      <span className="card-badge card-badge--sale">
-                        -{p.discount}%
-                      </span>
-                    )}
-                    
-                    <div className="card-image-wrapper">
-                      <img src={p.image} alt={p.name} className="card-image" />
-                    </div>
-
-                    <div className="card-body">
-                      <h3>{p.name}</h3>
-                      {/*todo: Se c'è sconto, mostriamo prezzo scontato principale + prezzo originale barrato sotto*/}
-                      {hasDiscount ? (
-                        <div className="price-container">
-                          <span className="price price--discount">{finalPrice.toFixed(2)}€</span>
-                          <span 
-                            className="price price--original"
-                            data-original-price="true"
-                          >
-                            {p.price.toFixed(2)}€
-                          </span>
-                        </div>
-                      ) : (
-                        <p className="price">{p.price.toFixed(2)}€</p>
-                      )}
-                      {viewMode === "list" && (
-                        <div className="card-details">
-                          <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="card-actions">
-                      {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
-                      <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
-                        Dettagli
-                      </button>
-                      <button className="buy-btn" onClick={() => addToCart(p)}>
-                        {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            <div className={`products products-${viewMode}`}>
               {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
-                <ProductCard
-                  key={p.name}
-                  product={p}
-                  variant={viewMode === "list" ? "compact" : "grid"}
-                  onViewDetails={handleViewDetails}
-                  onAddToCart={() => addToCart(p)}
-                />
+                <div key={p.name} className="card fancy-card">
+                  
+                  <div className="card-image-wrapper">
+                    <img src={p.image} alt={p.name} className="card-image" />
+                  </div>
+
+                  <div className="card-body">
+                    <h3>{p.name}</h3>
+                    <p className="price">{p.price.toFixed(2)}€</p>
+                    {viewMode === "list" && (
+                      <div className="card-details">
+                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="card-actions">
+                    {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
+                    <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
+                      Dettagli
+                    </button>
+                    <button className="buy-btn" onClick={() => addToCart(p)}>
+                      {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
+                    </button>
+                  </div>
+                </div>
               ))}
             </div>
 
@@ -590,9 +418,6 @@ function Shop() {
                   Carica altri 10 prodotti ({getFilteredAndSortedProducts().length - visibleProducts} rimanenti)
                 </button>
               </div>
-            )}
-            
-            </>
             )}
 
           </div>

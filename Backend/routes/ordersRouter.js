@@ -3,52 +3,52 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/connection.js');
 
-// CREATE - Nuovo ordine completo (con prodotti)
+// CREATE - Nuovo ordine completo (con prodotti e uso dello slug al posto dell'id) 
 router.post('/', async (req, res, next) => {
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
 
     const {
-      customer_name, customer_lastname, customer_address, customer_email,
+      customer_name,
+      customer_lastname,
+      customer_address,
+      customer_email,
       shipping_price,
       status = 'pending',
       products = []
     } = req.body;
 
+
     if (!customer_name || typeof customer_name !== "string") {
-      const err = new Error('Manca il nome, o il nome non è una stringa')
-      err.status = 400
-      return next(err)
+      const err = new Error('Manca il nome, o il nome non è una stringa');
+      err.status = 400;
+      return next(err);
     }
-
     if (!customer_lastname || typeof customer_lastname !== "string") {
-      const err = new Error('Manca il cognnome, o il cognome non è una stringa')
-      err.status = 400
-      return next(err)
+      const err = new Error('Manca il cognome, o il cognome non è una stringa');
+      err.status = 400;
+      return next(err);
     }
-
     if (!customer_email || typeof customer_email !== "string") {
-      const err = new Error('Manca l\'email, o l\'email non è una stringa')
-      err.status = 400
-      return next(err)
+      const err = new Error('Manca l\'email, o l\'email non è una stringa');
+      err.status = 400;
+      return next(err);
     }
-
     if (!customer_address || typeof customer_address !== "string") {
-      const err = new Error('Manca l\'indirizzo, o l\'indirizzo non è una stringa')
-      err.status = 400
-      return next(err)
+      const err = new Error('Manca l\'indirizzo, o l\'indirizzo non è una stringa');
+      err.status = 400;
+      return next(err);
     }
 
-    if (!status || typeof status !== "string") {
-      const err = new Error('Manca lo stato, o lo stato non è una stringa')
-      err.status = 400
-      return next(err)
+    if (!products.length) {
+      const err = new Error('Nessun prodotto nell\'ordine');
+      err.status = 400;
+      return next(err);
     }
-
-    if (!products.length) throw new Error('Nessun prodotto nell\'ordine');
 
     const shippingPrice = shipping_price !== undefined ? shipping_price : 4.99;
+
 
     const [orderResult] = await connection.execute(
       `INSERT INTO orders
@@ -58,45 +58,64 @@ router.post('/', async (req, res, next) => {
     );
 
     const orderId = orderResult.insertId;
+    let productsTotal = 0;
 
     for (const item of products) {
-      const { product_name, quantity = 1 } = item;
-
-      const qty = Number(quantity);
-      if (!qty || qty <= 0) {
-        const err = new Error("Quantità prodotto deve essere maggiore di 0");
+      const slug = item.slug ?? item.product_slug ?? item.productSlug;
+      const quantity = item.quantity ?? 1;
+      if (!slug || typeof slug !== 'string') {
+        const err = new Error('Ogni prodotto deve avere uno slug valido');
         err.status = 400;
         return next(err);
       }
 
+      const qty = Number(quantity);
+      if (isNaN(qty) || qty <= 0 || !Number.isInteger(qty)) {
+        const err = new Error("Quantità prodotto deve essere un numero intero positivo");
+        err.status = 400;
+        return next(err);
+      }
+
+
       const [[product]] = await connection.execute(
-        'SELECT name, price, discount FROM products WHERE name = ?',
-        [product_name]
+        'SELECT id, name, slug, price, discount FROM products WHERE slug = ?',
+        [slug.trim()]
       );
 
       if (!product) {
-        const err = new Error(`Prodotto con nome ${product_name} non trovato`);
+        const err = new Error(`Prodotto con slug "${slug}" non trovato`);
         err.status = 404;
         return next(err);
       }
 
-      const priceAfterDiscount = product.price * (1 - (product.discount || 0) / 100);
-      const finalCost = priceAfterDiscount * qty;
+      const discount = product.discount || 0;
+      const priceAfterDiscount = product.price * (1 - discount / 100);
+      const finalCost = Number((priceAfterDiscount * qty).toFixed(2));
+
+      productsTotal += finalCost;
 
       await connection.execute(
         `INSERT INTO product_order 
-     (order_id, product_name, price_product, discount_product, quantity, final_cost)
-     VALUES (?, ?, ?, ?, ?, ?)`,
+         (order_id, product_id, product_slug, product_name,
+          price_product, discount, quantity, final_cost)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           orderId,
+          product.id,
+          product.slug,
           product.name,
           product.price,
-          product.discount || 0,
+          discount,
           qty,
           finalCost
         ]
       );
     }
+
+    await connection.execute(
+      `UPDATE orders SET orders_total_price = ? WHERE id = ?`,
+      [Number(productsTotal), orderId]
+    );
 
     await connection.commit();
     res.status(201).json({ message: 'Ordine creato con successo!', order_id: orderId });
@@ -104,7 +123,7 @@ router.post('/', async (req, res, next) => {
   } catch (err) {
     await connection.rollback();
     console.error('Errore creazione ordine:', err.message);
-    res.status(500).json({ error: err.message });
+    next(err);
   } finally {
     connection.release();
   }
