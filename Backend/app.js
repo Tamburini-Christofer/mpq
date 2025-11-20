@@ -27,11 +27,7 @@ app.use('/products', productRoutes);
 app.use('/payment', paymentRoutes);
 
 //uso della route
-app.use('/orders', require('./routes/shopRouter.js'));
-//rotta home
-app.get("/", (req, res) => {
-    console.log("hai richiesto la home page");
-})
+app.use('/orders', require('./routes/ordersRouter.js'));
 
 
 // Middleware globale errorHandler
