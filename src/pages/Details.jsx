@@ -1,3 +1,4 @@
+// ...existing code...
 import "../styles/pages/Details.css"
 //todo useParams: hook per estrarre parametri dinamici dalla URL (es: /details/:slug)
 //todo useNavigate: hook per navigazione programmatica
@@ -31,11 +32,11 @@ function Details() {
   const navigate = useNavigate()
   //todo Cerchiamo il prodotto confrontando lo slug generato dal nome con quello dell'URL
   const product = productsData.find(p => generateSlug(p.name) === slug)
-  
+
   //todo Calcoliamo se il prodotto ha uno sconto attivo e il prezzo finale
   const hasDiscount = product && product.discount && typeof product.discount === 'number' && product.discount > 0;
   const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product?.price || 0;
-  
+
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
 
@@ -69,10 +70,10 @@ function Details() {
       cart.push({ ...product, price: finalPrice, quantity })
       showNotification(`"${product.name}" aggiunto al carrello!`)
     }
-    
+
     localStorage.setItem('cart', JSON.stringify(cart))
     window.dispatchEvent(new Event('cartUpdate'))
-    
+
     //todo Trigger storage event per sincronizzare con Shop e altre pagine aperte
     window.dispatchEvent(new Event("storage"))
   }
@@ -91,40 +92,40 @@ function Details() {
      - max 12
      - aggiungiamo originalIndex come in HomePage per compatibilità con ProductCard
   */
-const relatedProducts = useMemo(() => {
-  if (!product || typeof product.category_id === "undefined") {
-    console.warn("⚠️ Nessun category_id trovato per il prodotto:", product)
-    return []
-  }
+  const relatedProducts = useMemo(() => {
+    if (!product || typeof product.category_id === "undefined") {
+      console.warn("⚠️ Nessun category_id trovato per il prodotto:", product)
+      return []
+    }
 
-  // 1) filtra solo prodotti della stessa categoria, escluso il prodotto corrente
-  const sameCategory = productsData.filter(
-    (p) => p.category_id === product.category_id && p.name !== product.name
-  )
+    // 1) filtra solo prodotti della stessa categoria, escluso il prodotto corrente
+    const sameCategory = productsData.filter(
+      (p) => p.category_id === product.category_id && p.name !== product.name
+    )
 
-  // 2) mescola in modo random (Fisher-Yates)
-  const shuffled = [...sameCategory]
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-  }
+    // 2) mescola in modo random (Fisher-Yates)
+    const shuffled = [...sameCategory]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+        ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
 
-  // 3) prendi solo 6 prodotti randomici
-  const selected = shuffled.slice(0, 6)
+    // 3) prendi solo 6 prodotti randomici
+    const selected = shuffled.slice(0, 6)
 
-  // 4) aggiungi originalIndex per compatibilità
-  const withIndex = selected.map((prod) => ({
-    ...prod,
-    originalIndex: productsData.findIndex((p) => p.name === prod.name),
-  }))
+    // 4) aggiungi originalIndex per compatibilità
+    const withIndex = selected.map((prod) => ({
+      ...prod,
+      originalIndex: productsData.findIndex((p) => p.name === prod.name),
+    }))
 
-  console.log(
-    `🎯 PRODOTTI CORRELATI RANDOM (category_id = ${product.category_id}):`,
-    withIndex
-  )
+    console.log(
+      `🎯 PRODOTTI CORRELATI RANDOM (category_id = ${product.category_id}):`,
+      withIndex
+    )
 
-  return withIndex
-}, [product])
+    return withIndex
+  }, [product])
 
   // ---- FUNZIONI CAROSELLO (copiate/adattate da HomePage) ----
 
@@ -212,44 +213,39 @@ const relatedProducts = useMemo(() => {
         ← Torna alla Home
       </button>
 
-{/*     // TODO: wrapper principale della pagina prodotto
- */}<div className="product-page">
+      <div className="product-page">
+        <div className="product-gallery">
 
-  {/* Colonna immagini */}
-{/*   // TODO: sezione che contiene tutte le immagini del prodotto
- */}  <div className="product-gallery">
-
-{/*     // TODO: immagine principale grande del prodotto
+          {/*     // TODO: immagine principale grande del prodotto
  */}    <div className="product-main-image">
-{/*       // TODO: immagine animata (GIF) visualizzata come anteprima principale
+            {/*       // TODO: immagine animata (GIF) visualizzata come anteprima principale
  */}      <img
-        src={product.image}
-        alt={product.name}
-      />
-    </div>
+              src={product.image}
+              alt={product.name}
+            />
+          </div>
 
-  </div>
+        </div>
 
-  {/* Colonna info prodotto */}
-{/*   // TODO: sezione di destra con tutte le informazioni testuali
- */}  <div className="product-info">
+        {/* Colonna info prodotto */}  
+        <div className="product-info">
 
-{/*     // TODO: wrapper per categoria, titolo e sottotitolo
+          {/*     // TODO: wrapper per categoria, titolo e sottotitolo
  */}    <div>
-{/*       // TODO: categoria del prodotto, usata come label decorativa
+            {/*       // TODO: categoria del prodotto, usata come label decorativa
  */}      <div className="product-category">QUEST • ADVENTURE</div>
 
-{/*       // TODO: titolo principale del prodotto
+            {/*       // TODO: titolo principale del prodotto
  */}      <h1 className="product-title">{product.name}</h1>
 
-{/*       // TODO: breve descrizione subito sotto il titolo
+            {/*       // TODO: breve descrizione subito sotto il titolo
  */}      <p className="product-subtitle">
-        Avventura epica e contenuti esclusivi.
-      </p>
-    </div>
+              Avventura epica e contenuti esclusivi.
+            </p>
+          </div>
 
-    {/* Rating (commentato) */}
-    {/* 
+          {/* Rating (commentato) */}
+          {/* 
     // TODO: sezione delle stelle e recensioni (momentaneamente disattivata)
     <div className="product-rating">
       <span className="stars">★★★★☆</span>
@@ -257,92 +253,45 @@ const relatedProducts = useMemo(() => {
     </div>
     */}
 
-{/*     TODO: wrapper del prezzo e del badge
+          {/*     TODO: wrapper del prezzo e del badge
  */}    <div>
 
-{/*       // TODO: sezione prezzo con logica sconto corretta
+            {/*       // TODO: sezione prezzo con logica sconto corretta
  */}      <div className="product-price-row">
-        {hasDiscount ? (
-          <>
-            <span className="product-price">{finalPrice.toFixed(2)}€</span>
-            <span 
-              className="product-old-price" 
-              data-strikethrough="true"
-            >
-              {product.price.toFixed(2)}€
-            </span>
-          </>
-        ) : (
-          <span className="product-price">{product.price.toFixed(2)}€</span>
-        )}
-      </div>
+              {hasDiscount ? (
+                <>
+                  <span className="product-price">{finalPrice.toFixed(2)}€</span>
+                  <span
+                    className="product-old-price"
+                    data-strikethrough="true"
+                  >
+                    {product.price.toFixed(2)}€
+                  </span>
+                </>
+              ) : (
+                <span className="product-price">{product.price.toFixed(2)}€</span>
+              )}
+            </div>
 
-{/*       // TODO: badge che mostra sconto se presente, altrimenti Featured Quest
+            {/*       // TODO: badge che mostra sconto se presente, altrimenti Featured Quest
  */}      <div className="product-badge-wrapper">
-        <span 
-          className="product-badge" 
-          data-discount={hasDiscount ? "true" : "false"}
-        >
-          {hasDiscount ? `-${product.discount}% OFFERTA` : 'Featured Quest'}
-        </span>
-      </div>
-    </div>
+              <span
+                className="product-badge"
+                data-discount={hasDiscount ? "true" : "false"}
+              >
+                {hasDiscount ? `-${product.discount}% OFFERTA` : 'Featured Quest'}
+              </span>
+            </div>
+          </div>
 
-{/*     // TODO: descrizione principale del prodotto
+          {/*     // TODO: descrizione principale del prodotto
  */}    <p className="product-short-desc">
-      {product.description}
-    </p>
+            {product.description}
+          </p>
 
-    {/* Opzioni */}
-{/*     // TODO: sezione che gestisce le varie opzioni selezionabili dal prodotto
- */}    <div className="product-options">
-
-{/*       // TODO: scelta del formato (digitale, fisico, ecc.)
- */}      <div>
-{/*         // TODO: label della categoria opzioni
- */}        <div className="option-group-label">Formato</div>
-
-{/*         // TODO: pulsanti selezionabili per scegliere il formato
- */}        <div className="size-options">
-          <button className="size-pill selected">Digitale</button>
-          {/* <button className="size-pill">Fisico</button>
-          <button className="size-pill">Bundle</button> */}
-        </div>
-
-        {/* Colonna info prodotto */}
-        <div className="product-info">
-          <div>
-            <div className="product-category">QUEST • ADVENTURE</div>
-
-{/*       // TODO: pulsante che permette di aggiungere il prodotto al carretto
- */}      <button className="add-to-cart-btn" onClick={addToCart}>
-        <span>🪙 Aggiungi al carretto</span>
-      </button>
-
-            <p className="product-subtitle">
-              Avventura epica e contenuti esclusivi.
-            </p>
-          </div>
-
-          <div>
-            <div className="product-price-row">
-              <span className="product-price">
-                {product.price.toFixed(2)}€
-              </span>
-              <span className="product-old-price">
-                {(product.price * 1.25).toFixed(2)}€
-              </span>
-            </div>
-
-            <div className="product-badge-wrapper">
-              <span className="product-badge">Featured Quest</span>
-            </div>
-          </div>
-
-          <p className="product-short-desc">{product.description}</p>
-
-          {/* Opzioni */}
+          {/* Opzioni */} 
           <div className="product-options">
+
             <div>
               <div className="option-group-label">Formato</div>
 
@@ -360,7 +309,7 @@ const relatedProducts = useMemo(() => {
             </div>
           </div>
 
-          {/* Azioni */}
+          {/* Azioni */} 
           <div className="product-actions">
             <div className="product-quantity-row">
               <span className="qty-label">Quantità</span>
@@ -387,7 +336,7 @@ const relatedProducts = useMemo(() => {
             </div>
           </div>
 
-          {/* Tabs */}
+          {/* Tabs */} 
           <div className="product-tabs">
             <div className="tab-buttons">
               <button className="tab-btn">Descrizione</button>
@@ -420,53 +369,54 @@ const relatedProducts = useMemo(() => {
               </ul>
             </div>
           </div>
+
+          {/* CAROSELLO PRODOTTI CORRELATI */} 
+          {relatedProducts.length > 0 && (
+            <section className="quests-section related-section-wrapper d-flex flex-column">
+              <h2 className="section-title">Prodotti correlati</h2>
+
+              {/* freccia sinistra */}
+              <button
+                className="scroll-btn scroll-left"
+                onClick={() => scrollCarousel(relatedRef, -1)}
+              >
+                &lt;
+              </button>
+
+              {/* contenitore carosello con swipe touch */}
+              <div
+                ref={relatedRef}
+                className="cards-list related-cards-list"
+                onTouchStart={(e) => handleTouchStart(e, relatedRef)}
+                onTouchMove={(e) => handleTouchMove(e, relatedRef)}
+                onTouchEnd={() => handleTouchEnd(relatedRef)}
+              >
+                {relatedProducts.map((prod, index) => (
+                  <ProductCard
+                    key={index}
+                    product={prod}
+                    badge="related"
+                    variant="carousel"
+                    onViewDetails={handleViewDetails}
+                    onAddToCart={handleAddToCartFromCarousel}
+                  />
+                ))}
+              </div>
+
+              {/* freccia destra */}
+              <button
+                className="scroll-btn scroll-right"
+                onClick={() => scrollCarousel(relatedRef, 1)}
+              >
+                &gt;
+              </button>
+            </section>
+          )}
         </div>
       </div>
-
-      {/* CAROSELLO PRODOTTI CORRELATI */}
-      {relatedProducts.length > 0 && (
-        <section className="quests-section related-section-wrapper d-flex flex-column">
-          <h2 className="section-title">Prodotti correlati</h2>
-
-          {/* freccia sinistra */}
-          <button
-            className="scroll-btn scroll-left"
-            onClick={() => scrollCarousel(relatedRef, -1)}
-          >
-            &lt;
-          </button>
-
-          {/* contenitore carosello con swipe touch */}
-          <div
-            ref={relatedRef}
-            className="cards-list related-cards-list"
-            onTouchStart={(e) => handleTouchStart(e, relatedRef)}
-            onTouchMove={(e) => handleTouchMove(e, relatedRef)}
-            onTouchEnd={() => handleTouchEnd(relatedRef)}
-          >
-            {relatedProducts.map((prod, index) => (
-              <ProductCard
-                key={index}
-                product={prod}
-                badge="related"
-                variant="carousel"
-                onViewDetails={handleViewDetails}
-                onAddToCart={handleAddToCartFromCarousel}
-              />
-            ))}
-          </div>
-
-          {/* freccia destra */}
-          <button
-            className="scroll-btn scroll-right"
-            onClick={() => scrollCarousel(relatedRef, 1)}
-          >
-            &gt;
-          </button>
-        </section>
-      )}
     </>
   )
 }
 
 export default Details
+// ...existing code...
