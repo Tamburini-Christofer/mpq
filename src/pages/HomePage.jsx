@@ -30,6 +30,7 @@ function HomePage() {
     //todo Questi ref vengono usati per controllare lo scroll orizzontale e gestire i touch events
     const bestSellersRef = useRef(null);
     const latestArrivalsRef = useRef(null);
+    const promotionalProductsRef = useRef(null);
 
     //todo Inizializziamo useNavigate per permettere la navigazione tra le route
     const navigate = useNavigate();
@@ -69,6 +70,15 @@ function HomePage() {
         ...product,
         originalIndex: productsData.findIndex(p => p.name === product.name)
     }));
+    
+    //todo Filtriamo solo i prodotti che hanno uno sconto attivo per "Prodotti in Promozione"
+    //todo Controlliamo che discount sia un numero maggiore di 0
+    const promotionalProducts = productsData
+        .filter(product => product.discount && typeof product.discount === 'number' && product.discount > 0)
+        .map(product => ({
+            ...product,
+            originalIndex: productsData.findIndex(p => p.name === product.name)
+        }));
 
     //todo Funzione per gestire lo scroll dei caroselli con le frecce sinistra/destra
     const scrollCarousel = (ref, direction) => {
@@ -122,6 +132,10 @@ function HomePage() {
 
     //todo Funzione per aggiungere prodotto al carrello dal carosello HomePage
     const handleAddToCart = (product) => {
+        //todo Calcoliamo il prezzo finale considerando eventuali sconti
+        const hasDiscount = product.discount && typeof product.discount === 'number' && product.discount > 0;
+        const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product.price;
+        
         //todo Recuperiamo il carrello da localStorage (o array vuoto se non esiste)
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         //todo Cerchiamo se il prodotto è già nel carrello confrontando per nome
@@ -132,8 +146,8 @@ function HomePage() {
             existingItem.quantity += 1;
             showNotification(`Quantità di "${product.name}" aumentata nel carrello!`);
         } else {
-            //todo Altrimenti aggiungiamo il nuovo prodotto con quantità 1
-            cart.push({ ...product, quantity: 1 });
+            //todo Altrimenti aggiungiamo il nuovo prodotto con prezzo finale (scontato se applicabile) e quantità 1
+            cart.push({ ...product, price: finalPrice, quantity: 1 });
             showNotification(`"${product.name}" aggiunto al carrello!`);
         }
         
@@ -278,6 +292,48 @@ function HomePage() {
                     &gt;
                 </button>
             </section>
+
+            {/*PRODOTTI IN PROMOZIONE*/}
+            {/*todo Mostriamo la sezione solo se ci sono prodotti in promozione*/}
+            {promotionalProducts.length > 0 && (
+                <section className="quests-section promotional-section-wrapper">
+                    <h2 className="section-title">Prodotti in Promozione</h2>
+
+                    {/*todo Pulsante freccia sinistra per il carosello Prodotti in Promozione*/}
+                    <button
+                        className="scroll-btn scroll-left"
+                        onClick={() => scrollCarousel(promotionalProductsRef, -1)}>
+                        &lt;
+                    </button>
+
+                    {/*todo Contenitore carosello Prodotti in Promozione con gestione touch*/}
+                    <div 
+                        ref={promotionalProductsRef}
+                        className="cards-list promotional-products-list"
+                        onTouchStart={(e) => handleTouchStart(e, promotionalProductsRef)}
+                        onTouchMove={(e) => handleTouchMove(e, promotionalProductsRef)}
+                        onTouchEnd={() => handleTouchEnd(promotionalProductsRef)}
+                    >
+                        {promotionalProducts.map((product, index) => (
+                            <ProductCard
+                                key={index}
+                                product={product}
+                                badge="sale"
+                                variant="carousel"
+                                onViewDetails={handleViewDetails}
+                                onAddToCart={handleAddToCart}
+                            />
+                        ))}
+                    </div>
+
+                    {/*todo Pulsante freccia destra per scrollare Prodotti in Promozione*/}
+                    <button
+                        className="scroll-btn scroll-right"
+                        onClick={() => scrollCarousel(promotionalProductsRef, 1)}>
+                        &gt;
+                    </button>
+                </section>
+            )}
         </div>
         </>
     );

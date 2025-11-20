@@ -28,6 +28,10 @@ function Details() {
   //todo Cerchiamo il prodotto confrontando lo slug generato dal nome con quello dell'URL
   const product = productsData.find(p => generateSlug(p.name) === slug)
   
+  //todo Calcoliamo se il prodotto ha uno sconto attivo e il prezzo finale
+  const hasDiscount = product && product.discount && typeof product.discount === 'number' && product.discount > 0;
+  const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product?.price || 0;
+  
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
 
@@ -54,8 +58,8 @@ function Details() {
       existingItem.quantity += quantity
       showNotification(`Quantità di "${product.name}" aumentata nel carrello!`)
     } else {
-      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con la quantità
-      cart.push({ ...product, quantity })
+      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con prezzo finale (scontato se applicabile) e la quantità
+      cart.push({ ...product, price: finalPrice, quantity })
       showNotification(`"${product.name}" aggiunto al carrello!`)
     }
     
@@ -139,15 +143,31 @@ function Details() {
 {/*     TODO: wrapper del prezzo e del badge
  */}    <div>
 
-{/*       // TODO: sezione prezzo con prezzo nuovo + prezzo vecchio sbarrato
+{/*       // TODO: sezione prezzo con logica sconto corretta
  */}      <div className="product-price-row">
-        <span className="product-price">{product.price.toFixed(2)}€</span>
-        <span className="product-old-price">{(product.price * 1.25).toFixed(2)}€</span>
+        {hasDiscount ? (
+          <>
+            <span className="product-price">{finalPrice.toFixed(2)}€</span>
+            <span 
+              className="product-old-price" 
+              data-strikethrough="true"
+            >
+              {product.price.toFixed(2)}€
+            </span>
+          </>
+        ) : (
+          <span className="product-price">{product.price.toFixed(2)}€</span>
+        )}
       </div>
 
-{/*       // TODO: badge visuale che evidenzia la quest come “Featured”
+{/*       // TODO: badge che mostra sconto se presente, altrimenti Featured Quest
  */}      <div className="product-badge-wrapper">
-        <span className="product-badge">Featured Quest</span>
+        <span 
+          className="product-badge" 
+          data-discount={hasDiscount ? "true" : "false"}
+        >
+          {hasDiscount ? `-${product.discount}% OFFERTA` : 'Featured Quest'}
+        </span>
       </div>
     </div>
 
