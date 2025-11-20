@@ -130,17 +130,18 @@ function HomePage() {
         //todo Se esiste già, incrementiamo la quantità
         if (existingItem) {
             existingItem.quantity += 1;
-            showNotification(`Quantità di "${product.name}" aumentata nel carrello!`);
+            showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
         } else {
             //todo Altrimenti aggiungiamo il nuovo prodotto con quantità 1
             cart.push({ ...product, quantity: 1 });
-            showNotification(`"${product.name}" aggiunto al carrello!`);
+            showNotification(`"${product.name}" aggiunto al carretto!`);
         }
         
         //todo Salviamo il carrello aggiornato in localStorage
         localStorage.setItem('cart', JSON.stringify(cart));
-        //todo Dispatchamo evento storage per sincronizzare il carrello su tutte le pagine aperte
+        //todo Dispatchamo eventi per sincronizzare il carrello
         window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('cartUpdate'));
     };
 
 

@@ -80,15 +80,96 @@
     gap: 20px;
 }
 
-.cart-icon {
+/* todo: Link wishlist */
+.wishlist-icon-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* todo: Link carrello */
+.cart-icon-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* todo: Icona wishlist con badge */
+.wishlist-icon {
+    position: relative;
     font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.2s, transform 0.2s;
+    color: #fff;
+    display: inline-block;
+}
+
+.wishlist-icon:hover {
+    color: #ef4444;
+    transform: scale(1.3);
+}
+
+/* todo: Badge contatore wishlist */
+.wishlist-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.5);
+  animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.cart-icon {
+    position: relative;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
 }
 
 .cart-icon:hover {
     color: #D8A928;
     transform: scale(1.3);
+}
+
+/* todo: Badge contatore carrello */
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: linear-gradient(135deg, #d82828 0%, #ff0000 100%);
+    color: #1a1a1a;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(216, 169, 40, 0.5);
+    animation: popIn 0.3s ease;
 }
 
 .btn-levelup {
