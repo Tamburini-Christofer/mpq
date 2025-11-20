@@ -229,6 +229,7 @@ function HomePage() {
                             variant="carousel"
                             onViewDetails={handleViewDetails}
                             onAddToCart={handleAddToCart}
+                            isOverlay={true}
                         />
                     ))}
                 </div>
@@ -268,6 +269,7 @@ function HomePage() {
                             variant="carousel"
                             onViewDetails={handleViewDetails}
                             onAddToCart={handleAddToCart}
+                            isOverlay={true}
                         />
                     ))}
                 </div>

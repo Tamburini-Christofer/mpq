@@ -1,22 +1,38 @@
-/* --- NOTIFICHE --- */
+/* ==========================================
+   GLOBAL SETTINGS & TYPOGRAPHY
+   ========================================== */
+:root {
+  --pixel-bg: #1a1a1a;
+  --pixel-border: #000000;
+  --pixel-gold: #D8A928;
+  --pixel-purple: #772284;
+  --pixel-white: #ffffff;
+  --pixel-shadow: 5px 5px 0px #000000;
+}
+
+/* ==========================================
+   NOTIFICHE (Stile Retro Popup)
+   ========================================== */
 .notification {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  animation: slideIn 0.3s ease;
+  border-radius: 0; /* Squadrato */
+  border: 3px solid var(--pixel-border); /* Bordo spesso */
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.5); /* Ombra netta */
+  animation: slideInSteps 0.3s steps(5); /* Animazione a scatti */
   max-width: 400px;
+  font-family: "Courier New", monospace;
 }
 
 .notification.success {
-  border-left: 4px solid #10b981;
+  border-left: 8px solid #10b981; /* Bordo laterale più spesso */
 }
 
 .notification.error {
-  border-left: 4px solid #ef4444;
+  border-left: 8px solid #ef4444;
 }
 
 .notification-content {
@@ -27,102 +43,115 @@
 }
 
 .notification-icon {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: 900;
+  /* Icone pixelate se possibile, o font robusto */
 }
 
-.notification.success .notification-icon {
-  color: #10b981;
-}
-
-.notification.error .notification-icon {
-  color: #ef4444;
-}
+.notification.success .notification-icon { color: #059669; text-shadow: 2px 2px 0 #000; }
+.notification.error .notification-icon { color: #dc2626; text-shadow: 2px 2px 0 #000; }
 
 .notification-message {
   flex: 1;
-  color: #374151;
-  font-size: 0.95rem;
+  color: #000;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .notification-close {
   background: none;
-  border: none;
-  color: #9ca3af;
+  border: 2px solid transparent;
+  color: #000;
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 0;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s;
 }
 
 .notification-close:hover {
-  color: #374151;
+  background: #000;
+  color: #fff;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(400px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes slideInSteps {
+  from { transform: translateX(400px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 }
 
-/* --- CONTENITORE PRINCIPALE --- */
+/* ==========================================
+   CONTENITORE PRINCIPALE
+   ========================================== */
 .homepage {
-  /* max-width: 1400px; */
   margin: 0 auto;
   padding: 0 50px;
+  background-color: #121212; /* Background pagina scuro */
 }
 
-/* --- HERO SECTION --- */
+/* ==========================================
+   HERO SECTION
+   ========================================== */
 .hero-section {
   min-height: 80vh;
   width: 100%;
   margin-bottom: 80px;
   position: relative;
+  border-bottom: 4px solid var(--pixel-border); /* Linea di chiusura hero */
 }
 
+/* Hero Title: Ombra dura e massiccia */
 .hero-title {
   font-family: "Pixelify Sans", sans-serif;
   font-size: 9rem;
   font-weight: 900;
-  line-height: 1.1;
-  color: #D8A928;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+  line-height: 1;
+  color: var(--pixel-gold);
+  /* Ombra a strati per effetto 3D retro */
+  text-shadow: 
+    4px 4px 0px #000,
+    8px 8px 0px rgba(255, 255, 255, 0.1);
 }
 
 .hero-title-purple {
-  color: #772284;
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--pixel-purple);
+  font-family: "Courier New", monospace; /* Contrasto font */
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
+/* Pulsante Hero: Stile Arcade Button */
 .btn-get-started {
-  background-color: #D8A928;
-  color: #772284;
-  font-weight: bold;
+  background-color: var(--pixel-gold);
+  color: #000;
+  font-weight: 900;
   font-family: "Pixelify Sans", sans-serif;
-  padding: 30px 80px;
-  border: none;
-  border-radius: 5px;
+  padding: 25px 60px;
+  border: 4px solid #000;
+  border-radius: 0;
   cursor: pointer;
   font-size: 2rem;
-  margin-top: 20px;
-  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+  margin-top: 30px;
+  position: relative;
+  transition: transform 0.1s, box-shadow 0.1s;
+  
+  /* Ombra pulsante */
+  box-shadow: 8px 8px 0px #000;
 }
 
 .btn-get-started:hover {
-  transform: scale(1.1);
+  transform: translate(-2px, -2px);
+  box-shadow: 12px 12px 0px #fff; /* Hover bianco */
+  background-color: #ffd700;
 }
 
-/* --- HERO-RIGHT: Contenitore del Video (Sfondo) --- */
+.btn-get-started:active {
+  transform: translate(4px, 4px); /* Pressione fisica */
+  box-shadow: 0px 0px 0px #000;
+}
+
+/* Hero Background & Video */
 .hero-right {
   position: absolute;
   top: 0;
@@ -132,28 +161,27 @@
   z-index: 1;
   background-color: #121212;
   overflow: hidden;
-  border-radius: 8px;
-  margin-top: 20px;
+  border-radius: 0;
+  border: 4px solid #000; /* Frame attorno al video */
+  box-shadow: inset 0 0 100px #000; /* Vignettatura interna */
 }
 
-/* --- ELEMENTO VIDEO --- */
 .hero-video {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.2;
+  opacity: 0.25;
+  /* Effetto pixel art sul video stesso */
+  filter: contrast(1.2) saturate(1.2); 
 }
 
-/* --- HERO-LEFT: Contenitore del Testo (Sopra il Video) --- */
 .hero-left {
   position: relative;
   z-index: 99;
   width: 100%;
   height: 100%;
   min-height: 80vh;
-
-  /* CENTRATURA DEL CONTENUTO */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -162,187 +190,174 @@
   padding: 0 40px;
 }
 
-/* --- SEZIONI QUESTS (Latest Arrivals, Best Sellers) --- */
+/* ==========================================
+   SEZIONI QUESTS (Caroselli)
+   ========================================== */
 
 .quests-section {
-  margin-bottom: 80px;
+  padding-bottom: 80px;
 }
 
 .section-title {
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 2.5rem;
+  font-weight: 900;
   color: #ffffff;
-  margin-bottom: 25px;
+  font-family: "Pixelify Sans", sans-serif;
+  text-shadow: 4px 4px 0px #000;
+  margin-bottom: 30px;
+  border-left: 8px solid var(--pixel-gold); /* Indicatore sezione */
+  padding-left: 20px;
 }
 
-/*todo Contenitore delle card nei caroselli*/
+/* Contenitore Scrollabile */
 .cards-list {
   display: flex;
-  gap: 20px;
-  /*todo overflow-x:auto permette lo scroll orizzontale*/
+  gap: 25px; /* Più spazio per le ombre */
   overflow-x: auto;
-  padding-bottom: 20px;
+  padding: 20px 10px 30px 10px; /* Padding extra sotto per le ombre */
   margin-bottom: 0;
-  /*todo nowrap mantiene tutte le card su una singola riga*/
   flex-wrap: nowrap;
-  /* Nascondiamo la barra di scorrimento nativa */
   -ms-overflow-style: none;
   scrollbar-width: none;
-  /*todo scroll-behavior:smooth rende lo scroll animato e fluido*/
   scroll-behavior: smooth;
-  /*todo -webkit-overflow-scrolling:touch migliora lo scroll su iOS*/
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling su iOS */
+  -webkit-overflow-scrolling: touch;
+  align-items: flex-start; /* Allinea in alto */
 }
 
-/* Nascondi la barra di scorrimento per Chrome, Safari e Opera */
 .cards-list::-webkit-scrollbar {
   display: none;
 }
 
-/*todo Stile per ogni singola card del carosello*/
-.card-placeholder {
-  width: 150px;
-  min-height: 180px;
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  border-radius: 12px;
-  /*todo overflow:visible permette di vedere elementi che escono dalla card (es: shadow al hover)*/
-  overflow: visible;
-  /*todo flex-shrink:0 impedisce alle card di ridursi nel carosello*/
+/* ==========================================
+   INTEGRAZIONE CARD (Stile Pixel Moderno)
+   Nota: Assicurati di usare queste classi HTML
+   ========================================== */
+
+/* Qui ho riportato il CSS della card che abbiamo fatto prima,
+   adattandolo leggermente per il contesto carosello */
+
+.product-card, .card-placeholder { /* Supporto doppia classe */
+  width: 240px; /* Leggermente più larghe per il carosello desktop */
+  min-height: 320px;
+  background: #1a1a1a;
+  border-radius: 0;
   flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
   cursor: pointer;
-  border: 2px solid #333;
-  /*todo position:relative necessario per posizionare la label in absolute*/
+  border: 3px solid #000;
+  box-shadow: 6px 6px 0px #000;
   position: relative;
-  /*todo flex-direction:column dispone immagine e info verticalmente*/
   display: flex;
   flex-direction: column;
+  font-family: "Courier New", monospace;
+  overflow: visible;
 }
 
-.card-placeholder:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(216, 169, 40, 0.3);
-  border-color: #D8A928;
+/* Hover Card */
+.product-card:hover, .card-placeholder:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 10px 10px 0px var(--pixel-gold);
+  border-color: #000;
+  z-index: 10;
 }
 
-/*todo Label "POPOLARE" o "NUOVO ARRIVO" in alto a destra della card*/
-.card-label {
-  /*todo position:absolute con top/right per posizionare nell'angolo*/
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  padding: 5px 12px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: #fff;
-  border-radius: 4px;
-  /*todo z-index:5 assicura che la label stia sopra l'immagine*/
-  z-index: 5;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+/* Immagine */
+.product-card__image, .card-image {
   width: 100%;
-}
-
-/*todo Label blu per i prodotti popolari*/
-.card-label-popular {
-  background-color: #4d82f4;
-  box-shadow: 0 5px 10px 2px rgba(37, 99, 235, 0.4);
-}
-
-/*todo Label rossa per i nuovi arrivi*/
-.card-label-new {
-  background-color: #d62121;
-  box-shadow: 0 2px 8px 2px rgba(220, 38, 38, 0.4);
-}
-
-.card-image {
-  width: 100% !important;
-  height: 120px !important;
+  height: 160px !important;
   object-fit: cover;
-  display: block;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0;
+  border-bottom: 3px solid #000;
 }
 
-/*todo Contenitore delle informazioni sotto l'immagine (nome, prezzo, pulsanti)*/
-.card-info {
+/* Info Box */
+.product-card__info, .card-info {
   padding: 15px;
-  background: rgba(0, 0, 0, 0.7);
+  background: #1a1a1a;
+  flex: 1;
+  border-radius: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  /*todo flex:1 fa occupare tutto lo spazio disponibile nella card*/
-  flex: 1;
-  border-radius: 0 0 10px 10px;
 }
 
-.card-title {
-  color: #D8A928;
-  font-size: 1rem;
-  font-weight: bold;
-  margin: 0;
+.product-card__title, .card-title {
+  color: var(--pixel-gold);
   font-family: "Cinzel", serif;
-  min-height: 2.4em;
-  line-height: 1.2em;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  font-weight: bold;
+  font-size: 1rem;
+  text-shadow: 1px 1px 0 #000;
+  line-height: 1.3;
 }
 
-.card-price {
+.product-card__price, .card-price {
   color: #fff;
   font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0;
+  font-weight: 700;
 }
 
-/*todo Contenitore dei due pulsanti (Vedi Dettaglio e Aggiungi al Carrello)*/
-.card-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 5px;
+/* Bottoni Card */
+.product-card__actions, .card-buttons {
+  gap: 10px; 
+  margin-top: auto;
 }
 
-/*todo Stile base per i pulsanti delle card*/
-.card-btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: "Cinzel", serif;
+.product-card__btn, .card-btn {
+  border-radius: 0;
+  border: 2px solid #000;
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+  font-weight: 800;
+  box-shadow: 3px 3px 0px #000;
+  transition: transform 0.1s;
 }
 
-/*todo Pulsante "Vedi Dettaglio" con background oro*/
-.card-btn-details {
-  background-color: transparent;
-  color: #D8A928;
-  border: 2px solid #D8A928;
+.product-card__btn:active, .card-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0;
 }
 
-.card-btn-details:hover {
-  background-color: #e6c200;
-  transform: scale(1.02);
-  color:black
+/* Dettagli */
+.product-card__btn--details, .card-btn-details {
+  background: #2d2d2d;
+  color: var(--pixel-gold);
+  border-color: var(--pixel-gold);
+}
+.product-card__btn--details:hover, .card-btn-details:hover {
+  background: var(--pixel-gold);
+  color: #000;
+  box-shadow: 5px 5px 0px #000;
 }
 
-/*todo Pulsante "Aggiungi al Carrello" con bordo oro (trasparente)*/
-.card-btn-cart {
-  background-color: transparent;
-  color: #D8A928;
-  border: 2px solid #D8A928;
+/* Carrello */
+.product-card__btn--cart, .card-btn-cart {
+  background: var(--pixel-gold);
+  color: #000;
+  border: 2px solid #000;
+}
+.product-card__btn--cart:hover, .card-btn-cart:hover {
+  background: #fff;
+  box-shadow: 5px 5px 0px #000;
 }
 
-/*todo Al hover il pulsante carrello si riempie di oro*/
-.card-btn-cart:hover {
-  background-color: #D8A928;
-  color: #121212;
+/* Label/Badge */
+.product-card__badge, .card-label {
+  border-radius: 0;
+  top: -8px;
+  right: -8px;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.5);
+  font-size: 0.7rem;
+  letter-spacing: 1px;
 }
 
-/* --- STILE PER LO SCORRIMENTO CONTROLLATO --- */
+/* Varianti Label */
+.card-label-popular { background-color: #4d82f4; }
+.card-label-new { background-color: #d62121; }
+
+/* ==========================================
+   CONTROLLI SCORRIMENTO (Frecce Laterali)
+   ========================================== */
 
 .latest-section-wrapper,
 .best-sellers-section-wrapper {
@@ -354,24 +369,29 @@
   position: absolute;
   top: 60%;
   transform: translateY(-50%);
-
-  background-color: #D8A928;
-  color: #121212;
-  border: none;
-  border-radius: 8px;
-  width: 40px;
-  height: 200px;
-  font-size: 1.5rem;
-  font-weight: bold;
+  
+  background-color: var(--pixel-gold);
+  color: #000;
+  border: 3px solid #000; /* Bordo spesso */
+  border-radius: 0; /* Squadrato */
+  width: 50px;
+  height: 100px; /* Meno alte, più "pulsanti" */
+  font-size: 2rem;
+  font-weight: 900;
   cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: background-color 0.2s, opacity 0.3s, visibility 0.3s;
+  z-index: 20;
+  
+  /* Ombra Hard */
+  box-shadow: 5px 5px 0px #000;
+  
+  transition: all 0.1s;
   opacity: 0;
   visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* MOSTRA I PULSANTI QUANDO SI PASSA SOPRA AL CONTENITORE PRINCIPALE */
 .latest-section-wrapper:hover .scroll-btn,
 .best-sellers-section-wrapper:hover .scroll-btn {
   opacity: 1;
@@ -379,134 +399,94 @@
 }
 
 .scroll-btn:hover {
-  background-color: #836b0d;
+  background-color: #ffd700;
+  transform: translateY(-50%) translate(-2px, -2px); /* Si muove su hover */
+  box-shadow: 7px 7px 0px #fff;
 }
 
-/* Posizionamento dei pulsanti */
-.scroll-left {
-  left: -45px;
+.scroll-btn:active {
+  transform: translateY(-50%) translate(2px, 2px); /* Click fisico */
+  box-shadow: 1px 1px 0px #000;
 }
 
-.scroll-right {
-  right: -45px;
-}
+/* Posizionamento frecce */
+.scroll-left { left: -30px; }
+.scroll-right { right: -30px; }
 
-/* --- RESPONSIVE MOBILE --- */
+/* ==========================================
+   RESPONSIVE MOBILE
+   ========================================== */
 @media screen and (max-width: 768px) {
   .homepage {
-    padding: 0 20px;
+    padding: 0 15px;
   }
 
-  /* Hero section mobile */
   .hero-section {
     min-height: 60vh;
     margin-bottom: 40px;
+    border-bottom-width: 2px;
   }
 
   .hero-title {
     font-size: 3.5rem;
+    text-shadow: 3px 3px 0px #000;
   }
 
   .btn-get-started {
-    padding: 15px 40px;
+    padding: 15px 30px;
     font-size: 1.2rem;
+    border-width: 3px;
+    box-shadow: 5px 5px 0px #000;
   }
 
-  .hero-left {
-    min-height: 60vh;
-    padding: 0 20px;
-  }
-
-  /* Sezioni carosello mobile */
-  .quests-section {
-    margin-bottom: 50px;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-  }
-
-  /* Card mobile più piccole */
-  .card-placeholder {
+  /* Card Mobile */
+  .product-card, .card-placeholder {
     width: 180px;
-    min-height: 200px;
+    min-height: 260px;
+  }
+  
+  .product-card__image, .card-image {
+    height: 140px !important;
   }
 
-  .card-image {
-    height: 180px;
-  }
-
-  .card-info {
+  .product-card__info, .card-info {
     padding: 10px;
   }
-
-  .card-title {
-    font-size: 0.85rem;
+  
+  .product-card__btn, .card-btn {
+    padding: 6px;
+    font-size: 0.7rem;
   }
 
-  .card-price {
-    font-size: 1rem;
-  }
-
-  .card-btn {
-    padding: 8px 12px;
-    font-size: 0.8rem;
-  }
-
-  .card-label {
-    padding: 4px 8px;
-    font-size: 0.65rem;
-  }
-
-  /* Pulsanti carosello sempre visibili su mobile */
+  /* Pulsanti Scorrimento Mobile (Sempre visibili, più piccoli) */
   .scroll-btn {
     opacity: 1;
     visibility: visible;
     width: 35px;
-    height: 120px;
+    height: 60px;
     font-size: 1.2rem;
+    border-width: 2px;
+    box-shadow: 3px 3px 0px #000;
   }
 
-  .scroll-left {
-    left: -15px;
-  }
-
-  .scroll-right {
-    right: -15px;
-  }
-
-  .cards-list {
-    gap: 15px;
-    padding-bottom: 15px;
+  .scroll-left { left: -5px; }
+  .scroll-right { right: -5px; }
+  
+  .section-title {
+    font-size: 1.8rem;
+    border-left-width: 5px;
   }
 }
 
 /* Tablet */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
-  .homepage {
-    padding: 0 30px;
-  }
-
-  .hero-title {
-    font-size: 6rem;
-  }
-
-  .btn-get-started {
-    padding: 20px 60px;
-    font-size: 1.5rem;
-  }
-
-  .card-placeholder {
+  .homepage { padding: 0 30px; }
+  .hero-title { font-size: 6rem; }
+  
+  .product-card, .card-placeholder {
     width: 220px;
-    min-height: 470px;
   }
-
-  .card-image {
-    height: 220px;
-  }
-
-  /* Pulsanti sempre visibili anche su tablet */
+  
   .scroll-btn {
     opacity: 1;
     visibility: visible;

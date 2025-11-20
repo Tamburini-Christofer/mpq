@@ -32,7 +32,8 @@ export default function ProductCard({
   variant = "carousel",
   onViewDetails = null, 
   onAddToCart = null,
-  showActions = true
+  showActions = true,
+  isOverlay = false
 }) {
   if (!product) return null;
 
@@ -95,8 +96,12 @@ export default function ProductCard({
 
   const badgeData = badgeConfig[badge];
 
+  // 2. Calcoliamo le classi in modo pulito
+  // Se isOverlay è true, aggiungiamo "overlay-mode", altrimenti niente.
+  const overlayClass = isOverlay ? 'overlay-mode' : '';
+
   return (
-    <div className={`product-card product-card--${variant}`}>
+    <div className={`product-card product-card--${variant} ${overlayClass}`}>
       {/* todo: Badge se specificato */}
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>

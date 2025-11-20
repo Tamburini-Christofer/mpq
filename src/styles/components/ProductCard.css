@@ -1,117 +1,91 @@
 /* ==========================================
-   PRODUCT CARD - Stile unificato per tutte le card prodotto
+   PRODUCT CARD - Pixel / Neo-Brutalist Style
    ========================================== */
 
 /* todo: Container della card prodotto */
 .product-card {
   width: 150px;
   min-height: 180px;
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  border-radius: 12px;
-  overflow: visible;
+  background: #1a1a1a;
+  border-radius: 0; /* Niente curve */
+  overflow: visible; /* Lascia uscire le ombre "hard" */
   flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Transizioni scattanti (steps) o molto veloci */
+  transition: transform 0.1s ease-out, box-shadow 0.1s ease-out;
   cursor: pointer;
-  border: 2px solid #333;
+  /* Bordo spesso e nero */
+  border: 3px solid #000;
+  /* Ombra solida (Hard Shadow) */
+  box-shadow: 5px 5px 0px #000;
   position: relative;
   display: flex;
   flex-direction: column;
+  font-family: "Courier New", monospace; /* Font retro */
 }
 
-/* todo: Hover effect sulla card */
+/* todo: Hover effect sulla card (Movimento "Click" fisico) */
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(216, 169, 40, 0.3);
-  border-color: #D8A928;
+  transform: translate(-2px, -2px); /* Si alza leggermente */
+  box-shadow: 8px 8px 0px #D8A928; /* L'ombra diventa Oro */
+  border-color: #000;
+  z-index: 10;
 }
 
-/* todo: Label badge (POPOLARE, NUOVO, OFFERTA, ecc.) */
+/* todo: Label badge */
 .product-card__badge {
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 5px 12px;
-  font-size: 0.75rem;
-  font-weight: bold;
+  top: -10px; /* Esce dalla card */
+  right: -10px;
+  padding: 6px 8px;
+  font-size: 0.7rem;
+  font-weight: 800;
   color: #fff;
-  border-radius: 4px;
-  z-index: 5;
+  border-radius: 0; /* Squadrato */
+  z-index: 20;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  width: 100%;
+  letter-spacing: 1px;
+  min-width: 80px;
   text-align: center;
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px rgba(0,0,0,0.4);
 }
 
-/* todo: Badge blu per prodotti popolari */
-.product-card__badge--popular {
-  background-color: #4d82f4;
-  box-shadow: 0 5px 10px 2px rgba(37, 99, 235, 0.4);
-}
+/* Colori Badge (Piatti e saturati) */
+.product-card__badge--popular { background-color: #4d82f4; }
+.product-card__badge--new     { background-color: #d62121; }
+.product-card__badge--sale    { background-color: #10b981; }
 
-/* todo: Badge rosso per nuovi arrivi */
-.product-card__badge--new {
-  background-color: #d62121;
-  box-shadow: 0 2px 8px 2px rgba(220, 38, 38, 0.4);
-}
-
-/* todo: Badge verde per offerte */
-.product-card__badge--sale {
-  background-color: #10b981;
-  box-shadow: 0 2px 8px 2px rgba(16, 185, 129, 0.4);
-}
-
-/* todo: Pulsante wishlist (cuore) */
+/* todo: Pulsante wishlist (Quadrato pixel) */
 .product-card__wishlist-btn {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-  width: 36px;
-  height: 36px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(8px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  top: 8px;
+  left: 8px;
+  z-index: 30;
+  width: 32px;
+  height: 32px;
+  background: #000;
+  border: 2px solid #fff;
+  border-radius: 0; /* Squadrato */
   color: #fff;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  padding: 0;
+  transition: transform 0.1s;
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.5);
 }
 
 .product-card__wishlist-btn:hover {
-  transform: scale(1.15);
-  background: rgba(255, 0, 0, 0.9);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #D8A928;
+  background: #222;
 }
 
 .product-card__wishlist-btn.active {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  border-color: #ef4444;
-  color: #fffffd;
-  animation: heartBeat 0.3s ease;
-}
-
-.product-card__wishlist-btn.active:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  transform: scale(1.15);
-}
-
-@keyframes heartBeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.3);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  75% {
-    transform: scale(1.25);
-  }
+  background: #dc2626;
+  border-color: #000;
+  box-shadow: inset 2px 2px 0px rgba(0,0,0,0.3); /* Effetto premuto */
 }
 
 /* todo: Immagine del prodotto */
@@ -120,44 +94,41 @@
   height: 120px;
   object-fit: cover;
   display: block;
-  border-radius: 10px 10px 0 0;
+  border-radius: 0;
+  border-bottom: 3px solid #000; /* Linea di separazione netta */
+  image-rendering: pixelated; /* Forza resa pixel se bassa risoluzione */
 }
 
-/* todo: Contenitore informazioni prodotto */
+/* todo: Contenitore informazioni */
 .product-card__info {
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.7);
+  padding: 12px;
+  background: #1a1a1a;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0;
 }
 
-/* todo: Titolo prodotto */
+/* todo: Tipografia */
 .product-card__title {
   color: #D8A928;
-  font-size: 1rem;
-  font-weight: bold;
+  font-size: 0.9rem;
+  font-weight: 700;
   margin: 0;
   font-family: "Cinzel", serif;
-  min-height: 2.4em;
-  line-height: 1.2em;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  line-height: 1.3em;
+  text-shadow: 1px 1px 0 #000;
 }
 
-/* todo: Prezzo prodotto */
 .product-card__price {
   color: #fff;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
 }
 
-/* todo: Container pulsanti azione */
+/* todo: Pulsanti Azione (Stile Retro UI) */
 .product-card__actions {
   display: flex;
   flex-direction: column;
@@ -165,114 +136,135 @@
   margin-top: 5px;
 }
 
-/* todo: Stile base pulsanti */
 .product-card__btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  padding: 8px;
+  border: 2px solid #000;
+  border-radius: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: "Cinzel", serif;
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+  position: relative;
+  transition: transform 0.1s;
 }
 
-/* todo: Pulsante dettagli (bordo oro) */
+/* Dettagli: Sfondo scuro, testo oro */
 .product-card__btn--details {
-  background-color: transparent;
+  background-color: #2d2d2d;
   color: #D8A928;
-  border: 2px solid #D8A928;
+  border-color: #D8A928;
+  box-shadow: 3px 3px 0px #000;
 }
-
 .product-card__btn--details:hover {
   background-color: #D8A928;
-  color: #1a1a1a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(216, 169, 40, 0.3);
+  color: #000;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000;
 }
 
-/* todo: Pulsante carrello (pieno oro) */
+/* Carrello: Sfondo Oro */
 .product-card__btn--cart {
   background-color: #D8A928;
-  color: #1a1a1a;
-  border: 2px solid #D8A928;
+  color: #000;
+  box-shadow: 3px 3px 0px #fff;
 }
-
 .product-card__btn--cart:hover {
-  background-color: #e6c200;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(216, 169, 40, 0.4);
+  background-color: #ffd700;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #fff;
+}
+.product-card__btn--cart:active {
+  transform: translate(0, 0);
+  box-shadow: 0 0 0;
 }
 
-/* todo: Variante card per griglia (Shop) */
-.product-card--grid {
+/* ==========================================
+   VARIANTE OVERLAY - PIXEL MODERNO
+   ========================================== */
+
+/* 1. Container Overlay */
+.product-card.overlay-mode {
+  min-height: 280px;
+  display: block; /* Reset flex */
+  overflow: hidden; /* Necessario per mascherare il box info */
+  border: 3px solid #000; 
+  background: #000;
+}
+
+/* 2. Immagine Full Cover */
+.product-card.overlay-mode .product-card__image {
   width: 100%;
-  max-width: 280px;
+  height: 100% !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  z-index: 1;
+  border: none; /* Rimuove il bordo inferiore della card normale */
+  transition: transform 0.3s steps(4); /* Zoom a scatti */
 }
 
-/* todo: Variante card per carosello (HomePage) */
-.product-card--carousel {
-  width: 150px;
+/* 3. Box Info "Sliding Panel" */
+.product-card.overlay-mode .product-card__info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  padding: 15px;
+  
+  /* Sfondo solido (Niente gradienti morbidi in pixel art) */
+  background: rgba(20, 20, 20, 0.95);
+  
+  /* Bordo superiore per simulare una finestra di dialogo */
+  border-top: 4px solid #D8A928; 
+  
+  /* Stato Iniziale: Nascosto giù */
+  transform: translateY(100%);
+  transition: transform 0.2s cubic-bezier(0, 0.5, 0.5, 1); /* Movimento veloce "meccanico" */
 }
 
-/* todo: Variante card compatta (layout list orizzontale) */
+/* 4. Hover Interactions */
+.product-card.overlay-mode:hover .product-card__info {
+  transform: translateY(0); /* Scatta su */
+}
+
+.product-card.overlay-mode:hover .product-card__image {
+  transform: scale(1.1); /* Zoom */
+  opacity: 0.7; /* Diminuisce leggermente luminosità per contrasto */
+}
+
+/* 5. Badge e Wishlist in Overlay */
+/* Devono rientrare nel riquadro perché c'è overflow: hidden */
+.product-card.overlay-mode .product-card__badge {
+  top: 0;
+  right: 0;
+  border-top: none;
+  border-right: none;
+  box-shadow: -3px 3px 0px rgba(0,0,0,0.5);
+}
+
+.product-card.overlay-mode .product-card__wishlist-btn {
+  top: 10px;
+  left: 10px;
+}
+
+/* --- Varianti Layout (Grid, Compact) --- */
+.product-card--grid { width: 100%; max-width: 280px; }
+.product-card--carousel { width: 150px; }
+
 .product-card--compact {
   width: 100%;
-  max-width: 100%;
-  min-height: 0;
   flex-direction: row;
-  padding: 15px;
-  gap: 20px;
-  align-items: center;
+  align-items: stretch;
+  padding: 0;
 }
-
 .product-card--compact .product-card__image {
   width: 120px;
-  min-width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  object-fit: cover;
+  border-bottom: none;
+  border-right: 3px solid #000;
 }
-
 .product-card--compact .product-card__info {
-  flex: 1;
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: center;
 }
-
-.product-card--compact .product-card__title {
-  font-size: 1.2rem;
-  margin: 0;
-  flex: 1;
-  min-width: 200px;
-}
-
-.product-card--compact .product-card__price {
-  font-size: 1.4rem;
-  margin: 0;
-  min-width: 80px;
-  text-align: right;
-}
-
-.product-card--compact .product-card__actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-left: auto;
-}
-
-.product-card--compact .product-card__btn {
-  padding: 10px 20px;
-  font-size: 0.95rem;
-  min-width: 120px;
-}
-
-.product-card--compact .product-card__wishlist-btn {
-  top: 15px;
-  left: 15px;
-}
-
