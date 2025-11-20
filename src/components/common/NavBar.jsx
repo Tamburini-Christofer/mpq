@@ -1,8 +1,44 @@
 import '../../styles/components/NavBar.css'
 import { NavLink } from 'react-router-dom';
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaHeart } from "react-icons/fa";
+import { useState, useEffect } from 'react';
 
 function NavBar() {
+  //todo Stato per contare prodotti in wishlist
+  const [wishlistCount, setWishlistCount] = useState(0);
+  //todo Stato per contare prodotti nel carrello
+  const [cartCount, setCartCount] = useState(0);
+  
+  //todo Carica conteggio wishlist e carrello al mount
+  useEffect(() => {
+    updateWishlistCount();
+    updateCartCount();
+    
+    //todo Listener per aggiornare quando cambia wishlist o carrello
+    window.addEventListener('wishlistUpdate', updateWishlistCount);
+    window.addEventListener('storage', updateWishlistCount);
+    window.addEventListener('cartUpdate', updateCartCount);
+    window.addEventListener('storage', updateCartCount);
+    
+    return () => {
+      window.removeEventListener('wishlistUpdate', updateWishlistCount);
+      window.removeEventListener('storage', updateWishlistCount);
+      window.removeEventListener('cartUpdate', updateCartCount);
+      window.removeEventListener('storage', updateCartCount);
+    };
+  }, []);
+  
+  //todo Aggiorna conteggio prodotti wishlist
+  const updateWishlistCount = () => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    setWishlistCount(wishlist.length);
+  };
+  
+  //todo Aggiorna conteggio prodotti carrello
+  const updateCartCount = () => {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    setCartCount(cart.length);
+  };
 
   return (
     <>
@@ -22,7 +58,23 @@ function NavBar() {
         </ul>
 
         <div className="navbar-actions">
-          <span className="cart-icon"><FaShoppingCart /></span>
+          <NavLink to="/wishlist" className="wishlist-icon-link">
+            <span className="wishlist-icon">
+              <FaHeart />
+              {wishlistCount > 0 && (
+                <span className="wishlist-badge">{wishlistCount}</span>
+              )}
+            </span>
+          </NavLink>
+          
+          <NavLink to="/shop?tab=cart" className="cart-icon-link">
+            <span className="cart-icon">
+              <FaShoppingCart />
+              {cartCount > 0 && (
+                <span className="cart-badge">{cartCount}</span>
+              )}
+            </span>
+          </NavLink>
 
           <button className="btn-levelup">Level Up!</button>
         </div>

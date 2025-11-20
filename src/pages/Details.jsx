@@ -30,8 +30,12 @@ function Details() {
   const { slug } = useParams()
   const navigate = useNavigate()
   //todo Cerchiamo il prodotto confrontando lo slug generato dal nome con quello dell'URL
-  const product = productsData.find((p) => generateSlug(p.name) === slug)
-
+  const product = productsData.find(p => generateSlug(p.name) === slug)
+  
+  //todo Calcoliamo se il prodotto ha uno sconto attivo e il prezzo finale
+  const hasDiscount = product && product.discount && typeof product.discount === 'number' && product.discount > 0;
+  const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product?.price || 0;
+  
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
 
@@ -59,15 +63,16 @@ function Details() {
     if (existingItem) {
       //todo Se esiste già, aggiungiamo la quantità selezionata
       existingItem.quantity += quantity
-      showNotification(`Quantità di "${product.name}" aumentata nel carrello!`)
+      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`)
     } else {
-      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con la quantità
-      cart.push({ ...product, quantity })
+      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con prezzo finale (scontato se applicabile) e la quantità
+      cart.push({ ...product, price: finalPrice, quantity })
       showNotification(`"${product.name}" aggiunto al carrello!`)
     }
-
-    localStorage.setItem("cart", JSON.stringify(cart))
-
+    
+    localStorage.setItem('cart', JSON.stringify(cart))
+    window.dispatchEvent(new Event('cartUpdate'))
+    
     //todo Trigger storage event per sincronizzare con Shop e altre pagine aperte
     window.dispatchEvent(new Event("storage"))
   }
@@ -207,14 +212,101 @@ const relatedProducts = useMemo(() => {
         ← Torna alla Home
       </button>
 
-      {/* wrapper principale della pagina prodotto */}
-      <div className="product-page">
-        {/* Colonna immagini */}
-        <div className="product-gallery">
-          {/* immagine principale */}
-          <div className="product-main-image">
-            <img src={product.image} alt={product.name} />
-          </div>
+{/*     // TODO: wrapper principale della pagina prodotto
+ */}<div className="product-page">
+
+  {/* Colonna immagini */}
+{/*   // TODO: sezione che contiene tutte le immagini del prodotto
+ */}  <div className="product-gallery">
+
+{/*     // TODO: immagine principale grande del prodotto
+ */}    <div className="product-main-image">
+{/*       // TODO: immagine animata (GIF) visualizzata come anteprima principale
+ */}      <img
+        src={product.image}
+        alt={product.name}
+      />
+    </div>
+
+  </div>
+
+  {/* Colonna info prodotto */}
+{/*   // TODO: sezione di destra con tutte le informazioni testuali
+ */}  <div className="product-info">
+
+{/*     // TODO: wrapper per categoria, titolo e sottotitolo
+ */}    <div>
+{/*       // TODO: categoria del prodotto, usata come label decorativa
+ */}      <div className="product-category">QUEST • ADVENTURE</div>
+
+{/*       // TODO: titolo principale del prodotto
+ */}      <h1 className="product-title">{product.name}</h1>
+
+{/*       // TODO: breve descrizione subito sotto il titolo
+ */}      <p className="product-subtitle">
+        Avventura epica e contenuti esclusivi.
+      </p>
+    </div>
+
+    {/* Rating (commentato) */}
+    {/* 
+    // TODO: sezione delle stelle e recensioni (momentaneamente disattivata)
+    <div className="product-rating">
+      <span className="stars">★★★★☆</span>
+      <span>4,8 / 5 • 328 recensioni</span>
+    </div>
+    */}
+
+{/*     TODO: wrapper del prezzo e del badge
+ */}    <div>
+
+{/*       // TODO: sezione prezzo con logica sconto corretta
+ */}      <div className="product-price-row">
+        {hasDiscount ? (
+          <>
+            <span className="product-price">{finalPrice.toFixed(2)}€</span>
+            <span 
+              className="product-old-price" 
+              data-strikethrough="true"
+            >
+              {product.price.toFixed(2)}€
+            </span>
+          </>
+        ) : (
+          <span className="product-price">{product.price.toFixed(2)}€</span>
+        )}
+      </div>
+
+{/*       // TODO: badge che mostra sconto se presente, altrimenti Featured Quest
+ */}      <div className="product-badge-wrapper">
+        <span 
+          className="product-badge" 
+          data-discount={hasDiscount ? "true" : "false"}
+        >
+          {hasDiscount ? `-${product.discount}% OFFERTA` : 'Featured Quest'}
+        </span>
+      </div>
+    </div>
+
+{/*     // TODO: descrizione principale del prodotto
+ */}    <p className="product-short-desc">
+      {product.description}
+    </p>
+
+    {/* Opzioni */}
+{/*     // TODO: sezione che gestisce le varie opzioni selezionabili dal prodotto
+ */}    <div className="product-options">
+
+{/*       // TODO: scelta del formato (digitale, fisico, ecc.)
+ */}      <div>
+{/*         // TODO: label della categoria opzioni
+ */}        <div className="option-group-label">Formato</div>
+
+{/*         // TODO: pulsanti selezionabili per scegliere il formato
+ */}        <div className="size-options">
+          <button className="size-pill selected">Digitale</button>
+          {/* <button className="size-pill">Fisico</button>
+          <button className="size-pill">Bundle</button> */}
         </div>
 
         {/* Colonna info prodotto */}
@@ -222,7 +314,10 @@ const relatedProducts = useMemo(() => {
           <div>
             <div className="product-category">QUEST • ADVENTURE</div>
 
-            <h1 className="product-title">{product.name}</h1>
+{/*       // TODO: pulsante che permette di aggiungere il prodotto al carretto
+ */}      <button className="add-to-cart-btn" onClick={addToCart}>
+        <span>🪙 Aggiungi al carretto</span>
+      </button>
 
             <p className="product-subtitle">
               Avventura epica e contenuti esclusivi.

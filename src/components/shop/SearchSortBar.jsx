@@ -65,6 +65,8 @@ export default function SearchSortBar({
             {/* TODO: Opzioni del dropdown - ogni option ha un value che viene passato a onSortChange */}
             {/* TODO: 'recent' = ordinamento predefinito per articoli più recenti */}
             <option value="recent">Più Recenti</option>
+            {/* TODO: 'discount-desc' = sconto decrescente (maggiore sconto prima) */}
+            <option value="discount-desc">Sconto (Maggiore)</option>
             {/* TODO: 'price-asc' = prezzo crescente (dal più economico al più caro) */}
             <option value="price-asc">Prezzo (Crescente)</option>
             {/* TODO: 'price-desc' = prezzo decrescente (dal più caro al più economico) */}

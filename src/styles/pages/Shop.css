@@ -225,6 +225,47 @@
   gap: 20px;
 }
 
+/* todo: Card dello Shop - dimensioni originali */
+.products .product-card {
+  width: 280px;
+  max-width: 280px;
+}
+
+.products .product-card__image {
+  height: 230px;
+}
+
+/* todo: Layout lista - card orizzontali */
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-card__info{
+  background-color: transparent;
+}
+
+.products-list .product-card {
+  width: 100%;
+  max-width: 100%;
+  flex-direction: row;
+}
+
+.products-list .product-card__image {
+  width: 40px;
+  height: 100px;
+  border-radius: 10px 0 0 10px;
+}
+
+.products-list .product-card__info {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 0 0 10px 10px;
+}
+
 .card {
   display: flex;
   flex-direction: column;
@@ -755,153 +796,10 @@
   font-size: 16px;
 }
 
-/* todo: Effetto hover sulla card (ingrandimento e glow dorato) */
-.fancy-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 35px rgba(255, 200, 100, 0.5);
-}
-
-/* todo: Contenitore immagine con altezza fissa 320px */
-.card-image-wrapper {
-  width: 100%;
-  height: 230px;
-  border-bottom: 3px solid #c9a347;
-  flex-shrink: 0;
-}
-
-/* todo: Immagine prodotto responsive che copre tutto il contenitore */
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  filter: saturate(1.1) contrast(1.2);
-}
-
-/* todo: Corpo della card con nome e prezzo (font fantasy) */
-.card-body {
-  padding: 0;
-  text-align: center;
-  color: #e7d9b3;
-  font-family: "Cinzel", serif;
-  flex: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* todo: Titolo/nome del prodotto nella card */
-.card-body h3 {
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 2px black;
-}
-
-/* todo: Prezzo del prodotto in oro */
-.price {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #ffdf7f;
-}
-
-/* todo: Pulsante "Aggiungi" stile fantasy con gradiente scuro */
-.buy-btn {
-  margin: 0;
-  padding: 10px 18px;
-  font-size: 1rem;
-  border: 2px solid #c9a347;
-  background: linear-gradient(#2a2a2a, #1a1a1a);
-  color: #f5e4c3;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: "Cinzel", serif;
-  transition: 0.2s ease;
-}
-
-/* todo: Effetto hover sul pulsante aggiungi (sfondo oro scuro e glow) */
-.buy-btn:hover {
-  background: #3a2a00;
-  color: #ffe8b6;
-  box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
-}
-
-/* todo: Card in modalità lista (layout orizzontale, senza bordi) */
-.products.list .fancy-card {
-  flex-direction: row;
-  align-items: center;
-  padding: 15px;
-  height: auto;
-  max-height: none;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-/* todo: Immagine piccola stile icona in modalità lista (90x90px) */
-.products.list .card-image-wrapper {
-  width: 90px;
-  min-width: 90px;
-  height: 90px;   
-  border-radius: 8px;
-  border-bottom: none;
-  border-right: none;
-}
-
-/* todo: Immagine in modalità lista (quadrata e arrotondata) */
-.products.list .card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-/* todo: Corpo card in lista (layout orizzontale con info affiancate) */
-.products.list .card-body {
-  flex: 1;
-  padding: 0 20px;
-  text-align: left;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 30px;
-  justify-content: flex-start;
-}
-
-/* todo: Titolo prodotto in lista (allineato a sinistra) */
-.products.list .card-body h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0;
-  min-width: 200px;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-}
-
-/* todo: Prezzo in lista (più grande e visibile) */
-.products.list .price {
-  font-size: 1.3rem;
-  font-weight: bold;
-  min-width: 80px;
-}
-
-/* todo: Container dettagli aggiuntivi in lista (categoria, disponibilità) */
-.products.list .card-details {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-  padding-left: 20px;
-  border-left: 2px solid rgba(201, 163, 71, 0.3);
-}
-
-/* todo: Dettagli nascosti in visualizzazione griglia */
-.card-details {
-  display: none;
-}
-
-/* todo: Dettagli visibili solo in visualizzazione lista */
-.products.list .card-details {
-  display: flex;
-}
+/* ===================================
+   LEGACY CODE - .fancy-card rimosso
+   Ora si usa ProductCard component
+   =================================== */
 
 /* todo: Singolo dettaglio (ID, Categoria, Disponibilità) */
 .detail-item {
