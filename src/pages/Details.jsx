@@ -23,6 +23,8 @@ const generateSlug = (name) => {
     .replace(/-+/g, "-")
 }
 
+
+
 function Details() {
   //todo Estraiamo lo slug dalla URL (es: /details/il-padrino => slug = "il-padrino")
   const { slug } = useParams()
@@ -84,15 +86,40 @@ function Details() {
      - max 12
      - aggiungiamo originalIndex come in HomePage per compatibilità con ProductCard
   */
-  const relatedProducts = useMemo(() => {
-    return productsData
-      .filter((p) => p.name !== product.name)
-      .slice(0, 6)
-      .map((prod) => ({
-        ...prod,
-        originalIndex: productsData.findIndex((p) => p.name === prod.name),
-      }))
-  }, [product])
+const relatedProducts = useMemo(() => {
+  if (!product || typeof product.category_id === "undefined") {
+    console.warn("⚠️ Nessun category_id trovato per il prodotto:", product)
+    return []
+  }
+
+  // 1) filtra solo prodotti della stessa categoria, escluso il prodotto corrente
+  const sameCategory = productsData.filter(
+    (p) => p.category_id === product.category_id && p.name !== product.name
+  )
+
+  // 2) mescola in modo random (Fisher-Yates)
+  const shuffled = [...sameCategory]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+
+  // 3) prendi solo 6 prodotti randomici
+  const selected = shuffled.slice(0, 6)
+
+  // 4) aggiungi originalIndex per compatibilità
+  const withIndex = selected.map((prod) => ({
+    ...prod,
+    originalIndex: productsData.findIndex((p) => p.name === prod.name),
+  }))
+
+  console.log(
+    `🎯 PRODOTTI CORRELATI RANDOM (category_id = ${product.category_id}):`,
+    withIndex
+  )
+
+  return withIndex
+}, [product])
 
   // ---- FUNZIONI CAROSELLO (copiate/adattate da HomePage) ----
 
@@ -152,6 +179,8 @@ function Details() {
     localStorage.setItem("cart", JSON.stringify(cart))
     window.dispatchEvent(new Event("storage"))
   }
+
+
 
   return (
     <>
