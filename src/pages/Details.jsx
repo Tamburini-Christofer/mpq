@@ -56,7 +56,7 @@ function Details() {
     if (existingItem) {
       //todo Se esiste già, aggiungiamo la quantità selezionata
       existingItem.quantity += quantity
-      showNotification(`Quantità di "${product.name}" aumentata nel carrello!`)
+      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`)
     } else {
       //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con prezzo finale (scontato se applicabile) e la quantità
       cart.push({ ...product, price: finalPrice, quantity })
@@ -64,6 +64,7 @@ function Details() {
     }
     
     localStorage.setItem('cart', JSON.stringify(cart))
+    window.dispatchEvent(new Event('cartUpdate'))
     
     //todo Trigger storage event per sincronizzare con Shop e altre pagine aperte
     window.dispatchEvent(new Event('storage'))
@@ -222,9 +223,9 @@ function Details() {
         />
       </div>
 
-{/*       // TODO: pulsante che permette di aggiungere il prodotto al carrello
+{/*       // TODO: pulsante che permette di aggiungere il prodotto al carretto
  */}      <button className="add-to-cart-btn" onClick={addToCart}>
-        <span>🪙 Aggiungi al carrello</span>
+        <span>🪙 Aggiungi al carretto</span>
       </button>
 
 {/*       // TODO: testo che indica la disponibilità del prodotto
