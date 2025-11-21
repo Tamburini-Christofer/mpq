@@ -277,6 +277,35 @@
   font-size: 16px;
 }
 
+.summary-row.product-row {
+  position: relative;
+  padding: 8px 0;
+}
+
+.product-info {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.remove-product-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.2s ease;
+}
+
+.remove-product-btn:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
 .summary-value {
   font-weight: 600;
   color: var(--checkout-gold);

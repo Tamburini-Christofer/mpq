@@ -60,7 +60,10 @@ function Details() {
   //todo Calcoliamo se il prodotto ha uno sconto attivo e il prezzo finale
   const hasDiscount = product && product.discount && typeof product.discount === 'number' && product.discount > 0;
   const price = parseFloat(product?.price) || 0;
-  const finalPrice = hasDiscount ? price * (1 - product.discount / 100) : price;
+  const discountValue = parseFloat(product?.discount) || 0;
+  // Il discount nel database è un valore assoluto, non percentuale
+  const finalPrice = hasDiscount ? Math.max(0, price - discountValue) : price;
+  const discountPercentage = hasDiscount ? Math.round(((discountValue / price) * 100)) : 0;
 
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
@@ -297,7 +300,7 @@ function Details() {
                 className="product-badge"
                 data-discount={hasDiscount ? "true" : "false"}
               >
-                {hasDiscount ? `-${product.discount}% OFFERTA` : 'Featured Quest'}
+                {hasDiscount ? `-${discountPercentage}% OFFERTA` : 'Featured Quest'}
               </span>
             </div>
           </div>

@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
 import '../../styles/components/PaymentButton.css';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_YOUR_KEY');
 
 export default function PaymentButton({ totalAmount, cartItems, formData, onClose }) {
   const [loading, setLoading] = useState(false);
@@ -19,9 +16,7 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     setError(null);
 
     try {
-      const stripe = await stripePromise;
-
-      // Crea una sessione di checkout Stripe
+      // Chiamata al backend per creare la sessione Stripe
       const response = await fetch('http://localhost:3000/payment/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,16 +28,24 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
         })
       });
 
-      const { sessionId } = await response.json();
-
-      // Reindirizza a Stripe Checkout
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-
-      if (error) {
-        setError(error.message);
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+      console.log('📦 Risposta dal server:', data);
+
+      // Controlla se abbiamo ricevuto l'URL per il checkout
+      if (data.url) {
+        console.log('🔗 Reindirizzo a:', data.url);
+        // Redirect diretto al checkout Stripe
+        window.location.href = data.url;
+      } else {
+        throw new Error('URL di checkout non ricevuto dal server');
+      }
+
     } catch (err) {
+      console.error('❌ Errore durante il checkout:', err);
       setError(err.message || 'Errore durante il pagamento. Riprova.');
       setLoading(false);
     }

@@ -128,6 +128,9 @@ exports.removeFromCart = async (req, res, next) => {
     try {
         const { sessionId, productId } = req.params;
         
+        // Decodifica l'ID prodotto da URL encoding
+        const decodedProductId = decodeURIComponent(productId);
+        
         if (!carts.has(sessionId)) {
             const err = new Error("Carrello non trovato");
             err.status = 404;
@@ -135,15 +138,35 @@ exports.removeFromCart = async (req, res, next) => {
         }
         
         const cart = carts.get(sessionId);
-        const index = cart.findIndex(item => item.productId === parseInt(productId));
+        
+        // Prova prima con l'ID decodificato, poi con quello originale, poi come numero
+        let index = cart.findIndex(item => item.productId == decodedProductId);
+        if (index === -1) {
+            index = cart.findIndex(item => item.productId == productId);
+        }
+        if (index === -1) {
+            // Fallback per ID numerici
+            const numericId = parseInt(decodedProductId) || parseInt(productId);
+            if (!isNaN(numericId)) {
+                index = cart.findIndex(item => item.productId == numericId);
+            }
+        }
         
         if (index === -1) {
+            console.log(`Prodotto non trovato nel carrello:`, { 
+                sessionId, 
+                productId, 
+                decodedProductId,
+                cartItems: cart.map(item => ({ productId: item.productId, type: typeof item.productId }))
+            });
             const err = new Error("Prodotto non trovato nel carrello");
             err.status = 404;
             return next(err);
         }
         
-        cart.splice(index, 1);
+        const removedItem = cart.splice(index, 1)[0];
+        
+        console.log(`✅ Prodotto rimosso dal carrello:`, { sessionId, productId: removedItem.productId });
         
         res.json({
             message: "Prodotto rimosso dal carrello",
@@ -158,13 +181,19 @@ exports.removeFromCart = async (req, res, next) => {
 exports.clearCart = async (req, res, next) => {
     try {
         const { sessionId } = req.params;
+        
+        const previousCartSize = carts.has(sessionId) ? carts.get(sessionId).length : 0;
         carts.set(sessionId, []);
+        
+        console.log(`🗑️ Carrello svuotato per sessione ${sessionId}: ${previousCartSize} prodotti rimossi`);
         
         res.json({
             message: "Carrello svuotato",
-            cart: []
+            cart: [],
+            itemsRemoved: previousCartSize
         });
     } catch (err) {
+        console.error('Errore svuotamento carrello:', err);
         next(err);
     }
 };

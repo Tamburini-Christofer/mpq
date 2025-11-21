@@ -97,11 +97,23 @@ export const cartAPI = {
   remove: async (productId) => {
     try {
       const sessionId = getSessionId();
-      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}`, {
+      // Codifica correttamente l'ID per l'URL
+      const encodedProductId = encodeURIComponent(productId);
+      console.log('🗑️ Rimozione API:', { productId, encodedProductId, sessionId });
+      
+      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${encodedProductId}`, {
         method: 'DELETE'
       });
-      if (!response.ok) throw new Error('Errore nella rimozione');
-      return await response.json();
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Errore rimozione:', { status: response.status, errorText });
+        throw new Error(`Errore nella rimozione: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ Prodotto rimosso con successo:', result);
+      return result;
     } catch (error) {
       console.error('Errore API cart.remove:', error);
       throw error;
@@ -112,11 +124,21 @@ export const cartAPI = {
   clear: async () => {
     try {
       const sessionId = getSessionId();
+      console.log('🗑️ Svuotamento carrello API:', { sessionId });
+      
       const response = await fetch(`${API_BASE_URL}/cart/${sessionId}`, {
         method: 'DELETE'
       });
-      if (!response.ok) throw new Error('Errore nello svuotamento');
-      return await response.json();
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Errore svuotamento:', { status: response.status, errorText });
+        throw new Error(`Errore nello svuotamento: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('✅ Carrello svuotato con successo:', result);
+      return result;
     } catch (error) {
       console.error('Errore API cart.clear:', error);
       throw error;

@@ -3,7 +3,7 @@
    Overlay form per completare l'acquisto
    ======================================== */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PaymentButton from "./PaymentButton";
 import FreeShippingBanner from "./FreeShippingBanner";
 import { checkoutAPI, cartAPI, emitCartUpdate } from "../../services/api";
@@ -18,10 +18,11 @@ import "../../styles/components/CheckoutForm.css";
  * @param {array} cartItems - Array di prodotti nel carrello
  * @param {number} shippingCost - Costo spedizione (0 se sopra 40€ o promo, default 4.99)
  * @param {boolean} isFreeShipping - Se la spedizione è gratuita (sopra 40€ o promo)
+ * @param {function} onRemoveFromCart - Funzione per rimuovere prodotti dal carrello
  */
-//todo: Funzione componente che riceve 5 props dal padre (Shop.jsx)
+//todo: Funzione componente che riceve 6 props dal padre (Shop.jsx)
 //todo: shippingCost e isFreeShipping hanno valori di default nel caso non vengano passati
-export default function CheckoutForm({ onClose, totalAmount, cartItems, shippingCost = 4.99, isFreeShipping = false }) {
+export default function CheckoutForm({ onClose, totalAmount, cartItems, shippingCost = 4.99, isFreeShipping = false, onRemoveFromCart }) {
   
   /* ===== STATO DEL FORM ===== */
   const [formData, setFormData] = useState({
@@ -40,6 +41,13 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems, shipping
     sameAsShipping: true,
     notes: "",
   });
+
+  // Effetto per chiudere il checkout se il carrello diventa vuoto
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      onClose();
+    }
+  }, [cartItems.length, onClose]);
 
   /* ===== FUNZIONI HANDLER ===== */
   
@@ -297,10 +305,23 @@ export default function CheckoutForm({ onClose, totalAmount, cartItems, shipping
               {/* Lista prodotti nel carrello */}
               {/* todo: Mappiamo cartItems per mostrare ogni prodotto con nome, quantità e prezzo totale */}
               {cartItems.map((item, index) => (
-                <div key={index} className="summary-row">
-                  <span>{item.name} x{item.quantity}</span>
-                  {/* todo: Prezzo totale per questo prodotto = prezzo unitario × quantità */}
-                  <span className="summary-value">{(item.price * item.quantity).toFixed(2)}€</span>
+                <div key={index} className="summary-row product-row">
+                  <div className="product-info">
+                    <span>{item.name} x{item.quantity}</span>
+                    {/* todo: Prezzo totale per questo prodotto = prezzo unitario × quantità */}
+                    <span className="summary-value">{(item.price * item.quantity).toFixed(2)}€</span>
+                  </div>
+                  {/* Pulsante per rimuovere il prodotto */}
+                  {onRemoveFromCart && (
+                    <button 
+                      type="button"
+                      className="remove-product-btn"
+                      onClick={() => onRemoveFromCart(item.id)}
+                      title={`Rimuovi ${item.name}`}
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               ))}
               

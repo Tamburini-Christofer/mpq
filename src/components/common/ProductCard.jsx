@@ -104,14 +104,16 @@ export default function ProductCard({
 
   //todo Calcola prezzo originale e prezzo finale se c'è sconto
   const originalPrice = parseFloat(product.price) || 0;
-  const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
+  // Il discount nel database è un valore assoluto, non percentuale
+  const finalPrice = hasDiscount ? Math.max(0, originalPrice - discount) : originalPrice;
+  const discountPercentage = hasDiscount ? Math.round(((discount / originalPrice) * 100)) : 0;
 
   return (
     <div className={`product-card product-card--${variant}`}>
       {/* todo: Badge se specificato o se c'è uno sconto */}
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
-          {hasDiscount ? `-${discount}%` : badgeData.text}
+          {hasDiscount ? `-${discountPercentage}%` : badgeData.text}
         </span>
       )}
       

@@ -165,17 +165,26 @@ const Shop = () => {
   //todo: Funzione per rimuovere completamente un prodotto dal carrello
   const removeFromCart = async (productId) => {
     try {
+      console.log('🗑️ Rimozione prodotto:', { productId, cart });
       //todo: Trova prodotto per notifica
-      const productToRemove = cart.find(item => item.id === productId);
+      const productToRemove = cart.find(item => {
+        console.log('🔍 Confronto:', { itemId: item.id, itemName: item.name, productId });
+        return item.id === productId || item.name === productId;
+      });
 
-      //todo: Chiama API per rimuovere
-      await cartAPI.remove(productId);
+      console.log('📦 Prodotto trovato:', productToRemove);
+
+      //todo: Chiama API per rimuovere (usa l'ID corretto)
+      const idToRemove = productToRemove ? productToRemove.id : productId;
+      await cartAPI.remove(idToRemove);
 
       //todo: Ricarica carrello
       await loadCart();
 
       if (productToRemove) {
         showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
+      } else {
+        showNotification('Prodotto rimosso dal carrello', 'error');
       }
     } catch (error) {
       showNotification('Errore nella rimozione', 'error');
@@ -214,7 +223,34 @@ const Shop = () => {
     } catch (error) {
       showNotification('Errore nell\'aggiornamento', 'error');
     }
+  };
 
+  //todo: Funzione per svuotare completamente il carrello
+  const clearCart = async () => {
+    try {
+      const itemCount = cart.length;
+      
+      if (itemCount === 0) {
+        showNotification('Il carrello è già vuoto', 'info');
+        return;
+      }
+
+      // Conferma prima di svuotare
+      if (window.confirm(`Vuoi davvero svuotare il carrello? Verranno rimossi ${itemCount} prodotti.`)) {
+        console.log('🗑️ Svuotamento carrello...');
+        
+        // Chiama l'API per svuotare il carrello nel backend
+        await cartAPI.clear();
+        
+        // Ricarica il carrello per aggiornare lo stato
+        await loadCart();
+        
+        showNotification(`Carrello svuotato! ${itemCount} prodotti rimossi.`, 'error');
+      }
+    } catch (error) {
+      console.error('Errore svuotamento carrello:', error);
+      showNotification('Errore nello svuotamento del carrello', 'error');
+    }
   };
 
   //todo: Funzione per filtrare e ordinare prodotti
@@ -701,11 +737,7 @@ const Shop = () => {
           )}
           <button
             className="clear-cart-btn"
-            onClick={() => {
-              const itemCount = cart.length;
-              setCart([]);
-              showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
-            }}
+            onClick={clearCart}
           >
             Svuota Carretto
           </button>
@@ -751,6 +783,8 @@ const Shop = () => {
         shippingCost={shippingCost}
         /* todo: Stato booleano per mostrare "GRATIS" barrato nel form */
         isFreeShipping={isFreeShipping}
+        /* Funzione per rimuovere prodotti dal carrello durante il checkout */
+        onRemoveFromCart={removeFromCart}
       />
     );
   })()
