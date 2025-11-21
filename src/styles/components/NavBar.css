@@ -1,188 +1,247 @@
+/* ==========================================
+   NAVBAR - PIXEL ART STYLE
+   ========================================== */
+
 .navbar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0
-    ;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
-    background-color: #1a1a1a;
-    border-bottom: 1px solid #333;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: #1a1a1a;
+  /* Bordo inferiore spesso e netto */
+  border-bottom: 4px solid #000;
+  z-index: 1000;
+  /* Pattern opzionale per texture retro */
+  background-image: linear-gradient(#222 1px, transparent 1px),
+    linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 4px 4px;
 }
 
 .navbar-logo {
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-    font-weight: bold;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-family: "Pixelify Sans", sans-serif;
+  /* Font pixel se disponibile */
+  letter-spacing: -1px;
 }
 
 .logo-icon {
-    width: 150px;
-    margin-right: 10px;
+  width: 150px;
+  margin-right: 10px;
+  /* Assicura che il logo non sia sfocato */
+  image-rendering: pixelated;
 }
 
 .navbar-links {
-    list-style: none;
-    display: flex;
-    gap: 30px;
-    margin: 0;
-    padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  padding: 0;
 }
 
-/* --- STILE PER I LINK E LA BARRA SOTTO --- */
+/* --- STILE LINK MENU --- */
 .navbar-links a {
-    color: #D8A928;
-    font-family: Arial, Helvetica, sans-serif;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.3rem;
-    position: relative;
-    display: inline-block;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  color: #fff;
+  font-family: "Courier New", Courier, monospace;
+  /* Font Retro */
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.1rem;
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 5px 0;
+  text-shadow: 2px 2px 0px #000;
 }
 
-/* 2. CREAZIONE DELLA BARRA SOTTO */
+/* Sottolineatura: Barra solida stile 8-bit */
 .navbar-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #772284;
-    transform: scaleX(0);
-    transition: transform 0.3s ease-out;
-    transform-origin: bottom center;
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  /* Barra spessa */
+  background-color: #772284;
+  transform: scaleX(0);
+  transition: transform 0.1s steps(2);
+  /* Animazione a scatti */
+  transform-origin: left;
+  border: 1px solid #000;
+  /* Bordo alla barra */
 }
 
-/* 3. CONDIZIONI PER MOSTRARE LA BARRA */
+/* Hover effect */
+.navbar-links a:hover {
+  color: #D8A928;
+}
+
 .navbar-links a:hover::after {
-    transform: scaleX(1);
+  transform: scaleX(1);
+}
+
+.navbar-links a.active {
+  color: #D8A928;
 }
 
 .navbar-links a.active::after {
-    transform: scaleX(1);
-    background-color: #D8A928;
+  transform: scaleX(1);
+  background-color: #D8A928;
 }
 
-.navbar-links a:hover {
-    color: #D8A928;
-}
-
+/* --- AZIONI (Destra) --- */
 .navbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
 }
 
-/* todo: Link wishlist */
-.wishlist-icon-link {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* todo: Link carrello */
+.wishlist-icon-link,
 .cart-icon-link {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
 }
 
-/* todo: Icona wishlist con badge */
-.wishlist-icon {
-    position: relative;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.2s;
-    color: #fff;
-    display: inline-block;
+/* --- ICONE (Wishlist & Cart) --- */
+.wishlist-icon,
+.cart-icon {
+  position: relative;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #fff;
+  display: inline-block;
+  transition: transform 0.1s, color 0.1s;
+  /* Ombra testo per staccare dallo sfondo */
+  filter: drop-shadow(2px 2px 0px #000);
 }
 
 .wishlist-icon:hover {
-    color: #ef4444;
-    transform: scale(1.3);
+  color: #ef4444;
+  transform: translate(-2px, -2px);
+  /* Movimento fisico */
+  filter: drop-shadow(4px 4px 0px #000);
 }
 
-/* todo: Badge contatore wishlist */
+.cart-icon:hover {
+  color: #D8A928;
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(4px 4px 0px #000);
+}
+
+/* --- BADGES (Contatori) --- */
+/* Stile quadrato pixelato */
+.wishlist-badge,
+.cart-badge {
+  position: absolute;
+  top: -10px;
+  right: -12px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  /* Squadrato */
+  border: 2px solid #000;
+  /* Bordo nero */
+  box-shadow: 2px 2px 0px #000;
+  /* Ombra netta */
+  font-family: "Courier New", monospace;
+  animation: popPixel 0.2s steps(2);
+  z-index: 10;
+}
+
 .wishlist-badge {
-    position: absolute;
-    top: -8px;
-    right: -10px;
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-    min-width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.5);
-  animation: popIn 0.3s ease;
+  background-color: #ef4444;
+  /* Colore piatto, niente gradienti */
+  color: #fff;
 }
 
-@keyframes popIn {
+.cart-badge {
+  background-color: #D8A928;
+  color: #000;
+}
+
+@keyframes popPixel {
   0% {
     transform: scale(0);
   }
+
   50% {
     transform: scale(1.2);
   }
+
+  /* Scatto grande */
   100% {
     transform: scale(1);
   }
 }
 
-.cart-icon {
-    position: relative;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.2s;
-    display: inline-block;
-}
-
-.cart-icon:hover {
-    color: #D8A928;
-    transform: scale(1.3);
-}
-
-/* todo: Badge contatore carrello */
-.cart-badge {
-    position: absolute;
-    top: -8px;
-    right: -10px;
-    background: linear-gradient(135deg, #d82828 0%, #ff0000 100%);
-    color: #1a1a1a;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-    min-width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(216, 169, 40, 0.5);
-    animation: popIn 0.3s ease;
-}
-
+/* --- PULSANTE LEVEL UP (Arcade Button Style) --- */
 .btn-levelup {
-    background-color: #D8A928;
-    color: #772284;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.2s;
+  background-color: #D8A928;
+  color: #000;
+  font-weight: 900;
+  font-family: "Pixelify Sans", "Courier New", sans-serif;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  border: 3px solid #000;
+  /* Bordo spesso */
+  border-radius: 0;
+  /* Squadrato */
+  cursor: pointer;
+  transition: all 0.1s;
+  box-shadow: 4px 4px 0px #000;
+  /* Ombra bottone */
+  position: relative;
+  font-size: 0.9rem;
+  margin-left: 10px;
 }
 
 .btn-levelup:hover {
-    transform: scale(1.1);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #fff;
+  /* Hover luminoso */
+  color: #772284;
+  background-color: #ffd700;
+}
+
+.btn-levelup:active {
+  transform: translate(2px, 2px);
+  /* Pressione fisica */
+  box-shadow: 0px 0px 0px #000;
+}
+
+/* RESPONSIVE NAV (Mobile semplice) */
+@media screen and (max-width: 768px) {
+  .navbar {
+    padding: 15px 20px;
+  }
+
+  .navbar-links {
+    display: none;
+    /* Da gestire con menu hamburger se necessario */
+  }
+
+  .logo-icon {
+    width: 120px;
+  }
+
+  .btn-levelup {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    box-shadow: 3px 3px 0px #000;
+  }
 }

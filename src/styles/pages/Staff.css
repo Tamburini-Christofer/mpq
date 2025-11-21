@@ -195,12 +195,12 @@
 .careers-title {
   font-size: 48px;
   font-weight: 900;
-  color: var(--staff-light);
-  margin-bottom: 24px;
-  font-family: "Cinzel", serif;
+  color: var(--contact-gold);
+  margin-bottom: 20px;
+  font-family: "Pixelify Sans", "Cinzel", serif;
   text-shadow: 4px 4px 0px #000;
-  border-left: 8px solid var(--staff-gold);
-  padding-left: 20px;
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 .careers-description {

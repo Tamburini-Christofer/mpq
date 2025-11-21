@@ -19,16 +19,21 @@
   right: 20px;
   z-index: 1000;
   background: white;
-  border-radius: 0; /* Squadrato */
-  border: 3px solid var(--pixel-border); /* Bordo spesso */
-  box-shadow: 8px 8px 0px rgba(0,0,0,0.5); /* Ombra netta */
-  animation: slideInSteps 0.3s steps(5); /* Animazione a scatti */
+  border-radius: 0;
+  /* Squadrato */
+  border: 3px solid var(--pixel-border);
+  /* Bordo spesso */
+  box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.5);
+  /* Ombra netta */
+  animation: slideInSteps 0.3s steps(5);
+  /* Animazione a scatti */
   max-width: 400px;
   font-family: "Courier New", monospace;
 }
 
 .notification.success {
-  border-left: 8px solid #10b981; /* Bordo laterale più spesso */
+  border-left: 8px solid #10b981;
+  /* Bordo laterale più spesso */
 }
 
 .notification.error {
@@ -48,8 +53,15 @@
   /* Icone pixelate se possibile, o font robusto */
 }
 
-.notification.success .notification-icon { color: #059669; text-shadow: 2px 2px 0 #000; }
-.notification.error .notification-icon { color: #dc2626; text-shadow: 2px 2px 0 #000; }
+.notification.success .notification-icon {
+  color: #059669;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.notification.error .notification-icon {
+  color: #dc2626;
+  text-shadow: 2px 2px 0 #000;
+}
 
 .notification-message {
   flex: 1;
@@ -77,8 +89,15 @@
 }
 
 @keyframes slideInSteps {
-  from { transform: translateX(400px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* ==========================================
@@ -87,7 +106,8 @@
 .homepage {
   margin: 0 auto;
   padding: 0 50px;
-  background-color: #121212; /* Background pagina scuro */
+  background-color: #121212;
+  /* Background pagina scuro */
 }
 
 /* ==========================================
@@ -97,8 +117,10 @@
   min-height: 80vh;
   width: 100%;
   margin-bottom: 80px;
+  padding-top: 80px;
   position: relative;
-  border-bottom: 4px solid var(--pixel-border); /* Linea di chiusura hero */
+  border-bottom: 4px solid var(--pixel-border);
+  /* Linea di chiusura hero */
 }
 
 /* Hero Title: Ombra dura e massiccia */
@@ -109,14 +131,15 @@
   line-height: 1;
   color: var(--pixel-gold);
   /* Ombra a strati per effetto 3D retro */
-  text-shadow: 
+  text-shadow:
     4px 4px 0px #000,
     8px 8px 0px rgba(255, 255, 255, 0.1);
 }
 
 .hero-title-purple {
   color: var(--pixel-purple);
-  font-family: "Courier New", monospace; /* Contrasto font */
+  font-family: "Courier New", monospace;
+  /* Contrasto font */
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -135,19 +158,21 @@
   margin-top: 30px;
   position: relative;
   transition: transform 0.1s, box-shadow 0.1s;
-  
+
   /* Ombra pulsante */
   box-shadow: 8px 8px 0px #000;
 }
 
 .btn-get-started:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 12px 12px 0px #fff; /* Hover bianco */
+  box-shadow: 12px 12px 0px #fff;
+  /* Hover bianco */
   background-color: #ffd700;
 }
 
 .btn-get-started:active {
-  transform: translate(4px, 4px); /* Pressione fisica */
+  transform: translate(4px, 4px);
+  /* Pressione fisica */
   box-shadow: 0px 0px 0px #000;
 }
 
@@ -162,8 +187,10 @@
   background-color: #121212;
   overflow: hidden;
   border-radius: 0;
-  border: 4px solid #000; /* Frame attorno al video */
-  box-shadow: inset 0 0 100px #000; /* Vignettatura interna */
+  border: 4px solid #000;
+  /* Frame attorno al video */
+  box-shadow: inset 0 0 100px #000;
+  /* Vignettatura interna */
 }
 
 .hero-video {
@@ -173,7 +200,7 @@
   object-fit: cover;
   opacity: 0.25;
   /* Effetto pixel art sul video stesso */
-  filter: contrast(1.2) saturate(1.2); 
+  filter: contrast(1.2) saturate(1.2);
 }
 
 .hero-left {
@@ -205,23 +232,27 @@
   font-family: "Pixelify Sans", sans-serif;
   text-shadow: 4px 4px 0px #000;
   margin-bottom: 30px;
-  border-left: 8px solid var(--pixel-gold); /* Indicatore sezione */
+  border-left: 8px solid var(--pixel-gold);
+  /* Indicatore sezione */
   padding-left: 20px;
 }
 
 /* Contenitore Scrollabile */
 .cards-list {
   display: flex;
-  gap: 25px; /* Più spazio per le ombre */
+  gap: 25px;
+  /* Più spazio per le ombre */
   overflow-x: auto;
-  padding: 20px 10px 30px 10px; /* Padding extra sotto per le ombre */
+  padding: 20px 10px 30px 10px;
+  /* Padding extra sotto per le ombre */
   margin-bottom: 0;
   flex-wrap: nowrap;
   -ms-overflow-style: none;
   scrollbar-width: none;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  align-items: flex-start; /* Allinea in alto */
+  align-items: flex-start;
+  /* Allinea in alto */
 }
 
 .cards-list::-webkit-scrollbar {
@@ -236,8 +267,11 @@
 /* Qui ho riportato il CSS della card che abbiamo fatto prima,
    adattandolo leggermente per il contesto carosello */
 
-.product-card, .card-placeholder { /* Supporto doppia classe */
-  width: 240px; /* Leggermente più larghe per il carosello desktop */
+.product-card,
+.card-placeholder {
+  /* Supporto doppia classe */
+  width: 240px;
+  /* Leggermente più larghe per il carosello desktop */
   min-height: 320px;
   background: #1a1a1a;
   border-radius: 0;
@@ -254,7 +288,8 @@
 }
 
 /* Hover Card */
-.product-card:hover, .card-placeholder:hover {
+.product-card:hover,
+.card-placeholder:hover {
   transform: translate(-3px, -3px);
   box-shadow: 10px 10px 0px var(--pixel-gold);
   border-color: #000;
@@ -262,7 +297,8 @@
 }
 
 /* Immagine */
-.product-card__image, .card-image {
+.product-card__image,
+.card-image {
   width: 100%;
   height: 160px !important;
   object-fit: cover;
@@ -271,7 +307,8 @@
 }
 
 /* Info Box */
-.product-card__info, .card-info {
+.product-card__info,
+.card-info {
   padding: 15px;
   background: #1a1a1a;
   flex: 1;
@@ -281,7 +318,8 @@
   gap: 10px;
 }
 
-.product-card__title, .card-title {
+.product-card__title,
+.card-title {
   color: var(--pixel-gold);
   font-family: "Cinzel", serif;
   font-weight: bold;
@@ -290,19 +328,22 @@
   line-height: 1.3;
 }
 
-.product-card__price, .card-price {
+.product-card__price,
+.card-price {
   color: #fff;
   font-size: 1.3rem;
   font-weight: 700;
 }
 
 /* Bottoni Card */
-.product-card__actions, .card-buttons {
-  gap: 10px; 
+.product-card__actions,
+.card-buttons {
+  gap: 10px;
   margin-top: auto;
 }
 
-.product-card__btn, .card-btn {
+.product-card__btn,
+.card-btn {
   border-radius: 0;
   border: 2px solid #000;
   font-family: "Courier New", monospace;
@@ -312,48 +353,61 @@
   transition: transform 0.1s;
 }
 
-.product-card__btn:active, .card-btn:active {
+.product-card__btn:active,
+.card-btn:active {
   transform: translate(2px, 2px);
   box-shadow: 0 0 0;
 }
 
 /* Dettagli */
-.product-card__btn--details, .card-btn-details {
+.product-card__btn--details,
+.card-btn-details {
   background: #2d2d2d;
   color: var(--pixel-gold);
   border-color: var(--pixel-gold);
 }
-.product-card__btn--details:hover, .card-btn-details:hover {
+
+.product-card__btn--details:hover,
+.card-btn-details:hover {
   background: var(--pixel-gold);
   color: #000;
   box-shadow: 5px 5px 0px #000;
 }
 
 /* Carrello */
-.product-card__btn--cart, .card-btn-cart {
+.product-card__btn--cart,
+.card-btn-cart {
   background: var(--pixel-gold);
   color: #000;
   border: 2px solid #000;
 }
-.product-card__btn--cart:hover, .card-btn-cart:hover {
+
+.product-card__btn--cart:hover,
+.card-btn-cart:hover {
   background: #fff;
   box-shadow: 5px 5px 0px #000;
 }
 
 /* Label/Badge */
-.product-card__badge, .card-label {
+.product-card__badge,
+.card-label {
   border-radius: 0;
   top: -8px;
   right: -8px;
   border: 2px solid #000;
-  box-shadow: 3px 3px 0px rgba(0,0,0,0.5);
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
   font-size: 0.7rem;
   letter-spacing: 1px;
 }
 
 /* Varianti Label */
-.card-label-popular { background-color: #4d82f4; }
-.card-label-new { background-color: #d62121; }
+.card-label-popular {
+  background-color: #4d82f4;
+}
+
+.card-label-new {
+  background-color: #d62121;
+}
 
 /* ==========================================
    CONTROLLI SCORRIMENTO (Frecce Laterali)
@@ -367,23 +421,25 @@
 
 .scroll-btn {
   position: absolute;
-  top: 60%;
+  top: 50%;
   transform: translateY(-50%);
-  
   background-color: var(--pixel-gold);
   color: #000;
-  border: 3px solid #000; /* Bordo spesso */
-  border-radius: 0; /* Squadrato */
+  border: 3px solid #000;
+  /* Bordo spesso */
+  border-radius: 0;
+  /* Squadrato */
   width: 50px;
-  height: 100px; /* Meno alte, più "pulsanti" */
+  height: 100px;
+  /* Meno alte, più "pulsanti" */
   font-size: 2rem;
   font-weight: 900;
   cursor: pointer;
   z-index: 20;
-  
+
   /* Ombra Hard */
   box-shadow: 5px 5px 0px #000;
-  
+
   transition: all 0.1s;
   opacity: 0;
   visibility: hidden;
@@ -400,18 +456,25 @@
 
 .scroll-btn:hover {
   background-color: #ffd700;
-  transform: translateY(-50%) translate(-2px, -2px); /* Si muove su hover */
+  transform: translateY(-50%) translate(-2px, -2px);
+  /* Si muove su hover */
   box-shadow: 7px 7px 0px #fff;
 }
 
 .scroll-btn:active {
-  transform: translateY(-50%) translate(2px, 2px); /* Click fisico */
+  transform: translateY(-50%) translate(2px, 2px);
+  /* Click fisico */
   box-shadow: 1px 1px 0px #000;
 }
 
 /* Posizionamento frecce */
-.scroll-left { left: -30px; }
-.scroll-right { right: -30px; }
+.scroll-left {
+  left: -30px;
+}
+
+.scroll-right {
+  right: -30px;
+}
 
 /* ==========================================
    RESPONSIVE MOBILE
@@ -440,20 +503,24 @@
   }
 
   /* Card Mobile */
-  .product-card, .card-placeholder {
+  .product-card,
+  .card-placeholder {
     width: 180px;
     min-height: 260px;
   }
-  
-  .product-card__image, .card-image {
+
+  .product-card__image,
+  .card-image {
     height: 140px !important;
   }
 
-  .product-card__info, .card-info {
+  .product-card__info,
+  .card-info {
     padding: 10px;
   }
-  
-  .product-card__btn, .card-btn {
+
+  .product-card__btn,
+  .card-btn {
     padding: 6px;
     font-size: 0.7rem;
   }
@@ -469,9 +536,14 @@
     box-shadow: 3px 3px 0px #000;
   }
 
-  .scroll-left { left: -5px; }
-  .scroll-right { right: -5px; }
-  
+  .scroll-left {
+    left: -5px;
+  }
+
+  .scroll-right {
+    right: -5px;
+  }
+
   .section-title {
     font-size: 1.8rem;
     border-left-width: 5px;
@@ -480,13 +552,19 @@
 
 /* Tablet */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
-  .homepage { padding: 0 30px; }
-  .hero-title { font-size: 6rem; }
-  
-  .product-card, .card-placeholder {
+  .homepage {
+    padding: 0 30px;
+  }
+
+  .hero-title {
+    font-size: 6rem;
+  }
+
+  .product-card,
+  .card-placeholder {
     width: 220px;
   }
-  
+
   .scroll-btn {
     opacity: 1;
     visibility: visible;

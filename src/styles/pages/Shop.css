@@ -1,863 +1,701 @@
-/* todo: Reset CSS globale per rimuovere margini e padding di default */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ==========================================
+   SHOP UI - PIXEL / NEO-BRUTALIST RESET
+   ========================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* todo: Variabili colore globali del progetto */
 :root {
   --purple: #6c21ff;
   --gold: #d8a928;
   --dark: #141218;
   --light: #ffffff;
+  --pixel-black: #000000;
+  --pixel-shadow: 5px 5px 0px #000000;
 }
 
-/* todo: Layout generale del container principale */
+body {
+  background-color: var(--dark);
+}
+
+/* todo: Layout generale con Texture Retro */
 .shop-ui-container {
   display: flex;
-  background: var(--dark);
+  background-color: var(--dark);
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
+  font-family: "Courier New", Courier, monospace;
+  /* Font Retro */
   color: var(--light);
   position: relative;
   overflow: hidden;
+
+  /* Texture Griglia Sfondo */
+  background-image: linear-gradient(#222 1px, transparent 1px),
+    linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-/* todo: Notifiche popup in alto a destra */
+/* ==========================================
+   NOTIFICHE (Retro Popups)
+   ========================================== */
 .notification {
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 2000;
+  /* Z-index alto */
   padding: 15px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  animation: slideIn 0.3s ease-out;
+  border-radius: 0;
+  /* Squadrato */
+  box-shadow: 8px 8px 0px #000;
+  /* Hard Shadow */
+  animation: slideInSteps 0.3s steps(5);
   max-width: 400px;
-  border: 2px solid;
+  border: 3px solid #000;
+  font-family: "Pixelify Sans", sans-serif;
+  text-transform: uppercase;
 }
 
 .notification.success {
-  background: rgba(76, 175, 80, 0.9);
-  border-color: #4caf50;
-  color: white;
+  background: #4caf50;
+  color: #000;
 }
 
 .notification.error {
-  background: rgba(244, 67, 54, 0.9);
-  border-color: #f44336;
-  color: white;
+  background: #f44336;
+  color: #fff;
 }
 
 .notification-content {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
 }
 
 .notification-icon {
-  font-size: 18px;
-  font-weight: bold;
-  flex-shrink: 0;
+  font-size: 20px;
+  font-weight: 900;
+  border: 2px solid #000;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #000 !important;
+  /* Forza nero */
+  box-shadow: 2px 2px 0px #000;
 }
 
 .notification-message {
   flex: 1;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .notification-close {
   background: transparent;
-  border: none;
+  border: 2px solid transparent;
   color: inherit;
-  font-size: 16px;
+  font-size: 18px;
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-  flex-shrink: 0;
+  padding: 2px;
+  transition: 0.1s;
 }
 
 .notification-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #000;
+  color: #fff;
 }
 
-@keyframes slideIn {
+@keyframes slideInSteps {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
   }
 }
 
-/* todo: Sidebar laterale con logo e menu di navigazione */
+/* ==========================================
+   SIDEBAR & FILTRI
+   ========================================== */
 .sidebar {
   width: 280px;
   background: #1a1720;
-  border-right: 2px solid var(--gold);
+  /* Bordo destro spesso */
+  border-right: 4px solid #000;
   padding: 30px 20px;
-  box-shadow: 0 0 20px rgba(216, 169, 40, 0.2);
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  /* Ombra laterale dura */
+  box-shadow: 10px 0 0px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s steps(4), opacity 0.2s;
   position: fixed;
   left: 0;
   top: 100px;
-  height: 100%;
+  /* Sotto la navbar */
+  height: calc(100% - 100px);
   z-index: 2;
   flex-shrink: 0;
   overflow-y: auto;
-  overflow-x: hidden;
 }
 
-/* todo: Sidebar collassata quando i filtri sono aperti */
 .sidebar.collapsed {
+  transform: translateX(-100%);
+  /* Scivola via invece di fade */
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
 }
 
-/* todo: Contenitore logo e titolo del brand */
 .logo-box {
   text-align: center;
   margin-bottom: 40px;
+  border-bottom: 4px solid var(--purple);
+  padding-bottom: 20px;
 }
 
-/* todo: Titolo principale MyPocketQuest */
 .title {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 900;
   color: var(--light);
+  font-family: "Pixelify Sans", sans-serif;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0px #000;
 }
 
-/* todo: Parte "Quest" del titolo in oro */
 .title span {
   color: var(--gold);
 }
 
-/* todo: Sottotitolo "Next Level: Real Life" */
 .subtitle {
-  font-size: 12px;
-  opacity: 0.7;
+  font-size: 10px;
+  font-family: monospace;
+  background: #000;
+  color: #fff;
+  padding: 2px 5px;
+  display: inline-block;
+  margin-top: 5px;
 }
 
-/* todo: Pannello filtri che sostituisce la sidebar */
+/* Filtri Panel (Overlay) */
 .filters-panel {
   width: 280px;
   min-width: 280px;
   background: #1a1720;
-  border-right: 2px solid var(--purple);
-  box-shadow: 0 0 20px rgba(108, 33, 255, 0.2);
-  animation: fadeIn 0.3s ease;
+  border-right: 4px solid var(--purple);
+  box-shadow: 10px 0 0px rgba(0, 0, 0, 0.8);
+  animation: slideRight 0.2s steps(4);
   position: fixed;
   left: 0;
   top: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
   height: 100vh;
   z-index: 2000;
+  border-radius: 0;
 }
 
-/* todo: Animazione fade semplice */
-@keyframes fadeIn {
+@keyframes slideRight {
   from {
-    opacity: 0;
+    transform: translateX(-100%);
   }
+
   to {
-    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-/* todo: Pulsanti del menu di navigazione */
-/* todo: Stile base per i pulsanti di menu (Shop, Carrello, Checkout) */
+/* Menu Buttons */
 .menu-btn {
   width: 100%;
-  padding: 12px;
-  border: none;
+  padding: 12px 15px;
+  border: 2px solid transparent;
+  /* Riserva spazio */
   background: transparent;
   color: var(--light);
   font-size: 16px;
   text-align: left;
   margin-bottom: 10px;
   cursor: pointer;
-  border-left: 3px solid transparent;
-  transition: 0.2s;
+  transition: 0.1s;
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
-/* todo: Effetto hover sui pulsanti menu */
 .menu-btn:hover {
-  background: rgba(108, 33, 255, 0.1);
-}
-
-/* todo: Stile per il pulsante menu attivo (bordo oro a sinistra) */
-.menu-btn.active {
-  border-left: 3px solid var(--gold);
+  background: #000;
   color: var(--gold);
+  border: 2px solid var(--gold);
+  box-shadow: 4px 4px 0px #000;
+  transform: translate(-2px, -2px);
 }
 
-/* todo: Area contenuto principale a destra della sidebar */
+.menu-btn.active {
+  background: var(--gold);
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0px #fff;
+}
+
+/* ==========================================
+   CONTENT AREA
+   ========================================== */
 .content {
   flex: 1;
   padding: 40px;
   margin-left: 280px;
 }
 
-/* todo: Titoli delle sezioni principali (Carrello, Checkout) */
-.section-title-shop  {
-  font-size: 28px;
+.section-title-shop {
+  font-size: 32px;
   color: var(--gold);
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-family: "Pixelify Sans", sans-serif;
+  text-shadow: 4px 4px 0px #000;
+  border-left: 8px solid var(--purple);
+  padding-left: 20px;
 }
 
-/* todo: Container delle card prodotti */
+/* ==========================================
+   CONTROLLI VISTA (Grid/List)
+   ========================================== */
+.view-controls {
+  position: sticky;
+  top: 80px;
+  /* Adjust based on navbar height */
+  background-color: var(--dark);
+  border-bottom: 4px solid #000;
+  display: flex;
+  gap: 15px;
+  margin-bottom: 60px;
+  justify-content: flex-end;
+  padding: 15px 20px;
+  z-index: 100;
+}
+
+.view-btn {
+  background: #1c1a24;
+  border: 2px solid #000;
+  color: var(--light);
+  padding: 10px 20px;
+  border-radius: 0;
+  /* Squadrato */
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.1s;
+  font-family: "Courier New", monospace;
+  box-shadow: 3px 3px 0px #000;
+}
+
+.view-btn:hover {
+  background: var(--purple);
+  color: #fff;
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px #000;
+}
+
+.view-btn.active {
+  background: var(--gold);
+  border-color: #000;
+  color: #000;
+  box-shadow: inset 3px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================
+   PRODOTTI (Layout)
+   ========================================== */
 .products {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
 }
 
-/* todo: Card dello Shop - dimensioni originali */
-.products .product-card {
-  width: 280px;
-  max-width: 280px;
+/* Grid Layout */
+.products.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 30px;
 }
 
-.products .product-card__image {
-  height: 230px;
-}
-
-/* todo: Layout lista - card orizzontali */
-.products-list {
+/* List Layout (Terminal Style) */
+.products.list {
   display: flex;
   flex-direction: column;
   gap: 20px;
-}
-
-.product-card__info{
-  background-color: transparent;
+  max-width: 100%;
 }
 
 .products-list .product-card {
   width: 100%;
   max-width: 100%;
   flex-direction: row;
+  border: 3px solid #000;
+  /* Bordo lista */
+  box-shadow: 5px 5px 0px #000;
 }
 
 .products-list .product-card__image {
-  width: 40px;
-  height: 100px;
-  border-radius: 10px 0 0 10px;
+  width: 120px;
+  height: 100%;
+  min-height: 140px;
+  border-radius: 0;
+  border-right: 3px solid #000;
 }
 
 .products-list .product-card__info {
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-around;
-  border-radius: 0 0 10px 10px;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
+  border-radius: 0;
   justify-content: space-between;
-  background: #1c1a24;
-  border: 2px solid var(--purple);
   padding: 20px;
-  border-radius: 12px;
-  width: 200px;
-  text-align: center;
-  box-shadow: 0 0 12px rgba(108, 33, 255, 0.3);
-  height: 200px;
 }
 
-.card .price {
-  font-size: 18px;
-  margin: 10px 0;
-  color: var(--gold);
-}
-
-.card-actions {
-  display: flex;
-  justify-content: space-around;
-  gap: 10px;
-  width: 100%;
-}
-
-/* todo: Stile per carrello vuoto (messaggio centrale) */
-.empty-cart {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  padding: 40px;
-  color: #888;
-}
-
-/* todo: Immagine decorativa per carrello e checkout vuoti */
-.empty-cart img,
-.empty-checkout img {
-  max-width: 15%;
-  margin-top: 20px;
-  margin: 0 auto;
-}
-
-/* todo: Paragrafi nel messaggio carrello vuoto */
-.empty-cart p {
-  margin-bottom: 10px;
-}
-
-/* todo: Container lista prodotti nel carrello */
-.cart-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* todo: Singolo item nel carrello con layout orizzontale */
-.cart-item {
-  background: #1c1a24;
-  padding: 20px;
-  border: 1px solid var(--gold);
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-/* todo: Sezione informazioni prodotto (nome e prezzo) */
-.item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-}
-
-/* todo: Nome del prodotto nel carrello */
-.item-name {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-/* todo: Prezzo singolo del prodotto */
-.item-price {
-  color: var(--gold);
-  font-size: 14px;
-}
-
-/* todo: Container per i controlli + e - della quantità */
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* todo: Pulsanti + e - per modificare la quantità */
-.quantity-btn {
-  background: var(--purple);
-  border: none;
-  color: var(--light);
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sui pulsanti quantità */
-.quantity-btn:hover {
-  background: #8c4dff;
-}
-
-/* todo: Display del numero di quantità corrente */
-.quantity {
-  font-size: 16px;
-  font-weight: 600;
-  min-width: 20px;
-  text-align: center;
-}
-
-/* todo: Sezione totale e pulsante rimuovi a destra dell'item */
-.item-total {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-/* todo: Prezzo totale dell'item (prezzo x quantità) */
-.total-price {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--gold);
-}
-
-/* todo: Pulsante per rimuovere completamente un prodotto dal carrello */
-.remove-btn {
-  background: transparent;
-  border: 1px solid #ff4757;
-  color: #ff4757;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sul pulsante rimuovi (sfondo rosso) */
-.remove-btn:hover {
-  background: #ff4757;
-  color: var(--light);
-}
-
-/* todo: Box totale generale del carrello in basso */
-.cart-total {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2a2636;
-  border-radius: 8px;
-  text-align: right;
-  font-size: 20px;
-  color: var(--gold);
-}
-
-/* todo: Container principale sezione checkout */
-.checkout-section {
-  max-width: 600px;
-  display: contents;
-}
-
-/* todo: Messaggio quando il checkout è vuoto */
-.empty-checkout {
-  text-align: center;
-  padding: 40px;
-  color: #888;
-}
-
-/* todo: Paragrafi nel messaggio checkout vuoto */
-.empty-checkout p {
-  margin-bottom: 10px;
-}
-
-/* todo: Sottotitolo "Riepilogo Ordine" nel checkout */
-.checkout-subtitle {
-  color: var(--light);
-  margin-bottom: 20px;
-  font-size: 20px;
-}
-
-/* todo: Container lista prodotti nel checkout */
-.checkout-items {
-  margin-bottom: 30px;
-}
-
-/* todo: Singolo item nel riepilogo checkout */
-.checkout-item {
-  background: #1c1a24;
-  padding: 15px 20px;
-  border: 1px solid var(--purple);
-  border-radius: 8px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* todo: Sezione info prodotto nel checkout (nome e dettagli) */
-.checkout-item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-}
-
-/* todo: Nome del prodotto nel checkout */
-.checkout-item-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--light);
-}
-
-/* todo: Dettagli prodotto (quantità x prezzo) */
-.checkout-item-details {
-  font-size: 14px;
-  color: #888;
-}
-
-/* todo: Container per totale e pulsante rimuovi nel checkout */
-.checkout-item-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-/* todo: Totale del singolo prodotto nel checkout */
-.checkout-item-total {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--gold);
-}
-
-/* todo: Pulsante X per rimuovere prodotto dal checkout (circolare) */
-.checkout-remove-btn {
-  background: transparent;
-  border: 1px solid #ff4757;
-  color: #ff4757;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sul pulsante X del checkout */
-.checkout-remove-btn:hover {
-  background: #ff4757;
-  color: var(--light);
-}
-
-/* todo: Sezione riepilogo finale con totale e pulsanti */
-.checkout-summary {
-  border-top: 2px solid var(--gold);
-  padding-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: end;
-}
-
-/* todo: Sezione codice promozionale */
-.promo-code-section {
-  width: 100%;
-  background: rgba(255, 215, 0, 0.05);
-  border: 1px solid var(--gold);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.promo-code-section h3 {
-  margin: 0 0 15px 0;
-  color: var(--gold);
-  font-size: 18px;
-}
-
-/* todo: Gruppo input + bottone per codice promozionale */
-.promo-code-input-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-/* todo: Input per inserire il codice */
-.promo-code-input {
-  flex: 1;
-  padding: 12px;
-  border: 2px solid var(--gold);
-  background: rgba(0, 0, 0, 0.3);
-  color: var(--light);
-  border-radius: 6px;
-  font-size: 16px;
-  text-transform: uppercase;
-}
-
-.promo-code-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.promo-code-input::placeholder {
-  color: #888;
-  text-transform: none;
-}
-
-/* todo: Bottone per applicare il codice */
-.promo-code-btn {
-  padding: 12px 24px;
-  background: var(--gold);
-  color: var(--dark);
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.2s;
-  white-space: nowrap;
-}
-
-.promo-code-btn:hover:not(:disabled) {
-  background: #e6c200;
-  transform: scale(1.05);
-}
-
-.promo-code-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* todo: Messaggio di successo/errore codice promo */
-.promo-message {
-  margin: 10px 0 0 0;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.promo-message.success {
-  background: rgba(74, 222, 128, 0.1);
-  border: 1px solid #4ade80;
-  color: #4ade80;
-}
-
-.promo-message.error {
-  background: rgba(255, 71, 87, 0.1);
-  border: 1px solid #ff4757;
-  color: #ff4757;
-}
-
-/* todo: Container del totale ordine */
-.checkout-total {
-  width: 100%;
-  margin-bottom: 20px;
-}
-
-/* todo: Subtotale, spese spedizione e totale finale */
-.checkout-subtotal,
-.checkout-shipping {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  font-size: 16px;
-  color: var(--light);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-}
-
-.checkout-total-final {
-  display: flex;
-  justify-content: space-between;
-  padding: 15px 0;
-  margin-top: 10px;
-  border-top: 2px solid var(--gold);
-}
-
-/* todo: Titolo con il totale generale dell'ordine */
-.checkout-total h3,
-.checkout-total-final h3 {
-  color: var(--gold);
-  font-size: 24px;
-  margin: 0;
-}
-
-/* todo: Container per i pulsanti finali (Svuota e Conferma) */
-.checkout-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  align-items: center;
-}
-
-/* todo: Icona FreeShipping mostrata quando il promo è attivo */
-.free-shipping-icon {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  animation: bounce 2s ease-in-out infinite;
-}
-
-/* todo: Animazione bounce per l'icona FreeShipping */
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* todo: Pulsante "Svuota Carretto" (rosso, outline) */
-.clear-cart-btn {
-  background: transparent;
-  border: 2px solid #ff4757;
-  color: #ff4757;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sul pulsante svuota (sfondo rosso) */
-.clear-cart-btn:hover {
-  background: #ff4757;
-  color: var(--light);
-}
-
-/* todo: Pulsante "Conferma Acquisto" (oro, principale) */
-.confirm-btn {
-  background: var(--gold);
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sul pulsante conferma (oro più chiaro) */
-.confirm-btn:hover {
-  background: #e6b632;
-}
-
-/* todo: Layout griglia per visualizzazione card (default) */
-.products.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-  padding: 0px 20px;
-
-}
-
-/* todo: Layout lista per visualizzazione prodotti in linea orizzontale */
-.products.list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 0px 20px;
-  max-width: 1200px;
-}
-
-/* todo: Container controlli per cambiare visualizzazione griglia/lista */
-.view-controls {
-  position: sticky;
-  top: 0;
-  background-color: #141218;
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  z-index: 100;
-  padding: 15px 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */
-.view-btn {
-  background: #1c1a24;
-  border: 2px solid var(--purple);
-  color: var(--light);
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-  font-family: "Cinzel", serif;
-}
-
-/* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
-.view-btn:hover {
-  background: var(--purple);
-  border-color: var(--gold);
-  transform: translateY(-2px);
-}
-
-/* todo: Pulsante visualizzazione attivo (evidenziato in oro) */
-.view-btn.active {
-  background: var(--purple);
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-/* todo: Icona nei pulsanti visualizzazione (⊞ o ☰) */
-.view-icon {
-  font-size: 16px;
-}
-
-/* ===================================
-   LEGACY CODE - .fancy-card rimosso
-   Ora si usa ProductCard component
-   =================================== */
-
-/* todo: Singolo dettaglio (ID, Categoria, Disponibilità) */
-.detail-item {
-  font-size: 0.9rem;
-  color: #b8a67d;
-  margin: 0;
-}
-
-/* todo: Label del dettaglio (in grassetto e oro) */
-.detail-label {
-  font-weight: bold;
-  color: #c9a347;
-  margin-right: 5px;
-}
-
-/* todo: Pulsante aggiungi in lista (più largo con testo completo) */
-.products.list .buy-btn {
-  margin: 0;
-  padding: 12px 25px;
-  font-size: 1rem;
-  white-space: nowrap;
-  min-width: 200px;
-}
-
-/* todo: Container per il pulsante "Carica altri prodotti" */
+/* Load More Button (Arcade) */
 .load-more-container {
-  display: flex;
-  justify-content: center;
-  padding: 30px 0;
-  margin-top: 20px;
+  padding: 40px 0;
 }
 
-/* todo: Pulsante per caricare altri prodotti */
 .load-more-btn {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  color: #ffffff;
-  border: none;
+  background: var(--purple);
+  color: #fff;
+  border: 3px solid #000;
   padding: 16px 40px;
   font-size: 16px;
-  font-weight: 600;
-  border-radius: 12px;
+  font-weight: 900;
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Cinzel", serif;
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+  transition: all 0.1s;
+  font-family: "Pixelify Sans", sans-serif;
+  text-transform: uppercase;
+  box-shadow: 6px 6px 0px #000;
 }
 
 .load-more-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
-  background: linear-gradient(135deg, #7c31ff, #9c5dff);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #fff;
+  background: #7c31ff;
 }
 
 .load-more-btn:active {
-  transform: translateY(-1px);
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0;
 }
 
-/* todo: Colore di sfondo generale della pagina */
-body {
-  background-color: #141218;
+/* ==========================================
+   CARRELLO (Cart UI)
+   ========================================== */
+.empty-cart,
+.empty-checkout {
+  text-align: center;
+  padding: 60px;
+  border: 4px dashed #333;
+  /* Tratteggio pixel */
+  background: #1a1a1a;
+  color: #888;
+  font-family: monospace;
+}
+
+.empty-cart img,
+.empty-checkout img {
+  max-width: 100px;
+  margin-bottom: 20px;
+  image-rendering: pixelated;
+  opacity: 0.5;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Cart Item (Block) */
+.cart-item {
+  background: #1c1a24;
+  padding: 20px;
+  border: 3px solid #000;
+  border-radius: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 5px 5px 0px #000;
+  /* Hard Shadow */
+}
+
+.item-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  font-family: "Cinzel", serif;
+}
+
+.item-price {
+  color: var(--gold);
+  font-family: monospace;
+  font-size: 16px;
+}
+
+/* Quantity Controls (Square Buttons) */
+.quantity-controls {
+  background: #000;
+  padding: 5px;
+  border: 2px solid #333;
+}
+
+.quantity-btn {
+  background: var(--purple);
+  border: 2px solid #000;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 0;
+  /* Squadrato */
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  transition: 0.1s;
+  box-shadow: 2px 2px 0px #000;
+}
+
+.quantity-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px #fff;
+}
+
+.quantity-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 0 0 0;
+}
+
+.quantity {
+  color: #fff;
+  font-family: monospace;
+  font-size: 18px;
+  min-width: 30px;
+}
+
+/* Total & Remove */
+.total-price {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--gold);
+  text-shadow: 2px 2px 0px #000;
+}
+
+.remove-btn {
+  background: #1a1a1a;
+  border: 2px solid #ff4757;
+  color: #ff4757;
+  padding: 8px 12px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0px #000;
+}
+
+.remove-btn:hover {
+  background: #ff4757;
+  color: #000;
+  border-color: #000;
+  transform: translate(-1px, -1px);
+}
+
+.cart-total {
+  margin-top: 30px;
+  padding: 20px;
+  background: #000;
+  border: 2px solid var(--gold);
+  text-align: right;
+  font-size: 24px;
+  color: var(--gold);
+  font-family: "Pixelify Sans", sans-serif;
+  box-shadow: 8px 8px 0px rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================
+   CHECKOUT (Terminal Style)
+   ========================================== */
+.checkout-section {
+  display: contents;
+}
+
+.checkout-subtitle {
+  color: var(--light);
+  margin-bottom: 20px;
+  font-size: 24px;
+  border-bottom: 4px solid #000;
+  padding-bottom: 10px;
+  font-family: "Pixelify Sans", sans-serif;
+}
+
+.checkout-item {
+  background: #1c1a24;
+  padding: 15px 20px;
+  border: 2px solid var(--purple);
+  border-radius: 0;
+  margin-bottom: 15px;
+  box-shadow: 4px 4px 0px #000;
+}
+
+.checkout-remove-btn {
+  background: #000;
+  border: 2px solid #ff4757;
+  color: #ff4757;
+  width: 30px;
+  height: 30px;
+  border-radius: 0;
+  /* Squadrato */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.1s;
+  box-shadow: 2px 2px 0px #000;
+}
+
+.checkout-remove-btn:hover {
+  background: #ff4757;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Promo Code Section */
+.promo-code-section {
+  background: #1a1a1a;
+  border: 3px solid var(--gold);
+  border-radius: 0;
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 6px 6px 0px #000;
+}
+
+.promo-code-input {
+  flex: 1;
+  padding: 15px;
+  border: 2px solid var(--gold);
+  background: #000;
+  color: #fff;
+  border-radius: 0;
+  font-family: "Courier New", monospace;
+  font-size: 18px;
+  text-transform: uppercase;
+}
+
+.promo-code-btn {
+  padding: 15px 30px;
+  background: var(--gold);
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 0;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 4px 4px 0px #fff;
+}
+
+.promo-code-btn:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #fff;
+  background: #ffd700;
+}
+
+/* Summary & Actions */
+.checkout-summary {
+  border-top: 4px solid #000;
+  padding-top: 30px;
+  background: #1c1a24;
+  padding: 20px;
+  border: 3px solid #000;
+}
+
+.checkout-subtotal,
+.checkout-shipping {
+  border-bottom: 1px dashed #555;
+  font-family: monospace;
+}
+
+.checkout-total-final {
+  border-top: 4px solid var(--gold);
+  padding-top: 20px;
+  margin-top: 20px;
+}
+
+.checkout-total-final h3 {
+  font-size: 32px;
+  text-shadow: 3px 3px 0px #000;
+}
+
+.checkout-actions {
+  margin-top: 30px;
+  gap: 20px;
+}
+
+/* Bottone Svuota */
+.clear-cart-btn {
+  background: transparent;
+  border: 3px solid #ff4757;
+  color: #ff4757;
+  padding: 15px 30px;
+  font-size: 16px;
+  border-radius: 0;
+  text-transform: uppercase;
+  box-shadow: 5px 5px 0px #000;
+}
+
+.clear-cart-btn:hover {
+  background: #ff4757;
+  color: #fff;
+  border-color: #000;
+  transform: translate(-2px, -2px);
+}
+
+/* Bottone Conferma (Main Action) */
+.confirm-btn {
+  background: var(--gold);
+  border: 3px solid #000;
+  padding: 15px 40px;
+  font-size: 18px;
+  border-radius: 0;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 6px 6px 0px #fff;
+  color: #000;
+}
+
+.confirm-btn:hover {
+  background: #ffd700;
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #fff;
+}
+
+.confirm-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px;
+}
+
+/* Free Shipping Animation (Pixelated Bounce) */
+.free-shipping-icon {
+  width: 60px;
+  height: 60px;
+  image-rendering: pixelated;
+  animation: pixelBounce 1s steps(4) infinite alternate;
+}
+
+@keyframes pixelBounce {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-10px);
+  }
 }
