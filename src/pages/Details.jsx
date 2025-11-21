@@ -369,7 +369,7 @@ function Details() {
               </ul>
             </div>
           </div>
-
+          
           {/* CAROSELLO PRODOTTI CORRELATI */} 
           {relatedProducts.length > 0 && (
             <section className="quests-section related-section-wrapper d-flex flex-column">

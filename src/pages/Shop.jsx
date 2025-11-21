@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 //todo: Importiamo il CSS del componente Shop per lo stile
-import "../styles/pages/Shop.css"; 
+import "../styles/pages/Shop.css";
 
 //todo: Importiamo gli stili delle card
 import "../styles/components/cardExp.css";
@@ -26,33 +26,33 @@ import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 //todo: Creo il componente principale Shop
 const Shop = () => {
   const navigate = useNavigate();
-  
+
   //todo: Scroll istantaneo all'inizio della pagina quando si carica
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  
+
   //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
   const [activeTab, setActiveTab] = useState("shop");
-  
+
   //todo: Stato per la modalità di visualizzazione (grid o list)
   const [viewMode, setViewMode] = useState("grid");
-  
+
   //todo: Stato per mostrare/nascondere il form di checkout
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-  
+
   //todo: Stato per mostrare/nascondere i filtri
   const [showFilters, setShowFilters] = useState(false);
-  
+
   //todo: Stato per la ricerca
   const [searchValue, setSearchValue] = useState('');
-  
+
   //todo: Stato per l'ordinamento
   const [sortValue, setSortValue] = useState('recent');
-  
+
   //todo: Stato per i filtri
   const [filters, setFilters] = useState({
-    priceRange: { 
+    priceRange: {
       min: 0,
       max: 100,
       current: 100
@@ -60,19 +60,19 @@ const Shop = () => {
     categories: [],
     difficulties: []
   });
-  
+
   //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
   const [visibleProducts, setVisibleProducts] = useState(10);
 
   //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
   //todo: Array statico di prodotti demo (da collegare poi a un DB o API)
-    const products = productsData.map((p, index) => ({
-      ...p,
-      originalIndex: index,
-      category: p.category_id === 1 ? "film" : 
-                p.category_id === 2 ? "series" : 
-                p.category_id === 3 ? "anime" : "film"
-    }));
+  const products = productsData.map((p, index) => ({
+    ...p,
+    originalIndex: index,
+    category: p.category_id === 1 ? "film" :
+      p.category_id === 2 ? "series" :
+        p.category_id === 3 ? "anime" : "film"
+  }));
 
   //todo: Stato per i prodotti aggiunti al carrello (carica da localStorage se presente)
   const [cart, setCart] = useState(() => {
@@ -121,11 +121,11 @@ const Shop = () => {
   const addToCart = (product) => {
     //todo: Controllo se il prodotto era già nel carrello (confronto per nome)
     const wasInCart = cart.find(item => item.name === product.name);
-    
+
     setCart((prev) => {
       //todo: Trovo se esiste già l'item nel carrello
       const existingItem = prev.find(item => item.name === product.name);
-      
+
       if (existingItem) {
         //todo: Se esiste, incremento la quantità di 1
         return prev.map(item =>
@@ -151,9 +151,9 @@ const Shop = () => {
   const removeFromCart = (productName) => {
     //todo: Trovo il prodotto da rimuovere per mostrare il nome nella notifica
     const productToRemove = cart.find(item => item.name === productName);
-    
+
     setCart((prev) => prev.filter((item) => item.name !== productName));
-    
+
     //todo: Mostro notifica di rimozione in rosso
     if (productToRemove) {
       showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
@@ -165,7 +165,7 @@ const Shop = () => {
     //todo: Trovo il prodotto per controllare se sarà rimosso
     const productToCheck = cart.find(item => item.name === productName);
     const willBeRemoved = productToCheck && productToCheck.quantity === 1;
-    
+
     setCart((prev) => {
       return prev.map(item => {
         if (item.name === productName) {
@@ -179,7 +179,7 @@ const Shop = () => {
         return item;
       }).filter(Boolean); //todo: Rimuovo eventuali elementi null
     });
-    
+
     //todo: Mostro notifica se il prodotto è stato completamente rimosso
     if (willBeRemoved && productToCheck) {
       showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
@@ -188,7 +188,7 @@ const Shop = () => {
 
   //todo: Funzione per aumentare la quantità di un prodotto nel carrello
   const increaseQuantity = (productName) => {
-    setCart((prev) => 
+    setCart((prev) =>
       prev.map(item =>
         item.name === productName
           ? { ...item, quantity: item.quantity + 1 }
@@ -203,27 +203,27 @@ const Shop = () => {
 
     // Filtro per ricerca
     if (searchValue) {
-      filtered = filtered.filter(p => 
+      filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
     // Filtro per prezzo
     if (filters.priceRange) {
-      filtered = filtered.filter(p => 
+      filtered = filtered.filter(p =>
         p.price <= filters.priceRange.current
       );
     }
 
     // Filtro per categorie
     if (filters.categories && filters.categories.length > 0) {
-      filtered = filtered.filter(p => 
+      filtered = filtered.filter(p =>
         filters.categories.includes(p.category)
       );
     }
 
     // Ordinamento
-    switch(sortValue) {
+    switch (sortValue) {
       case 'price-asc':
         filtered.sort((a, b) => a.price - b.price);
         break;
@@ -284,7 +284,7 @@ const Shop = () => {
               {notification.type === 'success' ? '✓' : 'ℹ'}
             </span>
             <span className="notification-message">{notification.message}</span>
-            <button 
+            <button
               className="notification-close"
               onClick={() => setNotification(null)}
             >
@@ -332,7 +332,7 @@ const Shop = () => {
       {/* todo: Pannello filtri */}
       {showFilters && (
         <div className="filters-panel">
-          <ShopComponent 
+          <ShopComponent
             products={products}
             filters={filters}
             onFiltersChange={setFilters}
@@ -347,22 +347,22 @@ const Shop = () => {
           <div className="shop-section">
             {/* todo: Controlli per cambiare visualizzazione */}
             <div className="view-controls">
-              <div style={{display: 'flex', gap: '10px'}}>
-                <button 
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
                   className={viewMode === "grid" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("grid")}
                   title="Visualizzazione a griglia"
                 >
                   <span className="view-icon">⊞</span>
                 </button>
-                <button 
+                <button
                   className={viewMode === "list" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("list")}
                   title="Visualizzazione a lista"
                 >
-                  <span className="view-icon">☰</span> 
+                  <span className="view-icon">☰</span>
                 </button>
-                <button 
+                <button
                   className={showFilters ? "view-btn active" : "view-btn"}
                   onClick={() => setShowFilters(!showFilters)}
                   title="Mostra/Nascondi Filtri"
@@ -372,35 +372,35 @@ const Shop = () => {
               </div>
 
               {/* todo: Barra di ricerca e ordinamento */}
-              <SearchSortBar 
+              <SearchSortBar
                 searchValue={searchValue}
                 onSearchChange={setSearchValue}
                 sortValue={sortValue}
                 onSortChange={setSortValue}
               />
             </div>
-
             <div className={`products ${viewMode}`}>
               {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
                 <div key={p.name} className="card fancy-card">
-                  
+
                   <div className="card-image-wrapper">
                     <img src={p.image} alt={p.name} className="card-image" />
                   </div>
 
                   <div className="card-body">
-                    <h3>{p.name}</h3>
+                    <ProductCard /> 
+                     {/* <h3>{p.name}</h3>
                     <p className="price">{p.price.toFixed(2)}€</p>
                     {viewMode === "list" && (
                       <div className="card-details">
                         <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
-                      </div>
-                    )}
+                      </div> 
+                    )} */}
                   </div>
 
                   <div className="card-actions">
                     {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
-                    <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
+                    <button className="details-btn" onClick={() => navigate(`/details{$slug}`)}>
                       Dettagli
                     </button>
                     <button className="buy-btn" onClick={() => addToCart(p)}>
@@ -430,7 +430,7 @@ const Shop = () => {
 
             {/* todo: Banner spedizione gratuita */}
             {cart.length > 0 && (
-              <FreeShippingBanner 
+              <FreeShippingBanner
                 subtotal={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
                 threshold={40}
                 promoApplied={promoApplied}
@@ -453,7 +453,7 @@ const Shop = () => {
                       <span className="item-name">{item.name}</span>
                       <span className="item-price">{item.price.toFixed(2)}€</span>
                     </div>
-                    
+
                     {/* todo: Controlli per cambiare la quantità */}
                     <div className="quantity-controls">
                       <button
@@ -485,7 +485,7 @@ const Shop = () => {
                     </div>
                   </div>
                 ))}
-                
+
                 {/* todo: Mostro totale del carrello */}
                 <div className="cart-total">
                   <strong>
@@ -501,7 +501,7 @@ const Shop = () => {
         {activeTab === "checkout" && (
           <div className="checkout-section">
             <h2 className="section-title">Checkout</h2>
-            
+
             {cart.length === 0 ? (
               //todo: Messaggio se il carrello è vuoto
               <div className="empty-checkout">
@@ -514,7 +514,7 @@ const Shop = () => {
                 {/* todo: Riepilogo prodotti nel checkout */}
                 <div className="checkout-items">
                   <h3 className="checkout-subtitle">Riepilogo Ordine:</h3>
-                  
+
                   {cart.map((item) => (
                     <div key={item.id} className="checkout-item">
                       <div className="checkout-item-info">
@@ -523,7 +523,7 @@ const Shop = () => {
                           {item.quantity} x {item.price.toFixed(2)}€
                         </span>
                       </div>
-                      
+
                       <div className="checkout-item-actions">
                         <span className="checkout-item-total">
                           {(item.price * item.quantity).toFixed(2)}€
@@ -582,7 +582,7 @@ const Shop = () => {
                     const shippingCost = isFreeShipping ? 0 : 4.99;
                     //todo: Totale finale = subtotale + spese di spedizione
                     const total = subtotal + shippingCost;
-                    
+
                     return (
                       <>
                         <div className="checkout-total">
@@ -598,9 +598,9 @@ const Shop = () => {
                               {/*todo: Se spedizione gratuita (sopra 40€ o promo), mostra prezzo barrato + "GRATIS" in verde*/}
                               {isFreeShipping ? (
                                 <>
-                                  <span style={{textDecoration: 'line-through', color: '#999'}}>4.99€</span>
+                                  <span style={{ textDecoration: 'line-through', color: '#999' }}>4.99€</span>
                                   {' '}
-                                  <span style={{color: '#4ade80'}}>GRATIS</span>
+                                  <span style={{ color: '#4ade80' }}>GRATIS</span>
                                 </>
                               ) : (
                                 //todo: Altrimenti mostra il costo normale 4.99€
@@ -614,25 +614,25 @@ const Shop = () => {
                             <h3>{total.toFixed(2)}€</h3>
                           </div>
                         </div>
-                        
+
                         {/* todo: Banner spedizione gratuita */}
-                        <FreeShippingBanner 
+                        <FreeShippingBanner
                           subtotal={subtotal}
                           threshold={40}
                           promoApplied={promoApplied}
                         />
-                        
+
                         <div className="checkout-actions">
                           {/*todo: Mostriamo l'icona FreeShipping se sopra 40€ o se il codice promo è stato applicato*/}
                           {isFreeShipping && (
-                            <img 
-                              src="/icon/FreeShipping.png" 
-                              alt="Spedizione Gratuita" 
+                            <img
+                              src="/icon/FreeShipping.png"
+                              alt="Spedizione Gratuita"
                               className="free-shipping-icon"
                               title="Spedizione gratuita attiva!"
                             />
                           )}
-                          <button 
+                          <button
                             className="clear-cart-btn"
                             onClick={() => {
                               const itemCount = cart.length;
@@ -642,7 +642,7 @@ const Shop = () => {
                           >
                             Svuota Carretto
                           </button>
-                          <button 
+                          <button
                             className="confirm-btn"
                             onClick={() => setShowCheckoutForm(true)}
                           >
@@ -658,7 +658,7 @@ const Shop = () => {
           </div>
         )}
       </main>
-      
+
       {/* todo: Overlay form checkout */}
       {/* todo: Passiamo 4 props al CheckoutForm: totalAmount (con spedizione), cartItems, shippingCost e isFreeShipping */}
       {showCheckoutForm && (() => {
@@ -666,7 +666,7 @@ const Shop = () => {
         const isFreeShipping = subtotal >= 40 || promoApplied;
         const shippingCost = isFreeShipping ? 0 : 4.99;
         const totalAmount = subtotal + shippingCost;
-        
+
         return (
           <CheckoutForm
             /* todo: Funzione callback per chiudere l'overlay quando l'utente clicca su X o annulla */
