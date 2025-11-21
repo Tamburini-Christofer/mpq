@@ -14,7 +14,7 @@ function CardExp ({ product, onViewDetails, onAddToCart }) {
         {/* todo: Nome del prodotto */}
         <h3 className="card-title">{product.name}</h3>
         {/* todo: Prezzo formattato */}
-        <p className="card-price">{product.price.toFixed(2)}€</p>
+        <p className="card-price">{product.price}€</p>
         
         {/* todo: Mostra i pulsanti solo se almeno una callback è fornita */}
         {(onViewDetails || onAddToCart) && (

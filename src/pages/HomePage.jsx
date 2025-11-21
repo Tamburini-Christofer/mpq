@@ -1,11 +1,11 @@
 import '../styles/pages/HomePage.css'
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 //todo Importiamo useNavigate per navigare programmaticamente tra le pagine (es: da card a Details)
 import { useNavigate } from 'react-router-dom';
 import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
-//todo Importiamo i dati dei prodotti dal file JSON per popolare i caroselli
-import productsData from '../JSON/products.json';
+//todo Importiamo le API per gestire prodotti e carrello
+import { productsAPI, cartAPI, emitCartUpdate } from '../services/api';
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from '../components/common/ProductCard';
 
@@ -17,6 +17,10 @@ function HomePage() {
     
     //todo Stato per gestire le notifiche quando si aggiunge un prodotto al carrello
     const [notification, setNotification] = useState(null);
+    
+    //todo Stato per i prodotti caricati dal backend
+    const [productsData, setProductsData] = useState([]);
+    const [loading, setLoading] = useState(true);
     
     //todo Funzione per mostrare notifiche temporanee (3 secondi)
     const showNotification = (message, type = 'success') => {
@@ -35,6 +39,23 @@ function HomePage() {
     //todo Inizializziamo useNavigate per permettere la navigazione tra le route
     const navigate = useNavigate();
 
+    //todo Carica prodotti dal backend
+    useEffect(() => {
+        const loadProducts = async () => {
+            try {
+                setLoading(true);
+                const data = await productsAPI.getAll();
+                setProductsData(data);
+            } catch (error) {
+                console.error('Errore caricamento prodotti:', error);
+                showNotification('Errore nel caricamento dei prodotti', 'error');
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadProducts();
+    }, []);
+
     //todo useMemo memorizza il risultato della randomizzazione per evitare di rifare lo shuffle ad ogni render
     //todo Fisher-Yates shuffle: algoritmo per mescolare array in modo casuale
     const randomProducts = useMemo(() => {
@@ -44,7 +65,7 @@ function HomePage() {
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         return shuffled;
-    }, []);
+    }, [productsData]);
 
     // FUNZIONE MODIFICATA PER IL LOOP
     const handleVideoEnd = () => {
@@ -131,31 +152,19 @@ function HomePage() {
     };
 
     //todo Funzione per aggiungere prodotto al carrello dal carosello HomePage
-    const handleAddToCart = (product) => {
-        //todo Calcoliamo il prezzo finale considerando eventuali sconti
-        const hasDiscount = product.discount && typeof product.discount === 'number' && product.discount > 0;
-        const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product.price;
-        
-        //todo Recuperiamo il carrello da localStorage (o array vuoto se non esiste)
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        //todo Cerchiamo se il prodotto è già nel carrello confrontando per nome
-        const existingItem = cart.find(item => item.name === product.name);
-        
-        //todo Se esiste già, incrementiamo la quantità
-        if (existingItem) {
-            existingItem.quantity += 1;
-            showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
-        } else {
-            //todo Altrimenti aggiungiamo il nuovo prodotto con prezzo finale (scontato se applicabile) e quantità 1
-            cart.push({ ...product, price: finalPrice, quantity: 1 });
-            showNotification(`"${product.name}" aggiunto al carrello!`);
+    const handleAddToCart = async (product) => {
+        try {
+            //todo Aggiungi prodotto via API
+            await cartAPI.add(product.id, 1);
+            
+            //todo Emetti evento per aggiornare il contatore del carrello
+            emitCartUpdate();
+            
+            showNotification(`"${product.name}" aggiunto al carretto!`);
+        } catch (error) {
+            console.error('Errore aggiunta al carrello:', error);
+            showNotification('Errore nell\'aggiunta al carretto', 'error');
         }
-        
-        //todo Salviamo il carrello aggiornato in localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
-        //todo Dispatchamo eventi per sincronizzare il carrello
-        window.dispatchEvent(new Event('storage'));
-        window.dispatchEvent(new Event('cartUpdate'));
     };
 
 
@@ -208,7 +217,7 @@ function HomePage() {
                         onEnded={handleVideoEnd} // Gestore di fine video
                         key={currentVideoSrc} // Aggiungi la key per forzare il ricaricamento
                         src={currentVideoSrc} // Sorgente dinamica
-                        disablepictureinpicture
+                        disablePictureInPicture
                     >
                         Il tuo browser non supporta il tag video.
                     </video>

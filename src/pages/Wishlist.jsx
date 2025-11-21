@@ -83,7 +83,10 @@ function Wishlist() {
   }
 
   //todo Calcola prezzo totale wishlist
-  const totalWishlistValue = wishlistItems.reduce((sum, item) => sum + item.price, 0)
+  const totalWishlistValue = wishlistItems.reduce((sum, item) => {
+    const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
+    return sum + (price || 0);
+  }, 0);
 
   return (
     <>
