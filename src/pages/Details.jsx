@@ -4,8 +4,8 @@ import "../styles/pages/Details.css"
 //todo useNavigate: hook per navigazione programmatica
 import { useParams, useNavigate } from "react-router-dom"
 import { useState, useEffect, useMemo, useRef } from "react"
-//todo Importiamo il database dei prodotti
-import productsData from "../JSON/products.json"
+//todo Importiamo le API per gestire prodotti e carrello
+import { productsAPI, cartAPI, emitCartUpdate } from "../services/api"
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from "../components/common/ProductCard"
 
@@ -30,12 +30,37 @@ function Details() {
   //todo Estraiamo lo slug dalla URL (es: /details/il-padrino => slug = "il-padrino")
   const { slug } = useParams()
   const navigate = useNavigate()
-  //todo Cerchiamo il prodotto confrontando lo slug generato dal nome con quello dell'URL
-  const product = productsData.find(p => generateSlug(p.name) === slug)
+  
+  //todo Stato per il prodotto caricato dal backend
+  const [product, setProduct] = useState(null)
+  const [productsData, setProductsData] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  //todo Carica prodotto dal backend
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        setLoading(true)
+        const data = await productsAPI.getBySlug(slug)
+        setProduct(data)
+        
+        //todo Carica anche tutti i prodotti per la sezione "Correlati"
+        const allProducts = await productsAPI.getAll()
+        setProductsData(allProducts)
+      } catch (error) {
+        console.error('Errore caricamento prodotto:', error)
+        setProduct(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadProduct()
+  }, [slug])
 
   //todo Calcoliamo se il prodotto ha uno sconto attivo e il prezzo finale
   const hasDiscount = product && product.discount && typeof product.discount === 'number' && product.discount > 0;
-  const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product?.price || 0;
+  const price = parseFloat(product?.price) || 0;
+  const finalPrice = hasDiscount ? price * (1 - product.discount / 100) : price;
 
   const [quantity, setQuantity] = useState(1)
   const [notification, setNotification] = useState(null)
@@ -56,34 +81,19 @@ function Details() {
   }
 
   //todo Funzione per aggiungere il prodotto al carrello dalla pagina Details
-  const addToCart = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-    //todo Cerchiamo il prodotto nel carrello confrontando per nome (non per id)
-    const existingItem = cart.find((item) => item.name === product.name)
-
-    if (existingItem) {
-      //todo Se esiste già, aggiungiamo la quantità selezionata
-      existingItem.quantity += quantity
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`)
-    } else {
-      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con prezzo finale (scontato se applicabile) e la quantità
-      cart.push({ ...product, price: finalPrice, quantity })
-      showNotification(`"${product.name}" aggiunto al carrello!`)
+  const addToCart = async () => {
+    try {
+      //todo Aggiungi prodotto via API con la quantità selezionata
+      await cartAPI.add(product.id, quantity)
+      
+      //todo Emetti evento per aggiornare il contatore
+      emitCartUpdate()
+      
+      showNotification(`"${product.name}" aggiunto al carretto!`)
+    } catch (error) {
+      console.error('Errore aggiunta al carrello:', error)
+      showNotification('Errore nell\'aggiunta al carretto', 'error')
     }
-
-    localStorage.setItem('cart', JSON.stringify(cart))
-    window.dispatchEvent(new Event('cartUpdate'))
-
-    //todo Trigger storage event per sincronizzare con Shop e altre pagine aperte
-    window.dispatchEvent(new Event("storage"))
-  }
-
-  if (!product) {
-    return (
-      <div className="product-page">
-        <h1>Prodotto non trovato</h1>
-      </div>
-    )
   }
 
   /* Prove per richiamare dei correlati 
@@ -125,7 +135,15 @@ function Details() {
     )
 
     return withIndex
-  }, [product])
+  }, [product, productsData])
+
+  if (!product) {
+    return (
+      <div className="product-page">
+        <h1>Prodotto non trovato</h1>
+      </div>
+    )
+  }
 
   // ---- FUNZIONI CAROSELLO (copiate/adattate da HomePage) ----
 
@@ -265,11 +283,11 @@ function Details() {
                     className="product-old-price"
                     data-strikethrough="true"
                   >
-                    {product.price.toFixed(2)}€
+                    {price.toFixed(2)}€
                   </span>
                 </>
               ) : (
-                <span className="product-price">{product.price.toFixed(2)}€</span>
+                <span className="product-price">{price.toFixed(2)}€</span>
               )}
             </div>
 

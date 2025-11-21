@@ -2,11 +2,12 @@ import '../../styles/components/NavBar.css'
 import { NavLink } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useState, useEffect } from 'react';
+import { cartAPI } from '../../services/api';
 
 function NavBar() {
-  //todo Stato per contare prodotti in wishlist
+  //todo Stato per contare prodotti in wishlist (rimane localStorage)
   const [wishlistCount, setWishlistCount] = useState(0);
-  //todo Stato per contare prodotti nel carrello
+  //todo Stato per contare prodotti nel carrello (da API)
   const [cartCount, setCartCount] = useState(0);
   
   //todo Carica conteggio wishlist e carrello al mount
@@ -18,26 +19,30 @@ function NavBar() {
     window.addEventListener('wishlistUpdate', updateWishlistCount);
     window.addEventListener('storage', updateWishlistCount);
     window.addEventListener('cartUpdate', updateCartCount);
-    window.addEventListener('storage', updateCartCount);
     
     return () => {
       window.removeEventListener('wishlistUpdate', updateWishlistCount);
       window.removeEventListener('storage', updateWishlistCount);
       window.removeEventListener('cartUpdate', updateCartCount);
-      window.removeEventListener('storage', updateCartCount);
     };
   }, []);
   
-  //todo Aggiorna conteggio prodotti wishlist
+  //todo Aggiorna conteggio prodotti wishlist (rimane localStorage)
   const updateWishlistCount = () => {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     setWishlistCount(wishlist.length);
   };
   
-  //todo Aggiorna conteggio prodotti carrello
-  const updateCartCount = () => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    setCartCount(cart.length);
+  //todo Aggiorna conteggio prodotti carrello (da API)
+  const updateCartCount = async () => {
+    try {
+      const cart = await cartAPI.get();
+      const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      setCartCount(totalItems);
+    } catch (error) {
+      console.error('Errore caricamento carrello:', error);
+      setCartCount(0);
+    }
   };
 
   return (

@@ -6,6 +6,7 @@
 import { useState } from "react";
 import PaymentButton from "./PaymentButton";
 import FreeShippingBanner from "./FreeShippingBanner";
+import { checkoutAPI, cartAPI, emitCartUpdate } from "../../services/api";
 import "../../styles/components/CheckoutForm.css";
 
 /**

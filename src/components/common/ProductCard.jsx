@@ -34,17 +34,22 @@ export default function ProductCard({
   onAddToCart = null,
   showActions = true
 }) {
-  if (!product) return null;
-
-  //todo Genera lo slug dal nome del prodotto
-  const productSlug = generateSlug(product.name);
-  
   //todo Stato per tracciare se il prodotto è in wishlist
-  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(() => {
+    if (!product) return false;
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    return wishlist.some(item => item.name === product.name);
+  });
   
   //todo Controlla se il prodotto è in wishlist al mount e quando cambia
   useEffect(() => {
-    checkWishlistStatus();
+    if (!product) return;
+    
+    const checkWishlistStatus = () => {
+      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+      const inWishlist = wishlist.some(item => item.name === product.name);
+      setIsInWishlist(inWishlist);
+    };
     
     //todo Listener per aggiornare stato quando cambia wishlist
     const handleWishlistUpdate = () => checkWishlistStatus();
@@ -55,14 +60,12 @@ export default function ProductCard({
       window.removeEventListener('wishlistUpdate', handleWishlistUpdate);
       window.removeEventListener('storage', handleWishlistUpdate);
     };
-  }, [product.name]);
+  }, [product]);
   
-  //todo Verifica se prodotto è in wishlist
-  const checkWishlistStatus = () => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    const inWishlist = wishlist.some(item => item.name === product.name);
-    setIsInWishlist(inWishlist);
-  };
+  if (!product) return null;
+
+  //todo Genera lo slug dal nome del prodotto
+  const productSlug = generateSlug(product.name);
   
   //todo Toggle wishlist (aggiungi/rimuovi)
   const toggleWishlist = (e) => {
@@ -94,20 +97,21 @@ export default function ProductCard({
   };
 
   //todo Determina il badge da mostrare: se c'è sconto automatico, mostra badge sale
-  const hasDiscount = product.discount && typeof product.discount === 'number' && product.discount > 0;
+  const discount = parseFloat(product.discount) || 0;
+  const hasDiscount = discount > 0;
   const displayBadge = hasDiscount ? 'sale' : badge;
   const badgeData = badgeConfig[displayBadge];
 
   //todo Calcola prezzo originale e prezzo finale se c'è sconto
-  const originalPrice = product.price;
-  const finalPrice = hasDiscount ? originalPrice * (1 - product.discount / 100) : originalPrice;
+  const originalPrice = parseFloat(product.price) || 0;
+  const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
 
   return (
     <div className={`product-card product-card--${variant}`}>
       {/* todo: Badge se specificato o se c'è uno sconto */}
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
-          {hasDiscount ? `-${product.discount}%` : badgeData.text}
+          {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
       
@@ -145,7 +149,7 @@ export default function ProductCard({
             </span>
           </div>
         ) : (
-          <p className="product-card__price">{product.price.toFixed(2)}€</p>
+          <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
         )}
 
         {/* todo: Pulsanti azione (se abilitati) */}

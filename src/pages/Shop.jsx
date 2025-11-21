@@ -8,8 +8,11 @@ import "../styles/pages/Shop.css";
 //todo: Importiamo gli stili delle card
 import "../styles/components/cardExp.css";
 
-//todo: Importiamo i prodotti dal file JSON
-import productsData from "../JSON/products.json";
+//todo: Importiamo le API per gestire prodotti e carrello
+import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+
+//todo: Importiamo il componente ProductCard
+import ProductCard from "../components/common/ProductCard";
 
 //todo: Importiamo il componente CheckoutForm
 import CheckoutForm from "../components/shop/CheckoutForm";
@@ -58,55 +61,19 @@ const Shop = () => {
       current: 100
     },
     categories: [],
-    difficulties: []
+    matureContent: false,
+    onSale: false
   });
   
   //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
   const [visibleProducts, setVisibleProducts] = useState(10);
 
-  //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
-  //todo: Array statico di prodotti demo (da collegare poi a un DB o API)
-    const products = productsData.map((p, index) => ({
-      ...p,
-      originalIndex: index,
-      category: p.category_id === 1 ? "film" : 
-                p.category_id === 2 ? "series" : 
-                p.category_id === 3 ? "anime" : "film"
-    }));
-
-  //todo: Stato per i prodotti aggiunti al carrello (carica da localStorage se presente)
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
-  //todo: Sincronizza il carrello con localStorage ogni volta che cambia
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  //todo: Ascolta i cambiamenti del localStorage da altre pagine (es. Details)
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
+  //todo: Stato per i prodotti caricati dal backend
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   //todo: Stato per gestire le notifiche popup (es. "Prodotto aggiunto!")
   const [notification, setNotification] = useState(null);
-
-  //todo: Stato per memorizzare il codice promozionale inserito dall'utente
-  const [promoCode, setPromoCode] = useState('');
-  //todo: Stato booleano che indica se il codice promozionale è stato applicato con successo
-  const [promoApplied, setPromoApplied] = useState(false);
-  //todo: Stato per il messaggio di feedback (successo/errore) del codice promozionale
-  const [promoMessage, setPromoMessage] = useState('');
 
   //todo: Funzione per mostrare una notifica
   const showNotification = (message, type = 'success') => {
@@ -117,102 +84,160 @@ const Shop = () => {
     }, 3000);
   };
 
-  //todo: Funzione per aggiungere un prodotto al carrello
-  const addToCart = (product) => {
-    //todo: Controllo se il prodotto era già nel carrello (confronto per nome)
-    const wasInCart = cart.find(item => item.name === product.name);
-    
-    setCart((prev) => {
-      //todo: Trovo se esiste già l'item nel carrello
-      const existingItem = prev.find(item => item.name === product.name);
-      
-      if (existingItem) {
-        //todo: Se esiste, incremento la quantità di 1
-        return prev.map(item =>
-          item.name === product.name
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        //todo: Se non esiste, lo aggiungo con quantità iniziale 1
-        return [...prev, { ...product, quantity: 1 }];
+  //todo: Carica prodotti dal backend
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const data = await productsAPI.getAll();
+        const mappedProducts = data.map((p, index) => ({
+          ...p,
+          originalIndex: index,
+          category: p.category_id === 1 ? "film" : 
+                    p.category_id === 2 ? "series" : 
+                    p.category_id === 3 ? "anime" : "film"
+        }));
+        setProducts(mappedProducts);
+      } catch (error) {
+        console.error('Errore caricamento prodotti:', error);
+        showNotification('Errore nel caricamento dei prodotti', 'error');
+      } finally {
+        setLoading(false);
       }
-    });
+    };
+    loadProducts();
+  }, []);
 
-    //todo: Mostro una notifica diversa a seconda se era già nel carrello
-    if (wasInCart) {
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
-    } else {
-      showNotification(`"${product.name}" aggiunto al carretto!`);
+  //todo: Stato per i prodotti nel carrello (caricati dal backend)
+  const [cart, setCart] = useState([]);
+
+  //todo: Carica carrello dal backend
+  const loadCart = async () => {
+    try {
+      const cartData = await cartAPI.get();
+      setCart(cartData);
+      emitCartUpdate();
+    } catch (error) {
+      console.error('Errore caricamento carrello:', error);
+    }
+  };
+
+  useEffect(() => {
+    loadCart();
+  }, []);
+
+  //todo: Ascolta aggiornamenti carrello da altre componenti
+  useEffect(() => {
+    const handleCartUpdate = () => loadCart();
+    window.addEventListener('cartUpdate', handleCartUpdate);
+    return () => window.removeEventListener('cartUpdate', handleCartUpdate);
+  }, []);
+
+  //todo: Stato per memorizzare il codice promozionale inserito dall'utente
+  const [promoCode, setPromoCode] = useState('');
+  //todo: Stato booleano che indica se il codice promozionale è stato applicato con successo
+  const [promoApplied, setPromoApplied] = useState(false);
+  //todo: Stato per il messaggio di feedback (successo/errore) del codice promozionale
+  const [promoMessage, setPromoMessage] = useState('');
+
+  //todo: Funzione per aggiungere un prodotto al carrello
+  const addToCart = async (product) => {
+    try {
+      //todo: Controllo se il prodotto era già nel carrello
+      const wasInCart = cart.find(item => item.id === product.id);
+      
+      //todo: Chiama API per aggiungere al carrello
+      await cartAPI.add(product.id, 1);
+      
+      //todo: Ricarica carrello dal backend
+      await loadCart();
+
+      //todo: Mostro notifica
+      if (wasInCart) {
+        showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
+      } else {
+        showNotification(`"${product.name}" aggiunto al carretto!`);
+      }
+    } catch (error) {
+      showNotification('Errore nell\'aggiunta al carrello', 'error');
     }
   };
 
   //todo: Funzione per rimuovere completamente un prodotto dal carrello
-  const removeFromCart = (productName) => {
-    //todo: Trovo il prodotto da rimuovere per mostrare il nome nella notifica
-    const productToRemove = cart.find(item => item.name === productName);
-    
-    setCart((prev) => prev.filter((item) => item.name !== productName));
-    
-    //todo: Mostro notifica di rimozione in rosso
-    if (productToRemove) {
-      showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
+  const removeFromCart = async (productId) => {
+    try {
+      //todo: Trova prodotto per notifica
+      const productToRemove = cart.find(item => item.id === productId);
+      
+      //todo: Chiama API per rimuovere
+      await cartAPI.remove(productId);
+      
+      //todo: Ricarica carrello
+      await loadCart();
+      
+      if (productToRemove) {
+        showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
+      }
+    } catch (error) {
+      showNotification('Errore nella rimozione', 'error');
     }
   };
 
   //todo: Funzione per diminuire la quantità di un prodotto nel carrello
-  const decreaseQuantity = (productName) => {
-    //todo: Trovo il prodotto per controllare se sarà rimosso
-    const productToCheck = cart.find(item => item.name === productName);
-    const willBeRemoved = productToCheck && productToCheck.quantity === 1;
-    
-    setCart((prev) => {
-      return prev.map(item => {
-        if (item.name === productName) {
-          if (item.quantity === 1) {
-            //todo: Se la quantità è 1, rimuovo il prodotto dal carrello
-            return null;
-          }
-          //todo: Altrimenti diminuisco la quantità di 1
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      }).filter(Boolean); //todo: Rimuovo eventuali elementi null
-    });
-    
-    //todo: Mostro notifica se il prodotto è stato completamente rimosso
-    if (willBeRemoved && productToCheck) {
-      showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
+  const decreaseQuantity = async (productId) => {
+    try {
+      //todo: Trova prodotto
+      const product = cart.find(item => item.id === productId);
+      if (!product) return;
+      
+      if (product.quantity === 1) {
+        //todo: Se quantità è 1, rimuovi completamente
+        await removeFromCart(productId);
+      } else {
+        //todo: Altrimenti diminuisci quantità
+        await cartAPI.update(productId, product.quantity - 1);
+        await loadCart();
+      }
+    } catch (error) {
+      showNotification('Errore nell\'aggiornamento', 'error');
     }
   };
 
   //todo: Funzione per aumentare la quantità di un prodotto nel carrello
-  const increaseQuantity = (productName) => {
-    setCart((prev) => 
-      prev.map(item =>
-        item.name === productName
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+  const increaseQuantity = async (productId) => {
+    try {
+      const product = cart.find(item => item.id === productId);
+      if (!product) return;
+      
+      await cartAPI.update(productId, product.quantity + 1);
+      await loadCart();
+    } catch (error) {
+      showNotification('Errore nell\'aggiornamento', 'error');
+    }
   };
 
   //todo: Funzione per filtrare e ordinare prodotti
   const getFilteredAndSortedProducts = () => {
     let filtered = [...products];
 
+    console.log('🔍 Filtri attivi:', filters);
+    console.log('📦 Prodotti totali:', products.length);
+
     // Filtro per ricerca
     if (searchValue) {
       filtered = filtered.filter(p => 
         p.name.toLowerCase().includes(searchValue.toLowerCase())
       );
+      console.log('🔎 Dopo ricerca:', filtered.length);
     }
 
     // Filtro per prezzo
     if (filters.priceRange) {
-      filtered = filtered.filter(p => 
-        p.price <= filters.priceRange.current
-      );
+      filtered = filtered.filter(p => {
+        const price = parseFloat(p.price) || 0;
+        return price <= filters.priceRange.current;
+      });
+      console.log('💰 Dopo filtro prezzo (<=' + filters.priceRange.current + '):', filtered.length);
     }
 
     // Filtro per categorie
@@ -220,15 +245,46 @@ const Shop = () => {
       filtered = filtered.filter(p => 
         filters.categories.includes(p.category)
       );
+      console.log('📂 Dopo filtro categorie:', filtered.length);
     }
+
+    // Filtro per contenuti maggiorenni (+18)
+    if (filters.matureContent) {
+      console.log('🔞 Filtro maggiorenni attivo');
+      filtered = filtered.filter(p => {
+        const minAge = parseInt(p.min_age) || 0;
+        return minAge >= 18;
+      });
+      console.log('🔞 Dopo filtro maggiorenni:', filtered.length);
+    }
+
+    // Filtro per prodotti in promozione (scontati)
+    if (filters.onSale) {
+      console.log('🏷️ Filtro scontati attivo');
+      filtered = filtered.filter(p => {
+        const discount = parseFloat(p.discount) || 0;
+        return discount > 0;
+      });
+      console.log('🏷️ Dopo filtro scontati:', filtered.length);
+    }
+
+    console.log('✅ Prodotti finali:', filtered.length);
 
     // Ordinamento
     switch(sortValue) {
       case 'price-asc':
-        filtered.sort((a, b) => a.price - b.price);
+        filtered.sort((a, b) => {
+          const priceA = parseFloat(a.price) || 0;
+          const priceB = parseFloat(b.price) || 0;
+          return priceA - priceB;
+        });
         break;
       case 'price-desc':
-        filtered.sort((a, b) => b.price - a.price);
+        filtered.sort((a, b) => {
+          const priceA = parseFloat(a.price) || 0;
+          const priceB = parseFloat(b.price) || 0;
+          return priceB - priceA;
+        });
         break;
       case 'name-asc':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -380,44 +436,34 @@ const Shop = () => {
               />
             </div>
 
-            <div className={`products ${viewMode}`}>
-              {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
-                <div key={p.name} className="card fancy-card">
-                  
-                  <div className="card-image-wrapper">
-                    <img src={p.image} alt={p.name} className="card-image" />
-                  </div>
-
-                  <div className="card-body">
-                    <h3>{p.name}</h3>
-                    <p className="price">{p.price.toFixed(2)}€</p>
-                    {viewMode === "list" && (
-                      <div className="card-details">
-                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="card-actions">
-                    {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
-                    <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
-                      Dettagli
-                    </button>
-                    <button className="buy-btn" onClick={() => addToCart(p)}>
-                      {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pulsante per caricare altri prodotti */}
-            {visibleProducts < getFilteredAndSortedProducts().length && (
-              <div className="load-more-container">
-                <button className="load-more-btn" onClick={loadMoreProducts}>
-                  Carica altri 10 prodotti ({getFilteredAndSortedProducts().length - visibleProducts} rimanenti)
-                </button>
+            {loading ? (
+              <div className="loading-container">
+                <p>Caricamento prodotti...</p>
               </div>
+            ) : (
+              <>
+                <div className={`products products-${viewMode}`}>
+                  {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
+                    <ProductCard
+                      key={p.id || p.name}
+                      product={p}
+                      variant={viewMode === "grid" ? "grid" : "compact"}
+                      onViewDetails={(slug) => navigate(`/details/${slug}`)}
+                      onAddToCart={addToCart}
+                      showActions={true}
+                    />
+                  ))}
+                </div>
+
+                {/* Pulsante per caricare altri prodotti */}
+                {visibleProducts < getFilteredAndSortedProducts().length && (
+                  <div className="load-more-container">
+                    <button className="load-more-btn" onClick={loadMoreProducts}>
+                      Carica altri 10 prodotti ({getFilteredAndSortedProducts().length - visibleProducts} rimanenti)
+                    </button>
+                  </div>
+                )}
+              </>
             )}
 
           </div>
@@ -431,7 +477,10 @@ const Shop = () => {
             {/* todo: Banner spedizione gratuita */}
             {cart.length > 0 && (
               <FreeShippingBanner 
-                subtotal={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
+                subtotal={cart.reduce((sum, item) => {
+                  const price = parseFloat(item.price) || 0;
+                  return sum + (price * item.quantity);
+                }, 0)}
                 threshold={40}
                 promoApplied={promoApplied}
               />
@@ -447,25 +496,27 @@ const Shop = () => {
             ) : (
               //todo: Lista prodotti nel carrello
               <div className="cart-items">
-                {cart.map((item) => (
+                {cart.map((item) => {
+                  const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
+                  return (
                   <div key={item.id} className="cart-item">
                     <div className="item-info">
                       <span className="item-name">{item.name}</span>
-                      <span className="item-price">{item.price.toFixed(2)}€</span>
+                      <span className="item-price">{price.toFixed(2)}€</span>
                     </div>
                     
                     {/* todo: Controlli per cambiare la quantità */}
                     <div className="quantity-controls">
                       <button
                         className="quantity-btn"
-                        onClick={() => decreaseQuantity(item.name)}
+                        onClick={() => decreaseQuantity(item.id)}
                       >
                         -
                       </button>
                       <span className="quantity">{item.quantity}</span>
                       <button
                         className="quantity-btn"
-                        onClick={() => increaseQuantity(item.name)}
+                        onClick={() => increaseQuantity(item.id)}
                       >
                         +
                       </button>
@@ -474,22 +525,26 @@ const Shop = () => {
                     {/* todo: Mostra totale per prodotto e bottone per rimuovere */}
                     <div className="item-total">
                       <span className="total-price">
-                        {(item.price * item.quantity).toFixed(2)}€
+                        {(price * item.quantity).toFixed(2)}€
                       </span>
                       <button
                         className="remove-btn"
-                        onClick={() => removeFromCart(item.name)}
+                        onClick={() => removeFromCart(item.id)}
                       >
                         Rimuovi
                       </button>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
                 
                 {/* todo: Mostro totale del carrello */}
                 <div className="cart-total">
                   <strong>
-                    Totale Carretto: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
+                    Totale Carretto: {cart.reduce((sum, item) => {
+                      const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
+                      return sum + (price * item.quantity);
+                    }, 0).toFixed(2)}€
                   </strong>
                 </div>
               </div>
@@ -515,29 +570,32 @@ const Shop = () => {
                 <div className="checkout-items">
                   <h3 className="checkout-subtitle">Riepilogo Ordine:</h3>
                   
-                  {cart.map((item) => (
-                    <div key={item.id} className="checkout-item">
-                      <div className="checkout-item-info">
-                        <span className="checkout-item-name">{item.name}</span>
-                        <span className="checkout-item-details">
-                          {item.quantity} x {item.price.toFixed(2)}€
-                        </span>
+                  {cart.map((item) => {
+                    const price = parseFloat(item.price) || 0;
+                    return (
+                      <div key={item.id} className="checkout-item">
+                        <div className="checkout-item-info">
+                          <span className="checkout-item-name">{item.name}</span>
+                          <span className="checkout-item-details">
+                            {item.quantity} x {price.toFixed(2)}€
+                          </span>
+                        </div>
+                        
+                        <div className="checkout-item-actions">
+                          <span className="checkout-item-total">
+                            {(price * item.quantity).toFixed(2)}€
+                          </span>
+                          <button
+                            className="checkout-remove-btn"
+                            onClick={() => removeFromCart(item.name)}
+                            title="Rimuovi dal carretto"
+                          >
+                            ✕
+                          </button>
+                        </div>
                       </div>
-                      
-                      <div className="checkout-item-actions">
-                        <span className="checkout-item-total">
-                          {(item.price * item.quantity).toFixed(2)}€
-                        </span>
-                        <button
-                          className="checkout-remove-btn"
-                          onClick={() => removeFromCart(item.name)}
-                          title="Rimuovi dal carretto"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
 
                 {/* todo: Sezione per inserire il codice promozionale */}
@@ -576,7 +634,10 @@ const Shop = () => {
                   {/*todo: Calcoliamo i valori fuori dalla IIFE per usarli anche nelle azioni*/}
                   {(() => {
                     //todo: Calcoliamo il subtotale sommando prezzo × quantità di ogni prodotto
-                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const subtotal = cart.reduce((sum, item) => {
+                      const price = parseFloat(item.price) || 0;
+                      return sum + (price * item.quantity);
+                    }, 0);
                     //todo: Spese spedizione: 0€ se sopra 40€ O se promo applicata, altrimenti 4.99€
                     const isFreeShipping = subtotal >= 40 || promoApplied;
                     const shippingCost = isFreeShipping ? 0 : 4.99;
@@ -662,7 +723,10 @@ const Shop = () => {
       {/* todo: Overlay form checkout */}
       {/* todo: Passiamo 4 props al CheckoutForm: totalAmount (con spedizione), cartItems, shippingCost e isFreeShipping */}
       {showCheckoutForm && (() => {
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const subtotal = cart.reduce((sum, item) => {
+          const price = parseFloat(item.price) || 0;
+          return sum + (price * item.quantity);
+        }, 0);
         const isFreeShipping = subtotal >= 40 || promoApplied;
         const shippingCost = isFreeShipping ? 0 : 4.99;
         const totalAmount = subtotal + shippingCost;
