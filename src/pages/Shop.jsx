@@ -205,6 +205,22 @@ const Shop = () => {
   const loadMoreProducts = () => setVisibleProducts((prev) => prev + 10);
 
   // --------------------------------------------------
+  // 📦 CALCOLI CARRELLO (AGGIUNTI)
+  // --------------------------------------------------
+  const subtotal = cart.reduce(
+    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    0
+  );
+
+  const SHIPPING_THRESHOLD = 40;
+  const SHIPPING_COST = 4.99;
+
+  const isFreeShipping = subtotal >= SHIPPING_THRESHOLD;
+  const shippingCost = isFreeShipping ? 0 : SHIPPING_COST;
+
+  const totalAmount = subtotal + shippingCost;
+
+  // --------------------------------------------------
   // RENDER
   // --------------------------------------------------
   return (
@@ -360,10 +376,7 @@ const Shop = () => {
 
             {cart.length > 0 && (
               <FreeShippingBanner
-                subtotal={cart.reduce(
-                  (sum, item) => sum + parseFloat(item.price) * item.quantity,
-                  0
-                )}
+                subtotal={subtotal}
                 threshold={40}
                 promoApplied={false}
               />
@@ -412,16 +425,7 @@ const Shop = () => {
 
                 <div className="cart-total">
                   <strong>
-                    Totale Carrello:{" "}
-                    {cart
-                      .reduce(
-                        (sum, item) =>
-                          sum +
-                          parseFloat(item.price) * item.quantity,
-                        0
-                      )
-                      .toFixed(2)}
-                    €
+                    Totale Carrello: {subtotal.toFixed(2)}€
                   </strong>
                 </div>
               </div>
@@ -448,16 +452,37 @@ const Shop = () => {
                   const price = parseFloat(item.price);
                   return (
                     <div key={item.id} className="checkout-item">
-                      <div>{item.name}</div>
                       <div>
-                        {item.quantity} pz
+                        {item.name} <strong className="qt">{item.quantity} pz</strong>
                       </div>
-                      <div>
-                        {(price * item.quantity).toFixed(2)}€
-                      </div>
+                      <div>{(price * item.quantity).toFixed(2)}€</div>
                     </div>
                   );
                 })}
+
+                {/* Subtotale */}
+                <div className="checkout-item" style={{ justifyContent: "space-between" }}>
+                  <strong className="sub">Subtotale</strong>
+                  <strong>{subtotal.toFixed(2)}€</strong>
+                </div>
+
+                {/* Spedizione */}
+                <div className="checkout-item" style={{ justifyContent: "space-between" }}>
+                  <strong className="sub">Spedizione</strong>
+                  {isFreeShipping ? (
+                    <span style={{ color: "#4ade80", fontWeight: "bold" }}>GRATIS</span>
+                  ) : (
+                    <strong>{shippingCost.toFixed(2)}€</strong>
+                  )}
+                </div>
+
+                {/* Totale */}
+                <div className="checkout-item" style={{ justifyContent: "space-between", borderTop: "2px solid var(--gold)" }}>
+                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>Totale</strong>
+                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>
+                    {totalAmount.toFixed(2)}€
+                  </strong>
+                </div>
 
                 <div className="checkout-actions">
                   <button
@@ -477,6 +502,9 @@ const Shop = () => {
         <CheckoutForm
           onClose={() => setShowCheckoutForm(false)}
           cartItems={cart}
+          totalAmount={totalAmount}
+          shippingCost={shippingCost}
+          isFreeShipping={isFreeShipping}
         />
       )}
     </div>

@@ -501,14 +501,10 @@ ease;
 
 /* todo: Singolo item nel riepilogo checkout */
 .checkout-item {
-  background: #1c1a24;
-  padding: 15px 20px;
-  border: 1px solid var(--purple);
-  border-radius: 8px;
+  padding: 15px 20px 15px 0;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 /* todo: Sezione info prodotto nel checkout (nome e dettagli) */
@@ -571,22 +567,19 @@ ease;
 /* todo: Sezione riepilogo finale con totale e pulsanti */
 .checkout-summary {
   width: 100%;
-  margin-top: 30px;
   padding: 25px 30px;
-
   background: linear-gradient(145deg, #1c1a24, #17151d);
-  border-radius: 16px;
-
   border: 2px solid rgba(216, 169, 40, 0.25);
-  box-shadow:
-    0 0 15px rgba(108, 33, 255, 0.25),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-
   display: flex;
   flex-direction: column;
-  gap: 20px;
 
   animation: fadeSummary 0.35s ease-out;
+}
+
+.checkout-summary h3{
+  color: var(--gold);
+  font-size: 24px;
+  margin-bottom: 15px;
 }
 
 @keyframes fadeSummary {
@@ -727,7 +720,7 @@ ease;
 .checkout-actions {
   display: flex;
   gap: 15px;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -919,4 +912,13 @@ ease;
 /* todo: Colore di sfondo generale della pagina */
 body {
   background-color: #141218;
+}
+
+.qt{
+  color: var(--gold);
+  margin-left: 20px;
+}
+
+.sub{
+  color: var(--gold);
 }
