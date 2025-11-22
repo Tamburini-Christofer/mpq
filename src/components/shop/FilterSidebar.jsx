@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
 const DEFAULT_FILTERS = {
-  priceRange: { min: 0, max: 100, current: 100 },
+  priceRange: { min: 0, max: 200 },
   categories: [],
   matureContent: false,
   accessibility: false,
@@ -21,14 +21,12 @@ export default function FilterSidebar({
     ...initialFilters
   });
 
-  /** 🔄 Ogni volta che i filtri cambiano → aggiorna il parent */
+  /** 🔄 Ogni volta che i filtri cambiano → aggiorna Shop */
   useEffect(() => {
-    if (onFiltersChange) {
-      onFiltersChange(filters, false);
-    }
+    onFiltersChange && onFiltersChange(filters);
   }, [filters]);
 
-  /** 🔍 Ricerca */
+  /** 🔍 SEARCH */
   const handleSearchChange = (e) => {
     onSearchChange(e.target.value);
   };
@@ -55,15 +53,26 @@ export default function FilterSidebar({
     });
   };
 
-  /** Applica filtri */
-  const handleApplyFilters = () => {
-    if (onFiltersChange) onFiltersChange(filters, true);
+  /** MIN */
+  const handleMinPrice = (val) => {
+    setFilters(prev => ({
+      ...prev,
+      priceRange: {
+        ...prev.priceRange,
+        min: val
+      }
+    }));
   };
 
-  /** Reset filtri */
-  const handleResetFilters = () => {
-    setFilters(DEFAULT_FILTERS);
-    if (onFiltersChange) onFiltersChange(DEFAULT_FILTERS, true);
+  /** MAX */
+  const handleMaxPrice = (val) => {
+    setFilters(prev => ({
+      ...prev,
+      priceRange: {
+        ...prev.priceRange,
+        max: val
+      }
+    }));
   };
 
   return (
@@ -93,89 +102,61 @@ export default function FilterSidebar({
         <div className="filter-option">
           <input
             type="checkbox"
-            id="cat-series"
             name="categories"
             value="series"
             checked={filters.categories.includes('series')}
             onChange={handleFilterChange}
           />
-          <label htmlFor="cat-series">Serie TV</label>
+          <label>Serie TV</label>
         </div>
 
         <div className="filter-option">
           <input
             type="checkbox"
-            id="cat-anime"
             name="categories"
             value="anime"
             checked={filters.categories.includes('anime')}
             onChange={handleFilterChange}
           />
-          <label htmlFor="cat-anime">Anime</label>
+          <label>Anime</label>
         </div>
 
         <div className="filter-option">
           <input
             type="checkbox"
-            id="cat-film"
             name="categories"
             value="film"
             checked={filters.categories.includes('film')}
             onChange={handleFilterChange}
           />
-          <label htmlFor="cat-film">Film</label>
+          <label>Film</label>
         </div>
       </div>
 
-      {/* 💰 FILTRO PREZZO MIN – MAX */}
+      {/* 💰 PREZZO MIN–MAX */}
       <div className="filter-group">
         <h4>Prezzo</h4>
 
         <div className="price-inputs">
 
-          {/* MIN PRICE */}
           <div className="price-input-wrapper">
-            <label htmlFor="price-min">Min</label>
+            <label>Min</label>
             <input
               type="number"
-              id="price-min"
-              name="priceMin"
-              min="0"
               value={filters.priceRange.min}
-              onChange={(e) => {
-                const value = parseFloat(e.target.value) || 0;
-                setFilters(prev => ({
-                  ...prev,
-                  priceRange: {
-                    ...prev.priceRange,
-                    min: value
-                  }
-                }));
-              }}
+              min="0"
+              onChange={(e) => handleMinPrice(parseFloat(e.target.value) || 0)}
               className="price-number-input"
             />
           </div>
 
-          {/* MAX PRICE */}
           <div className="price-input-wrapper">
-            <label htmlFor="price-max">Max</label>
+            <label>Max</label>
             <input
               type="number"
-              id="price-max"
-              name="priceMax"
-              min="0"
               value={filters.priceRange.max}
-              onChange={(e) => {
-                const value = parseFloat(e.target.value) || 0;
-                setFilters(prev => ({
-                  ...prev,
-                  priceRange: {
-                    ...prev.priceRange,
-                    max: value,
-                    current: value
-                  }
-                }));
-              }}
+              min={filters.priceRange.min}
+              onChange={(e) => handleMaxPrice(parseFloat(e.target.value) || 0)}
               className="price-number-input"
             />
           </div>
@@ -190,44 +171,33 @@ export default function FilterSidebar({
         <div className="filter-option">
           <input
             type="checkbox"
-            id="on-sale"
             name="onSale"
             checked={filters.onSale}
             onChange={handleFilterChange}
           />
-          <label htmlFor="on-sale">Prodotti in Promozione</label>
+          <label>Prodotti in Promozione</label>
         </div>
 
         <div className="filter-option">
           <input
             type="checkbox"
-            id="mature-content"
             name="matureContent"
             checked={filters.matureContent}
             onChange={handleFilterChange}
           />
-          <label htmlFor="mature-content">Contenuti +18</label>
+          <label>Contenuti +18</label>
         </div>
 
         <div className="filter-option">
           <input
             type="checkbox"
-            id="accessibility"
             name="accessibility"
             checked={filters.accessibility}
             onChange={handleFilterChange}
           />
-          <label htmlFor="accessibility">Contenuti accessibili</label>
+          <label>Contenuti accessibili</label>
         </div>
       </div>
-
-      <button className="apply-filters-btn" onClick={handleApplyFilters}>
-        APPLICA FILTRI
-      </button>
-
-      <button className="apply-filters-btn reset-filters-btn" onClick={handleResetFilters}>
-        AZZERA FILTRI
-      </button>
 
     </aside>
   );
