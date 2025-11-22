@@ -98,12 +98,12 @@
     font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.2s, transform 0.2s;
-    color: #fff;
+    color: #ff0303;
     display: inline-block;
 }
 
 .wishlist-icon:hover {
-    color: #ef4444;
+    color: #C8923A;
     transform: scale(1.3);
 }
 
@@ -112,7 +112,7 @@
     position: absolute;
     top: -8px;
     right: -10px;
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: linear-gradient(135deg, #ff0000 0%, #dc2626 100%);
     color: white;
     font-size: 0.7rem;
     font-weight: bold;
