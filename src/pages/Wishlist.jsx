@@ -151,7 +151,7 @@ function Wishlist() {
                 className="btn-move-all"
                 onClick={handleMoveAllToCart}
               >
-                Aggiungi TUTTO al Carretto 🛒
+                Aggiungi tutto al Carretto
               </button>
 
             </div>

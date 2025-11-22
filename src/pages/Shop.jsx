@@ -389,11 +389,11 @@ const Shop = () => {
                       </div>
 
                       <div className="quantity-controls">
-                        <button onClick={() => decreaseQuantity(item.id)}>
+                        <button className="quantity-btn-c" onClick={() => decreaseQuantity(item.id)}>
                           -
                         </button>
                         <span>{item.quantity}</span>
-                        <button onClick={() => increaseQuantity(item.id)}>
+                        <button className="quantity-btn-c" onClick={() => increaseQuantity(item.id)}>
                           +
                         </button>
                       </div>
@@ -402,7 +402,7 @@ const Shop = () => {
                         <span className="total-price">
                           {(price * item.quantity).toFixed(2)}€
                         </span>
-                        <button onClick={() => removeFromCart(item.id)}>
+                        <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
                           Rimuovi
                         </button>
                       </div>
@@ -450,7 +450,7 @@ const Shop = () => {
                     <div key={item.id} className="checkout-item">
                       <div>{item.name}</div>
                       <div>
-                        {item.quantity} × {price.toFixed(2)}€
+                        {item.quantity} pz
                       </div>
                       <div>
                         {(price * item.quantity).toFixed(2)}€

@@ -208,6 +208,8 @@
   margin-left: 280px;
 }
 
+
+
 /* todo: Titoli delle sezioni principali (Carrello, Checkout) */
 .section-title-shop  {
   font-size: 28px;
@@ -314,25 +316,34 @@
   margin-bottom: 10px;
 }
 
-/* todo: Container lista prodotti nel carrello */
-.cart-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* todo: Singolo item nel carrello con layout orizzontale */
 .cart-item {
-  background: #1c1a24;
-  padding: 20px;
-  border: 1px solid var(--gold);
-  border-radius: 8px;
+  background: linear-gradient(145deg, #1c1a24, #17151d);
+  padding: 22px 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(216, 169, 40, 0.25);
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
+  gap: 22px;
+  margin: 10px 0;
+
+  /* Glow elegante */
+  box-shadow:
+    0 0 12px rgba(108, 33, 255, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  transition: 0.25s ease;
 }
 
+/* Hover ancora più premium */
+.cart-item:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 18px rgba(108, 33, 255, 0.45),
+    0 0 8px rgba(216, 169, 40, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
 /* todo: Sezione informazioni prodotto (nome e prezzo) */
 .item-info {
   display: flex;
@@ -360,18 +371,45 @@
   gap: 10px;
 }
 
+
+
 /* todo: Pulsanti + e - per modificare la quantità */
 .quantity-btn {
-  background: var(--purple);
-  border: none;
-  color: var(--light);
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: 0.2s;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #6d28d9, #7c3aed);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s 
+ease, box-shadow 0.15s 
+ease;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+}
+
+.quantity-btn-c{
+      width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #6d28d9, #7c3aed);
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s 
+ease, box-shadow 0.15s 
+ease;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
 }
 
 /* todo: Effetto hover sui pulsanti quantità */
@@ -532,11 +570,34 @@
 
 /* todo: Sezione riepilogo finale con totale e pulsanti */
 .checkout-summary {
-  border-top: 2px solid var(--gold);
-  padding-top: 20px;
+  width: 100%;
+  margin-top: 30px;
+  padding: 25px 30px;
+
+  background: linear-gradient(145deg, #1c1a24, #17151d);
+  border-radius: 16px;
+
+  border: 2px solid rgba(216, 169, 40, 0.25);
+  box-shadow:
+    0 0 15px rgba(108, 33, 255, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
   display: flex;
   flex-direction: column;
-  align-items: end;
+  gap: 20px;
+
+  animation: fadeSummary 0.35s ease-out;
+}
+
+@keyframes fadeSummary {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* todo: Sezione codice promozionale */
