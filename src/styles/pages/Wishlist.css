@@ -333,3 +333,27 @@
     font-size: 1.5rem;
   }
 }
+
+
+.wishlist-header-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-move-all {
+  padding: 10px 18px;
+  background: #442580;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-move-all:hover {
+  background: #5b33b0;
+  transform: translateY(-1px);
+}

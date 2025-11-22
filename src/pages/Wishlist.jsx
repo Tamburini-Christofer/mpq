@@ -2,22 +2,21 @@ import "../styles/pages/Wishlist.css"
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import ProductCard from "../components/common/ProductCard"
+import { cartAPI, emitCartUpdate } from "../services/api"
 
 function Wishlist() {
   const navigate = useNavigate()
   const [wishlistItems, setWishlistItems] = useState([])
   const [notification, setNotification] = useState(null)
 
-  //todo Funzione per caricare wishlist da localStorage
+  // Carica wishlist
   const loadWishlist = () => {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]')
     setWishlistItems(wishlist)
   }
 
-  //todo Carica wishlist da localStorage al mount
   useEffect(() => {
     loadWishlist()
-    //todo Listener per sincronizzare wishlist tra tab
     window.addEventListener('storage', loadWishlist)
     window.addEventListener('wishlistUpdate', loadWishlist)
     
@@ -27,70 +26,85 @@ function Wishlist() {
     }
   }, [])
 
-  //todo Mostra notifica temporanea
+  // Notifiche
   const showNotification = (message, type = 'success') => {
     setNotification({ message, type })
-    setTimeout(() => {
-      setNotification(null)
-    }, 3000)
+    setTimeout(() => setNotification(null), 3000)
   }
 
-  //todo Naviga ai dettagli del prodotto
+  // Navigazione ai dettagli del prodotto
   const handleViewDetails = (slug) => {
     navigate(`/details/${slug}`)
   }
 
-  //todo Rimuove prodotto dalla wishlist
+  // Rimuovi singolo dalla wishlist
   const handleRemoveFromWishlist = (product) => {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]')
-    const updatedWishlist = wishlist.filter(item => item.name !== product.name)
+    const updatedWishlist = wishlist.filter(item => item.id !== product.id)
     
     localStorage.setItem('wishlist', JSON.stringify(updatedWishlist))
     setWishlistItems(updatedWishlist)
-    
-    //todo Trigger evento per sincronizzare altre pagine
+
     window.dispatchEvent(new Event('wishlistUpdate'))
     
     showNotification(`"${product.name}" rimosso dalla wishlist`)
   }
 
-  //todo Aggiunge prodotto al carrello dalla wishlist
-  const handleAddToCart = (product) => {
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]')
-    const existingItem = cart.find(item => item.name === product.name)
-    
-    if (existingItem) {
-      existingItem.quantity += 1
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`)
-    } else {
-      cart.push({ ...product, quantity: 1 })
+  // Aggiunge singolo al carretto tramite API
+  const handleAddToCart = async (product) => {
+    try {
+      await cartAPI.add(product.id, 1)
+      emitCartUpdate()
       showNotification(`"${product.name}" aggiunto al carretto!`)
+    } catch (error) {
+      showNotification("Errore nell'aggiunta al carretto", "error")
+      console.error(error)
     }
-    
-    localStorage.setItem('cart', JSON.stringify(cart))
-    window.dispatchEvent(new Event('cartUpdate'))
-    window.dispatchEvent(new Event('storage'))
   }
 
-  //todo Svuota tutta la wishlist
+  // Svuota wishlist
   const handleClearWishlist = () => {
     if (window.confirm('Vuoi davvero svuotare la wishlist?')) {
       localStorage.setItem('wishlist', JSON.stringify([]))
       setWishlistItems([])
       window.dispatchEvent(new Event('wishlistUpdate'))
-      showNotification('Wishlist svuotata', 'success')
+      showNotification('Wishlist svuotata')
     }
   }
 
-  //todo Calcola prezzo totale wishlist
+  // 👉 Aggiungi TUTTA la wishlist al carretto tramite API
+  const handleMoveAllToCart = async () => {
+    if (wishlistItems.length === 0) return
+
+    try {
+      for (const product of wishlistItems) {
+        await cartAPI.add(product.id, 1)
+      }
+
+      // svuota wishlist
+      localStorage.setItem('wishlist', JSON.stringify([]))
+      setWishlistItems([])
+
+      emitCartUpdate()
+      window.dispatchEvent(new Event('wishlistUpdate'))
+
+      showNotification("Tutti i prodotti sono stati aggiunti al carretto!")
+
+    } catch (error) {
+      console.error("Errore aggiunta multipla:", error)
+      showNotification("Errore durante l'aggiunta dei prodotti", "error")
+    }
+  }
+
+  // Totale
   const totalWishlistValue = wishlistItems.reduce((sum, item) => {
-    const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
-    return sum + (price || 0);
-  }, 0);
+    const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price
+    return sum + (price || 0)
+  }, 0)
 
   return (
     <>
-      {/* todo: Notifica */}
+      {/* Notifica */}
       {notification && (
         <div className={`notification ${notification.type}`}>
           <div className="notification-content">
@@ -109,11 +123,11 @@ function Wishlist() {
       )}
 
       <div className="wishlist-page">
+        
+        {/* HEADER */}
         <div className="wishlist-header">
           <div className="wishlist-header-content">
-            <h1 className="wishlist-title">
-              ❤️ La Mia Wishlist
-            </h1>
+            <h1 className="wishlist-title">❤️ La Mia Wishlist</h1>
             <p className="wishlist-subtitle">
               {wishlistItems.length === 0 
                 ? 'La tua lista dei desideri è vuota'
@@ -121,23 +135,30 @@ function Wishlist() {
               }
             </p>
           </div>
-          
+
+          {/* BOTTONI HEADER */}
           {wishlistItems.length > 0 && (
-            <div className="wishlist-header-actions">
-              <div className="wishlist-total">
-                <span className="wishlist-total-label">Valore totale:</span>
-                <span className="wishlist-total-amount">{totalWishlistValue.toFixed(2)}€</span>
-              </div>
+            <div className="wishlist-header-buttons">
+              
               <button 
                 className="btn-clear-wishlist"
                 onClick={handleClearWishlist}
               >
                 Svuota Wishlist
               </button>
+
+              <button 
+                className="btn-move-all"
+                onClick={handleMoveAllToCart}
+              >
+                Aggiungi TUTTO al Carretto 🛒
+              </button>
+
             </div>
           )}
         </div>
 
+        {/* LISTA WISHLIST */}
         {wishlistItems.length === 0 ? (
           <div className="wishlist-empty">
             <div className="wishlist-empty-icon">💔</div>
@@ -156,23 +177,26 @@ function Wishlist() {
           <div className="wishlist-grid">
             {wishlistItems.map((product, index) => (
               <div key={index} className="wishlist-item">
+                
                 <button 
                   className="wishlist-item-remove"
                   onClick={() => handleRemoveFromWishlist(product)}
-                  title="Rimuovi dalla wishlist"
                 >
                   ✕
                 </button>
+
                 <ProductCard
                   product={product}
                   variant="grid"
                   onViewDetails={(slug) => handleViewDetails(slug)}
                   onAddToCart={() => handleAddToCart(product)}
                 />
+
               </div>
             ))}
           </div>
         )}
+
       </div>
     </>
   )
