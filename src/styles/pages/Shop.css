@@ -227,8 +227,7 @@
 
 /* todo: Card dello Shop - dimensioni originali */
 .products .product-card {
-  width: 280px;
-  max-width: 280px;
+  max-width: 400px
 }
 
 .products .product-card__image {
@@ -805,7 +804,7 @@ ease;
   gap: 10px;
   margin-bottom: 20px;
   justify-content: flex-end;
-  align-items: center;
+  align-items: flex-end
   flex-wrap: wrap;
   z-index: 100;
   padding: 15px 20px;

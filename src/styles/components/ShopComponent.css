@@ -237,9 +237,9 @@ body {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  align-items: center;
   flex: 1;
   max-width: 800px;
+  justify-content: flex-end;
 }
 
 /* SEARCH WRAPPER */
