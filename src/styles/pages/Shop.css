@@ -157,8 +157,6 @@
   position: fixed;
   left: 0;
   top: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;

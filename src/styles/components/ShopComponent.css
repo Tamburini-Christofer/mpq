@@ -47,7 +47,7 @@ body {
 }
 
 .filter-group {
-  margin-bottom: 1.8rem;
+  margin-bottom: 1.3rem;
 }
 
 .filter-group h4 {
@@ -92,8 +92,58 @@ body {
   color: #ffffff;
 }
 
-/* STILE SLIDER PREZZO */
+/* ---------------------------- */
+/* 💰 STILE INPUT MIN – MAX     */
+/* ---------------------------- */
 
+.price-inputs {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.price-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+.price-input-wrapper label {
+  font-size: 0.8rem;
+  color: #D8A928;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.price-number-input {
+  padding: 0.6rem 0.8rem;
+  background: rgba(42, 42, 64, 0.75);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  transition: all 0.25s ease;
+  width: 100px;
+}
+
+.price-number-input:focus {
+  outline: none;
+  border-color: #D8A928;
+  box-shadow: 0 0 0 2px rgba(216, 169, 40, 0.2);
+  background: rgba(42, 42, 64, 0.9);
+}
+
+.price-number-input:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+}
+
+/* ---------------------------- */
+
+
+/* SLIDER — (non usato ma lasciato compatibile) */
 .price-slider-container {
   margin-bottom: 1rem;
 }
@@ -113,7 +163,6 @@ body {
   cursor: pointer;
 }
 
-/* Webkit browsers (Chrome, Safari) - Thumb nero */
 .price-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -123,10 +172,8 @@ body {
   background: #000000;
   border: 2px solid #D8A928;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Firefox - Thumb nero */
 .price-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
@@ -134,9 +181,8 @@ body {
   background: #000000;
   border: 2px solid #D8A928;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  border: none;
 }
+
 
 /* STILE ETICHETTE PREZZO */
 .price-labels {
@@ -147,10 +193,6 @@ body {
   margin-top: 0.3rem;
 }
 
-.price-label {
-  font-size: 0.8rem;
-  color: #888;
-}
 
 /* APPLY FILTERS BUTTON */
 .apply-filters-btn {
@@ -184,9 +226,11 @@ body {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
+
 .results-content {
   flex-grow: 1;
 }
+
 
 /* SEARCH AND SORT BAR */
 .search-sort-bar {
@@ -233,14 +277,15 @@ body {
 /* Search Icon */
 .search-icon {
   position: absolute;
-  left: 0.8rem;
-  top: 50%;
+  left: 2.1rem;
+  top: 13%;
   transform: translateY(-50%);
   width: 18px;
   height: 18px;
   color: #D8A928;
   z-index: 1;
 }
+
 
 /* SORT WRAPPER */
 .sort-wrapper {
@@ -326,6 +371,7 @@ body {
   color: #000000;
 }
 
+
 /* RESULTS GRID */
 .results-grid {
   display: flex;
@@ -333,7 +379,8 @@ body {
   margin-top: 1rem;
 }
 
-/* Responsive adjustments */
+
+/* Responsive */
 @media (max-width: 768px) {
   .search-wrapper {
     max-width: none;
