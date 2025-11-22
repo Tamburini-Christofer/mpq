@@ -61,7 +61,7 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
           onClick={handlePayClick}
           disabled={loading}
         >
-          {loading ? 'Reindirizzamento a Stripe...' : `Paga ${totalAmount.toFixed(2)}€`}
+          {loading ? 'Reindirizzamento a Stripe...' : `Procedi al pagamento`}
         </button>
       </div>
     </>

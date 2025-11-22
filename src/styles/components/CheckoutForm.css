@@ -1,500 +1,298 @@
 /* ========================================
-   VARIABILI GLOBALI
+   VARIABILI GLOBALI MIGLIORATE
    ======================================== */
 :root {
-  --checkout-purple: #6c21ff;
-  --checkout-gold: #d8a928;
+  --checkout-purple: #7a33ff;
+  --checkout-purple-glow: rgba(122, 51, 255, 0.6);
+  --checkout-gold: #e7c46c;
+  --checkout-gold-light: #f8d98c;
   --checkout-dark: #141218;
   --checkout-light: #ffffff;
-  --checkout-gray: #8e8e93;
-  --checkout-card-bg: #1c1a24;
-  --checkout-input-bg: #2a2636;
+  --checkout-gray: #9d9da3;
+  --checkout-card-bg: #1b1822;
+  --checkout-card-bg-light: #221f2b;
+  --checkout-input-bg: #2d2a36;
 }
 
 /* ========================================
-   OVERLAY E ANIMAZIONI
+   OVERLAY & ANIMAZIONI
    ======================================== */
-
-/* Overlay scuro di sfondo */
 .checkout-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(20, 18, 24, 0.95);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  inset: 0;
+  background: rgba(10, 8, 12, 0.85);
+  backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 40px 20px;
   z-index: 10000;
-  padding: 20px;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.25s ease;
   overflow-y: auto;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* ========================================
    CONTAINER PRINCIPALE
    ======================================== */
-
-/* Container del form di checkout */
 .checkout-form-container {
   background: var(--checkout-card-bg);
-  border-radius: 20px;
+  border-radius: 22px;
   width: 100%;
   max-width: 900px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(216, 169, 40, 0.2);
-  border: 2px solid transparent;
-  background-clip: padding-box;
-  position: relative;
-  animation: slideUp 0.4s ease;
+  overflow: hidden;
+  box-shadow:
+    0 0 25px rgba(122, 51, 255, 0.25),
+    0 0 80px rgba(231, 196, 108, 0.15),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  animation: slideUp 0.35s ease;
 }
 
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========================================
-   HEADER DEL FORM
+   HEADER
    ======================================== */
-
-/* Header con titolo e pulsante chiudi */
 .checkout-form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 40px 20px;
-  border-bottom: 2px solid rgba(216, 169, 40, 0.2);
-  position: sticky;
-  top: 0;
-  background: var(--checkout-card-bg);
-  z-index: 10;
+  padding: 28px 38px 20px;
+  background: var(--checkout-card-bg-light);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Titolo del form con gradiente */
 .checkout-form-title {
-  color: var(--checkout-light);
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 30px;
   font-family: "Cinzel", serif;
-  background: linear-gradient(135deg, var(--checkout-light), var(--checkout-gold));
+  background: linear-gradient(135deg, var(--checkout-light), var(--checkout-gold-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0;
+  font-weight: 800;
+  margin-bottom: 10px;
 }
 
-/* Pulsante chiudi */
 .close-btn {
-  background: transparent;
-  border: 2px solid var(--checkout-gray);
-  color: var(--checkout-gray);
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  color: var(--checkout-gray);
+  font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
+  transition: 0.25s;
 }
 
 .close-btn:hover {
   border-color: var(--checkout-gold);
   color: var(--checkout-gold);
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.08);
 }
 
 /* ========================================
-   FORM E SEZIONI
+   FORM
    ======================================== */
-
-/* Form principale */
 .checkout-form {
-  padding: 30px 40px 40px;
+  padding: 35px 40px 45px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 35px;
 }
 
-/* Sezione del form */
 .form-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  background: rgba(255, 255, 255, 0.02);
+  padding: 22px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* Titolo sezione */
 .section-title-form {
-  color: var(--checkout-gold);
-  font-size: 20px;
-  font-weight: 600;
+  color: var(--checkout-gold-light);
+  font-size: 19px;
+  font-weight: 700;
   font-family: "Cinzel", serif;
-  margin: 0;
-  padding-bottom: 10px;
-  border-bottom: 1px solid rgba(216, 169, 40, 0.3);
+  margin-bottom: 15px;
 }
 
 /* ========================================
-   INPUT E CAMPI FORM
+   INPUTS
    ======================================== */
-
-/* Riga del form per layout affiancato */
 .form-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
 }
 
-/* Gruppo input */
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
-/* Label degli input */
 .input-label {
   color: var(--checkout-light);
   font-size: 14px;
-  font-weight: 500;
-  margin-left: 4px;
+  opacity: 0.85;
+  margin: 20px 0;
 }
 
-/* Input di testo */
 .checkout-input,
 .checkout-textarea {
   background: var(--checkout-input-bg);
   border: 2px solid transparent;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 14px 18px;
   color: var(--checkout-light);
   font-size: 16px;
-  font-family: "Inter", sans-serif;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-.checkout-input::placeholder,
-.checkout-textarea::placeholder {
-  color: var(--checkout-gray);
-  opacity: 0.7;
+  transition: 0.25s ease;
 }
 
 .checkout-input:focus,
 .checkout-textarea:focus {
   border-color: var(--checkout-purple);
-  box-shadow: 
-    0 0 0 3px rgba(108, 33, 255, 0.1),
-    0 8px 20px rgba(108, 33, 255, 0.15);
-  transform: translateY(-2px);
-}
-
-/* Textarea specifico */
-.checkout-textarea {
-  min-height: 80px;
-  resize: vertical;
-  line-height: 1.6;
+  box-shadow: 0 0 10px var(--checkout-purple-glow);
 }
 
 /* ========================================
    CHECKBOX
    ======================================== */
-
-/* Gruppo checkbox */
 .checkbox-group {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 15px;
-  background: rgba(216, 169, 40, 0.05);
+  background: rgba(231, 196, 108, 0.06);
+  border: 1px solid rgba(231, 196, 108, 0.2);
+  padding: 14px 18px;
   border-radius: 12px;
-  border: 1px solid rgba(216, 169, 40, 0.2);
-}
-
-.checkbox-group input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  accent-color: var(--checkout-gold);
 }
 
 .checkbox-group label {
   color: var(--checkout-light);
   font-size: 15px;
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 /* ========================================
    RIEPILOGO ORDINE
    ======================================== */
-
-/* Container riepilogo */
 .order-summary {
-  background: rgba(108, 33, 255, 0.05);
-  border: 2px solid rgba(108, 33, 255, 0.2);
-  border-radius: 12px;
-  padding: 20px;
+  background: rgba(122, 51, 255, 0.08);
+  border: 1px solid rgba(122, 51, 255, 0.25);
+  border-radius: 16px;
+  padding: 22px;
 }
 
-.summary-details {
+.summary-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 15px;
+  gap: 16px;
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  padding-bottom: 6px;
+}
+
+.summary-product-name {
+  font-weight: 600;
   color: var(--checkout-light);
-  font-size: 16px;
+}
+
+.summary-product-qty {
+  font-size: 14px;
+  color: var(--checkout-gold-light);
+  margin-left: 10px;
 }
 
 .summary-value {
-  font-weight: 600;
-  color: var(--checkout-gold);
+  font-weight: 700;
 }
 
-/* Riga subtotale */
-.subtotal-row {
-  padding-top: 8px;
-  border-top: 1px solid rgba(216, 169, 40, 0.2);
-  margin-top: 8px;
+.summary-subtotal,
+.summary-shipping {
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
 }
 
-/* Riga spese di spedizione */
-.shipping-row {
-  padding-bottom: 8px;
-}
-
-.total-row {
+/* Totale */
+.summary-total {
+  border-top: 2px solid var(--checkout-gold);
+  margin-top: 10px;
   padding-top: 12px;
-  border-top: 2px solid rgba(216, 169, 40, 0.3);
-  margin-top: 8px;
 }
 
 .total-label {
   font-size: 20px;
-  font-weight: 700;
-  font-family: "Cinzel", serif;
-  color: var(--checkout-gold);
+  color: var(--checkout-gold-light);
 }
 
 .total-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--checkout-gold);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--checkout-gold-light);
 }
 
 /* ========================================
-   PULSANTI AZIONE
+   BOTTONI AZIONE
    ======================================== */
-
-/* Container pulsanti */
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  flex-direction: column;
   gap: 15px;
   padding-top: 20px;
-  border-top: 2px solid rgba(216, 169, 40, 0.2);
 }
 
-.buttons-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 15px;
-}
-
-/* Stili base pulsanti */
-.cancel-btn,
-.payment-btn {
-  padding: 16px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Cinzel", serif;
-  border: none;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Pulsante annulla */
-.cancel-btn {
+.secondary-btn {
   background: transparent;
   border: 2px solid var(--checkout-gray);
   color: var(--checkout-gray);
+  padding: 14px 26px;
+  border-radius: 12px;
+  transition: 0.25s;
 }
 
-.cancel-btn:hover {
+.secondary-btn:hover {
   border-color: var(--checkout-light);
   color: var(--checkout-light);
   transform: translateY(-2px);
 }
 
-/* Pulsante pagamento */
 .payment-btn {
-  background: linear-gradient(135deg, var(--checkout-purple), #8c4dff);
-  color: var(--checkout-light);
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+  background: linear-gradient(135deg, var(--checkout-purple), #9b6aff);
+  color: white;
+  padding: 16px 30px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-family: "Cinzel", serif;
+  box-shadow: 0 8px 25px rgba(122, 51, 255, 0.4);
+  transition: 0.25s;
 }
 
 .payment-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
-}
-
-.payment-btn:active,
-.cancel-btn:active {
-  transform: translateY(-1px);
-}
-
-/* Icona nel pulsante pagamento */
-.payment-btn img {
-  max-width: 50px;
-  height: auto;
+  box-shadow: 0 12px 35px rgba(122, 51, 255, 0.55);
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
+   SCROLLBAR
    ======================================== */
-
-/* Tablet (max 768px) */
-@media (max-width: 768px) {
-  .checkout-form-container {
-    max-width: 100%;
-    border-radius: 15px;
-    max-height: 95vh;
-  }
-  
-  .checkout-form-header {
-    padding: 20px 25px 15px;
-  }
-  
-  .checkout-form-title {
-    font-size: 24px;
-  }
-  
-  .checkout-form {
-    padding: 20px 25px 30px;
-  }
-  
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .form-actions {
-    flex-direction: row;
-    justify-content: flex-end;
-  }
-  
-  .cancel-btn,
-  .payment-btn {
-    width: 100%;
-  }
-}
-
-/* Mobile (max 480px) */
-@media (max-width: 480px) {
-  .checkout-overlay {
-    padding: 10px;
-  }
-  
-  .checkout-form-container {
-    border-radius: 12px;
-  }
-  
-  .checkout-form-header {
-    padding: 15px 20px 12px;
-  }
-  
-  .checkout-form-title {
-    font-size: 20px;
-  }
-  
-  .close-btn {
-    width: 35px;
-    height: 35px;
-    font-size: 20px;
-  }
-  
-  .checkout-form {
-    padding: 15px 20px 25px;
-    gap: 20px;
-  }
-  
-  .section-title-form {
-    font-size: 18px;
-  }
-  
-  .checkout-input,
-  .checkout-textarea {
-    padding: 12px 16px;
-    font-size: 15px;
-  }
-  
-  .cancel-btn,
-  .payment-btn {
-    padding: 14px 24px;
-    font-size: 15px;
-  }
-  
-  .payment-btn img {
-    max-width: 40px;
-  }
-}
-
-/* ========================================
-   SCROLLBAR PERSONALIZZATA
-   ======================================== */
-
-/* Scrollbar per webkit browsers */
 .checkout-form-container::-webkit-scrollbar {
-  width: 10px;
-}
-
-.checkout-form-container::-webkit-scrollbar-track {
-  background: var(--checkout-dark);
-  border-radius: 10px;
+  width: 8px;
 }
 
 .checkout-form-container::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--checkout-purple), var(--checkout-gold));
   border-radius: 10px;
-  border: 2px solid var(--checkout-dark);
 }
 
-.checkout-form-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #8c4dff, #f0c040);
-}
