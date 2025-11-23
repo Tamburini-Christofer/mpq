@@ -227,7 +227,6 @@ function Details() {
         {/* COLONNA DESTRA: INFO */}
         <div className="product-info">
           <div>
-            <div className="product-category">QUEST • ADVENTURE</div>
             <h1 className="product-title">{product.name}</h1>
             <p className="product-subtitle">Avventura epica e contenuti esclusivi.</p>
           </div>

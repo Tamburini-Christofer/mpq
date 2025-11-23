@@ -23,64 +23,68 @@ export default function ProductCard({
   variant = "carousel",
   onViewDetails = null,
   onAddToCart = null,
-  showActions = true
+  onIncrease = null,
+  onDecrease = null,
+  showActions = true,
+  cart = []
 }) {
 
+  /* ======================================================
+     WISHLIST
+  ====================================================== */
   const [isInWishlist, setIsInWishlist] = useState(() => {
-    if (!product) return false;
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    return wishlist.some(item => item.name === product.name);
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    return wishlist.some((i) => i.id === product.id);
   });
-
-  useEffect(() => {
-    if (!product) return;
-
-    const checkWishlistStatus = () => {
-      const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      setIsInWishlist(wishlist.some(item => item.name === product.name));
-    };
-
-    window.addEventListener('wishlistUpdate', checkWishlistStatus);
-    window.addEventListener('storage', checkWishlistStatus);
-
-    return () => {
-      window.removeEventListener('wishlistUpdate', checkWishlistStatus);
-      window.removeEventListener('storage', checkWishlistStatus);
-    };
-  }, [product]);
-
-  if (!product) return null;
-
-  const productSlug = generateSlug(product.name);
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
 
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
 
     if (isInWishlist) {
-      const updated = wishlist.filter(item => item.name !== product.name);
-      localStorage.setItem('wishlist', JSON.stringify(updated));
+      const updated = wishlist.filter((i) => i.id !== product.id);
+      localStorage.setItem("wishlist", JSON.stringify(updated));
       setIsInWishlist(false);
     } else {
       wishlist.push(product);
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
       setIsInWishlist(true);
     }
 
     window.dispatchEvent(new Event("wishlistUpdate"));
   };
 
-  // badge
+  /* ======================================================
+     MOSTRA QUANTITÀ SE IL PRODOTTO È GIÀ NEL CARRELLO
+  ====================================================== */
+  const cartItem = cart.find((c) => c.id === product.id);
+  const qty = cartItem?.quantity || 0;
+
+  const handleAdd = async () => {
+    const newQty = await onAddToCart(product);
+  };
+
+  const handleIncrease = async () => {
+    const newQty = await onIncrease(product.id);
+  };
+
+  const handleDecrease = async () => {
+    const newQty = await onDecrease(product.id);
+  };
+
+  /* ======================================================
+     BADGE & PREZZI
+  ====================================================== */
   const badgeConfig = {
     popular: { className: "product-card__badge--popular", text: "POPOLARE" },
-    new:     { className: "product-card__badge--new",     text: "NUOVO" },
-    sale:    { className: "product-card__badge--sale",    text: "OFFERTA" },
+    new: { className: "product-card__badge--new", text: "NUOVO" },
+    sale: { className: "product-card__badge--sale", text: "OFFERTA" },
   };
 
   const discount = parseFloat(product.discount) || 0;
   const hasDiscount = discount > 0;
-  const originalPrice = parseFloat(product.price) || 0;
+  const originalPrice = parseFloat(product.price);
   const finalPrice = hasDiscount
     ? originalPrice * (1 - discount / 100)
     : originalPrice;
@@ -88,88 +92,84 @@ export default function ProductCard({
   const displayBadge = hasDiscount ? "sale" : badge;
   const badgeData = badgeConfig[displayBadge];
 
-  /*
-  =====================================================
-  |                LIST (COMPACT) MODE                |
-  =====================================================
-  */
+  const productSlug = generateSlug(product.name);
+
+  /* ======================================================
+     CARD VERSIONE LIST / COMPACT
+  ====================================================== */
   if (variant === "compact") {
     return (
-      <div className="mpq-list-card">
+      <div className="product-card product-card--compact">
 
-        <div className="mpq-list-thumb">
-          <img src={product.image} alt={product.name} />
-        </div>
+        <img
+          className="product-card__image"
+          src={product.image}
+          alt={product.name}
+        />
 
-        <div className="mpq-list-content">
-          <h3 className="mpq-list-title">{product.name}</h3>
+        <div className="product-card__info">
+          <h3 className="product-card__title">{product.name}</h3>
 
-          <div className="mpq-list-price">
-            {hasDiscount ? (
-              <>
-                <span className="old-price">{originalPrice.toFixed(2)}€</span>
-                <span className="discounted-price">
-                  {finalPrice.toFixed(2)}€
-                </span>
-              </>
-            ) : (
-              <span>{originalPrice.toFixed(2)}€</span>
-            )}
-          </div>
-
-          <div className="mpq-list-info">
-            <p><strong>Categoria:</strong> {product.category}</p>
-            <p><strong>Età:</strong> {product.min_age}+</p>
-            <p><strong>Disponibilità:</strong> {product.stock > 0 ? "Disponibile" : "Esaurito"}</p>
-            <p><strong>Rating:</strong> ⭐ {product.rating || "N/D"}</p>
-          </div>
-
-          {product.short_description && (
-            <p className="mpq-list-desc">
-              {product.short_description.length > 90
-                ? product.short_description.slice(0, 90) + "..."
-                : product.short_description}
-            </p>
+          {hasDiscount ? (
+            <div className="product-card__price-container">
+              <span className="product-card__price--discount">
+                {finalPrice.toFixed(2)}€
+              </span>
+              <span
+                className="product-card__price--original"
+                data-original-price="true"
+              >
+                {originalPrice.toFixed(2)}€
+              </span>
+            </div>
+          ) : (
+            <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
           )}
         </div>
 
-        <div className="mpq-list-actions">
-          {onViewDetails && (
-            <button
-              className="btn-details"
-              onClick={() => onViewDetails(productSlug)}
-            >
-              Dettagli
-            </button>
-          )}
+        <div className="product-card__actions">
+          {/* Dettagli */}
+          <button
+            className="product-card__btn product-card__btn--details"
+            onClick={() => onViewDetails(productSlug)}
+          >
+            Dettagli
+          </button>
 
-          {onAddToCart && (
+          {/* Acquista + Qty */}
+          {qty === 0 ? (
             <button
-              className="btn-buy"
-              onClick={() => onAddToCart(product)}
+              className="product-card__btn product-card__btn--cart"
+              onClick={handleAdd}
             >
-              Aggiungi
+              Acquista
             </button>
+          ) : (
+            <div className="product-qty-controls">
+              <button className="qty-btn" onClick={handleDecrease}>-</button>
+              <span className="qty-display">{qty}</span>
+              <button className="qty-btn" onClick={handleIncrease}>+</button>
+            </div>
           )}
         </div>
       </div>
     );
   }
 
-  /*
-  =====================================================
-  |                  VERSIONE GRID                     |
-  =====================================================
-  */
+  /* ======================================================
+     CARD VERSIONE GRIGLIA (SHOP)
+  ====================================================== */
   return (
     <div className={`product-card product-card--${variant}`}>
 
+      {/* Badge */}
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
           {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
 
+      {/* Cuore / Wishlist */}
       <button
         className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
         onClick={toggleWishlist}
@@ -177,17 +177,24 @@ export default function ProductCard({
         {isInWishlist ? "♥" : "♡"}
       </button>
 
-      <img className="product-card__image" src={product.image} alt={product.name} />
+      <img
+        className="product-card__image"
+        src={product.image}
+        alt={product.name}
+      />
 
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
 
         {hasDiscount ? (
           <div className="product-card__price-container">
-            <span className="product-card__price product-card__price--discount">
+            <span className="product-card__price--discount">
               {finalPrice.toFixed(2)}€
             </span>
-            <span className="product-card__price product-card__price--original">
+            <span
+              className="product-card__price--original"
+              data-original-price="true"
+            >
               {originalPrice.toFixed(2)}€
             </span>
           </div>
@@ -195,27 +202,36 @@ export default function ProductCard({
           <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
         )}
 
+        {/* BOTTONI / QTY */}
         {showActions && (
           <div className="product-card__actions">
-            {onViewDetails && (
-              <button
-                className="product-card__btn product-card__btn--details"
-                onClick={() => onViewDetails(productSlug)}
-              >
-                Dettagli
-              </button>
-            )}
 
-            {onAddToCart && (
+            {/* Dettagli */}
+            <button
+              className="product-card__btn product-card__btn--details"
+              onClick={() => onViewDetails(productSlug)}
+            >
+              Dettagli
+            </button>
+
+            {/* Se qty = 0 → Mostra Acquista */}
+            {qty === 0 ? (
               <button
                 className="product-card__btn product-card__btn--cart"
-                onClick={() => onAddToCart(product)}
+                onClick={handleAdd}
               >
                 Acquista
               </button>
+            ) : (
+              <div className="product-qty-controls">
+                <button className="qty-btn" onClick={handleDecrease}>-</button>
+                <span className="qty-display">{qty}</span>
+                <button className="qty-btn" onClick={handleIncrease}>+</button>
+              </div>
             )}
           </div>
         )}
+
       </div>
     </div>
   );

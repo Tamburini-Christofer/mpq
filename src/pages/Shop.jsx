@@ -16,7 +16,6 @@ import ShopComponent from "../components/shop/ShopComponent";
 import SearchSortBar from "../components/shop/SearchSortBar";
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
-// ⭐ Cambiato qui: accetto defaultTab per capire da che rotta arrivo
 const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
 
@@ -24,7 +23,6 @@ const Shop = ({ defaultTab = "shop" }) => {
     window.scrollTo(0, 0);
   }, []);
 
-  // ⭐ Qui: uso defaultTab invece che "shop" fisso
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [viewMode, setViewMode] = useState("grid");
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
@@ -53,10 +51,10 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
+    setTimeout(() => setNotification(null), 2500);
   };
 
-  // CARICA PRODOTTI
+  // PRODOTTI
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -86,100 +84,119 @@ const Shop = ({ defaultTab = "shop" }) => {
     loadProducts();
   }, []);
 
-  let isLoadingCart = false;
+  // CARRELLO
   const [cart, setCart] = useState([]);
 
-  const loadCart = async () => {
-    if (isLoadingCart) return;
-    isLoadingCart = true;
-
+  const fetchCart = async () => {
     try {
       const data = await cartAPI.get();
       setCart(data);
-    } catch (err) {
-      console.error("Errore caricamento carrello:", err);
-    } finally {
-      isLoadingCart = false;
+      return data;
+    } catch {
+      return cart;
     }
   };
 
   useEffect(() => {
-    loadCart();
+    fetchCart();
   }, []);
 
-  // AGGIUNGERE AL CARRELLO
+  // ⭐ AGGIUNTA singola
   const addToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
-      loadCart();
+      const updatedCart = await fetchCart();
+      const item = updatedCart.find((i) => i.id === product.id);
+
       showNotification(`"${product.name}" aggiunto al carrello!`);
+      return item?.quantity || 0;
     } catch {
       showNotification("Errore aggiunta al carrello", "error");
+      return 0;
     }
   };
 
-  // RIMOZIONE
+  // ⭐ DIMINUISCI QUANTITÀ
+  const decreaseQuantity = async (productId) => {
+    try {
+      const currentItem = cart.find((i) => i.id === productId);
+      if (!currentItem) return 0;
+
+      // se arriva a 0 → rimuovi
+      if (currentItem.quantity <= 1) {
+        await cartAPI.remove(productId);
+        await fetchCart();
+        return 0;
+      }
+
+      const newQty = currentItem.quantity - 1;
+      await cartAPI.update(productId, newQty);
+      const updatedCart = await fetchCart();
+      const updatedItem = updatedCart.find((i) => i.id === productId);
+
+      return updatedItem?.quantity || 0;
+    } catch {
+      return cart.find((i) => i.id === productId)?.quantity || 0;
+    }
+  };
+
+  // ⭐ AUMENTA QUANTITÀ
+  const increaseQuantity = async (productId) => {
+    try {
+      const currentItem = cart.find((i) => i.id === productId);
+      const newQty = (currentItem?.quantity || 0) + 1;
+
+      await cartAPI.update(productId, newQty);
+      const updatedCart = await fetchCart();
+      const updatedItem = updatedCart.find((i) => i.id === productId);
+
+      return updatedItem?.quantity || 0;
+    } catch {
+      return cart.find((i) => i.id === productId)?.quantity || 0;
+    }
+  };
+
+  // ⭐ RIMOZIONE dal carrello
   const removeFromCart = async (productId) => {
     try {
       await cartAPI.remove(productId);
-      loadCart();
+      await fetchCart();
       showNotification("Prodotto rimosso", "error");
     } catch {
       showNotification("Errore rimozione", "error");
     }
   };
 
-  const decreaseQuantity = async (productId) => {
-    const item = cart.find((i) => i.id === productId);
-    if (!item) return;
-    if (item.quantity === 1) return removeFromCart(productId);
-    await cartAPI.update(productId, item.quantity - 1);
-    loadCart();
-  };
-
-  const increaseQuantity = async (productId) => {
-    const item = cart.find((i) => i.id === productId);
-    if (!item) return;
-    await cartAPI.update(productId, item.quantity + 1);
-    loadCart();
-  };
-
-  // FILTRI + SEARCH + ORDINAMENTO
+  // FILTRI + ORDINAMENTO
   const getFilteredAndSortedProducts = () => {
     let filtered = [...products];
 
-    // SEARCH
     if (searchValue.trim() !== "") {
       filtered = filtered.filter((p) =>
         p.name.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
-    // PREZZO MIN-MAX
     filtered = filtered.filter(
       (p) =>
         parseFloat(p.price) >= filters.priceRange.min &&
         parseFloat(p.price) <= filters.priceRange.max
     );
 
-    // CATEGORIE
     if (filters.categories.length > 0) {
       filtered = filtered.filter((p) =>
         filters.categories.includes(p.category)
       );
     }
 
-    // +18
     if (filters.matureContent) {
       filtered = filtered.filter((p) => (parseInt(p.min_age) || 0) >= 18);
     }
 
-    // PROMO
     if (filters.onSale) {
       filtered = filtered.filter((p) => parseFloat(p.discount) > 0);
     }
 
-    // ORDINAMENTO
     switch (sortValue) {
       case "price-asc":
         filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
@@ -202,7 +219,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const loadMoreProducts = () => setVisibleProducts((prev) => prev + 10);
 
-  // CALCOLI CARRELLO
+  // TOTALI
   const subtotal = cart.reduce(
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
     0
@@ -218,7 +235,6 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   return (
     <div className="shop-ui-container">
-
       {/* NOTIFICHE */}
       {notification && (
         <div className={`notification ${notification.type}`}>
@@ -237,7 +253,7 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
       )}
 
-      {/* SIDEBAR (ORIGINALE) */}
+      {/* SIDEBAR */}
       <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
           <div className="icon"></div>
@@ -250,30 +266,37 @@ const Shop = ({ defaultTab = "shop" }) => {
         <div className="menu">
           <button
             className={activeTab === "shop" ? "menu-btn active" : "menu-btn"}
-            onClick={() => { setActiveTab("shop"); navigate("/shop"); }}
+            onClick={() => {
+              setActiveTab("shop");
+              navigate("/shop");
+            }}
           >
             Shop
           </button>
 
           <button
             className={activeTab === "cart" ? "menu-btn active" : "menu-btn"}
-            onClick={() => { setActiveTab("cart"); navigate("/shop/cart"); }}
+            onClick={() => {
+              setActiveTab("cart");
+              navigate("/shop/cart");
+            }}
           >
             Carrello ({cart.length})
           </button>
 
           <button
-            className={
-              activeTab === "checkout" ? "menu-btn active" : "menu-btn"
-            }
-            onClick={() => { setActiveTab("checkout"); navigate("/shop/checkout"); }}
+            className={activeTab === "checkout" ? "menu-btn active" : "menu-btn"}
+            onClick={() => {
+              setActiveTab("checkout");
+              navigate("/shop/checkout");
+            }}
           >
             Checkout
           </button>
         </div>
       </aside>
 
-      {/* FILTRI PANEL (ORIGINALE) */}
+      {/* FILTRI */}
       {showFilters && (
         <div className="filters-panel">
           <ShopComponent
@@ -287,23 +310,20 @@ const Shop = ({ defaultTab = "shop" }) => {
 
       {/* MAIN */}
       <main className="content">
+        {/* SHOP */}
         {activeTab === "shop" && (
           <div className="shop-section">
-            {/* VIEW CONTROLS */}
+            {/* CONTROLLI */}
             <div className="view-controls">
               <div style={{ display: "flex", gap: "10px" }}>
                 <button
-                  className={
-                    viewMode === "grid" ? "view-btn active" : "view-btn"
-                  }
+                  className={viewMode === "grid" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("grid")}
                 >
                   ⊞
                 </button>
                 <button
-                  className={
-                    viewMode === "list" ? "view-btn active" : "view-btn"
-                  }
+                  className={viewMode === "list" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("list")}
                 >
                   ☰
@@ -337,11 +357,16 @@ const Shop = ({ defaultTab = "shop" }) => {
                     .map((p) => (
                       <ProductCard
                         key={p.id}
-                        product={p}
+                        product={{
+                          ...p,
+                          cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+                        }}
                         variant={viewMode === "grid" ? "grid" : "compact"}
                         onViewDetails={(slug) => navigate(`/details/${slug}`)}
                         onAddToCart={addToCart}
-                        showActions={true}
+                        onIncrease={increaseQuantity}
+                        onDecrease={decreaseQuantity}
+                        cart={cart}
                       />
                     ))}
                 </div>
@@ -426,9 +451,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                 })}
 
                 <div className="cart-total">
-                  <strong>
-                    Totale Carrello: {subtotal.toFixed(2)}€
-                  </strong>
+                  <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
                 </div>
               </div>
             )}
@@ -463,7 +486,6 @@ const Shop = ({ defaultTab = "shop" }) => {
                   );
                 })}
 
-                {/* Subtotale */}
                 <div
                   className="checkout-item"
                   style={{ justifyContent: "space-between" }}
@@ -472,7 +494,6 @@ const Shop = ({ defaultTab = "shop" }) => {
                   <strong>{subtotal.toFixed(2)}€</strong>
                 </div>
 
-                {/* Spedizione */}
                 <div
                   className="checkout-item"
                   style={{ justifyContent: "space-between" }}
@@ -492,7 +513,6 @@ const Shop = ({ defaultTab = "shop" }) => {
                   )}
                 </div>
 
-                {/* Totale */}
                 <div
                   className="checkout-item"
                   style={{

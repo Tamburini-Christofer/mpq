@@ -12,7 +12,7 @@
   flex-shrink: 0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  border: 2px solid #333;
+  border: 2px solid var(--gold);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -25,55 +25,40 @@
   border-color: #D8A928;
 }
 
-/* todo: Label badge (POPOLARE, NUOVO, OFFERTA, ecc.) */
+/* todo: Label badge */
 .product-card__badge {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 5px 12px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: #fff;
-  border-radius: 4px;
-  z-index: 10;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  width: 100%;
-  text-align: center;
-  pointer-events: none;
+    position: absolute;
+    top: -1px;
+    right: 0px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    z-index: 10;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
 }
 
-/* todo: Badge blu per prodotti popolari */
-.product-card__badge--popular {
-  background-color: #4d82f4;
-  box-shadow: 0 5px 10px 2px rgba(37, 99, 235, 0.4);
-}
+.product-card__badge--popular { background-color: #4d82f4; }
+.product-card__badge--new { background-color: #d62121; }
+.product-card__badge--sale { background-color: #10b981; }
 
-/* todo: Badge rosso per nuovi arrivi */
-.product-card__badge--new {
-  background-color: #d62121;
-  box-shadow: 0 2px 8px 2px rgba(220, 38, 38, 0.4);
-}
-
-/* todo: Badge verde per offerte */
-.product-card__badge--sale {
-  background-color: #10b981;
-  box-shadow: 0 2px 8px 2px rgba(16, 185, 129, 0.4);
-}
-
-/* todo: Pulsante wishlist (cuore) */
+/* todo: Pulsante wishlist */
 .product-card__wishlist-btn {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 50px;
+  left: 0px;
   z-index: 15;
-  width: 36px;
-  height: 36px;
+  width: 50px;
+  height: 50px;
   background: rgba(0, 0, 0, 0.7);
-  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
+  border-radius: 0% 50% 50% 0%;
   color: #fff;
   font-size: 1.4rem;
   cursor: pointer;
@@ -81,51 +66,22 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  padding: 0;
-}
-
-.product-card__wishlist-btn:hover {
-  transform: scale(1.15);
-  background: rgba(255, 0, 0, 0.9);
 }
 
 .product-card__wishlist-btn.active {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   border-color: #ef4444;
-  color: #fffffd;
-  animation: heartBeat 0.3s ease;
 }
 
-.product-card__wishlist-btn.active:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  transform: scale(1.15);
-}
-
-@keyframes heartBeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.3);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  75% {
-    transform: scale(1.25);
-  }
-}
-
-/* todo: Immagine del prodotto */
+/* todo: Immagine */
 .product-card__image {
   width: 100%;
   height: 120px;
   object-fit: cover;
-  display: block;
   border-radius: 10px 10px 0 0;
 }
 
-/* todo: Contenitore informazioni prodotto */
+/* todo: Info prodotto */
 .product-card__info {
   padding: 15px;
   background: rgba(0, 0, 0, 0.7);
@@ -136,7 +92,7 @@
   border-radius: 0 0 10px 10px;
 }
 
-/* todo: Titolo prodotto */
+/* Titolo */
 .product-card__title {
   color: #D8A928;
   font-size: 1rem;
@@ -151,173 +107,342 @@
   -webkit-box-orient: vertical;
 }
 
-/* todo: Container per prezzi promozionali nella ProductCard */
+/* Prezzi */
 .product-card__price-container {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
   gap: 8px;
+  align-items: baseline;
 }
 
-/* todo: Prezzo originale barrato nel ProductCard */
 .product-card__price--original {
   font-size: 0.75rem !important;
   color: #ff4444 !important;
   text-decoration: line-through !important;
-  font-weight: normal !important;
-  opacity: 0.8 !important;
 }
 
-/* todo: Prezzo scontato nel ProductCard */
 .product-card__price--discount {
   font-size: 1.3rem !important;
-  color: #fff !important;
-  font-weight: 600 !important;
-  margin: 0 !important;
-}
-
-/* todo: Prezzo prodotto */
-.product-card__price {
   color: #fff;
-  font-size: 1.3rem;
   font-weight: 600;
-  margin: 0;
 }
 
-/* Selettore più specifico per prezzo barrato */
-.product-card .product-card__price-container .product-card__price--original {
-  font-size: 0.75rem !important;
-  color: #ff4444 !important;
-  text-decoration: line-through !important;
-  font-weight: normal !important;
-  opacity: 0.8 !important;
+.product-card__price {
+  font-size: 1.3rem;
+  color: white;
+  font-weight: 600;
 }
 
-/* Selettore con data attribute per massima specificità */
-.product-card span[data-original-price="true"] {
-  font-size: 0.75rem !important;
-  color: #ff4444 !important;
-  text-decoration: line-through !important;
-  font-weight: normal !important;
-  opacity: 0.8 !important;
-}
-
-/* todo: Container pulsanti azione */
+/* todo: Pulsanti */
 .product-card__actions {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 5px;
 }
 
-/* todo: Stile base pulsanti */
 .product-card__btn {
   padding: 10px 15px;
-  border: none;
   border-radius: 6px;
-  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
   font-family: "Cinzel", serif;
+  border: none;
 }
 
-/* todo: Pulsante dettagli (bordo oro) */
 .product-card__btn--details {
-  background-color: transparent;
-  color: #D8A928;
-  border: 2px solid #D8A928;
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
 }
 
-.product-card__btn--details:hover {
-  background-color: #D8A928;
-  color: #1a1a1a;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(216, 169, 40, 0.3);
-}
-
-/* todo: Pulsante carrello (pieno oro) */
 .product-card__btn--cart {
-  background-color: #D8A928;
+  background: var(--gold);
   color: #1a1a1a;
-  border: 2px solid #D8A928;
 }
 
-.product-card__btn--cart:hover {
-  background-color: #e6c200;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(216, 169, 40, 0.4);
-}
+/* GRID */
+.product-card--grid { width: 31%; }
 
-/* todo: Variante card per griglia (Shop) */
-.product-card--grid {
-  width: 100%;
-  max-width: 280px;
-}
+/* ==========================================
+   PRODUCT CARD - LIST / COMPACT MODE FIXED
+   ========================================== */
 
-/* todo: Variante card per carosello (HomePage) */
-.product-card--carousel {
-  width: 150px;
-}
-
-/* todo: Variante card compatta (layout list orizzontale) */
 .product-card--compact {
   width: 100%;
-  max-width: 100%;
-  min-height: 0;
-  flex-direction: row;
+  display: flex;
+  align-items: center;
+  background: #1c1a24;
+  border: 2px solid var(--gold);
+  border-radius: 15px;
   padding: 15px;
   gap: 20px;
-  align-items: center;
+  min-height: 120px;
 }
 
+/* Immagine piccola a sinistra */
 .product-card--compact .product-card__image {
-  width: 120px;
-  min-width: 120px;
-  height: 120px;
-  border-radius: 8px;
+  width: 80px;
+  height: 110px;
+  border-radius: 10px;
   object-fit: cover;
 }
 
+/* INFO AL CENTRO (titolo + prezzo) */
 .product-card--compact .product-card__info {
   flex: 1;
-  padding: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* Titolo */
+.product-card--compact .product-card__title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--gold);
+  margin: 0;
+}
+
+/* Prezzi (anche con sconto) */
+.product-card--compact .product-card__price-container {
+  display: flex;
   align-items: center;
+  gap: 10px;
+}
+
+.product-card--compact .product-card__price--discount {
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.product-card--compact .product-card__price--original {
+  color: #ff4444 !important;
+  font-size: 0.9rem !important;
+  text-decoration: line-through;
+}
+
+/* AREA AZIONI A DESTRA */
+.product-card--compact .product-card__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 150px;
+}
+
+/* Pulsante dettagli */
+.product-card--compact .product-card__btn--details {
+  width: 220px;
+  padding: 10px 0;
+}
+
+/* Pulsante acquista */
+.product-card--compact .product-card__btn--cart {
+  width: 220px;
+  padding: 10px 0;
+}
+
+/* Controlli quantità */
+.product-card--compact .product-qty-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.product-card--compact .qty-btn {
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+.product-card--compact .qty-display {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #000000;
+}
+
+
+/* Controlli quantità sulla card */
+.product-qty-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background: var(--gold);
+    color: #1a1a1a;
+        padding: 0px 18.5%;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: "Cinzel", serif;
+    border: none;
+}
+
+.product-qty-controls button,
+.product-qty-controls span {
+  border: none;
+  background: transparent;
+  color: #1a1a1a;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.qty-btn {
+  background: #6c21ff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.qty-display {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* =====================================================
+   SHOP PAGE — LAYOUT COMPLETO
+   ===================================================== */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --purple: #6c21ff;
+  --gold: #d8a928;
+  --dark: #141218;
+  --light: #ffffff;
+}
+
+.shop-ui-container {
+  display: flex;
+  background: var(--dark);
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+  color: var(--light);
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: #1a1720;
+  padding: 30px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-right: 2px solid var(--gold);
+  overflow-y: auto;
+}
+
+.menu-btn {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.menu-btn.active {
+  color: var(--gold);
+  border-left: 3px solid var(--gold);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  padding: 40px;
+  margin-left: 300px;
+}
+
+/* PRODUCT GRID */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+}
+
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* LOAD MORE */
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  padding: 30px 0;
+}
+
+.load-more-btn {
+  background: var(--purple);
+  padding: 14px 30px;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* CART */
+.cart-item {
+  background: #1f1c27;
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
   justify-content: space-between;
   gap: 20px;
 }
 
-.product-card--compact .product-card__title {
-  font-size: 1.2rem;
-  margin: 0;
-  flex: 1;
-  min-width: 200px;
-}
-
-.product-card--compact .product-card__price {
-  font-size: 1.4rem;
-  margin: 0;
-  min-width: 80px;
-  text-align: right;
-}
-
-.product-card--compact .product-card__actions {
+.quantity-controls {
   display: flex;
-  flex-direction: column;
   gap: 10px;
-  margin-left: auto;
 }
 
-.product-card--compact .product-card__btn {
+.quantity-btn-c {
+  width: 32px;
+  height: 32px;
+  background: var(--purple);
+  border-radius: 10px;
+  border: none;
+  color: white;
+}
+
+/* CHECKOUT */
+.checkout-summary {
+  background: #1f1c27;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+/* VIEW CONTROLS */
+.view-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.view-btn {
+  background: #1c1a24;
+  border: 2px solid var(--purple);
   padding: 10px 20px;
-  font-size: 0.95rem;
-  min-width: 120px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
 }
 
-.product-card--compact .product-card__wishlist-btn {
-  top: 15px;
-  left: 15px;
+.view-btn.active {
+  background: var(--purple);
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
+/* END FILE */

@@ -180,7 +180,6 @@
   display: flex;
   gap: 20px;
   /*todo overflow-x:auto permette lo scroll orizzontale*/
-  overflow-x: auto;
   padding-bottom: 20px;
   margin-bottom: 0;
   /*todo nowrap mantiene tutte le card su una singola riga*/
