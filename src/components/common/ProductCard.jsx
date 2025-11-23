@@ -1,4 +1,4 @@
-// src/components/common/ProductCard.jsx
+
 import "../../styles/components/ProductCard.css";
 import { useState } from "react";
 
@@ -87,13 +87,14 @@ export default function ProductCard({
 
   const displayBadge = hasDiscount ? "sale" : badge;
   const badgeData = badgeConfig[displayBadge];
+  const typeClass = displayBadge ? `product-card--${displayBadge}` : "";
 
   const productSlug = generateSlug(product.name);
 
   // Versione compact
   if (variant === "compact") {
     return (
-      <div className="product-card product-card--compact">
+      <div className={`product-card product-card--compact ${typeClass}`}>
         <img
           className="product-card__image"
           src={product.image}
@@ -153,7 +154,7 @@ export default function ProductCard({
 
   // Versione griglia/shop/carousel
   return (
-    <div className={`product-card product-card--${variant}`}>
+    <div className={`product-card product-card--${variant} ${typeClass}`}>
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
           {hasDiscount ? `-${discount}%` : badgeData.text}

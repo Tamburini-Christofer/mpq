@@ -17,6 +17,7 @@ import "../../styles/components/CheckoutForm.css";
  */
 export default function CheckoutForm({
   onClose,
+  onCancelOrder,
   totalAmount,
   cartItems,
   shippingCost = 4.99,
@@ -441,6 +442,12 @@ export default function CheckoutForm({
                   formData={formData}
                   onClose={onClose}
                 />
+                <button
+                  type="button"
+                  className="cancel-order-btn"
+                  onClick={onCancelOrder}>
+                  Annulla Ordine
+                </button>
               </div>
             </div>
           </div>

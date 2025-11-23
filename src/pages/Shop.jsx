@@ -8,6 +8,7 @@ import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
 
 import ProductCard from "../components/common/ProductCard";
 import CheckoutForm from "../components/shop/CheckoutForm";
+import CheckoutPage from "./CheckoutPage";
 import ShopComponent from "../components/shop/ShopComponent";
 import SearchSortBar from "../components/shop/SearchSortBar";
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
@@ -79,70 +80,60 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const fetchCart = async () => {
     try {
-      const data = await cartAPI.get();
-      setCart(data);
-      emitCartUpdate();
-      return data;
+      const cartData = await cartAPI.get();
+      setCart(cartData);
     } catch {
-      return cart;
+      console.error("Errore nel fetch del carrello");
     }
   };
 
   useEffect(() => {
     fetchCart();
+    window.addEventListener('cartUpdate', fetchCart);
+    return () => window.removeEventListener('cartUpdate', fetchCart);
   }, []);
 
-  const addToCart = async (product) => {
+  const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
-      const updatedCart = await fetchCart();
-
+      emitCartUpdate();
       showNotification(`"${product.name}" aggiunto al carrello!`);
-      return updatedCart.find((i) => i.id === product.id)?.quantity || 0;
-    } catch {
+    } catch (error) {
+      console.error("Errore aggiunta al carrello:", error);
       showNotification("Errore aggiunta al carrello", "error");
-      return 0;
-    }
-  };
-
-  const decreaseQuantity = async (productId) => {
-    try {
-      const currentItem = cart.find((i) => i.id === productId);
-      if (!currentItem) return 0;
-
-      if (currentItem.quantity <= 1) {
-        await cartAPI.remove(productId);
-        await fetchCart();
-        return 0;
-      }
-
-      const newQty = currentItem.quantity - 1;
-      await cartAPI.update(productId, newQty);
-      const updatedCart = await fetchCart();
-      return updatedCart.find((i) => i.id === productId)?.quantity || 0;
-    } catch {
-      return cart.find((i) => i.id === productId)?.quantity || 0;
     }
   };
 
   const increaseQuantity = async (productId) => {
     try {
-      const currentItem = cart.find((i) => i.id === productId);
-      const newQty = (currentItem?.quantity || 0) + 1;
+      await cartAPI.increase(productId);
+      await fetchCart(); // Aggiorna subito lo stato locale e poi emetti
+      // emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nell'aumentare la quantità:", error);
+    }
+  };
 
-      await cartAPI.update(productId, newQty);
-      const updatedCart = await fetchCart();
-      return updatedCart.find((i) => i.id === productId)?.quantity || 0;
-    } catch {
-      return cart.find((i) => i.id === productId)?.quantity || 0;
+  const decreaseQuantity = async (productId) => {
+    try {
+      const item = cart.find((i) => i.id === productId);
+      if (item && item.quantity > 1) {
+        await cartAPI.decrease(productId);
+      } else {
+        await cartAPI.remove(productId);
+      }
+      await fetchCart(); // Aggiorna subito lo stato locale e poi emetti
+      // emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nel diminuire la quantità:", error);
     }
   };
 
   const removeFromCart = async (productId) => {
     try {
       await cartAPI.remove(productId);
-      await fetchCart();
       showNotification("Prodotto rimosso", "error");
+      emitCartUpdate();
     } catch {
       showNotification("Errore rimozione", "error");
     }
@@ -210,6 +201,17 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const totalAmount = subtotal + shippingCost;
 
+  const handleCancelOrder = async () => {
+    try {
+      await cartAPI.clear();
+      emitCartUpdate();
+      setShowCheckoutForm(false);
+      navigate("/shop");
+    } catch (err) {
+      console.error("Errore annullamento ordine:", err);
+    }
+  };
+
   return (
     <div className="shop-ui-container">
       {notification && (
@@ -256,7 +258,7 @@ const Shop = ({ defaultTab = "shop" }) => {
               navigate("/shop/cart");
             }}
           >
-            Carrello ({cart.length})
+            Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
           <button
@@ -333,7 +335,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                         }}
                         variant={viewMode === "grid" ? "grid" : "compact"}
                         onViewDetails={(slug) => navigate(`/details/${slug}`)}
-                        onAddToCart={addToCart}
+                        onAddToCart={handleAddToCart}
                         onIncrease={increaseQuantity}
                         onDecrease={decreaseQuantity}
                         cart={cart}
@@ -408,70 +410,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
         {activeTab === "checkout" && (
           <div className="checkout-section">
-            <h2 className="section-title-shop">Checkout</h2>
-
-            {cart.length === 0 ? (
-              <div className="empty-checkout">
-                <p>Il carrello è vuoto.</p>
-                <p>Aggiungi prodotti per procedere.</p>
-                <img src="/public/icon/InShop.png" alt="empty" />
-              </div>
-            ) : (
-              <div className="checkout-summary">
-                <h3>Riepilogo Ordine</h3>
-
-                {cart.map((item) => {
-                  const price = parseFloat(item.price);
-                  return (
-                    <div key={item.id} className="checkout-item">
-                      <div>
-                        {item.name} <strong className="qt">{item.quantity} pz</strong>
-                      </div>
-                      <div>{(price * item.quantity).toFixed(2)}€</div>
-                    </div>
-                  );
-                })}
-
-                <div
-                  className="checkout-item"
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <strong className="sub">Subtotale</strong>
-                  <strong>{subtotal.toFixed(2)}€</strong>
-                </div>
-
-                <div
-                  className="checkout-item"
-                  style={{ justifyContent: "space-between" }}
-                >
-                  <strong className="sub">Spedizione</strong>
-                  {isFreeShipping ? (
-                    <span style={{ color: "#4ade80", fontWeight: "bold" }}>GRATIS</span>
-                  ) : (
-                    <strong>{shippingCost.toFixed(2)}€</strong>
-                  )}
-                </div>
-
-                <div
-                  className="checkout-item"
-                  style={{
-                    justifyContent: "space-between",
-                    borderTop: "2px solid var(--gold)",
-                  }}
-                >
-                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>Totale</strong>
-                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>
-                    {totalAmount.toFixed(2)}€
-                  </strong>
-                </div>
-
-                <div className="checkout-actions">
-                  <button className="confirm-btn" onClick={() => setShowCheckoutForm(true)}>
-                    Procedi al Pagamento
-                  </button>
-                </div>
-              </div>
-            )}
+            <CheckoutPage />
           </div>
         )}
       </main>
@@ -479,6 +418,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       {showCheckoutForm && (
         <CheckoutForm
           onClose={() => setShowCheckoutForm(false)}
+          onCancelOrder={handleCancelOrder}
           cartItems={cart}
           totalAmount={totalAmount}
           shippingCost={shippingCost}

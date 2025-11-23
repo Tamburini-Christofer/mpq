@@ -18,6 +18,7 @@ function HomePage() {
     //todo Stato per gestire le notifiche quando si aggiunge un prodotto al carrello
     const [notification, setNotification] = useState(null);
     
+    const [cart, setCart] = useState([]);
     //todo Stato per i prodotti caricati dal backend
     const [productsData, setProductsData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -39,6 +40,22 @@ function HomePage() {
     //todo Inizializziamo useNavigate per permettere la navigazione tra le route
     const navigate = useNavigate();
 
+    // Carica il carrello
+    const loadCart = async () => {
+        try {
+            const cartData = await cartAPI.get();
+            setCart(cartData);
+        } catch (error) {
+            console.error("Errore caricamento carrello:", error);
+        }
+    };
+
+    // Aggiungi listener per l'aggiornamento del carrello
+    useEffect(() => {
+        window.addEventListener('cartUpdate', loadCart);
+        return () => window.removeEventListener('cartUpdate', loadCart);
+    }, []);
+
     //todo Carica prodotti dal backend
     useEffect(() => {
         const loadProducts = async () => {
@@ -53,6 +70,7 @@ function HomePage() {
                 setLoading(false);
             }
         };
+        loadCart();
         loadProducts();
     }, []);
 
@@ -194,12 +212,38 @@ function HomePage() {
             await cartAPI.add(product.id, 1);
             
             //todo Emetti evento per aggiornare il contatore del carrello
+            
             emitCartUpdate();
             
             showNotification(`"${product.name}" aggiunto al carretto!`);
         } catch (error) {
             console.error('Errore aggiunta al carrello:', error);
             showNotification('Errore nell\'aggiunta al carretto', 'error');
+        }
+    };
+
+    const handleIncrease = async (productId) => {
+        try {
+            await cartAPI.increase(productId);
+            emitCartUpdate();
+        } catch (error) {
+            console.error("Errore nell'aumentare la quantità:", error);
+            showNotification("Errore nell'aggiornamento del carrello", "error");
+        }
+    };
+
+    const handleDecrease = async (productId) => {
+        try {
+            const item = cart.find(i => i.id === productId);
+            if (item && item.quantity > 1) {
+                await cartAPI.decrease(productId);
+            } else {
+                await cartAPI.remove(productId);
+            }
+            emitCartUpdate();
+        } catch (error) {
+            console.error("Errore nel diminuire la quantità:", error);
+            showNotification("Errore nell'aggiornamento del carrello", "error");
         }
     };
 
@@ -288,8 +332,12 @@ function HomePage() {
                             product={product}
                             badge="popular"
                             variant="carousel"
+                            cart={cart}
                             onViewDetails={handleViewDetails}
                             onAddToCart={handleAddToCart}
+                            onIncrease={handleIncrease}
+                            onDecrease={handleDecrease}
+                            showActions={true}
                         />
                     ))}
                 </div>
@@ -329,8 +377,12 @@ function HomePage() {
                             product={product}
                             badge="new"
                             variant="carousel"
+                            cart={cart}
                             onViewDetails={handleViewDetails}
                             onAddToCart={handleAddToCart}
+                            onIncrease={handleIncrease}
+                            onDecrease={handleDecrease}
+                            showActions={true}
                         />
                     ))}
                 </div>
@@ -372,8 +424,12 @@ function HomePage() {
                                 product={product}
                                 badge="sale"
                                 variant="carousel"
+                                cart={cart}
                                 onViewDetails={handleViewDetails}
                                 onAddToCart={handleAddToCart}
+                                onIncrease={handleIncrease}
+                                onDecrease={handleDecrease}
+                                showActions={true}
                             />
                         ))}
                     </div>

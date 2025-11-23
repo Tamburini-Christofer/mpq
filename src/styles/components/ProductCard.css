@@ -1,53 +1,56 @@
 /* ==========================================
-   PRODUCT CARD - Stile unificato per tutte le card prodotto
+   PRODUCT CARD - Stile unificato per tutte le card prodotto (modernizzato)
    ========================================== */
 
-/* todo: Container della card prodotto */
+/* Container card */
 .product-card {
-  width: 150px;
-  min-height: 180px;
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  border-radius: 12px;
-  overflow: visible;
+  width: 170px;
+  min-height: 260px;
+  background: linear-gradient(180deg, rgba(30,27,38,0.95) 0%, rgba(20,18,24,0.98) 100%);
+  border-radius: 16px;
+  overflow: hidden;
   flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   cursor: pointer;
-  border: 2px solid var(--gold);
+  border: 1px solid rgba(216, 169, 40, 0.35);
   position: relative;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
-/* todo: Hover effect sulla card */
+/* Hover card */
 .product-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(216, 169, 40, 0.3);
-  border-color: #D8A928;
+  transform: translateY(-6px);
+  box-shadow: 0 16px 30px rgba(216, 169, 40, 0.25), 0 6px 18px rgba(0,0,0,0.4);
+  border-color: rgba(216, 169, 40, 0.6);
 }
 
-/* todo: Label badge */
+/* Badge pill centrato */
 .product-card__badge {
-    position: absolute;
-    top: -1px;
-    right: 0px;
-    padding: 5px 12px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #fff;
-    border-radius: 10px 10px 0 0;
-    z-index: 10;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    width: 100%;
-    text-align: center;
-    pointer-events: none;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fff;
+  border-radius: 999px;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  width: auto;
+  text-align: center;
+  pointer-events: none;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  backdrop-filter: blur(2px);
 }
-
 .product-card__badge--popular { background-color: #4d82f4; }
 .product-card__badge--new { background-color: #d62121; }
 .product-card__badge--sale { background-color: #10b981; }
 
-/* todo: Pulsante wishlist */
+/* Pulsante wishlist (lasciato invariato per compatibilità) */
 .product-card__wishlist-btn {
   position: absolute;
   top: 50px;
@@ -67,40 +70,41 @@
   justify-content: center;
   transition: all 0.3s ease;
 }
-
 .product-card__wishlist-btn.active {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
   border-color: #ef4444;
 }
 
-/* todo: Immagine */
+/* Immagine */
 .product-card__image {
   width: 100%;
-  height: 120px;
+  height: 180px;
   object-fit: cover;
-  border-radius: 10px 10px 0 0;
+}
+.product-card:hover .product-card__image {
+  filter: brightness(1.03) contrast(1.02);
+  transition: filter 0.25s ease;
 }
 
-/* todo: Info prodotto */
+/* Info prodotto */
 .product-card__info {
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.7);
+  padding: 12px 14px 14px 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.55) 100%);
   display: flex;
   flex-direction: column;
   gap: 10px;
   flex: 1;
-  border-radius: 0 0 10px 10px;
 }
 
 /* Titolo */
 .product-card__title {
-  color: #D8A928;
-  font-size: 1rem;
-  font-weight: bold;
+  color: var(--gold);
+  font-size: 1.05rem;
+  font-weight: 800;
   margin: 0;
   font-family: "Cinzel", serif;
   min-height: 2.4em;
-  line-height: 1.2em;
+  line-height: 1.25em;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -110,72 +114,80 @@
 /* Prezzi */
 .product-card__price-container {
   display: flex;
-  gap: 8px;
-  align-items: baseline;
+  gap: 10px;
+  align-items: center;
 }
-
 .product-card__price--original {
-  font-size: 0.75rem !important;
-  color: #ff4444 !important;
+  font-size: 0.78rem !important;
+  color: #ff6b6b !important;
   text-decoration: line-through !important;
+  opacity: 0.9;
 }
-
 .product-card__price--discount {
-  font-size: 1.3rem !important;
-  color: #fff;
-  font-weight: 600;
+  font-size: 1.25rem !important;
+  color: #ffffff;
+  font-weight: 700;
 }
-
 .product-card__price {
-  font-size: 1.3rem;
-  color: white;
-  font-weight: 600;
+  font-size: 1.25rem;
+  color: #ffffff;
+  font-weight: 700;
 }
 
-/* todo: Pulsanti */
+/* Azioni */
 .product-card__actions {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
-
 .product-card__btn {
-  padding: 10px 15px;
-  border-radius: 6px;
-  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 700;
   cursor: pointer;
   font-family: "Cinzel", serif;
   border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
 }
-
 .product-card__btn--details {
   background: transparent;
   border: 2px solid var(--gold);
   color: var(--gold);
+  box-shadow: 0 0 0 rgba(216,169,40,0);
 }
-
+.product-card__btn--details:hover {
+  background: rgba(216,169,40,0.12);
+  box-shadow: 0 8px 16px rgba(216,169,40,0.18);
+  transform: translateY(-1px);
+}
 .product-card__btn--cart {
-  background: var(--gold);
+  background: linear-gradient(135deg, #e6c200 0%, #d8a928 100%);
   color: #1a1a1a;
+  box-shadow: 0 6px 14px rgba(216,169,40,0.25);
+}
+.product-card__btn--cart:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(216,169,40,0.28);
 }
 
 /* GRID */
 .product-card--grid { width: 31%; }
 
 /* ==========================================
-   PRODUCT CARD - LIST / COMPACT MODE FIXED
+   PRODUCT CARD - LIST / COMPACT MODE FIXED (modernizzata)
    ========================================== */
 
 .product-card--compact {
   width: 100%;
   display: flex;
   align-items: center;
-  background: #1c1a24;
-  border: 2px solid var(--gold);
-  border-radius: 15px;
-  padding: 15px;
+  background: linear-gradient(180deg, rgba(28,26,36,0.98) 0%, rgba(20,18,24,1) 100%);
+  border: 1px solid rgba(216, 169, 40, 0.35);
+  border-radius: 16px;
+  padding: 16px;
   gap: 20px;
   min-height: 120px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
 /* Immagine piccola a sinistra */
@@ -209,13 +221,11 @@
   align-items: center;
   gap: 10px;
 }
-
 .product-card--compact .product-card__price--discount {
   color: #fff;
   font-size: 1.2rem;
   font-weight: 700;
 }
-
 .product-card--compact .product-card__price--original {
   color: #ff4444 !important;
   font-size: 0.9rem !important;
@@ -249,20 +259,17 @@
   gap: 10px;
   align-items: center;
 }
-
 .product-card--compact .qty-btn {
   width: 35px;
   height: 35px;
   font-size: 18px;
   border-radius: 8px;
 }
-
 .product-card--compact .qty-display {
   font-size: 1.1rem;
   font-weight: bold;
   color: #000000;
 }
-
 
 /* Controlli quantità sulla card */
 .product-qty-controls {
@@ -270,15 +277,14 @@
   justify-content: center;
   gap: 10px;
   background: var(--gold);
-    color: #1a1a1a;
-        padding: 0px 18.5%;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: "Cinzel", serif;
-    border: none;
+  color: #1a1a1a;
+  padding: 0px 18.5%;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: "Cinzel", serif;
+  border: none;
 }
-
 .product-qty-controls button,
 .product-qty-controls span {
   border: none;
@@ -288,7 +294,6 @@
   cursor: pointer;
   box-shadow: none;
 }
-
 .qty-btn {
   background: #6c21ff;
   width: 36px;
@@ -299,7 +304,6 @@
   font-size: 20px;
   cursor: pointer;
 }
-
 .qty-display {
   color: white;
   font-size: 1.1rem;
@@ -307,7 +311,7 @@
 }
 
 /* =====================================================
-   SHOP PAGE — LAYOUT COMPLETO
+   SHOP PAGE — LAYOUT COMPLETO (sezione legacy mantenuta per compatibilità)
    ===================================================== */
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

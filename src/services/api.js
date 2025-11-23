@@ -48,11 +48,14 @@ export const productsAPI = {
 export const cartAPI = {
   // Ottieni carrello
   get: async () => {
+    console.log('API: cartAPI.get() called.');
     try {
       const sessionId = getSessionId();
       const response = await fetch(`${API_BASE_URL}/cart/${sessionId}`);
       if (!response.ok) throw new Error('Errore nel caricamento del carrello');
-      return await response.json();
+      const data = await response.json();
+      console.log('API: cartAPI.get() response data:', data);
+      return data;
     } catch (error) {
       console.error('Errore API cart.get:', error);
       return [];
@@ -170,5 +173,6 @@ export const checkoutAPI = {
 
 // Evento personalizzato per sincronizzare il carrello tra componenti
 export const emitCartUpdate = () => {
+  console.log('API: emitCartUpdate() called, dispatching CustomEvent "cartUpdate".');
   window.dispatchEvent(new CustomEvent('cartUpdate'));
 };
