@@ -56,6 +56,37 @@ function HomePage() {
         loadProducts();
     }, []);
 
+    // Autoplay lento e continuo con loop per i caroselli
+    useEffect(() => {
+        let rafId = null;
+        let lastTs = null;
+        const speedPxPerSecond = 24; // ~24px/s (lento). Aumenta per più veloce
+        const refs = [bestSellersRef, latestArrivalsRef, promotionalProductsRef];
+
+        const step = (ts) => {
+            if (lastTs == null) lastTs = ts;
+            const dt = (ts - lastTs) / 1000; // seconds
+            lastTs = ts;
+
+            refs.forEach((r) => {
+                const el = r.current;
+                if (!el || el.isPaused) return;
+                if (el.scrollWidth <= el.clientWidth) return; // niente scroll se contenuto insufficiente
+                el.scrollLeft += speedPxPerSecond * dt;
+                if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+                    el.scrollLeft = 0; // loop
+                }
+            });
+
+            rafId = requestAnimationFrame(step);
+        };
+
+        rafId = requestAnimationFrame(step);
+        return () => {
+            if (rafId) cancelAnimationFrame(rafId);
+        };
+    }, []);
+
     //todo useMemo memorizza il risultato della randomizzazione per evitare di rifare lo shuffle ad ogni render
     //todo Fisher-Yates shuffle: algoritmo per mescolare array in modo casuale
     const randomProducts = useMemo(() => {
@@ -125,6 +156,7 @@ function HomePage() {
         if (ref.current) {
             ref.current.touchStartX = e.touches[0].clientX;
             ref.current.scrollStartX = ref.current.scrollLeft;
+            ref.current.isPaused = true; // pausa autoplay durante il drag
         }
     };
 
@@ -142,6 +174,10 @@ function HomePage() {
         if (ref.current) {
             ref.current.touchStartX = null;
             ref.current.scrollStartX = null;
+            // riprendi autoplay dopo breve delay
+            setTimeout(() => {
+                if (ref.current) ref.current.isPaused = false;
+            }, 800);
         }
     };
 
@@ -231,7 +267,7 @@ function HomePage() {
                 {/*todo Pulsante freccia sinistra per scrollare il carosello indietro*/}
                 <button
                     className="scroll-btn scroll-left"
-                    onClick={() => scrollCarousel(bestSellersRef, -1)}>
+                    onClick={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = true; scrollCarousel(bestSellersRef, -1); setTimeout(() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = false; }, 800); }}>
                     &lt;
                 </button>
 
@@ -243,6 +279,8 @@ function HomePage() {
                     onTouchStart={(e) => handleTouchStart(e, bestSellersRef)}
                     onTouchMove={(e) => handleTouchMove(e, bestSellersRef)}
                     onTouchEnd={() => handleTouchEnd(bestSellersRef)}
+                    onMouseEnter={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = true; }}
+                    onMouseLeave={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = false; }}
                 >
                     {bestSellers.map((product, index) => (
                         <ProductCard
@@ -259,7 +297,7 @@ function HomePage() {
                 {/*todo Pulsante freccia destra per scrollare il carosello avanti*/}
                 <button
                     className="scroll-btn scroll-right"
-                    onClick={() => scrollCarousel(bestSellersRef, 1)}>
+                    onClick={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = true; scrollCarousel(bestSellersRef, 1); setTimeout(() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = false; }, 800); }}>
                     &gt;
                 </button>
             </section>
@@ -271,7 +309,7 @@ function HomePage() {
                 {/*todo Pulsante freccia sinistra per il carosello Ultimi Arrivi*/}
                 <button
                     className="scroll-btn scroll-left"
-                    onClick={() => scrollCarousel(latestArrivalsRef, -1)}>
+                    onClick={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = true; scrollCarousel(latestArrivalsRef, -1); setTimeout(() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = false; }, 800); }}>
                     &lt;
                 </button>
 
@@ -282,6 +320,8 @@ function HomePage() {
                     onTouchStart={(e) => handleTouchStart(e, latestArrivalsRef)}
                     onTouchMove={(e) => handleTouchMove(e, latestArrivalsRef)}
                     onTouchEnd={() => handleTouchEnd(latestArrivalsRef)}
+                    onMouseEnter={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = true; }}
+                    onMouseLeave={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = false; }}
                 >
                     {latestArrivals.map((product, index) => (
                         <ProductCard
@@ -298,7 +338,7 @@ function HomePage() {
                 {/*todo Pulsante freccia destra per scrollare Ultimi Arrivi*/}
                 <button
                     className="scroll-btn scroll-right"
-                    onClick={() => scrollCarousel(latestArrivalsRef, 1)}>
+                    onClick={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = true; scrollCarousel(latestArrivalsRef, 1); setTimeout(() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = false; }, 800); }}>
                     &gt;
                 </button>
             </section>
@@ -312,7 +352,7 @@ function HomePage() {
                     {/*todo Pulsante freccia sinistra per il carosello Prodotti in Promozione*/}
                     <button
                         className="scroll-btn scroll-left"
-                        onClick={() => scrollCarousel(promotionalProductsRef, -1)}>
+                        onClick={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = true; scrollCarousel(promotionalProductsRef, -1); setTimeout(() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = false; }, 800); }}>
                         &lt;
                     </button>
 
@@ -323,6 +363,8 @@ function HomePage() {
                         onTouchStart={(e) => handleTouchStart(e, promotionalProductsRef)}
                         onTouchMove={(e) => handleTouchMove(e, promotionalProductsRef)}
                         onTouchEnd={() => handleTouchEnd(promotionalProductsRef)}
+                        onMouseEnter={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = true; }}
+                        onMouseLeave={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = false; }}
                     >
                         {promotionalProducts.map((product, index) => (
                             <ProductCard
@@ -339,7 +381,7 @@ function HomePage() {
                     {/*todo Pulsante freccia destra per scrollare Prodotti in Promozione*/}
                     <button
                         className="scroll-btn scroll-right"
-                        onClick={() => scrollCarousel(promotionalProductsRef, 1)}>
+                        onClick={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = true; scrollCarousel(promotionalProductsRef, 1); setTimeout(() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = false; }, 800); }}>
                         &gt;
                     </button>
                 </section>
