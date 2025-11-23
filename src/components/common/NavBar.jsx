@@ -5,7 +5,6 @@ import { useState, useEffect, useRef } from 'react';
 import { cartAPI, emitCartUpdate } from '../../services/api';
 
 function NavBar() {
-
   const navigate = useNavigate();
 
   const [wishlistCount, setWishlistCount] = useState(0);
@@ -23,6 +22,8 @@ function NavBar() {
   const closeTimer = useRef(null);
 
   const FALLBACK_IMAGE = "/fallback-product.png";
+
+  const FREE_SHIPPING_THRESHOLD = 40; // soglia per spesa gratuita
 
   useEffect(() => {
     updateWishlistCount();
@@ -54,7 +55,6 @@ function NavBar() {
       setCartCount(totalItems);
       setCartItems(cart);
       setCartTotal(totalPrice.toFixed(2));
-
     } catch (error) {
       setCartCount(0);
       setCartItems([]);
@@ -118,6 +118,10 @@ function NavBar() {
     }, 250);
   };
 
+  const goToCheckout = () => {
+    navigate("/shop/checkout");
+  };
+
   return (
     <>
       <nav className="navbar navbar-sticky">
@@ -136,7 +140,6 @@ function NavBar() {
 
         <div className="navbar-actions">
 
-          {/* Wishlist */}
           <NavLink to="/wishlist" className="wishlist-icon-link">
             <span className="wishlist-icon">
               <FaHeart />
@@ -144,7 +147,6 @@ function NavBar() {
             </span>
           </NavLink>
 
-          {/* CARRELLO */}
           <div
             className="cart-wrapper"
             onMouseEnter={handleHoverOpen}
@@ -170,18 +172,14 @@ function NavBar() {
                         key={item.id}
                         className={`cart-preview-item fade-in ${item.removing ? "removing" : ""}`}
                       >
-
                         <img
                           src={item.image || FALLBACK_IMAGE}
                           onError={(e) => e.target.src = FALLBACK_IMAGE}
                           alt={item.name}
                         />
-
                         <div className="info">
                           <span>{item.name}</span>
-
                           <div className="qty-controls">
-
                             <button
                               className="qty-btn"
                               disabled={loadingItemId === item.id}
@@ -189,9 +187,7 @@ function NavBar() {
                             >
                               {loadingItemId === item.id ? <span className="spinner"></span> : "−"}
                             </button>
-
                             <span className="qty-number">{item.quantity}</span>
-
                             <button
                               className="qty-btn"
                               disabled={loadingItemId === item.id}
@@ -199,36 +195,37 @@ function NavBar() {
                             >
                               {loadingItemId === item.id ? <span className="spinner"></span> : "+"}
                             </button>
-
                             <span
                               className="remove-btn"
                               onClick={() => removeItem(item.id)}
                             >
                               Rimuovi
                             </span>
-
                           </div>
                         </div>
-
                         <span className="price">{item.price}€</span>
                       </li>
                     ))}
                   </ul>
                 )}
 
-                {/* Totale */}
                 {cartItems.length > 0 && (
                   <div className="cart-total-box">
                     <span>Totale:</span>
                     <strong>{cartTotal}€</strong>
+                    {parseFloat(cartTotal) >= FREE_SHIPPING_THRESHOLD && (
+                      <div className="free-shipping-text" style={{color: '#4ade80', fontWeight: 'bold', marginTop: '6px'}}>
+                        Spesa gratuita!
+                      </div>
+                    )}
                   </div>
                 )}
 
                 <button
                   className="btn-checkout"
-                  onClick={() => navigate("/shop/carretto")}
+                  onClick={goToCheckout}
                 >
-                  Vai al Carretto
+                  Vai al Checkout
                 </button>
 
               </div>

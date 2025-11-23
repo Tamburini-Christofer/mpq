@@ -1,15 +1,11 @@
-//todo: Importiamo React e useState per creare componenti e gestire stati
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-// Stili
 import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
-// API
-import { productsAPI, cartAPI } from "../services/api";
+import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
 
-// Componenti
 import ProductCard from "../components/common/ProductCard";
 import CheckoutForm from "../components/shop/CheckoutForm";
 import ShopComponent from "../components/shop/ShopComponent";
@@ -28,13 +24,10 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  // SEARCH
   const [searchValue, setSearchValue] = useState("");
 
-  // ORDINAMENTO
   const [sortValue, setSortValue] = useState("recent");
 
-  // FILTRI
   const [filters, setFilters] = useState({
     priceRange: { min: 0, max: 200, current: 200 },
     categories: [],
@@ -46,7 +39,6 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // NOTIFICHE
   const [notification, setNotification] = useState(null);
 
   const showNotification = (message, type = "success") => {
@@ -54,7 +46,6 @@ const Shop = ({ defaultTab = "shop" }) => {
     setTimeout(() => setNotification(null), 2500);
   };
 
-  // PRODOTTI
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -84,13 +75,13 @@ const Shop = ({ defaultTab = "shop" }) => {
     loadProducts();
   }, []);
 
-  // CARRELLO
   const [cart, setCart] = useState([]);
 
   const fetchCart = async () => {
     try {
       const data = await cartAPI.get();
       setCart(data);
+      emitCartUpdate();
       return data;
     } catch {
       return cart;
@@ -101,28 +92,24 @@ const Shop = ({ defaultTab = "shop" }) => {
     fetchCart();
   }, []);
 
-  // ⭐ AGGIUNTA singola
   const addToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
       const updatedCart = await fetchCart();
-      const item = updatedCart.find((i) => i.id === product.id);
 
       showNotification(`"${product.name}" aggiunto al carrello!`);
-      return item?.quantity || 0;
+      return updatedCart.find((i) => i.id === product.id)?.quantity || 0;
     } catch {
       showNotification("Errore aggiunta al carrello", "error");
       return 0;
     }
   };
 
-  // ⭐ DIMINUISCI QUANTITÀ
   const decreaseQuantity = async (productId) => {
     try {
       const currentItem = cart.find((i) => i.id === productId);
       if (!currentItem) return 0;
 
-      // se arriva a 0 → rimuovi
       if (currentItem.quantity <= 1) {
         await cartAPI.remove(productId);
         await fetchCart();
@@ -132,15 +119,12 @@ const Shop = ({ defaultTab = "shop" }) => {
       const newQty = currentItem.quantity - 1;
       await cartAPI.update(productId, newQty);
       const updatedCart = await fetchCart();
-      const updatedItem = updatedCart.find((i) => i.id === productId);
-
-      return updatedItem?.quantity || 0;
+      return updatedCart.find((i) => i.id === productId)?.quantity || 0;
     } catch {
       return cart.find((i) => i.id === productId)?.quantity || 0;
     }
   };
 
-  // ⭐ AUMENTA QUANTITÀ
   const increaseQuantity = async (productId) => {
     try {
       const currentItem = cart.find((i) => i.id === productId);
@@ -148,15 +132,12 @@ const Shop = ({ defaultTab = "shop" }) => {
 
       await cartAPI.update(productId, newQty);
       const updatedCart = await fetchCart();
-      const updatedItem = updatedCart.find((i) => i.id === productId);
-
-      return updatedItem?.quantity || 0;
+      return updatedCart.find((i) => i.id === productId)?.quantity || 0;
     } catch {
       return cart.find((i) => i.id === productId)?.quantity || 0;
     }
   };
 
-  // ⭐ RIMOZIONE dal carrello
   const removeFromCart = async (productId) => {
     try {
       await cartAPI.remove(productId);
@@ -167,7 +148,6 @@ const Shop = ({ defaultTab = "shop" }) => {
     }
   };
 
-  // FILTRI + ORDINAMENTO
   const getFilteredAndSortedProducts = () => {
     let filtered = [...products];
 
@@ -184,9 +164,7 @@ const Shop = ({ defaultTab = "shop" }) => {
     );
 
     if (filters.categories.length > 0) {
-      filtered = filtered.filter((p) =>
-        filters.categories.includes(p.category)
-      );
+      filtered = filtered.filter((p) => filters.categories.includes(p.category));
     }
 
     if (filters.matureContent) {
@@ -219,7 +197,6 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const loadMoreProducts = () => setVisibleProducts((prev) => prev + 10);
 
-  // TOTALI
   const subtotal = cart.reduce(
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
     0
@@ -235,7 +212,6 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   return (
     <div className="shop-ui-container">
-      {/* NOTIFICHE */}
       {notification && (
         <div className={`notification ${notification.type}`}>
           <div className="notification-content">
@@ -253,7 +229,6 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
       )}
 
-      {/* SIDEBAR */}
       <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
           <div className="icon"></div>
@@ -296,7 +271,6 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
       </aside>
 
-      {/* FILTRI */}
       {showFilters && (
         <div className="filters-panel">
           <ShopComponent
@@ -308,12 +282,9 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
       )}
 
-      {/* MAIN */}
       <main className="content">
-        {/* SHOP */}
         {activeTab === "shop" && (
           <div className="shop-section">
-            {/* CONTROLLI */}
             <div className="view-controls">
               <div style={{ display: "flex", gap: "10px" }}>
                 <button
@@ -344,7 +315,6 @@ const Shop = ({ defaultTab = "shop" }) => {
               />
             </div>
 
-            {/* LISTA PRODOTTI */}
             {loading ? (
               <div className="loading-container">
                 <p>Caricamento prodotti...</p>
@@ -371,13 +341,9 @@ const Shop = ({ defaultTab = "shop" }) => {
                     ))}
                 </div>
 
-                {visibleProducts <
-                  getFilteredAndSortedProducts().length && (
+                {visibleProducts < getFilteredAndSortedProducts().length && (
                   <div className="load-more-container">
-                    <button
-                      className="load-more-btn"
-                      onClick={loadMoreProducts}
-                    >
+                    <button className="load-more-btn" onClick={loadMoreProducts}>
                       Carica altri 10 prodotti
                     </button>
                   </div>
@@ -387,17 +353,12 @@ const Shop = ({ defaultTab = "shop" }) => {
           </div>
         )}
 
-        {/* CART */}
         {activeTab === "cart" && (
           <div className="cart-section">
             <h2 className="section-title-shop">Carrello</h2>
 
             {cart.length > 0 && (
-              <FreeShippingBanner
-                subtotal={subtotal}
-                threshold={40}
-                promoApplied={false}
-              />
+              <FreeShippingBanner subtotal={subtotal} threshold={40} promoApplied={false} />
             )}
 
             {cart.length === 0 ? (
@@ -414,35 +375,22 @@ const Shop = ({ defaultTab = "shop" }) => {
                     <div key={item.id} className="cart-item">
                       <div className="item-info">
                         <span className="item-name">{item.name}</span>
-                        <span className="item-price">
-                          {price.toFixed(2)}€
-                        </span>
+                        <span className="item-price">{price.toFixed(2)}€</span>
                       </div>
 
                       <div className="quantity-controls">
-                        <button
-                          className="quantity-btn-c"
-                          onClick={() => decreaseQuantity(item.id)}
-                        >
+                        <button className="quantity-btn-c" onClick={() => decreaseQuantity(item.id)}>
                           -
                         </button>
                         <span>{item.quantity}</span>
-                        <button
-                          className="quantity-btn-c"
-                          onClick={() => increaseQuantity(item.id)}
-                        >
+                        <button className="quantity-btn-c" onClick={() => increaseQuantity(item.id)}>
                           +
                         </button>
                       </div>
 
                       <div className="item-total">
-                        <span className="total-price">
-                          {(price * item.quantity).toFixed(2)}€
-                        </span>
-                        <button
-                          className="remove-btn"
-                          onClick={() => removeFromCart(item.id)}
-                        >
+                        <span className="total-price">{(price * item.quantity).toFixed(2)}€</span>
+                        <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
                           Rimuovi
                         </button>
                       </div>
@@ -458,7 +406,6 @@ const Shop = ({ defaultTab = "shop" }) => {
           </div>
         )}
 
-        {/* CHECKOUT */}
         {activeTab === "checkout" && (
           <div className="checkout-section">
             <h2 className="section-title-shop">Checkout</h2>
@@ -478,8 +425,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                   return (
                     <div key={item.id} className="checkout-item">
                       <div>
-                        {item.name}{" "}
-                        <strong className="qt">{item.quantity} pz</strong>
+                        {item.name} <strong className="qt">{item.quantity} pz</strong>
                       </div>
                       <div>{(price * item.quantity).toFixed(2)}€</div>
                     </div>
@@ -500,14 +446,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                 >
                   <strong className="sub">Spedizione</strong>
                   {isFreeShipping ? (
-                    <span
-                      style={{
-                        color: "#4ade80",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      GRATIS
-                    </span>
+                    <span style={{ color: "#4ade80", fontWeight: "bold" }}>GRATIS</span>
                   ) : (
                     <strong>{shippingCost.toFixed(2)}€</strong>
                   )}
@@ -520,23 +459,14 @@ const Shop = ({ defaultTab = "shop" }) => {
                     borderTop: "2px solid var(--gold)",
                   }}
                 >
-                  <strong
-                    style={{ color: "var(--gold)", fontSize: "20px" }}
-                  >
-                    Totale
-                  </strong>
-                  <strong
-                    style={{ color: "var(--gold)", fontSize: "20px" }}
-                  >
+                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>Totale</strong>
+                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>
                     {totalAmount.toFixed(2)}€
                   </strong>
                 </div>
 
                 <div className="checkout-actions">
-                  <button
-                    className="confirm-btn"
-                    onClick={() => setShowCheckoutForm(true)}
-                  >
+                  <button className="confirm-btn" onClick={() => setShowCheckoutForm(true)}>
                     Procedi al Pagamento
                   </button>
                 </div>

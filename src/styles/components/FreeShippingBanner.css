@@ -13,7 +13,6 @@
 
 .free-shipping-banner.active {
   background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-  animation: pulse 2s infinite;
 }
 
 @keyframes pulse {

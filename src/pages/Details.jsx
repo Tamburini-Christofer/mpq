@@ -1,10 +1,9 @@
-import "../styles/pages/Details.css";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, useMemo, useRef } from "react";
 import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
 import ProductCard from "../components/common/ProductCard";
+import "../styles/pages/Details.css";
 
-// (ti resta se ti serve altrove)
 const generateSlug = (name) => {
   return name
     .toLowerCase()
@@ -29,11 +28,9 @@ function Details() {
 
   const [quantity, setQuantity] = useState(1);
   const [animClass, setAnimClass] = useState("");
-
   const [notification, setNotification] = useState(null);
   const relatedRef = useRef(null);
 
-  // Carica prodotto + lista prodotti per correlati
   useEffect(() => {
     const loadProduct = async () => {
       try {
@@ -52,7 +49,6 @@ function Details() {
     loadProduct();
   }, [slug]);
 
-  // Notifiche
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
     setTimeout(() => {
@@ -60,74 +56,67 @@ function Details() {
     }, 3000);
   };
 
-  // Quantità con animazione (increment/decrement + shake)
   const increaseQty = () => {
     setAnimClass("increment");
     setTimeout(() => {
       setAnimClass("");
     }, 200);
-
     setQuantity((q) => q + 1);
   };
 
   const decreaseQty = () => {
     setQuantity((q) => {
       if (q <= 1) {
-        // Shake se provi a scendere sotto 1
         setAnimClass("shake");
         setTimeout(() => {
           setAnimClass("");
         }, 300);
         return 1;
       }
-
       setAnimClass("decrement");
       setTimeout(() => {
         setAnimClass("");
       }, 200);
-
       return q - 1;
     });
   };
 
-  // Aggiungi al carretto con quantità corrente
   const addToCart = async () => {
     if (!product) return;
     try {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
-      showNotification(`"${product.name}" aggiunto al carretto!`);
+      showNotification(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
-      console.error("Errore aggiunta al carretto:", error);
-      showNotification("Errore nell'aggiunta al carretto", "error");
+      console.error("Errore aggiunta al carrello:", error);
+      showNotification("Errore nell'aggiunta al carrello", "error");
     }
   };
 
-  // Prodotti correlati (stessa categoria, escluso attuale)
+  // Prodotti correlati con sconto e originalIndex
   const relatedProducts = useMemo(() => {
-    if (!product || typeof product.category_id === "undefined") {
-      return [];
-    }
-
+    if (!product || typeof product.category_id === "undefined") return [];
     const sameCategory = productsData.filter(
       (p) => p.category_id === product.category_id && p.id !== product.id
     );
-
     const shuffled = [...sameCategory];
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-
     const selected = shuffled.slice(0, 6);
-
     return selected.map((prod) => ({
       ...prod,
       originalIndex: productsData.findIndex((p) => p.id === prod.id),
+      hasDiscount:
+        prod.discount && typeof prod.discount === "number" && prod.discount > 0,
+      finalPrice:
+        prod.discount && typeof prod.discount === "number" && prod.discount > 0
+          ? parseFloat(prod.price) * (1 - prod.discount / 100)
+          : parseFloat(prod.price),
     }));
   }, [product, productsData]);
 
-  // Carosello correlati
   const scrollCarousel = (ref, direction) => {
     if (ref.current) {
       const cardWidth = window.innerWidth < 768 ? 200 : 270;
@@ -162,15 +151,14 @@ function Details() {
     }
   };
 
-  // Aggiungi dal carosello correlati (1 pezzo)
   const handleAddToCartFromCarousel = async (prod) => {
     try {
       await cartAPI.add(prod.id, 1);
       emitCartUpdate();
-      showNotification(`"${prod.name}" aggiunto al carretto!`);
+      showNotification(`"${prod.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta correlato:", error);
-      showNotification("Errore nell'aggiunta al carretto", "error");
+      showNotification("Errore nell'aggiunta al carrello", "error");
     }
   };
 
@@ -193,7 +181,6 @@ function Details() {
 
   return (
     <>
-      {/* NOTIFICA */}
       {notification && (
         <div className={`notification ${notification.type}`}>
           <div className="notification-content">
@@ -211,58 +198,45 @@ function Details() {
         </div>
       )}
 
-      {/* Torna alla home */}
       <button className="back-to-home-btn" onClick={() => navigate("/")}>
         ← Torna alla Home
       </button>
 
       <div className="product-page">
-        {/* COLONNA SINISTRA: IMMAGINE */}
         <div className="product-gallery">
           <div className="product-main-image">
             <img src={product.image} alt={product.name} />
           </div>
         </div>
 
-        {/* COLONNA DESTRA: INFO */}
         <div className="product-info">
-          <div>
-            <h1 className="product-title">{product.name}</h1>
-            <p className="product-subtitle">Avventura epica e contenuti esclusivi.</p>
+          <h1 className="product-title">{product.name}</h1>
+          <p className="product-subtitle">Avventura epica e contenuti esclusivi.</p>
+
+          <div className="product-price-row">
+            {hasDiscount ? (
+              <>
+                <span className="product-price">{finalPrice.toFixed(2)}€</span>
+                <span className="product-old-price" data-strikethrough="true">
+                  {price.toFixed(2)}€
+                </span>
+              </>
+            ) : (
+              <span className="product-price">{price.toFixed(2)}€</span>
+            )}
           </div>
 
-          {/* Prezzo + badge */}
-          <div>
-            <div className="product-price-row">
-              {hasDiscount ? (
-                <>
-                  <span className="product-price">{finalPrice.toFixed(2)}€</span>
-                  <span
-                    className="product-old-price"
-                    data-strikethrough="true"
-                  >
-                    {price.toFixed(2)}€
-                  </span>
-                </>
-              ) : (
-                <span className="product-price">{price.toFixed(2)}€</span>
-              )}
-            </div>
-
-            <div className="product-badge-wrapper">
-              <span
-                className="product-badge"
-                data-discount={hasDiscount ? "true" : "false"}
-              >
-                {hasDiscount ? `-${product.discount}% OFFERTA` : "Featured Quest"}
-              </span>
-            </div>
+          <div className="product-badge-wrapper">
+            <span
+              className="product-badge"
+              data-discount={hasDiscount ? "true" : "false"}
+            >
+              {hasDiscount ? `-${product.discount}% OFFERTA` : "Featured Quest"}
+            </span>
           </div>
 
-          {/* Descrizione breve */}
           <p className="product-short-desc">{product.description}</p>
 
-          {/* AZIONI: quantità + bottone carretto */}
           <div className="product-actions">
             <div className="product-quantity-row">
               <span className="qty-label">Quantità</span>
@@ -294,32 +268,6 @@ function Details() {
             </div>
           </div>
 
-          {/* TABS (puoi espandere il testo come vuoi) */}
-          <div className="product-tabs">
-            <div className="tab-buttons">
-              <button className="tab-btn">Descrizione</button>
-              <button className="tab-btn active">Cosa è incluso</button>
-            </div>
-            <div className="tab-content">
-              <p>
-                📜 Sarai chiamato a percorrere sentieri misteriosi, raccogliere
-                indizi e completare quest come in una vera avventura GdR...
-              </p>
-              <ul className="specs-list">
-                <li>
-                  <span className="spec-label">Durata:</span> 20 quest
-                </li>
-                <li>
-                  <span className="spec-label">File inclusi:</span> PDF
-                </li>
-                <li>
-                  <span className="spec-label">Bonus:</span> quest finale extra
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* CORRELATI */}
           {relatedProducts.length > 0 && (
             <section className="quests-section related-section-wrapper">
               <h2 className="section-title">Prodotti correlati</h2>

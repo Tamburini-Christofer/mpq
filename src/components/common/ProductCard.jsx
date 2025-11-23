@@ -1,20 +1,20 @@
-//todo Importiamo gli stili della card prodotto
+// src/components/common/ProductCard.jsx
 import "../../styles/components/ProductCard.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-//todo Funzione per generare slug SEO-friendly
+// Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
   return name
     .toLowerCase()
     .trim()
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/[àáâãäå]/g, "a")
+    .replace(/[èéêë]/g, "e")
+    .replace(/[ìíîï]/g, "i")
+    .replace(/[òóôõö]/g, "o")
+    .replace(/[ùúûü]/g, "u")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
 };
 
 export default function ProductCard({
@@ -26,12 +26,9 @@ export default function ProductCard({
   onIncrease = null,
   onDecrease = null,
   showActions = true,
-  cart = []
+  cart = [],
 }) {
-
-  /* ======================================================
-     WISHLIST
-  ====================================================== */
+  // Gestione wishlist
   const [isInWishlist, setIsInWishlist] = useState(() => {
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
     return wishlist.some((i) => i.id === product.id);
@@ -39,9 +36,7 @@ export default function ProductCard({
 
   const toggleWishlist = (e) => {
     e.stopPropagation();
-
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-
     if (isInWishlist) {
       const updated = wishlist.filter((i) => i.id !== product.id);
       localStorage.setItem("wishlist", JSON.stringify(updated));
@@ -51,31 +46,32 @@ export default function ProductCard({
       localStorage.setItem("wishlist", JSON.stringify(wishlist));
       setIsInWishlist(true);
     }
-
     window.dispatchEvent(new Event("wishlistUpdate"));
   };
 
-  /* ======================================================
-     MOSTRA QUANTITÀ SE IL PRODOTTO È GIÀ NEL CARRELLO
-  ====================================================== */
+  // Quantità prodotto nel carrello
   const cartItem = cart.find((c) => c.id === product.id);
   const qty = cartItem?.quantity || 0;
 
   const handleAdd = async () => {
-    const newQty = await onAddToCart(product);
+    if (onAddToCart) {
+      await onAddToCart(product);
+    }
   };
 
   const handleIncrease = async () => {
-    const newQty = await onIncrease(product.id);
+    if (onIncrease) {
+      await onIncrease(product.id);
+    }
   };
 
   const handleDecrease = async () => {
-    const newQty = await onDecrease(product.id);
+    if (onDecrease) {
+      await onDecrease(product.id);
+    }
   };
 
-  /* ======================================================
-     BADGE & PREZZI
-  ====================================================== */
+  // Configurazioni badge
   const badgeConfig = {
     popular: { className: "product-card__badge--popular", text: "POPOLARE" },
     new: { className: "product-card__badge--new", text: "NUOVO" },
@@ -84,7 +80,7 @@ export default function ProductCard({
 
   const discount = parseFloat(product.discount) || 0;
   const hasDiscount = discount > 0;
-  const originalPrice = parseFloat(product.price);
+  const originalPrice = parseFloat(product.price) || 0;
   const finalPrice = hasDiscount
     ? originalPrice * (1 - discount / 100)
     : originalPrice;
@@ -94,13 +90,10 @@ export default function ProductCard({
 
   const productSlug = generateSlug(product.name);
 
-  /* ======================================================
-     CARD VERSIONE LIST / COMPACT
-  ====================================================== */
+  // Versione compact
   if (variant === "compact") {
     return (
       <div className="product-card product-card--compact">
-
         <img
           className="product-card__image"
           src={product.image}
@@ -128,15 +121,13 @@ export default function ProductCard({
         </div>
 
         <div className="product-card__actions">
-          {/* Dettagli */}
           <button
             className="product-card__btn product-card__btn--details"
-            onClick={() => onViewDetails(productSlug)}
+            onClick={() => onViewDetails && onViewDetails(productSlug)}
           >
             Dettagli
           </button>
 
-          {/* Acquista + Qty */}
           {qty === 0 ? (
             <button
               className="product-card__btn product-card__btn--cart"
@@ -146,9 +137,13 @@ export default function ProductCard({
             </button>
           ) : (
             <div className="product-qty-controls">
-              <button className="qty-btn" onClick={handleDecrease}>-</button>
+              <button className="qty-btn" onClick={handleDecrease}>
+                -
+              </button>
               <span className="qty-display">{qty}</span>
-              <button className="qty-btn" onClick={handleIncrease}>+</button>
+              <button className="qty-btn" onClick={handleIncrease}>
+                +
+              </button>
             </div>
           )}
         </div>
@@ -156,20 +151,15 @@ export default function ProductCard({
     );
   }
 
-  /* ======================================================
-     CARD VERSIONE GRIGLIA (SHOP)
-  ====================================================== */
+  // Versione griglia/shop/carousel
   return (
     <div className={`product-card product-card--${variant}`}>
-
-      {/* Badge */}
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
           {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
 
-      {/* Cuore / Wishlist */}
       <button
         className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
         onClick={toggleWishlist}
@@ -202,19 +192,15 @@ export default function ProductCard({
           <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
         )}
 
-        {/* BOTTONI / QTY */}
         {showActions && (
           <div className="product-card__actions">
-
-            {/* Dettagli */}
             <button
               className="product-card__btn product-card__btn--details"
-              onClick={() => onViewDetails(productSlug)}
+              onClick={() => onViewDetails && onViewDetails(productSlug)}
             >
               Dettagli
             </button>
 
-            {/* Se qty = 0 → Mostra Acquista */}
             {qty === 0 ? (
               <button
                 className="product-card__btn product-card__btn--cart"
@@ -224,14 +210,17 @@ export default function ProductCard({
               </button>
             ) : (
               <div className="product-qty-controls">
-                <button className="qty-btn" onClick={handleDecrease}>-</button>
+                <button className="qty-btn" onClick={handleDecrease}>
+                  -
+                </button>
                 <span className="qty-display">{qty}</span>
-                <button className="qty-btn" onClick={handleIncrease}>+</button>
+                <button className="qty-btn" onClick={handleIncrease}>
+                  +
+                </button>
               </div>
             )}
           </div>
         )}
-
       </div>
     </div>
   );
