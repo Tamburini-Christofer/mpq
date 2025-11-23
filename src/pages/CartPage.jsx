@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/pages/CartPage.css";
 
-import { cartAPI } from "../services/api";
+import { cartAPI, emitCartUpdate } from "../services/api";
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
 function CartPage() {
@@ -36,6 +36,7 @@ function CartPage() {
     try {
       await cartAPI.remove(id);
       loadCart();
+      window.emitCartUpdate && emitCartUpdate();
       showNotification("Prodotto rimosso", "error");
     } catch {
       showNotification("Errore rimozione", "error");
@@ -47,6 +48,7 @@ function CartPage() {
     if (!item) return;
     await cartAPI.update(id, item.quantity + 1);
     loadCart();
+    window.emitCartUpdate && emitCartUpdate();
   };
 
   const decreaseQuantity = async (id) => {
@@ -60,6 +62,7 @@ function CartPage() {
 
     await cartAPI.update(id, item.quantity - 1);
     loadCart();
+    window.emitCartUpdate && emitCartUpdate();
   };
 
   // TOTALE

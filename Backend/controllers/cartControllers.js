@@ -117,6 +117,69 @@ exports.updateCartItem = async (req, res, next) => {
   }
 };
 
+// POST - Aumenta quantità di 1
+exports.increaseQuantity = async (req, res, next) => {
+  try {
+    const { sessionId, productId } = req.params;
+
+    if (!carts.has(sessionId)) {
+      const err = new Error("Carrello non trovato");
+      err.status = 404;
+      return next(err);
+    }
+
+    const cart = carts.get(sessionId);
+    const item = cart.find((i) => i.productId === parseInt(productId));
+
+    if (!item) {
+      const err = new Error("Prodotto non nel carrello");
+      err.status = 404;
+      return next(err);
+    }
+
+    item.quantity += 1;
+
+    res.json({ message: "Quantità aumentata", cart });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// POST - Diminuisci quantità di 1
+exports.decreaseQuantity = async (req, res, next) => {
+  try {
+    const { sessionId, productId } = req.params;
+
+    if (!carts.has(sessionId)) {
+      const err = new Error("Carrello non trovato");
+      err.status = 404;
+      return next(err);
+    }
+
+    const cart = carts.get(sessionId);
+    const item = cart.find((i) => i.productId === parseInt(productId));
+
+    if (!item) {
+      const err = new Error("Prodotto non nel carrello");
+      err.status = 404;
+      return next(err);
+    }
+
+    item.quantity -= 1;
+
+    // Se la quantità scende a 0 o meno, rimuovi l'item
+    if (item.quantity <= 0) {
+      const index = cart.indexOf(item);
+      cart.splice(index, 1);
+      return res.json({ message: "Prodotto rimosso", cart });
+    }
+
+    res.json({ message: "Quantità diminuita", cart });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // DELETE - Rimuovi un item
 exports.removeFromCart = async (req, res, next) => {
   try {

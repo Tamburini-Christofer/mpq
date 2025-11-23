@@ -52,9 +52,6 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     <>
       {error && <div className="payment-error">{error}</div>}
       <div className="buttons-row">
-        <button type="button" className="cancel-btn" onClick={onClose}>
-          Annulla Ordine
-        </button>
         <button 
           type="button"
           className="pay-btn" 

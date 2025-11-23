@@ -435,19 +435,31 @@ export default function CheckoutForm({
 
               {/* AZIONI / PAGAMENTO */}
               <div className="form-actions">
-
-                <PaymentButton
+                <button
+                  type="button"
+                  className="cancel-order-btn danger"
+                  onClick={onCancelOrder}
+                  style={{
+                    background: 'linear-gradient(135deg, #ff3b3b, #c80000)',
+                    color: 'white',
+                    border: 'none',
+                    fontWeight: 700,
+                    fontFamily: 'Cinzel, serif',
+                    padding: '14px 26px',
+                    borderRadius: '12px',
+                    boxShadow: '0 8px 25px rgba(255, 59, 59, 0.25)',
+                    transition: '0.25s',
+                  }}
+                >
+              
+                  Annulla e Cancella Ordine
+                </button>
+                     <PaymentButton
                   totalAmount={safeTotalAmount}
                   cartItems={safeCartItems}
                   formData={formData}
                   onClose={onClose}
                 />
-                <button
-                  type="button"
-                  className="cancel-order-btn"
-                  onClick={onCancelOrder}>
-                  Annulla Ordine
-                </button>
               </div>
             </div>
           </div>

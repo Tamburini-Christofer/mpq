@@ -96,6 +96,38 @@ export const cartAPI = {
     }
   },
 
+  // Aumenta quantità
+  increase: async (productId) => {
+    try {
+      const sessionId = getSessionId();
+      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}/increase`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Errore nell\'aumento della quantità');
+      return await response.json();
+    } catch (error) {
+      console.error('Errore API cart.increase:', error);
+      throw error;
+    }
+  },
+
+  // Diminuisci quantità
+  decrease: async (productId) => {
+    try {
+      const sessionId = getSessionId();
+      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}/decrease`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Errore nella diminuzione della quantità');
+      return await response.json();
+    } catch (error) {
+      console.error('Errore API cart.decrease:', error);
+      throw error;
+    }
+  },
+
   // Rimuovi dal carrello
   remove: async (productId) => {
     try {

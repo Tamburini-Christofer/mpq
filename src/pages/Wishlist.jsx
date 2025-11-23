@@ -9,20 +9,33 @@ function Wishlist() {
   const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [cart, setCart] = useState([]);
 
   const loadWishlist = () => {
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
     setWishlistItems(wishlist);
   };
 
+  const loadCart = async () => {
+    try {
+      const cartData = await cartAPI.get();
+      setCart(cartData);
+    } catch (error) {
+      console.error("Errore caricamento carrello:", error);
+    }
+  };
+
   useEffect(() => {
     loadWishlist();
+    loadCart();
     window.addEventListener("storage", loadWishlist);
     window.addEventListener("wishlistUpdate", loadWishlist);
+    window.addEventListener("cartUpdate", loadCart);
 
     return () => {
       window.removeEventListener("storage", loadWishlist);
       window.removeEventListener("wishlistUpdate", loadWishlist);
+      window.removeEventListener("cartUpdate", loadCart);
     };
   }, []);
 
@@ -81,6 +94,31 @@ function Wishlist() {
     }
   };
 
+  const handleIncrease = async (productId) => {
+    try {
+      await cartAPI.increase(productId);
+      emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nell'aumentare la quantità:", error);
+      showNotification("Errore nell'aggiornamento del carrello", "error");
+    }
+  };
+
+  const handleDecrease = async (productId) => {
+    try {
+      const item = cart.find(i => i.id === productId);
+      if (item && item.quantity > 1) {
+        await cartAPI.decrease(productId);
+      } else {
+        await cartAPI.remove(productId);
+      }
+      emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nel diminuire la quantità:", error);
+      showNotification("Errore nell'aggiornamento del carrello", "error");
+    }
+  };
+
   return (
     <>
       {notification && (
@@ -125,8 +163,11 @@ function Wishlist() {
                 <ProductCard
                   product={product}
                   variant="wishlist"
+                  cart={cart}
                   onViewDetails={(slug) => handleViewDetails(slug)}
                   onAddToCart={() => handleAddToCart(product)}
+                  onIncrease={handleIncrease}
+                  onDecrease={handleDecrease}
                 />
               </div>
             ))}

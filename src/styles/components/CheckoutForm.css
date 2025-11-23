@@ -1,3 +1,19 @@
+.cancel-order-btn.danger {
+  background: linear-gradient(135deg, #ff3b3b, #c80000);
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-family: "Cinzel", serif;
+  padding: 14px 26px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(255, 59, 59, 0.25);
+  transition: 0.25s;
+}
+.cancel-order-btn.danger:hover {
+  background: linear-gradient(135deg, #c80000, #ff3b3b);
+  box-shadow: 0 12px 35px rgba(255, 59, 59, 0.35);
+  transform: translateY(-2px) scale(1.04);
+}
 /* ========================================
    VARIABILI GLOBALI MIGLIORATE
    ======================================== */

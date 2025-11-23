@@ -87,22 +87,32 @@ function NavBar() {
     closeCartPreview();
   };
 
-  const increaseQty = async (id, qty) => {
+  const increaseQty = async (id) => {
     setLoadingItemId(id);
-    await cartAPI.update(id, qty + 1);
-    setLoadingItemId(null);
-    emitCartUpdate();
+    try {
+      await cartAPI.increase(id);
+      emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nell'aumentare la quantità:", error);
+    } finally {
+      setLoadingItemId(null);
+    }
   };
 
   const decreaseQty = async (id, qty) => {
     setLoadingItemId(id);
-    if (qty <= 1) {
-      await removeItem(id);
-    } else {
-      await cartAPI.update(id, qty - 1);
+    try {
+      if (qty <= 1) {
+        await removeItem(id);
+      } else {
+        await cartAPI.decrease(id);
+        emitCartUpdate();
+      }
+    } catch (error) {
+      console.error("Errore nel diminuire la quantità:", error);
+    } finally {
+      setLoadingItemId(null);
     }
-    setLoadingItemId(null);
-    emitCartUpdate();
   };
 
   const removeItem = async (id) => {
@@ -191,7 +201,7 @@ function NavBar() {
                             <button
                               className="qty-btn"
                               disabled={loadingItemId === item.id}
-                              onClick={() => increaseQty(item.id, item.quantity)}
+                              onClick={() => increaseQty(item.id)}
                             >
                               {loadingItemId === item.id ? <span className="spinner"></span> : "+"}
                             </button>

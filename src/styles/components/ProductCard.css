@@ -29,19 +29,19 @@
 /* Badge pill centrato */
 .product-card__badge {
   position: absolute;
-  top: 10px;
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
-  padding: 6px 14px;
+  padding: 6px 18px;
   font-size: 0.72rem;
   font-weight: 800;
   color: #fff;
-  border-radius: 999px;
+  border-radius: 20px 20px 0px 0px;
   z-index: 10;
   text-transform: uppercase;
   letter-spacing: 0.6px;
-  width: auto;
-  text-align: center;
+  width: 105%;
+  text-align: end;
   pointer-events: none;
   box-shadow: 0 6px 16px rgba(0,0,0,0.35);
   backdrop-filter: blur(2px);
@@ -53,7 +53,7 @@
 /* Pulsante wishlist (lasciato invariato per compatibilità) */
 .product-card__wishlist-btn {
   position: absolute;
-  top: 50px;
+  top: 0%;
   left: 0px;
   z-index: 15;
   width: 50px;
@@ -61,7 +61,7 @@
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0% 50% 50% 0%;
+  border-radius: 0% 0% 50% 50%;
   color: #fff;
   font-size: 1.4rem;
   cursor: pointer;
