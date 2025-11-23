@@ -99,7 +99,7 @@
 
 /* todo: Sidebar laterale con logo e menu di navigazione */
 .sidebar {
-  width: 280px;
+  width: 300px;
   background: #1a1720;
   border-right: 2px solid var(--gold);
   padding: 30px 20px;
@@ -146,23 +146,7 @@
   opacity: 0.7;
 }
 
-/* todo: Pannello filtri che sostituisce la sidebar */
-.filters-panel {
-  width: 280px;
-  min-width: 280px;
-  background: #1a1720;
-  border-right: 2px solid var(--purple);
-  box-shadow: 0 0 20px rgba(108, 33, 255, 0.2);
-  animation: fadeIn 0.3s ease;
-  position: fixed;
-  left: 0;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  height: 100vh;
-  z-index: 2000;
-}
+
 
 /* todo: Animazione fade semplice */
 @keyframes fadeIn {
@@ -173,6 +157,119 @@
     opacity: 1;
   }
 }
+
+/* ================================================
+   FILTERS PANEL — VERSIONE ORIGINALE MPQ IDENTICA
+   ================================================ */
+
+.filters-panel {
+  position: fixed;
+  width: 300px;
+  min-width: 300px;
+  background: #1b1a24;               /* colore identico allo screenshot */
+  border-right: 2px solid var(--purple);
+  
+  padding: 30px 25px;                 /* padding grande come l’originale */
+  display: flex;
+  flex-direction: column;
+  gap: 35px;                          /* grande separazione tra sezioni */
+
+  position: relative;                 /* NON fixed */
+  height: auto;
+  top: auto;
+  left: auto;
+
+  box-shadow: 0 0 25px rgba(108, 33, 255, 0.15);
+  animation: fadeFilters 0.25s ease;
+}
+
+/* animazione originale */
+@keyframes fadeFilters {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* TITOLI SEZIONI */
+.filters-panel h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0;
+}
+
+/* SEARCH BOX */
+.search-in-filters {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: #1f1e28;
+  border: 1px solid var(--purple);
+  border-radius: 10px;
+  gap: 12px;
+}
+
+.search-icon {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 15px;
+  width: 100%;
+}
+
+/* OPZIONI */
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  margin: 16px 0;
+}
+
+.filter-option input[type="checkbox"] {
+  accent-color: var(--purple);
+  cursor: pointer;
+}
+
+/* PREZZO MIN–MAX */
+.price-inputs {
+  display: flex;
+  gap: 15px;
+}
+
+.price-number-input {
+  width: 90px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--purple);
+  background: #222;
+  color: white;
+  font-size: 15px;
+}
+
+.price-number-input:focus {
+  outline: 1px solid var(--gold);
+}
+
+/* PICCOLE LABEL (MIN/MAX) */
+.price-input-wrapper label {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 0 3px;
+  margin: 0 1px;
+}
+
+
+
 
 /* todo: Pulsanti del menu di navigazione */
 /* todo: Stile base per i pulsanti di menu (Shop, Carrello, Checkout) */
@@ -801,10 +898,11 @@ ease;
   top: 0;
   background-color: #141218;
   display: flex;
+  align-items: center;
   gap: 10px;
   margin-bottom: 20px;
   justify-content: flex-end;
-  align-items: flex-end
+  align-items: flex-end;
   flex-wrap: wrap;
   z-index: 100;
   padding: 15px 20px;
@@ -826,6 +924,7 @@ ease;
   gap: 8px;
   transition: all 0.2s ease;
   font-family: "Cinzel", serif;
+  height: 50px;
 }
 
 /* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
@@ -921,3 +1020,5 @@ body {
 .sub{
   color: var(--gold);
 }
+
+

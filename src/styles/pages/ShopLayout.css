@@ -1,0 +1,40 @@
+.shop-layout-container {
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar sinistra */
+.shop-left-menu {
+  width: 220px;
+  background: #1a1a1a;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+.menu-item {
+    color: #D8A928;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3rem;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 30PX 0;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: var(--mpq-purple);
+}
+
+/* Pannello contenuti (shop/cart/checkout) */
+.shop-right-panel {
+  flex: 1;
+  padding: 20px 30px;
+}

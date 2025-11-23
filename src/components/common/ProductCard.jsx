@@ -2,8 +2,7 @@
 import "../../styles/components/ProductCard.css";
 import { useState, useEffect } from "react";
 
-//todo Funzione per generare slug SEO-friendly dal nome prodotto
-//todo Converte "Il Padrino" → "il-padrino"
+//todo Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
   return name
     .toLowerCase()
@@ -18,133 +17,177 @@ const generateSlug = (name) => {
     .replace(/-+/g, '-');
 };
 
-//todo Componente card prodotto riutilizzabile
-//todo Props:
-//todo - product: oggetto prodotto con {name, price, image}
-//todo - badge: tipo di badge ("popular", "new", "sale", null)
-//todo - variant: variante di visualizzazione ("carousel", "grid", "compact")
-//todo - onViewDetails: callback per visualizzare dettagli (riceve slug)
-//todo - onAddToCart: callback per aggiungere al carrello
-//todo - showActions: boolean per mostrare/nascondere pulsanti
-export default function ProductCard({ 
-  product, 
+export default function ProductCard({
+  product,
   badge = null,
   variant = "carousel",
-  onViewDetails = null, 
+  onViewDetails = null,
   onAddToCart = null,
   showActions = true
 }) {
-  //todo Stato per tracciare se il prodotto è in wishlist
+
   const [isInWishlist, setIsInWishlist] = useState(() => {
     if (!product) return false;
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     return wishlist.some(item => item.name === product.name);
   });
-  
-  //todo Controlla se il prodotto è in wishlist al mount e quando cambia
+
   useEffect(() => {
     if (!product) return;
-    
+
     const checkWishlistStatus = () => {
       const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      const inWishlist = wishlist.some(item => item.name === product.name);
-      setIsInWishlist(inWishlist);
+      setIsInWishlist(wishlist.some(item => item.name === product.name));
     };
-    
-    //todo Listener per aggiornare stato quando cambia wishlist
-    const handleWishlistUpdate = () => checkWishlistStatus();
-    window.addEventListener('wishlistUpdate', handleWishlistUpdate);
-    window.addEventListener('storage', handleWishlistUpdate);
-    
+
+    window.addEventListener('wishlistUpdate', checkWishlistStatus);
+    window.addEventListener('storage', checkWishlistStatus);
+
     return () => {
-      window.removeEventListener('wishlistUpdate', handleWishlistUpdate);
-      window.removeEventListener('storage', handleWishlistUpdate);
+      window.removeEventListener('wishlistUpdate', checkWishlistStatus);
+      window.removeEventListener('storage', checkWishlistStatus);
     };
   }, [product]);
-  
+
   if (!product) return null;
 
-  //todo Genera lo slug dal nome del prodotto
   const productSlug = generateSlug(product.name);
-  
-  //todo Toggle wishlist (aggiungi/rimuovi)
+
   const toggleWishlist = (e) => {
-    e.stopPropagation(); //todo Previeni click su card
-    
+    e.stopPropagation();
+
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    
+
     if (isInWishlist) {
-      //todo Rimuovi da wishlist
-      const updatedWishlist = wishlist.filter(item => item.name !== product.name);
-      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+      const updated = wishlist.filter(item => item.name !== product.name);
+      localStorage.setItem('wishlist', JSON.stringify(updated));
       setIsInWishlist(false);
     } else {
-      //todo Aggiungi a wishlist
       wishlist.push(product);
       localStorage.setItem('wishlist', JSON.stringify(wishlist));
       setIsInWishlist(true);
     }
-    
-    //todo Trigger evento per sincronizzare altre pagine
-    window.dispatchEvent(new Event('wishlistUpdate'));
+
+    window.dispatchEvent(new Event("wishlistUpdate"));
   };
 
-  //todo Mappa i tipi di badge alle classi CSS e testi
+  // badge
   const badgeConfig = {
     popular: { className: "product-card__badge--popular", text: "POPOLARE" },
-    new: { className: "product-card__badge--new", text: "NUOVO ARRIVO" },
-    sale: { className: "product-card__badge--sale", text: "OFFERTA" }
+    new:     { className: "product-card__badge--new",     text: "NUOVO" },
+    sale:    { className: "product-card__badge--sale",    text: "OFFERTA" },
   };
 
-  //todo Determina il badge da mostrare: se c'è sconto automatico, mostra badge sale
   const discount = parseFloat(product.discount) || 0;
   const hasDiscount = discount > 0;
-  const displayBadge = hasDiscount ? 'sale' : badge;
+  const originalPrice = parseFloat(product.price) || 0;
+  const finalPrice = hasDiscount
+    ? originalPrice * (1 - discount / 100)
+    : originalPrice;
+
+  const displayBadge = hasDiscount ? "sale" : badge;
   const badgeData = badgeConfig[displayBadge];
 
-  //todo Calcola prezzo originale e prezzo finale se c'è sconto
-  const originalPrice = parseFloat(product.price) || 0;
-  const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
+  /*
+  =====================================================
+  |                LIST (COMPACT) MODE                |
+  =====================================================
+  */
+  if (variant === "compact") {
+    return (
+      <div className="mpq-list-card">
 
+        <div className="mpq-list-thumb">
+          <img src={product.image} alt={product.name} />
+        </div>
+
+        <div className="mpq-list-content">
+          <h3 className="mpq-list-title">{product.name}</h3>
+
+          <div className="mpq-list-price">
+            {hasDiscount ? (
+              <>
+                <span className="old-price">{originalPrice.toFixed(2)}€</span>
+                <span className="discounted-price">
+                  {finalPrice.toFixed(2)}€
+                </span>
+              </>
+            ) : (
+              <span>{originalPrice.toFixed(2)}€</span>
+            )}
+          </div>
+
+          <div className="mpq-list-info">
+            <p><strong>Categoria:</strong> {product.category}</p>
+            <p><strong>Età:</strong> {product.min_age}+</p>
+            <p><strong>Disponibilità:</strong> {product.stock > 0 ? "Disponibile" : "Esaurito"}</p>
+            <p><strong>Rating:</strong> ⭐ {product.rating || "N/D"}</p>
+          </div>
+
+          {product.short_description && (
+            <p className="mpq-list-desc">
+              {product.short_description.length > 90
+                ? product.short_description.slice(0, 90) + "..."
+                : product.short_description}
+            </p>
+          )}
+        </div>
+
+        <div className="mpq-list-actions">
+          {onViewDetails && (
+            <button
+              className="btn-details"
+              onClick={() => onViewDetails(productSlug)}
+            >
+              Dettagli
+            </button>
+          )}
+
+          {onAddToCart && (
+            <button
+              className="btn-buy"
+              onClick={() => onAddToCart(product)}
+            >
+              Aggiungi
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  /*
+  =====================================================
+  |                  VERSIONE GRID                     |
+  =====================================================
+  */
   return (
     <div className={`product-card product-card--${variant}`}>
-      {/* todo: Badge se specificato o se c'è uno sconto */}
+
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
           {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
-      
-      {/* todo: Pulsante wishlist */}
-      <button 
-        className={`product-card__wishlist-btn ${isInWishlist ? 'active' : ''}`}
+
+      <button
+        className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
         onClick={toggleWishlist}
-        title={isInWishlist ? 'Rimuovi dalla wishlist' : 'Aggiungi alla wishlist'}
       >
-        {isInWishlist ? '♥' : '♡'}
+        {isInWishlist ? "♥" : "♡"}
       </button>
 
-      {/* todo: Immagine prodotto */}
-      <img 
-        src={product.image} 
-        alt={product.name} 
-        className="product-card__image" 
-      />
+      <img className="product-card__image" src={product.image} alt={product.name} />
 
-      {/* todo: Informazioni prodotto */}
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
-        
-        {/* todo: Mostra prezzi in base a presenza sconto */}
+
         {hasDiscount ? (
           <div className="product-card__price-container">
             <span className="product-card__price product-card__price--discount">
               {finalPrice.toFixed(2)}€
             </span>
-            <span 
-              className="product-card__price product-card__price--original"
-              data-original-price="true"
-            >
+            <span className="product-card__price product-card__price--original">
               {originalPrice.toFixed(2)}€
             </span>
           </div>
@@ -152,10 +195,8 @@ export default function ProductCard({
           <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
         )}
 
-        {/* todo: Pulsanti azione (se abilitati) */}
-        {showActions && (onViewDetails || onAddToCart) && (
+        {showActions && (
           <div className="product-card__actions">
-            {/* todo: Pulsante dettagli - passa lo slug generato */}
             {onViewDetails && (
               <button
                 className="product-card__btn product-card__btn--details"
@@ -165,7 +206,6 @@ export default function ProductCard({
               </button>
             )}
 
-            {/* todo: Pulsante carrello */}
             {onAddToCart && (
               <button
                 className="product-card__btn product-card__btn--cart"

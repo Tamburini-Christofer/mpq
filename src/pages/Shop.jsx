@@ -16,14 +16,16 @@ import ShopComponent from "../components/shop/ShopComponent";
 import SearchSortBar from "../components/shop/SearchSortBar";
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
-const Shop = () => {
+// ⭐ Cambiato qui: accetto defaultTab per capire da che rotta arrivo
+const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const [activeTab, setActiveTab] = useState("shop");
+  // ⭐ Qui: uso defaultTab invece che "shop" fisso
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [viewMode, setViewMode] = useState("grid");
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
@@ -84,11 +86,7 @@ const Shop = () => {
     loadProducts();
   }, []);
 
-  // -------------------------
-  // 🔥 FIX LOOP INFINITO QUI
-  // -------------------------
   let isLoadingCart = false;
-
   const [cart, setCart] = useState([]);
 
   const loadCart = async () => {
@@ -204,9 +202,7 @@ const Shop = () => {
 
   const loadMoreProducts = () => setVisibleProducts((prev) => prev + 10);
 
-  // --------------------------------------------------
-  // 📦 CALCOLI CARRELLO (AGGIUNTI)
-  // --------------------------------------------------
+  // CALCOLI CARRELLO
   const subtotal = cart.reduce(
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
     0
@@ -220,9 +216,6 @@ const Shop = () => {
 
   const totalAmount = subtotal + shippingCost;
 
-  // --------------------------------------------------
-  // RENDER
-  // --------------------------------------------------
   return (
     <div className="shop-ui-container">
 
@@ -244,7 +237,7 @@ const Shop = () => {
         </div>
       )}
 
-      {/* SIDEBAR */}
+      {/* SIDEBAR (ORIGINALE) */}
       <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
           <div className="icon"></div>
@@ -257,14 +250,14 @@ const Shop = () => {
         <div className="menu">
           <button
             className={activeTab === "shop" ? "menu-btn active" : "menu-btn"}
-            onClick={() => setActiveTab("shop")}
+            onClick={() => { setActiveTab("shop"); navigate("/shop"); }}
           >
             Shop
           </button>
 
           <button
             className={activeTab === "cart" ? "menu-btn active" : "menu-btn"}
-            onClick={() => setActiveTab("cart")}
+            onClick={() => { setActiveTab("cart"); navigate("/shop/cart"); }}
           >
             Carrello ({cart.length})
           </button>
@@ -273,14 +266,14 @@ const Shop = () => {
             className={
               activeTab === "checkout" ? "menu-btn active" : "menu-btn"
             }
-            onClick={() => setActiveTab("checkout")}
+            onClick={() => { setActiveTab("checkout"); navigate("/shop/checkout"); }}
           >
             Checkout
           </button>
         </div>
       </aside>
 
-      {/* FILTRI */}
+      {/* FILTRI PANEL (ORIGINALE) */}
       {showFilters && (
         <div className="filters-panel">
           <ShopComponent
@@ -372,7 +365,7 @@ const Shop = () => {
         {/* CART */}
         {activeTab === "cart" && (
           <div className="cart-section">
-            <h2 className="section-title">Carrello</h2>
+            <h2 className="section-title-shop">Carrello</h2>
 
             {cart.length > 0 && (
               <FreeShippingBanner
@@ -402,11 +395,17 @@ const Shop = () => {
                       </div>
 
                       <div className="quantity-controls">
-                        <button className="quantity-btn-c" onClick={() => decreaseQuantity(item.id)}>
+                        <button
+                          className="quantity-btn-c"
+                          onClick={() => decreaseQuantity(item.id)}
+                        >
                           -
                         </button>
                         <span>{item.quantity}</span>
-                        <button className="quantity-btn-c" onClick={() => increaseQuantity(item.id)}>
+                        <button
+                          className="quantity-btn-c"
+                          onClick={() => increaseQuantity(item.id)}
+                        >
                           +
                         </button>
                       </div>
@@ -415,7 +414,10 @@ const Shop = () => {
                         <span className="total-price">
                           {(price * item.quantity).toFixed(2)}€
                         </span>
-                        <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
+                        <button
+                          className="remove-btn"
+                          onClick={() => removeFromCart(item.id)}
+                        >
                           Rimuovi
                         </button>
                       </div>
@@ -436,7 +438,7 @@ const Shop = () => {
         {/* CHECKOUT */}
         {activeTab === "checkout" && (
           <div className="checkout-section">
-            <h2 className="section-title">Checkout</h2>
+            <h2 className="section-title-shop">Checkout</h2>
 
             {cart.length === 0 ? (
               <div className="empty-checkout">
@@ -453,7 +455,8 @@ const Shop = () => {
                   return (
                     <div key={item.id} className="checkout-item">
                       <div>
-                        {item.name} <strong className="qt">{item.quantity} pz</strong>
+                        {item.name}{" "}
+                        <strong className="qt">{item.quantity} pz</strong>
                       </div>
                       <div>{(price * item.quantity).toFixed(2)}€</div>
                     </div>
@@ -461,25 +464,50 @@ const Shop = () => {
                 })}
 
                 {/* Subtotale */}
-                <div className="checkout-item" style={{ justifyContent: "space-between" }}>
+                <div
+                  className="checkout-item"
+                  style={{ justifyContent: "space-between" }}
+                >
                   <strong className="sub">Subtotale</strong>
                   <strong>{subtotal.toFixed(2)}€</strong>
                 </div>
 
                 {/* Spedizione */}
-                <div className="checkout-item" style={{ justifyContent: "space-between" }}>
+                <div
+                  className="checkout-item"
+                  style={{ justifyContent: "space-between" }}
+                >
                   <strong className="sub">Spedizione</strong>
                   {isFreeShipping ? (
-                    <span style={{ color: "#4ade80", fontWeight: "bold" }}>GRATIS</span>
+                    <span
+                      style={{
+                        color: "#4ade80",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      GRATIS
+                    </span>
                   ) : (
                     <strong>{shippingCost.toFixed(2)}€</strong>
                   )}
                 </div>
 
                 {/* Totale */}
-                <div className="checkout-item" style={{ justifyContent: "space-between", borderTop: "2px solid var(--gold)" }}>
-                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>Totale</strong>
-                  <strong style={{ color: "var(--gold)", fontSize: "20px" }}>
+                <div
+                  className="checkout-item"
+                  style={{
+                    justifyContent: "space-between",
+                    borderTop: "2px solid var(--gold)",
+                  }}
+                >
+                  <strong
+                    style={{ color: "var(--gold)", fontSize: "20px" }}
+                  >
+                    Totale
+                  </strong>
+                  <strong
+                    style={{ color: "var(--gold)", fontSize: "20px" }}
+                  >
                     {totalAmount.toFixed(2)}€
                   </strong>
                 </div>

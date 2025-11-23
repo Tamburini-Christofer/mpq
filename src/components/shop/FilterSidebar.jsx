@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
-import { FiSearch } from 'react-icons/fi';
+// src/components/shop/FilterSidebar.jsx
+
+import { useState, useEffect } from "react";
+import { FiSearch } from "react-icons/fi";
 
 const DEFAULT_FILTERS = {
   priceRange: { min: 0, max: 200 },
@@ -15,33 +17,29 @@ export default function FilterSidebar({
   onFiltersChange,
   initialFilters = {}
 }) {
-
   const [filters, setFilters] = useState({
     ...DEFAULT_FILTERS,
     ...initialFilters
   });
 
-  /** 🔄 Ogni volta che i filtri cambiano → aggiorna Shop */
   useEffect(() => {
     onFiltersChange && onFiltersChange(filters);
   }, [filters]);
 
-  /** 🔍 SEARCH */
   const handleSearchChange = (e) => {
     onSearchChange(e.target.value);
   };
 
-  /** 🟣 Gestione filtri */
   const handleFilterChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    setFilters(prev => {
+    setFilters((prev) => {
       if (Array.isArray(prev[name])) {
         return {
           ...prev,
           [name]: checked
             ? [...prev[name], value]
-            : prev[name].filter(item => item !== value)
+            : prev[name].filter((item) => item !== value)
         };
       }
 
@@ -53,25 +51,17 @@ export default function FilterSidebar({
     });
   };
 
-  /** MIN */
   const handleMinPrice = (val) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      priceRange: {
-        ...prev.priceRange,
-        min: val
-      }
+      priceRange: { ...prev.priceRange, min: val }
     }));
   };
 
-  /** MAX */
   const handleMaxPrice = (val) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      priceRange: {
-        ...prev.priceRange,
-        max: val
-      }
+      priceRange: { ...prev.priceRange, max: val }
     }));
   };
 
@@ -104,7 +94,7 @@ export default function FilterSidebar({
             type="checkbox"
             name="categories"
             value="series"
-            checked={filters.categories.includes('series')}
+            checked={filters.categories.includes("series")}
             onChange={handleFilterChange}
           />
           <label>Serie TV</label>
@@ -115,7 +105,7 @@ export default function FilterSidebar({
             type="checkbox"
             name="categories"
             value="anime"
-            checked={filters.categories.includes('anime')}
+            checked={filters.categories.includes("anime")}
             onChange={handleFilterChange}
           />
           <label>Anime</label>
@@ -126,19 +116,18 @@ export default function FilterSidebar({
             type="checkbox"
             name="categories"
             value="film"
-            checked={filters.categories.includes('film')}
+            checked={filters.categories.includes("film")}
             onChange={handleFilterChange}
           />
           <label>Film</label>
         </div>
       </div>
 
-      {/* 💰 PREZZO MIN–MAX */}
+      {/* 💰 PREZZO */}
       <div className="filter-group">
         <h4>Prezzo</h4>
 
         <div className="price-inputs">
-
           <div className="price-input-wrapper">
             <label>Min</label>
             <input
@@ -160,7 +149,6 @@ export default function FilterSidebar({
               className="price-number-input"
             />
           </div>
-
         </div>
       </div>
 
@@ -198,7 +186,6 @@ export default function FilterSidebar({
           <label>Contenuti accessibili</label>
         </div>
       </div>
-
     </aside>
   );
 }

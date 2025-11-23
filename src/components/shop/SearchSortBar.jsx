@@ -1,35 +1,58 @@
-import React from 'react';
-import { FiChevronDown } from 'react-icons/fi';
+import React, { useState } from "react";
+import { FiChevronDown } from "react-icons/fi";
 
 export default function SearchSortBar({ sortValue, onSortChange }) {
+  const [open, setOpen] = useState(false);
+
+  const handleChange = (value) => {
+    onSortChange(value);
+    setOpen(false);
+  };
+
   return (
-    <div className="search-sort-bar">
+    <div className="sort-wrapper">
 
-      <div className="sort-wrapper">
-        <label htmlFor="sort-by">Ordina per:</label>
+      <div className={`custom-select ${open ? "open" : ""}`}>
+        <button
+          className="select-display"
+          onClick={() => setOpen(!open)}
+        >
+          <span>{getLabel(sortValue)}</span>
+          <FiChevronDown className="select-arrow" />
+        </button>
 
-        <div className="select-container">
-          <select
-            id="sort-by"
-            name="sort-by"
-            className="sort-select"
-            value={sortValue}
-            onChange={(e) => onSortChange(e.target.value)}
-          >
-            <option value="recent">Più Recenti</option>
-            <option value="discount-desc">Sconto (Maggiore)</option>
-            <option value="price-asc">Prezzo (Crescente)</option>
-            <option value="price-desc">Prezzo (Decrescente)</option>
-            <option value="name-asc">Nome (A-Z)</option>
-            <option value="name-desc">Nome (Z-A)</option>
-            <option value="rating-asc">Valutazione (Bassa - Alta)</option>
-            <option value="rating-desc">Valutazione (Alta - Bassa)</option>
-          </select>
-
-          <FiChevronDown className="select-icon" />
-        </div>
+        {open && (
+          <ul className="select-dropdown">
+            {OPTIONS.map((opt) => (
+              <li
+                key={opt.value}
+                className={`select-option ${
+                  sortValue === opt.value ? "active" : ""
+                }`}
+                onClick={() => handleChange(opt.value)}
+              >
+                {opt.label}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-
     </div>
   );
+}
+
+const OPTIONS = [
+  { value: "recent", label: "Più Recenti" },
+  { value: "discount-desc", label: "Sconto (Maggiore)" },
+  { value: "price-asc", label: "Prezzo (Crescente)" },
+  { value: "price-desc", label: "Prezzo (Decrescente)" },
+  { value: "name-asc", label: "Nome (A-Z)" },
+  { value: "name-desc", label: "Nome (Z-A)" },
+  { value: "rating-asc", label: "Valutazione (Bassa → Alta)" },
+  { value: "rating-desc", label: "Valutazione (Alta → Bassa)" }
+];
+
+function getLabel(value) {
+  const opt = OPTIONS.find((o) => o.value === value);
+  return opt ? opt.label : "";
 }

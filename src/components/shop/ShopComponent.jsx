@@ -1,4 +1,5 @@
-import React from "react";
+// src/components/shop/ShopComponent.jsx
+
 import FilterSidebar from "./FilterSidebar";
 import "../../styles/components/ShopComponent.css";
 
@@ -9,7 +10,7 @@ export default function ShopComponent({
   onSearchChange
 }) {
   return (
-    <div className="shop-container">
+    <div className="shop-filters-container">
       <FilterSidebar
         initialFilters={filters}
         onFiltersChange={onFiltersChange}
