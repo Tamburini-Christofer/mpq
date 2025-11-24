@@ -14,18 +14,59 @@ const getSessionId = () => {
 // ===== PRODUCTS API =====
 
 export const productsAPI = {
-  // Ottieni tutti i prodotti
-  getAll: async (categoryId = null) => {
+  // Ottieni tutti i prodotti con paginazione
+  getAll: async (options = {}) => {
     try {
-      const url = categoryId 
-        ? `${API_BASE_URL}/products?category_id=${categoryId}`
-        : `${API_BASE_URL}/products`;
+      const {
+        categoryId = null,
+        page = 1,
+        limit = 10,
+        search = '',
+        sortBy = 'recent',
+        priceMin = null,
+        priceMax = null,
+        onSale = false,
+        matureContent = false,
+        accessibility = false
+      } = options;
+
+      const params = new URLSearchParams();
+      
+      if (categoryId) params.append('category_id', categoryId);
+      params.append('page', page.toString());
+      params.append('limit', limit.toString());
+      if (search.trim()) params.append('search', search.trim());
+      params.append('sortBy', sortBy);
+      if (priceMin !== null) params.append('priceMin', priceMin.toString());
+      if (priceMax !== null) params.append('priceMax', priceMax.toString());
+      if (onSale) params.append('onSale', 'true');
+      if (matureContent) params.append('matureContent', 'true');
+      if (accessibility) params.append('accessibility', 'true');
+
+      const url = `${API_BASE_URL}/products?${params.toString()}`;
       
       const response = await fetch(url);
       if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
       return await response.json();
     } catch (error) {
       console.error('Errore API getAll:', error);
+      throw error;
+    }
+  },
+
+  // Ottieni tutti i prodotti senza paginazione (per compatibilità)
+  getAllUnpaginated: async (categoryId = null) => {
+    try {
+      const url = categoryId 
+        ? `${API_BASE_URL}/products?category_id=${categoryId}&limit=1000`
+        : `${API_BASE_URL}/products?limit=1000`;
+      
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
+      const result = await response.json();
+      return result.products || result; // Gestisce sia il nuovo formato che il vecchio
+    } catch (error) {
+      console.error('Errore API getAllUnpaginated:', error);
       throw error;
     }
   },
