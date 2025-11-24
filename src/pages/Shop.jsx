@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
@@ -16,6 +16,8 @@ import Pagination from "../components/shop/Pagination";
 
 const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const mountedRef = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,6 +55,45 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [loading, setLoading] = useState(true);
 
   const [notification, setNotification] = useState(null);
+
+  // Inizializza lo stato dei filtri dalla query string (se presente)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+
+    const q = params.get("q") || "";
+    const sort = params.get("sort") || "recent";
+    const page = parseInt(params.get("page")) || 1;
+    const limit = parseInt(params.get("limit")) || 10;
+
+    const priceMin = params.get("priceMin");
+    const priceMax = params.get("priceMax");
+    const categories = params.get("categories");
+
+    const onSale = params.get("onSale") === "1";
+    const matureContent = params.get("matureContent") === "1";
+    const accessibility = params.get("accessibility") === "1";
+
+    setSearchValue(q);
+    setSortValue(sort);
+    setItemsPerPage(limit);
+    setCurrentPage(page);
+
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: {
+        min: priceMin !== null ? parseFloat(priceMin) : prev.priceRange.min,
+        max: priceMax !== null ? parseFloat(priceMax) : prev.priceRange.max,
+      },
+      categories: categories ? categories.split(",").filter(Boolean) : prev.categories,
+      onSale,
+      matureContent,
+      accessibility,
+    }));
+
+    // Carica i prodotti in base alla pagina trovata nella query string
+    loadProducts(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const showNotification = (message, type = "success") => {
     setNotification({ message, type });
@@ -132,6 +173,34 @@ const Shop = ({ defaultTab = "shop" }) => {
     
     return () => clearTimeout(timeoutId);
   }, [filters, searchValue, sortValue]);
+
+  // Aggiorna la query string ogni volta che cambiano parametri rilevanti
+  useEffect(() => {
+    // Evita di aggiornare subito durante il mount iniziale (abbiamo già parsato la URL)
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
+
+    const params = new URLSearchParams();
+
+    if (searchValue) params.set("q", searchValue);
+    if (sortValue) params.set("sort", sortValue);
+    if (currentPage) params.set("page", String(currentPage));
+    if (itemsPerPage) params.set("limit", String(itemsPerPage));
+
+    params.set("priceMin", String(filters.priceRange.min));
+    params.set("priceMax", String(filters.priceRange.max));
+
+    if (filters.categories && filters.categories.length > 0)
+      params.set("categories", filters.categories.join(","));
+
+    params.set("onSale", filters.onSale ? "1" : "0");
+    params.set("matureContent", filters.matureContent ? "1" : "0");
+    params.set("accessibility", filters.accessibility ? "1" : "0");
+
+    setSearchParams(params, { replace: true });
+  }, [filters, searchValue, sortValue, currentPage, itemsPerPage, setSearchParams]);
 
   const fetchCart = async () => {
     try {
