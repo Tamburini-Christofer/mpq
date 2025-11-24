@@ -162,7 +162,7 @@ function Wishlist() {
                 <button className="wishlist-item-remove" onClick={() => handleRemoveFromWishlist(product)}>✕</button>
                 <ProductCard
                   product={product}
-                  variant="wishlist"
+                  variant="compact"
                   cart={cart}
                   onViewDetails={(slug) => handleViewDetails(slug)}
                   onAddToCart={() => handleAddToCart(product)}

@@ -5,80 +5,85 @@ import { useState } from "react";
 // Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
   return name
-    .toLowerCase()
-    .trim()
-    .replace(/[àáâãäå]/g, "a")
-    .replace(/[èéêë]/g, "e")
-    .replace(/[ìíîï]/g, "i")
-    .replace(/[òóôõö]/g, "o")
-    .replace(/[ùúûü]/g, "u")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
-};
+    if (variant === "compact") {
+      const [expanded, setExpanded] = useState(false);
+      return (
+        <div className={`product-card product-card--compact ${typeClass}${expanded ? " expanded" : ""}`}>
+          <img
+            className={`product-card__image${expanded ? " expanded" : ""}`}
+            src={product.image}
+            alt={product.name}
+          />
 
-export default function ProductCard({
-  product,
-  badge = null,
-  variant = "carousel",
-  onViewDetails = null,
-  onAddToCart = null,
-  onIncrease = null,
-  onDecrease = null,
-  showActions = true,
-  cart = [],
-}) {
-  // Gestione wishlist
-  const [isInWishlist, setIsInWishlist] = useState(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    return wishlist.some((i) => i.id === product.id);
-  });
+          <div className="product-card__info">
+            <h3 className="product-card__title">{product.name}</h3>
+            <div className="product-card__meta">
+              <span className="product-card__category">
+                Categoria: {
+                  product.category_id === 1 ? "Film" :
+                  product.category_id === 2 ? "Serie TV" :
+                  product.category_id === 3 ? "Anime" : "Altro"
+                }
+              </span>
+              {product.stock !== undefined && (
+                <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
+              )}
+            </div>
+            {product.description && (
+              expanded ? (
+                <p className="product-card__desc-full">{product.description}</p>
+              ) : (
+                <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+              )
+            )}
 
-  const toggleWishlist = (e) => {
-    e.stopPropagation();
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    if (isInWishlist) {
-      const updated = wishlist.filter((i) => i.id !== product.id);
-      localStorage.setItem("wishlist", JSON.stringify(updated));
-      setIsInWishlist(false);
-    } else {
-      wishlist.push(product);
-      localStorage.setItem("wishlist", JSON.stringify(wishlist));
-      setIsInWishlist(true);
+            {hasDiscount ? (
+              <div className="product-card__price-container">
+                <span className="product-card__price--discount">
+                  {finalPrice.toFixed(2)}€
+                </span>
+                <span
+                  className="product-card__price--original"
+                  data-original-price="true"
+                >
+                  {originalPrice.toFixed(2)}€
+                </span>
+              </div>
+            ) : (
+              <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
+            )}
+          </div>
+
+          <div className="product-card__actions">
+            <button
+              className="product-card__btn product-card__btn--details small"
+              onClick={() => setExpanded((e) => !e)}
+            >
+              {expanded ? "Nascondi" : "Dettagli"}
+            </button>
+
+            {qty === 0 ? (
+              <button
+                className="product-card__btn product-card__btn--cart small"
+                onClick={handleAdd}
+              >
+                Acquista
+              </button>
+            ) : (
+              <div className="product-qty-controls small">
+                <button className="qty-btn small" onClick={handleDecrease}>
+                  -
+                </button>
+                <span className="qty-display small">{qty}</span>
+                <button className="qty-btn small" onClick={handleIncrease}>
+                  +
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
     }
-    window.dispatchEvent(new Event("wishlistUpdate"));
-  };
-
-  // Quantità prodotto nel carrello
-  const cartItem = cart.find((c) => c.id === product.id);
-  const qty = cartItem?.quantity || 0;
-
-  const handleAdd = async () => {
-    if (onAddToCart) {
-      await onAddToCart(product);
-    }
-  };
-
-  const handleIncrease = async () => {
-    if (onIncrease) {
-      await onIncrease(product.id);
-    }
-  };
-
-  const handleDecrease = async () => {
-    if (onDecrease) {
-      await onDecrease(product.id);
-    }
-  };
-
-  // Configurazioni badge
-  const badgeConfig = {
-    popular: { className: "product-card__badge--popular", text: "POPOLARE" },
-    new: { className: "product-card__badge--new", text: "NUOVO" },
-    sale: { className: "product-card__badge--sale", text: "OFFERTA" },
-  };
-
-  const discount = parseFloat(product.discount) || 0;
   const hasDiscount = discount > 0;
   const originalPrice = parseFloat(product.price) || 0;
   const finalPrice = hasDiscount
@@ -103,6 +108,22 @@ export default function ProductCard({
 
         <div className="product-card__info">
           <h3 className="product-card__title">{product.name}</h3>
+
+          <div className="product-card__meta">
+            <span className="product-card__category">
+              Categoria: {
+                product.category_id === 1 ? "Film" :
+                product.category_id === 2 ? "Serie TV" :
+                product.category_id === 3 ? "Anime" : "Altro"
+              }
+            </span>
+            {product.stock !== undefined && (
+              <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
+            )}
+          </div>
+          {product.description && (
+            <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+          )}
 
           {hasDiscount ? (
             <div className="product-card__price-container">

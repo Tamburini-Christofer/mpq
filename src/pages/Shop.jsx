@@ -96,7 +96,8 @@ const Shop = ({ defaultTab = "shop" }) => {
   const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
-      emitCartUpdate();
+      await fetchCart(); // aggiorna subito lo stato locale
+      emitCartUpdate();  // notifica la navbar e altri componenti
       showNotification(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
@@ -107,8 +108,8 @@ const Shop = ({ defaultTab = "shop" }) => {
   const increaseQuantity = async (productId) => {
     try {
       await cartAPI.increase(productId);
-      await fetchCart(); // Aggiorna subito lo stato locale e poi emetti
-      // emitCartUpdate();
+      await fetchCart();
+      emitCartUpdate();
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     }
@@ -122,8 +123,8 @@ const Shop = ({ defaultTab = "shop" }) => {
       } else {
         await cartAPI.remove(productId);
       }
-      await fetchCart(); // Aggiorna subito lo stato locale e poi emetti
-      // emitCartUpdate();
+      await fetchCart();
+      emitCartUpdate();
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
     }

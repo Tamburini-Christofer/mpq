@@ -74,36 +74,8 @@ function HomePage() {
         loadProducts();
     }, []);
 
-    // Autoplay lento e continuo con loop per i caroselli
-    useEffect(() => {
-        let rafId = null;
-        let lastTs = null;
-        const speedPxPerSecond = 24; // ~24px/s (lento). Aumenta per più veloce
-        const refs = [bestSellersRef, latestArrivalsRef, promotionalProductsRef];
+    // Autoplay più fluido e veloce con loop per i caroselli
 
-        const step = (ts) => {
-            if (lastTs == null) lastTs = ts;
-            const dt = (ts - lastTs) / 1000; // seconds
-            lastTs = ts;
-
-            refs.forEach((r) => {
-                const el = r.current;
-                if (!el || el.isPaused) return;
-                if (el.scrollWidth <= el.clientWidth) return; // niente scroll se contenuto insufficiente
-                el.scrollLeft += speedPxPerSecond * dt;
-                if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
-                    el.scrollLeft = 0; // loop
-                }
-            });
-
-            rafId = requestAnimationFrame(step);
-        };
-
-        rafId = requestAnimationFrame(step);
-        return () => {
-            if (rafId) cancelAnimationFrame(rafId);
-        };
-    }, []);
 
     //todo useMemo memorizza il risultato della randomizzazione per evitare di rifare lo shuffle ad ogni render
     //todo Fisher-Yates shuffle: algoritmo per mescolare array in modo casuale

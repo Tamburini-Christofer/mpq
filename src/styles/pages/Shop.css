@@ -467,42 +467,37 @@
 
 
 /* todo: Pulsanti + e - per modificare la quantità */
-.quantity-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #6d28d9, #7c3aed);
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s 
-ease, box-shadow 0.15s 
-ease;
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+
+.quantity-btn, .quantity-btn-c {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #7c3aed 0%, #e7c46c 100%);
+  color: #fff;
+  font-size: 1.3rem;
+  cursor: pointer;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.25), 0 2px 8px rgba(231, 196, 108, 0.18);
+  transition: transform 0.18s cubic-bezier(.4,2,.3,1), box-shadow 0.18s cubic-bezier(.4,2,.3,1), background 0.18s;
+  outline: none;
+  position: relative;
 }
 
-.quantity-btn-c{
-      width: 30px;
-    height: 30px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #6d28d9, #7c3aed);
-    color: white;
-    font-size: 1.1rem;
-    cursor: pointer;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.15s 
-ease, box-shadow 0.15s 
-ease;
-    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+.quantity-btn:active, .quantity-btn-c:active {
+  transform: scale(0.92);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.18);
+}
+
+.quantity-btn:hover, .quantity-btn-c:hover {
+  background: linear-gradient(135deg, #e7c46c 0%, #7c3aed 100%);
+  color: #7c3aed;
+  box-shadow: 0 10px 28px rgba(231, 196, 108, 0.25), 0 4px 16px rgba(124, 58, 237, 0.18);
+  border: 2px solid #e7c46c;
+  z-index: 2;
 }
 
 /* todo: Effetto hover sui pulsanti quantità */
