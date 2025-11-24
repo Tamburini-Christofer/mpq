@@ -51,7 +51,8 @@ function Wishlist() {
   const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
-      emitCartUpdate();
+      await loadCart(); // aggiorna lo stato locale
+      emitCartUpdate(); // notifica altri componenti
       showNotification(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
       showNotification("Errore nell'aggiunta al carrello", "error");
@@ -85,6 +86,7 @@ function Wishlist() {
       }
       localStorage.setItem("wishlist", JSON.stringify([]));
       setWishlistItems([]);
+      await loadCart();
       emitCartUpdate();
       window.dispatchEvent(new Event("wishlistUpdate"));
       showNotification("Tutti i prodotti sono stati aggiunti al carrello!");
@@ -97,6 +99,7 @@ function Wishlist() {
   const handleIncrease = async (productId) => {
     try {
       await cartAPI.increase(productId);
+      await loadCart();
       emitCartUpdate();
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
@@ -112,6 +115,7 @@ function Wishlist() {
       } else {
         await cartAPI.remove(productId);
       }
+      await loadCart();
       emitCartUpdate();
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);

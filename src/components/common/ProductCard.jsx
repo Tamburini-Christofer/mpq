@@ -1,181 +1,67 @@
 
 import "../../styles/components/ProductCard.css";
-import { useState } from "react";
+import React, { useState } from "react";
 
 // Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
   return name
-    if (variant === "compact") {
-      const [expanded, setExpanded] = useState(false);
-      return (
-        <div className={`product-card product-card--compact ${typeClass}${expanded ? " expanded" : ""}`}>
-          <img
-            className={`product-card__image${expanded ? " expanded" : ""}`}
-            src={product.image}
-            alt={product.name}
-          />
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+};
 
-          <div className="product-card__info">
-            <h3 className="product-card__title">{product.name}</h3>
-            <div className="product-card__meta">
-              <span className="product-card__category">
-                Categoria: {
-                  product.category_id === 1 ? "Film" :
-                  product.category_id === 2 ? "Serie TV" :
-                  product.category_id === 3 ? "Anime" : "Altro"
-                }
-              </span>
-              {product.stock !== undefined && (
-                <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
-              )}
-            </div>
-            {product.description && (
-              expanded ? (
-                <p className="product-card__desc-full">{product.description}</p>
-              ) : (
-                <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
-              )
-            )}
+function ProductCard({
+  product,
+  variant = "grid",
+  badge,
+  onViewDetails,
+  onAddToCart,
+  onIncrease,
+  onDecrease,
+  qty = 0,
+  showActions = true,
+}) {
+  // Configurazione badge
+  const badgeConfig = {
+    popular: { text: "Popolare", className: "badge-popular" },
+    new: { text: "Novità", className: "badge-new" },
+    sale: { text: "Offerta", className: "badge-sale" },
+    related: { text: "Correlato", className: "badge-related" },
+    wishlist: { text: "Wishlist", className: "badge-wishlist" },
+    grid: { text: "", className: "" },
+    compact: { text: "", className: "" },
+    carousel: { text: "", className: "" },
+  };
 
-            {hasDiscount ? (
-              <div className="product-card__price-container">
-                <span className="product-card__price--discount">
-                  {finalPrice.toFixed(2)}€
-                </span>
-                <span
-                  className="product-card__price--original"
-                  data-original-price="true"
-                >
-                  {originalPrice.toFixed(2)}€
-                </span>
-              </div>
-            ) : (
-              <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
-            )}
-          </div>
+  // Stato espansione per la variante compatta
+  const [expanded, setExpanded] = useState(false);
+  // Stato locale per mostrare i controlli quantità dopo il primo acquisto
+  const [showQtyControls, setShowQtyControls] = useState(qty > 0);
+  React.useEffect(() => {
+    setShowQtyControls(qty > 0);
+  }, [qty]);
 
-          <div className="product-card__actions">
-            <button
-              className="product-card__btn product-card__btn--details small"
-              onClick={() => setExpanded((e) => !e)}
-            >
-              {expanded ? "Nascondi" : "Dettagli"}
-            </button>
-
-            {qty === 0 ? (
-              <button
-                className="product-card__btn product-card__btn--cart small"
-                onClick={handleAdd}
-              >
-                Acquista
-              </button>
-            ) : (
-              <div className="product-qty-controls small">
-                <button className="qty-btn small" onClick={handleDecrease}>
-                  -
-                </button>
-                <span className="qty-display small">{qty}</span>
-                <button className="qty-btn small" onClick={handleIncrease}>
-                  +
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
+  const discount = product.discount || 0;
   const hasDiscount = discount > 0;
   const originalPrice = parseFloat(product.price) || 0;
-  const finalPrice = hasDiscount
-    ? originalPrice * (1 - discount / 100)
-    : originalPrice;
-
+  const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
   const displayBadge = hasDiscount ? "sale" : badge;
   const badgeData = badgeConfig[displayBadge];
-  const typeClass = displayBadge ? `product-card--${displayBadge}` : "";
-
   const productSlug = generateSlug(product.name);
+  const typeClass = variant === "compact" ? (expanded ? "expanded" : "collapsed") : "";
+  const [isInWishlist, setIsInWishlist] = useState(product.isInWishlist || false);
 
-  // Versione compact
-  if (variant === "compact") {
-    return (
-      <div className={`product-card product-card--compact ${typeClass}`}>
-        <img
-          className="product-card__image"
-          src={product.image}
-          alt={product.name}
-        />
+  // Gestione wishlist (placeholder)
+  const toggleWishlist = () => setIsInWishlist((prev) => !prev);
 
-        <div className="product-card__info">
-          <h3 className="product-card__title">{product.name}</h3>
+  // Gestione quantità: ora delegata alle funzioni prop
 
-          <div className="product-card__meta">
-            <span className="product-card__category">
-              Categoria: {
-                product.category_id === 1 ? "Film" :
-                product.category_id === 2 ? "Serie TV" :
-                product.category_id === 3 ? "Anime" : "Altro"
-              }
-            </span>
-            {product.stock !== undefined && (
-              <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
-            )}
-          </div>
-          {product.description && (
-            <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
-          )}
-
-          {hasDiscount ? (
-            <div className="product-card__price-container">
-              <span className="product-card__price--discount">
-                {finalPrice.toFixed(2)}€
-              </span>
-              <span
-                className="product-card__price--original"
-                data-original-price="true"
-              >
-                {originalPrice.toFixed(2)}€
-              </span>
-            </div>
-          ) : (
-            <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
-          )}
-        </div>
-
-        <div className="product-card__actions">
-          <button
-            className="product-card__btn product-card__btn--details"
-            onClick={() => onViewDetails && onViewDetails(productSlug)}
-          >
-            Dettagli
-          </button>
-
-          {qty === 0 ? (
-            <button
-              className="product-card__btn product-card__btn--cart"
-              onClick={handleAdd}
-            >
-              Acquista
-            </button>
-          ) : (
-            <div className="product-qty-controls">
-              <button className="qty-btn" onClick={handleDecrease}>
-                -
-              </button>
-              <span className="qty-display">{qty}</span>
-              <button className="qty-btn" onClick={handleIncrease}>
-                +
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // Versione griglia/shop/carousel
+  // Unico wrapper per tutte le varianti
   return (
-    <div className={`product-card product-card--${variant} ${typeClass}`}>
+    <div className={`product-card product-card--${variant} ${typeClass}`}
+      onClick={variant === "compact" ? () => setExpanded((prev) => !prev) : undefined}
+      style={variant === "compact" ? { cursor: "pointer" } : {}}
+    >
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
           {hasDiscount ? `-${discount}%` : badgeData.text}
@@ -184,7 +70,7 @@ const generateSlug = (name) => {
 
       <button
         className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
-        onClick={toggleWishlist}
+        onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}
       >
         {isInWishlist ? "♥" : "♡"}
       </button>
@@ -197,6 +83,25 @@ const generateSlug = (name) => {
 
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
+
+        {variant === "compact" && (
+          <div className="product-card__meta">
+            <span className="product-card__category">
+              Categoria: {
+                product.category_id === 1 ? "Film" :
+                product.category_id === 2 ? "Serie TV" :
+                product.category_id === 3 ? "Anime" : "Altro"
+              }
+            </span>
+            {product.stock !== undefined && (
+              <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
+            )}
+          </div>
+        )}
+
+        {variant === "compact" && product.description && (
+          <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+        )}
 
         {hasDiscount ? (
           <div className="product-card__price-container">
@@ -218,25 +123,29 @@ const generateSlug = (name) => {
           <div className="product-card__actions">
             <button
               className="product-card__btn product-card__btn--details"
-              onClick={() => onViewDetails && onViewDetails(productSlug)}
+              onClick={(e) => { e.stopPropagation(); onViewDetails && onViewDetails(productSlug); }}
             >
               Dettagli
             </button>
 
-            {qty === 0 ? (
+            {!showQtyControls ? (
               <button
                 className="product-card__btn product-card__btn--cart"
-                onClick={handleAdd}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onAddToCart && onAddToCart(product);
+                  setShowQtyControls(true);
+                }}
               >
                 Acquista
               </button>
             ) : (
               <div className="product-qty-controls">
-                <button className="qty-btn" onClick={handleDecrease}>
+                <button className="qty-btn" onClick={(e) => { e.stopPropagation(); onDecrease && onDecrease(product.id); }}>
                   -
                 </button>
                 <span className="qty-display">{qty}</span>
-                <button className="qty-btn" onClick={handleIncrease}>
+                <button className="qty-btn" onClick={(e) => { e.stopPropagation(); onIncrease && onIncrease(product.id); }}>
                   +
                 </button>
               </div>

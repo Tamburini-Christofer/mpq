@@ -12,7 +12,7 @@ function CheckoutPage() {
     try {
       const data = await cartAPI.get();
       setCart(data);
-      emitCartUpdate();
+      // emitCartUpdate(); // RIMOSSO: evita loop infinito
     } catch (err) {
       console.error("Errore caricamento carrello:", err);
     }

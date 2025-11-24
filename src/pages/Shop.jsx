@@ -96,8 +96,8 @@ const Shop = ({ defaultTab = "shop" }) => {
   const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
-      await fetchCart(); // aggiorna subito lo stato locale
-      emitCartUpdate();  // notifica la navbar e altri componenti
+      await fetchCart();
+      emitCartUpdate();
       showNotification(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
@@ -133,6 +133,7 @@ const Shop = ({ defaultTab = "shop" }) => {
   const removeFromCart = async (productId) => {
     try {
       await cartAPI.remove(productId);
+      await fetchCart();
       showNotification("Prodotto rimosso", "error");
       emitCartUpdate();
     } catch {
