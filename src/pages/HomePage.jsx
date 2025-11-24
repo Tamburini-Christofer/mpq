@@ -1,11 +1,11 @@
 import '../styles/pages/HomePage.css'
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 //todo Importiamo useNavigate per navigare programmaticamente tra le pagine (es: da card a Details)
 import { useNavigate } from 'react-router-dom';
 import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
-//todo Importiamo i dati dei prodotti dal file JSON per popolare i caroselli
-import productsData from '../JSON/products.json';
+//todo Importiamo le API per gestire prodotti e carrello
+import { productsAPI, cartAPI, emitCartUpdate } from '../services/api';
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from '../components/common/ProductCard';
 
@@ -17,6 +17,11 @@ function HomePage() {
     
     //todo Stato per gestire le notifiche quando si aggiunge un prodotto al carrello
     const [notification, setNotification] = useState(null);
+    
+    const [cart, setCart] = useState([]);
+    //todo Stato per i prodotti caricati dal backend
+    const [productsData, setProductsData] = useState([]);
+    const [loading, setLoading] = useState(true);
     
     //todo Funzione per mostrare notifiche temporanee (3 secondi)
     const showNotification = (message, type = 'success') => {
@@ -30,9 +35,47 @@ function HomePage() {
     //todo Questi ref vengono usati per controllare lo scroll orizzontale e gestire i touch events
     const bestSellersRef = useRef(null);
     const latestArrivalsRef = useRef(null);
+    const promotionalProductsRef = useRef(null);
 
     //todo Inizializziamo useNavigate per permettere la navigazione tra le route
     const navigate = useNavigate();
+
+    // Carica il carrello
+    const loadCart = async () => {
+        try {
+            const cartData = await cartAPI.get();
+            setCart(cartData);
+        } catch (error) {
+            console.error("Errore caricamento carrello:", error);
+        }
+    };
+
+    // Aggiungi listener per l'aggiornamento del carrello
+    useEffect(() => {
+        window.addEventListener('cartUpdate', loadCart);
+        return () => window.removeEventListener('cartUpdate', loadCart);
+    }, []);
+
+    //todo Carica prodotti dal backend
+    useEffect(() => {
+        const loadProducts = async () => {
+            try {
+                setLoading(true);
+                const data = await productsAPI.getAll();
+                setProductsData(data);
+            } catch (error) {
+                console.error('Errore caricamento prodotti:', error);
+                showNotification('Errore nel caricamento dei prodotti', 'error');
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadCart();
+        loadProducts();
+    }, []);
+
+    // Autoplay più fluido e veloce con loop per i caroselli
+
 
     //todo useMemo memorizza il risultato della randomizzazione per evitare di rifare lo shuffle ad ogni render
     //todo Fisher-Yates shuffle: algoritmo per mescolare array in modo casuale
@@ -43,7 +86,7 @@ function HomePage() {
             [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
         }
         return shuffled;
-    }, []);
+    }, [productsData]);
 
     // FUNZIONE MODIFICATA PER IL LOOP
     const handleVideoEnd = () => {
@@ -69,6 +112,15 @@ function HomePage() {
         ...product,
         originalIndex: productsData.findIndex(p => p.name === product.name)
     }));
+    
+    //todo Filtriamo solo i prodotti che hanno uno sconto attivo per "Prodotti in Promozione"
+    //todo Controlliamo che discount sia un numero maggiore di 0
+    const promotionalProducts = productsData
+        .filter(product => product.discount && typeof product.discount === 'number' && product.discount > 0)
+        .map(product => ({
+            ...product,
+            originalIndex: productsData.findIndex(p => p.name === product.name)
+        }));
 
     //todo Funzione per gestire lo scroll dei caroselli con le frecce sinistra/destra
     const scrollCarousel = (ref, direction) => {
@@ -94,6 +146,7 @@ function HomePage() {
         if (ref.current) {
             ref.current.touchStartX = e.touches[0].clientX;
             ref.current.scrollStartX = ref.current.scrollLeft;
+            ref.current.isPaused = true; // pausa autoplay durante il drag
         }
     };
 
@@ -111,6 +164,10 @@ function HomePage() {
         if (ref.current) {
             ref.current.touchStartX = null;
             ref.current.scrollStartX = null;
+            // riprendi autoplay dopo breve delay
+            setTimeout(() => {
+                if (ref.current) ref.current.isPaused = false;
+            }, 800);
         }
     };
 
@@ -121,27 +178,45 @@ function HomePage() {
     };
 
     //todo Funzione per aggiungere prodotto al carrello dal carosello HomePage
-    const handleAddToCart = (product) => {
-        //todo Recuperiamo il carrello da localStorage (o array vuoto se non esiste)
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        //todo Cerchiamo se il prodotto è già nel carrello confrontando per nome
-        const existingItem = cart.find(item => item.name === product.name);
-        
-        //todo Se esiste già, incrementiamo la quantità
-        if (existingItem) {
-            existingItem.quantity += 1;
-            showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
-        } else {
-            //todo Altrimenti aggiungiamo il nuovo prodotto con quantità 1
-            cart.push({ ...product, quantity: 1 });
+    const handleAddToCart = async (product) => {
+        try {
+            //todo Aggiungi prodotto via API
+            await cartAPI.add(product.id, 1);
+            
+            //todo Emetti evento per aggiornare il contatore del carrello
+            
+            emitCartUpdate();
+            
             showNotification(`"${product.name}" aggiunto al carretto!`);
+        } catch (error) {
+            console.error('Errore aggiunta al carrello:', error);
+            showNotification('Errore nell\'aggiunta al carretto', 'error');
         }
-        
-        //todo Salviamo il carrello aggiornato in localStorage
-        localStorage.setItem('cart', JSON.stringify(cart));
-        //todo Dispatchamo eventi per sincronizzare il carrello
-        window.dispatchEvent(new Event('storage'));
-        window.dispatchEvent(new Event('cartUpdate'));
+    };
+
+    const handleIncrease = async (productId) => {
+        try {
+            await cartAPI.increase(productId);
+            emitCartUpdate();
+        } catch (error) {
+            console.error("Errore nell'aumentare la quantità:", error);
+            showNotification("Errore nell'aggiornamento del carrello", "error");
+        }
+    };
+
+    const handleDecrease = async (productId) => {
+        try {
+            const item = cart.find(i => i.id === productId);
+            if (item && item.quantity > 1) {
+                await cartAPI.decrease(productId);
+            } else {
+                await cartAPI.remove(productId);
+            }
+            emitCartUpdate();
+        } catch (error) {
+            console.error("Errore nel diminuire la quantità:", error);
+            showNotification("Errore nell'aggiornamento del carrello", "error");
+        }
     };
 
 
@@ -194,7 +269,7 @@ function HomePage() {
                         onEnded={handleVideoEnd} // Gestore di fine video
                         key={currentVideoSrc} // Aggiungi la key per forzare il ricaricamento
                         src={currentVideoSrc} // Sorgente dinamica
-                        disablepictureinpicture
+                        disablePictureInPicture
                     >
                         Il tuo browser non supporta il tag video.
                     </video>
@@ -208,7 +283,7 @@ function HomePage() {
                 {/*todo Pulsante freccia sinistra per scrollare il carosello indietro*/}
                 <button
                     className="scroll-btn scroll-left"
-                    onClick={() => scrollCarousel(bestSellersRef, -1)}>
+                    onClick={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = true; scrollCarousel(bestSellersRef, -1); setTimeout(() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = false; }, 800); }}>
                     &lt;
                 </button>
 
@@ -220,6 +295,8 @@ function HomePage() {
                     onTouchStart={(e) => handleTouchStart(e, bestSellersRef)}
                     onTouchMove={(e) => handleTouchMove(e, bestSellersRef)}
                     onTouchEnd={() => handleTouchEnd(bestSellersRef)}
+                    onMouseEnter={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = true; }}
+                    onMouseLeave={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = false; }}
                 >
                     {bestSellers.map((product, index) => (
                         <ProductCard
@@ -227,9 +304,12 @@ function HomePage() {
                             product={product}
                             badge="popular"
                             variant="carousel"
+                            cart={cart}
                             onViewDetails={handleViewDetails}
                             onAddToCart={handleAddToCart}
-                            isOverlay={true}
+                            onIncrease={handleIncrease}
+                            onDecrease={handleDecrease}
+                            showActions={true}
                         />
                     ))}
                 </div>
@@ -237,7 +317,7 @@ function HomePage() {
                 {/*todo Pulsante freccia destra per scrollare il carosello avanti*/}
                 <button
                     className="scroll-btn scroll-right"
-                    onClick={() => scrollCarousel(bestSellersRef, 1)}>
+                    onClick={() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = true; scrollCarousel(bestSellersRef, 1); setTimeout(() => { if (bestSellersRef.current) bestSellersRef.current.isPaused = false; }, 800); }}>
                     &gt;
                 </button>
             </section>
@@ -249,7 +329,7 @@ function HomePage() {
                 {/*todo Pulsante freccia sinistra per il carosello Ultimi Arrivi*/}
                 <button
                     className="scroll-btn scroll-left"
-                    onClick={() => scrollCarousel(latestArrivalsRef, -1)}>
+                    onClick={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = true; scrollCarousel(latestArrivalsRef, -1); setTimeout(() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = false; }, 800); }}>
                     &lt;
                 </button>
 
@@ -260,6 +340,8 @@ function HomePage() {
                     onTouchStart={(e) => handleTouchStart(e, latestArrivalsRef)}
                     onTouchMove={(e) => handleTouchMove(e, latestArrivalsRef)}
                     onTouchEnd={() => handleTouchEnd(latestArrivalsRef)}
+                    onMouseEnter={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = true; }}
+                    onMouseLeave={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = false; }}
                 >
                     {latestArrivals.map((product, index) => (
                         <ProductCard
@@ -267,9 +349,12 @@ function HomePage() {
                             product={product}
                             badge="new"
                             variant="carousel"
+                            cart={cart}
                             onViewDetails={handleViewDetails}
                             onAddToCart={handleAddToCart}
-                            isOverlay={true}
+                            onIncrease={handleIncrease}
+                            onDecrease={handleDecrease}
+                            showActions={true}
                         />
                     ))}
                 </div>
@@ -277,10 +362,58 @@ function HomePage() {
                 {/*todo Pulsante freccia destra per scrollare Ultimi Arrivi*/}
                 <button
                     className="scroll-btn scroll-right"
-                    onClick={() => scrollCarousel(latestArrivalsRef, 1)}>
+                    onClick={() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = true; scrollCarousel(latestArrivalsRef, 1); setTimeout(() => { if (latestArrivalsRef.current) latestArrivalsRef.current.isPaused = false; }, 800); }}>
                     &gt;
                 </button>
             </section>
+
+            {/*PRODOTTI IN PROMOZIONE*/}
+            {/*todo Mostriamo la sezione solo se ci sono prodotti in promozione*/}
+            {promotionalProducts.length > 0 && (
+                <section className="quests-section promotional-section-wrapper">
+                    <h2 className="section-title">Prodotti in Promozione</h2>
+
+                    {/*todo Pulsante freccia sinistra per il carosello Prodotti in Promozione*/}
+                    <button
+                        className="scroll-btn scroll-left"
+                        onClick={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = true; scrollCarousel(promotionalProductsRef, -1); setTimeout(() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = false; }, 800); }}>
+                        &lt;
+                    </button>
+
+                    {/*todo Contenitore carosello Prodotti in Promozione con gestione touch*/}
+                    <div 
+                        ref={promotionalProductsRef}
+                        className="cards-list promotional-products-list"
+                        onTouchStart={(e) => handleTouchStart(e, promotionalProductsRef)}
+                        onTouchMove={(e) => handleTouchMove(e, promotionalProductsRef)}
+                        onTouchEnd={() => handleTouchEnd(promotionalProductsRef)}
+                        onMouseEnter={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = true; }}
+                        onMouseLeave={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = false; }}
+                    >
+                        {promotionalProducts.map((product, index) => (
+                            <ProductCard
+                                key={index}
+                                product={product}
+                                badge="sale"
+                                variant="carousel"
+                                cart={cart}
+                                onViewDetails={handleViewDetails}
+                                onAddToCart={handleAddToCart}
+                                onIncrease={handleIncrease}
+                                onDecrease={handleDecrease}
+                                showActions={true}
+                            />
+                        ))}
+                    </div>
+
+                    {/*todo Pulsante freccia destra per scrollare Prodotti in Promozione*/}
+                    <button
+                        className="scroll-btn scroll-right"
+                        onClick={() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = true; scrollCarousel(promotionalProductsRef, 1); setTimeout(() => { if (promotionalProductsRef.current) promotionalProductsRef.current.isPaused = false; }, 800); }}>
+                        &gt;
+                    </button>
+                </section>
+            )}
         </div>
         </>
     );

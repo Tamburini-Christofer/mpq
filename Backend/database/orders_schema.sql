@@ -1,0 +1,32 @@
+-- -- Tabella per gli ordini (se non esiste già)
+-- CREATE TABLE IF NOT EXISTS orders (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     customer_name VARCHAR(255) NOT NULL,
+--     customer_email VARCHAR(255) NOT NULL,
+--     customer_phone VARCHAR(50),
+--     shipping_address TEXT NOT NULL,
+--     billing_address TEXT,
+--     total_amount DECIMAL(10, 2) NOT NULL,
+--     payment_method VARCHAR(50) DEFAULT 'card',
+--     status ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') DEFAULT 'pending',
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--     INDEX idx_customer_email (customer_email),
+--     INDEX idx_created_at (created_at),
+--     INDEX idx_status (status)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabella per gli item degli ordini (se non esiste già)
+-- CREATE TABLE IF NOT EXISTS order_items (
+--     id INT AUTO_INCREMENT PRIMARY KEY,
+--     order_id INT NOT NULL,
+--     product_id INT NOT NULL,
+--     quantity INT NOT NULL DEFAULT 1,
+--     price DECIMAL(10, 2) NOT NULL,
+--     discount DECIMAL(10, 2) DEFAULT 0,
+--     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+--     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
+--     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT,
+--     INDEX idx_order_id (order_id),
+--     INDEX idx_product_id (product_id)
+-- ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

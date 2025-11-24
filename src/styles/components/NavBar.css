@@ -1,247 +1,534 @@
-/* ==========================================
-   NAVBAR - PIXEL ART STYLE
-   ========================================== */
-
 .navbar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 40px;
-  background-color: #1a1a1a;
-  /* Bordo inferiore spesso e netto */
-  border-bottom: 4px solid #000;
-  z-index: 1000;
-  /* Pattern opzionale per texture retro */
-  background-image: linear-gradient(#222 1px, transparent 1px),
-    linear-gradient(90deg, #222 1px, transparent 1px);
-  background-size: 4px 4px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0
+    ;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 50px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+    z-index: 1000;
 }
 
 .navbar-logo {
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: 900;
-  font-family: "Pixelify Sans", sans-serif;
-  /* Font pixel se disponibile */
-  letter-spacing: -1px;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
 .logo-icon {
-  width: 150px;
-  margin-right: 10px;
-  /* Assicura che il logo non sia sfocato */
-  image-rendering: pixelated;
+    width: 150px;
+    margin-right: 10px;
 }
 
 .navbar-links {
-  list-style: none;
-  display: flex;
-  gap: 40px;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
 }
 
-/* --- STILE LINK MENU --- */
+/* --- STILE PER I LINK E LA BARRA SOTTO --- */
 .navbar-links a {
-  color: #fff;
-  font-family: "Courier New", Courier, monospace;
-  /* Font Retro */
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 1.1rem;
-  position: relative;
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  padding: 5px 0;
-  text-shadow: 2px 2px 0px #000;
+    color: #D8A928;
+    font-family: Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3rem;
+    position: relative;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-/* Sottolineatura: Barra solida stile 8-bit */
+/* 2. CREAZIONE DELLA BARRA SOTTO */
 .navbar-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  /* Barra spessa */
-  background-color: #772284;
-  transform: scaleX(0);
-  transition: transform 0.1s steps(2);
-  /* Animazione a scatti */
-  transform-origin: left;
-  border: 1px solid #000;
-  /* Bordo alla barra */
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #772284;
+    transform: scaleX(0);
+    transition: transform 0.3s ease-out;
+    transform-origin: bottom center;
 }
 
-/* Hover effect */
-.navbar-links a:hover {
-  color: #D8A928;
-}
-
+/* 3. CONDIZIONI PER MOSTRARE LA BARRA */
 .navbar-links a:hover::after {
-  transform: scaleX(1);
-}
-
-.navbar-links a.active {
-  color: #D8A928;
+    transform: scaleX(1);
 }
 
 .navbar-links a.active::after {
-  transform: scaleX(1);
-  background-color: #D8A928;
+    transform: scaleX(1);
+    background-color: #D8A928;
 }
 
-/* --- AZIONI (Destra) --- */
+.navbar-links a:hover {
+    color: #D8A928;
+}
+
 .navbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 
-.wishlist-icon-link,
+/* todo: Link wishlist */
+.wishlist-icon-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* todo: Link carretto */
 .cart-icon-link {
-  text-decoration: none;
-  color: inherit;
-  position: relative;
+    text-decoration: none;
+    color: inherit;
 }
 
-/* --- ICONE (Wishlist & Cart) --- */
-.wishlist-icon,
-.cart-icon {
-  position: relative;
-  font-size: 1.6rem;
-  cursor: pointer;
-  color: #fff;
-  display: inline-block;
-  transition: transform 0.1s, color 0.1s;
-  /* Ombra testo per staccare dallo sfondo */
-  filter: drop-shadow(2px 2px 0px #000);
+/* todo: Icona wishlist con badge */
+.wishlist-icon {
+    position: relative;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    color: #ff0303;
+    display: inline-block;
 }
 
 .wishlist-icon:hover {
-  color: #ef4444;
-  transform: translate(-2px, -2px);
-  /* Movimento fisico */
-  filter: drop-shadow(4px 4px 0px #000);
+    color: #C8923A;
+    transform: scale(1.3);
 }
 
-.cart-icon:hover {
-  color: #D8A928;
-  transform: translate(-2px, -2px);
-  filter: drop-shadow(4px 4px 0px #000);
-}
-
-/* --- BADGES (Contatori) --- */
-/* Stile quadrato pixelato */
-.wishlist-badge,
-.cart-badge {
-  position: absolute;
-  top: -10px;
-  right: -12px;
-  font-size: 0.7rem;
-  font-weight: 900;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 0;
-  /* Squadrato */
-  border: 2px solid #000;
-  /* Bordo nero */
-  box-shadow: 2px 2px 0px #000;
-  /* Ombra netta */
-  font-family: "Courier New", monospace;
-  animation: popPixel 0.2s steps(2);
-  z-index: 10;
-}
-
+/* todo: Badge contatore wishlist */
 .wishlist-badge {
-  background-color: #ef4444;
-  /* Colore piatto, niente gradienti */
-  color: #fff;
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: linear-gradient(135deg, #ff0000 0%, #dc2626 100%);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.5);
+  animation: popIn 0.3s ease;
 }
 
-.cart-badge {
-  background-color: #D8A928;
-  color: #000;
-}
-
-@keyframes popPixel {
+@keyframes popIn {
   0% {
     transform: scale(0);
   }
-
   50% {
     transform: scale(1.2);
   }
-
-  /* Scatto grande */
   100% {
     transform: scale(1);
   }
 }
 
-/* --- PULSANTE LEVEL UP (Arcade Button Style) --- */
+.cart-icon {
+    position: relative;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+.cart-icon:hover {
+    color: #D8A928;
+    transform: scale(1.3);
+}
+
+/* todo: Badge contatore carretto */
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: linear-gradient(135deg, #d82828 0%, #ff0000 100%);
+    color: #1a1a1a;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(216, 169, 40, 0.5);
+    animation: popIn 0.3s ease;
+}
+
 .btn-levelup {
-  background-color: #D8A928;
-  color: #000;
-  font-weight: 900;
-  font-family: "Pixelify Sans", "Courier New", sans-serif;
-  text-transform: uppercase;
-  padding: 10px 24px;
-  border: 3px solid #000;
-  /* Bordo spesso */
-  border-radius: 0;
-  /* Squadrato */
-  cursor: pointer;
-  transition: all 0.1s;
-  box-shadow: 4px 4px 0px #000;
-  /* Ombra bottone */
-  position: relative;
-  font-size: 0.9rem;
-  margin-left: 10px;
+    background-color: #D8A928;
+    color: #772284;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
 }
 
 .btn-levelup:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #fff;
-  /* Hover luminoso */
-  color: #772284;
-  background-color: #ffd700;
+    transform: scale(1.1);
 }
 
-.btn-levelup:active {
-  transform: translate(2px, 2px);
-  /* Pressione fisica */
-  box-shadow: 0px 0px 0px #000;
+.cart-wrapper {
+  position: relative;
 }
 
-/* RESPONSIVE NAV (Mobile semplice) */
-@media screen and (max-width: 768px) {
-  .navbar {
-    padding: 15px 20px;
-  }
+.cart-preview {
+    position: absolute;
+    top: 43px;
+    right: -120px;
+    width: 500px;
+    background: #1b1b1e;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid #44258055;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: cartEnter .22s 
+ease-out forwards;
+}
 
-  .navbar-links {
-    display: none;
-    /* Da gestire con menu hamburger se necessario */
-  }
+@keyframes fadeCart {
+  from { opacity: 0; transform: translateY(-5px);}
+  to { opacity: 1; transform: translateY(0);}
+}
 
-  .logo-icon {
-    width: 120px;
-  }
+.cart-preview h4 {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #442580;
+}
 
-  .btn-levelup {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-    box-shadow: 3px 3px 0px #000;
+.empty-cart {
+  text-align: center;
+  padding: 20px 0;
+  color: #555;
+}
+
+.cart-preview-list {
+  max-height: 250px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.cart-preview-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cart-preview-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.cart-preview-item .info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-preview-item .price {
+  font-weight: 700;
+  color: #fbfbfb;
+}
+
+.btn-checkout {
+  width: 100%;
+  padding: 10px;
+  background: #442580;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-checkout:hover {
+  background: #772284;
+}
+
+
+
+/* ──────────────────────────────────────────────── */
+/*     MINI CART PREVIEW – MYPOCKETQUEST STYLE     */
+/* ──────────────────────────────────────────────── */
+
+.cart-wrapper {
+  position: relative;
+}
+
+/* Contenitore principale */
+.cart-preview {
+    position: absolute;
+    top: 43px;
+    right: -120px;
+    width: 500px;
+    background: #1b1b1e;
+    border-radius: 16px;
+    padding: 22px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid #D8A928;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: cartEnter .22s 
+ease-out forwards;
+}
+
+@keyframes cartEnter {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.cart-preview.closing {
+  animation: cartExit .22s ease-in forwards;
+}
+
+@keyframes cartExit {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+.cart-preview h4 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #D4A74F;
+}
+
+/* Lista scrollabile */
+.cart-preview-list {
+  max-height: 260px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.cart-preview-list::-webkit-scrollbar {
+  width: 6px;
+}
+.cart-preview-list::-webkit-scrollbar-thumb {
+  background: #442580;
+  border-radius: 10px;
+}
+.cart-preview-list::-webkit-scrollbar-track {
+  background: #2a2a2d;
+}
+
+/* Elemento */
+.cart-preview-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 12px;
+  background: #242428;
+  border-radius: 12px;
+  transition: all 0.18s;
+}
+
+/* Animazione fade-in */
+.fade-in {
+  opacity: 0;
+  animation: fadeInItem 0.35s ease forwards;
+}
+
+@keyframes fadeInItem {
+  from { opacity: 0; transform: translateX(15px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Rimozione */
+.cart-preview-item.removing {
+  animation: removeItem 0.25s ease forwards;
+}
+
+@keyframes removeItem {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+    height: 70px;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-25px);
+    height: 0;
+    margin: 0;
+    padding: 0 12px;
   }
 }
+
+/* Immagine prodotto */
+.cart-preview-item img {
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.info {
+  flex-grow: 1;
+  color: #eee;
+  font-size: 14px;
+}
+
+/* Quantità */
+.qty-controls {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #442580;
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qty-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.qty-number {
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Spinner */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spinner 0.6s linear infinite;
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+/* Rimuovi */
+.remove-btn {
+  margin-left: 20px;
+  color: #ff5555;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.remove-btn:hover {
+  color: #ff7777;
+}
+
+/* Prezzo */
+.price {
+  font-size: 16px;
+  color: #D4A74F;
+  font-weight: 700;
+}
+
+/* Totale */
+.cart-total-box {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding: 12px 8px;
+  color: white;
+  font-size: 16px;
+}
+
+.cart-total-box strong {
+  font-size: 18px;
+  color: #D4A74F;
+}
+
+/* Pulsanti */
+.btn-checkout,
+.btn-fast-checkout {
+  width: 100%;
+  padding: 12px;
+  margin-top: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+  border: none;
+}
+
+.btn-checkout {
+  background: linear-gradient(135deg, #442580, #6a3bc8);
+  color: white;
+}
+
+.btn-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(68, 37, 128, 0.45);
+}
+
+.btn-fast-checkout {
+  background: linear-gradient(135deg, #D4A74F, #f1c567);
+  color: #1c1c1f;
+}
+
+.btn-fast-checkout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(212, 167, 79, 0.45);
+}
+
+.cart-icon-link,
+.cart-icon-link:focus,
+.cart-icon-link:active,
+.cart-wrapper > button,
+.cart-wrapper > button:focus,
+.cart-wrapper > button:active {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+
+

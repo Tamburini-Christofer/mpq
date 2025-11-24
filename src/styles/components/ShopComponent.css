@@ -1,460 +1,77 @@
-/* ==========================================
-   SHOP UI - PIXEL / NEO-BRUTALIST STYLE
-   ========================================== */
-
-/* Reset e Variabili */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-:root {
-  --pixel-dark: #141218;
-  --pixel-light: #ffffff;
-  --pixel-gold: #D8A928;
-  --pixel-purple: #6c21ff;
-  --pixel-border: #000000;
-  --pixel-shadow: 5px 5px 0px #000000;
-}
-
-body {
-  font-family: 'Courier New', Courier, monospace;
-  /* Font Retro */
-  background-color: var(--pixel-dark);
-  color: var(--pixel-light);
-  min-height: 100vh;
-
-  /* Texture a griglia retro */
-  background-image: linear-gradient(#222 1px, transparent 1px),
-    linear-gradient(90deg, #222 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.shop-container {
-  display: flex;
-  background: transparent;
-  min-height: calc(100vh - 4rem);
-  position: relative;
-}
-
-/*  */
-
-/* ==========================================
-   SIDEBAR FILTRI (Control Panel)
-   ========================================== */
-.filters-sidebar {
-  flex-grow: 0;
-  flex-shrink: 0;
-  width: 100%;
-  max-width: 300px;
-  /* Larghezza fissa consigliata */
-  background: #1a1720;
-
-  /* Bordo e Ombra Hard */
-  border-right: 4px solid #000;
-  box-shadow: 10px 0 0 rgba(0, 0, 0, 0.5);
-
-  padding: 1.5rem;
-  height: 100vh;
-  /* O sticky se preferisci */
-  overflow-y: auto;
-  border-radius: 0;
-  /* Squadrato */
-}
-
-.filters-title {
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: var(--pixel-gold);
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  border-bottom: 4px solid var(--pixel-purple);
-  padding-bottom: 0.5rem;
-  font-family: "Pixelify Sans", sans-serif;
-  text-shadow: 2px 2px 0 #000;
-}
-
-.filter-group {
-  margin-bottom: 2rem;
-  border-bottom: 2px dashed #333;
-  /* Separatore tratteggiato */
-  padding-bottom: 1rem;
-}
-
-.filter-group h4 {
-  margin-bottom: 1rem;
-  color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
-  text-transform: uppercase;
-  background: #000;
-  display: inline-block;
-  padding: 2px 8px;
-}
-
-/* Opzioni Filtro (Checkbox Style) */
-.filter-option {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  padding: 0.5rem 0;
-  transition: transform 0.1s;
-}
-
-.filter-option:hover {
-  transform: translateX(5px);
-  /* Movimento meccanico */
-  opacity: 1;
-}
-
-.filter-option input[type="checkbox"] {
-  appearance: none;
-  /* Rimuove stile default */
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  margin-right: 0.75rem;
-  cursor: pointer;
-  background: #000;
-  border: 2px solid #555;
-  border-radius: 0;
-  /* Squadrato */
-  position: relative;
-}
-
-.filter-option input[type="checkbox"]:checked {
-  background: var(--pixel-gold);
-  border-color: #fff;
-  box-shadow: 2px 2px 0px #fff;
-}
-
-/* Simula la spunta pixel */
-.filter-option input[type="checkbox"]:checked::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 6px;
-  width: 4px;
-  height: 10px;
-  border: solid #000;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
-.filter-option label {
-  cursor: pointer;
-  font-size: 0.9rem;
-  color: #aaa;
-  font-weight: 600;
-  font-family: monospace;
-  text-transform: uppercase;
-}
-
-.filter-option:hover label {
-  color: var(--pixel-gold);
-}
-
-/* ==========================================
-   SLIDER PREZZO (Retro Bar)
-   ========================================== */
-.price-slider-container {
-  margin-bottom: 1.5rem;
-  background: #000;
-  padding: 10px;
-  border: 2px solid #333;
-}
-
-.price-range-wrapper {
-  margin-bottom: 0.5rem;
-}
-
-.price-slider {
-  width: 100%;
-  height: 12px;
-  /* Più spesso */
-  border-radius: 0;
-  background: #333;
-  outline: none;
-  -webkit-appearance: none;
-  appearance: none;
-  cursor: pointer;
-  border: 2px solid #000;
-}
-
-/* Thumb (Maniglia) - Squadrata */
-.price-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  border-radius: 0;
-  /* Quadrato */
-  background: var(--pixel-gold);
-  border: 3px solid #000;
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #fff;
-  margin-top: -8px;
-  /* Centratura se necessario */
-}
-
-.price-slider::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
-  border-radius: 0;
-  background: var(--pixel-gold);
-  border: 3px solid #000;
-  cursor: pointer;
-  box-shadow: 2px 2px 0px #fff;
-}
-
-.price-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #fff;
-  margin-top: 0.5rem;
-  font-family: monospace;
-  font-weight: bold;
-}
-
-/* ==========================================
-   BOTTONI AZIONE SIDEBAR
-   ========================================== */
-.apply-filters-btn {
-  width: 100%;
-  padding: 1rem;
-  background: var(--pixel-gold);
-  color: #000;
-  border: 3px solid #000;
-  border-radius: 0;
-  font-size: 1rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.1s;
-  margin-top: 1rem;
-  box-shadow: 5px 5px 0px #000;
-  /* Hard Shadow */
-  font-family: "Pixelify Sans", sans-serif;
-}
-
-.apply-filters-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0px #fff;
-  background: #ffd700;
-}
-
-.apply-filters-btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0;
-}
-
-/* Reset Button (Se presente, stile rosso) */
-.reset-filters-btn {
-  /* Assumendo esista nell'HTML */
-  width: 100%;
-  padding: 0.8rem;
-  background: #ef4444;
-  color: #fff;
-  border: 3px solid #000;
-  border-radius: 0;
-  font-weight: bold;
-  margin-top: 10px;
-  box-shadow: 5px 5px 0px #000;
-  cursor: pointer;
-  text-transform: uppercase;
-}
-
-.reset-filters-btn:hover {
-  transform: translate(-2px, -2px);
-  background: #ff0000;
-  box-shadow: 7px 7px 0px #fff;
-}
-
-/* ==========================================
-   CONTENUTO RISULTATI E BARRA RICERCA
-   ========================================== */
-.results-content {
-  flex-grow: 1;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-}
-
-/* SEARCH AND SORT BAR */
-.search-sort-bar {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  align-items: center;
-  flex: 1;
-  max-width: 100%;
-  background: #1a1720;
-  padding: 1rem;
-  border: 3px solid #000;
-  box-shadow: 8px 8px 0px #000;
-}
-
-/* SEARCH WRAPPER */
-.search-wrapper {
-  flex: 1;
-  min-width: 250px;
-  position: relative;
-}
-
-.search-input {
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  background: #000;
-  border: 2px solid #555;
-  border-radius: 0;
-  /* Squadrato */
-  color: #fff;
-  font-size: 1rem;
-  font-family: "Courier New", monospace;
-  transition: all 0.1s;
-  box-shadow: inset 4px 4px 0px rgba(255, 255, 255, 0.1);
-}
-
-.search-input::placeholder {
-  color: #666;
-  font-style: normal;
-  text-transform: uppercase;
-}
-
-.search-input:focus {
-  outline: none;
-  border-color: var(--pixel-gold);
-  background: #111;
-  box-shadow: 5px 5px 0px var(--pixel-purple);
-  /* Ombra focus */
-  transform: translate(-2px, -2px);
-}
-
-/* Search Icon */
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  color: var(--pixel-gold);
-  z-index: 1;
-}
-
-/* SORT WRAPPER */
+/* WRAPPER */
 .sort-wrapper {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  white-space: nowrap;
-  flex-shrink: 0;
+  gap: 10px;
 }
 
-.sort-wrapper label {
-  color: #fff;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  background: #000;
-  padding: 2px 5px;
-}
-
-.select-container {
+/* SELECT BOX PERSONALIZZATO */
+.custom-select {
   position: relative;
-  display: inline-block;
+  width: 230px;
+  font-family: "Cinzel", serif;
 }
 
-.sort-select {
-  position: relative;
-  padding: 0.8rem 3rem 0.8rem 1rem;
+.select-display {
+  width: 100%;
+  padding: 13px 18px;
   background: #1c1a24;
-  border: 2px solid #000;
-  border-radius: 0;
-  /* Squadrato */
-  color: var(--pixel-gold);
-  font-size: 0.9rem;
-  font-weight: 700;
+  border: 2px solid var(--purple);
+  border-radius: 10px;
+  color: var(--light);
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.1s;
-  min-width: 200px;
-  appearance: none;
-  font-family: "Courier New", monospace;
-  text-transform: uppercase;
-  box-shadow: 4px 4px 0px #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transition: 0.2s ease;
+  box-shadow: 0 0 10px rgba(108, 33, 255, 0.4);
 }
 
-.select-icon {
+.select-display:hover {
+  border-color: var(--gold);
+  background: #241f2c;
+}
+
+.custom-select.open .select-arrow {
+  transform: rotate(180deg);
+}
+
+.select-arrow {
+  transition: transform 0.25s ease;
+  color: var(--gold);
+  font-size: 20px;
+}
+
+/* DROPDOWN */
+.select-dropdown {
   position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  color: #fff;
-  pointer-events: none;
-  z-index: 1;
-  background: #000;
-  /* Sfondo icona per coprire testo */
+  top: 105%;
+  width: 100%;
+  background: #1c1a24;
+  border: 2px solid var(--purple);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 50;
+  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
 }
 
-.sort-select:focus {
-  outline: none;
-  border-color: var(--pixel-gold);
-  background-color: #000;
-  transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #fff;
+.select-option {
+  padding: 12px 18px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--light);
+  transition: 0.15s;
 }
 
-.sort-select:hover {
-  background-color: #000;
-  border-color: #fff;
+.select-option:hover {
+  background: rgba(255, 215, 0, 0.1);
+  color: var(--gold);
 }
 
-.sort-select option {
-  background: #000;
-  color: #fff;
-  padding: 10px;
-  font-family: monospace;
-}
-
-/* RESULTS GRID */
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .shop-container {
-    flex-direction: column;
-  }
-
-  .filters-sidebar {
-    width: 100%;
-    max-width: none;
-    height: auto;
-    border-right: none;
-    border-bottom: 4px solid #000;
-    position: relative;
-    /* Non sticky su mobile */
-  }
-
-  .search-sort-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-wrapper {
-    max-width: none;
-  }
-
-  .sort-select {
-    width: 100%;
-  }
+.select-option.active {
+  background: rgba(108, 33, 255, 0.2);
+  color: var(--gold);
+  font-weight: bold;
 }

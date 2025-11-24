@@ -1,38 +1,25 @@
-/* ========================================
-   VARIABILI & GLOBAL (Pixel Theme)
-   ======================================== */
+/* todo: Variabili colore per la pagina contatti */
 :root {
   --contact-purple: #6c21ff;
   --contact-gold: #d8a928;
   --contact-dark: #141218;
   --contact-light: #ffffff;
-  --contact-gray: #a1a1aa;
-  --contact-success: #10b981;
-  --contact-error: #ef4444;
+  --contact-gray: #8e8e93;
+  --contact-success: #4caf50;
+  --contact-error: #ff4757;
   --contact-card-bg: #1c1a24;
-  --contact-input-bg: #000000;
-  
-  /* Variabili Pixel Core */
-  --pixel-border: #000000;
-  --pixel-shadow: 6px 6px 0px #000000;
+  --contact-input-bg: #2a2636;
 }
 
-/* ========================================
-   CONTAINER PRINCIPALE
-   ======================================== */
+/* todo: Container principale della pagina contatti */
 .contact-page-container {
   min-height: 100vh;
-  background-color: var(--contact-dark);
+  background: linear-gradient(135deg, var(--contact-dark) 0%, #1a1720 50%, var(--contact-dark) 100%);
   padding: 80px 20px 40px;
-  font-family: "Courier New", Courier, monospace; /* Font Retro */
-  
-  /* Texture a griglia stile "Piano cartesiano" */
-  background-image: linear-gradient(#222 1px, transparent 1px),
-  linear-gradient(90deg, #222 1px, transparent 1px);
-  background-size: 40px 40px;
+  font-family: "Inter", sans-serif;
 }
 
-/* Content wrapper */
+/* todo: Content wrapper con layout a due colonne */
 .contact-content {
   max-width: 1400px;
   margin: 0 auto;
@@ -42,153 +29,140 @@
   align-items: start;
 }
 
-/* ========================================
-   SEZIONE SINISTRA (Info)
-   ======================================== */
-
-/* Titolo principale */
+/* todo: Titolo principale */
 .contact-main-title {
   font-size: 48px;
-  font-weight: 900;
-  color: var(--contact-gold);
+  font-weight: 800;
+  color: var(--contact-light);
   margin-bottom: 20px;
-  font-family: "Pixelify Sans", "Cinzel", serif;
-  text-shadow: 4px 4px 0px #000;
-  text-transform: uppercase;
-  line-height: 1;
+  background: linear-gradient(135deg, var(--contact-light), var(--contact-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: "Cinzel", serif;
 }
 
-/* Descrizione */
+/* todo: Descrizione */
 .contact-description {
-  font-size: 16px;
+  font-size: 18px;
   color: var(--contact-gray);
   line-height: 1.6;
   margin-bottom: 40px;
-  background: #000;
-  border: 2px solid var(--contact-purple);
-  padding: 15px;
-  box-shadow: 4px 4px 0px rgba(0,0,0,0.5);
 }
 
-/* Container dettagli */
+/* todo: Container dettagli contatto */
 .contact-details {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-/* Singolo item di dettaglio (Inventory Slot Style) */
+/* todo: Singolo item di dettaglio */
 .contact-detail-item {
   display: flex;
   align-items: center;
   gap: 20px;
   padding: 20px;
-  background: #1a1720;
-  border-radius: 0; /* Squadrato */
-  border: 3px solid var(--pixel-border);
-  box-shadow: 5px 5px 0px var(--pixel-border);
-  transition: all 0.1s steps(2);
-  cursor: pointer;
+  background: rgba(28, 26, 36, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(216, 169, 40, 0.2);
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
 }
 
 .contact-detail-item:hover {
-  background: #2d2d2d;
-  border-color: #000;
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px var(--contact-gold); /* Ombra oro al passaggio */
+  background: rgba(28, 26, 36, 0.8);
+  border-color: var(--contact-gold);
+  transform: translateX(5px);
 }
 
-/* Icona */
-.contact-icon img{
-  font-size: 28px;
+/* todo: Icona nel dettaglio */
+.contact-icon {
+  font-size: 32px;
   width: 60px;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--contact-purple);
-  border: 3px solid #000;
-  border-radius: 0; /* Squadrato */
+  background: linear-gradient(135deg, var(--contact-purple), #8c4dff);
+  border-radius: 12px;
   flex-shrink: 0;
-  color: #fff;
-  box-shadow: inset 3px 3px 0px rgba(255,255,255,0.2);
+}
+
+.contact-icon img {
+  max-width: 100%;
 }
 
 .contact-detail-item h3 {
   color: var(--contact-light);
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 600;
   margin-bottom: 5px;
-  font-family: "Cinzel", serif;
-  text-transform: uppercase;
 }
 
 .contact-detail-item p {
   color: var(--contact-gray);
-  font-size: 14px;
-  font-family: "Courier New", monospace;
+  font-size: 16px;
 }
 
-/* ========================================
-   SEZIONE DESTRA (Form)
-   ======================================== */
+/* todo: Sezione form contatto (destra) */
 .contact-form-section {
   width: 100%;
 }
 
-/* Card contenente il form (Terminal Style) */
+/* todo: Card contenente il form */
 .contact-form-card {
   background: var(--contact-card-bg);
-  border-radius: 0;
+  border-radius: 20px;
   padding: 40px;
-  border: 4px solid #000;
-  box-shadow: 12px 12px 0px #000; /* Ombra molto pronunciata */
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(216, 169, 40, 0.1);
+  border: 2px solid transparent;
+  background-clip: padding-box;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
 }
 
-/* Decorazione "Barra del titolo" sopra il form */
+/* todo: Effetto brillante sul bordo della card */
 .contact-form-card::before {
-  content: "/// TRANSMISSION_UPLINK ///";
+  content: '';
   position: absolute;
-  top: -24px;
-  left: -4px; /* Allineato al bordo */
-  background: var(--contact-gold);
-  color: #000;
-  font-weight: 900;
-  font-size: 12px;
-  padding: 4px 10px;
-  border: 4px solid #000;
-  border-bottom: none;
-  font-family: monospace;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, var(--contact-purple), var(--contact-gold), var(--contact-purple));
+  z-index: -1;
+  margin: -2px;
+  border-radius: 20px;
+  opacity: 0.8;
 }
 
-/* Titolo del form */
+/* todo: Titolo del form */
 .contact-form-title {
   color: var(--contact-light);
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 600;
   margin-bottom: 30px;
   font-family: "Cinzel", serif;
-  text-transform: uppercase;
-  border-bottom: 4px solid var(--contact-purple);
-  padding-bottom: 10px;
-  display: inline-block;
 }
 
-/* Stili del form */
+/* todo: Stili del form */
 .contact-form {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
+/* todo: Riga del form per layout affiancato */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
+/* todo: Gruppi di input */
 .input-group {
   position: relative;
   display: flex;
@@ -196,167 +170,177 @@
   gap: 8px;
 }
 
+/* todo: Label degli input */
 .input-label {
   color: var(--contact-light);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-family: monospace;
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 4px;
 }
 
-/* Input e Textarea (Blocchi neri) */
+/* todo: Stili base per input e textarea */
 .contact-input,
 .contact-textarea {
-  background: #000;
-  border: 2px solid var(--contact-gray);
-  border-radius: 0; /* Squadrato */
-  padding: 15px;
+  background: var(--contact-input-bg);
+  border: 2px solid transparent;
+  border-radius: 5px;
+  padding: 5px 20px;
   color: var(--contact-light);
   font-size: 14px;
-  font-family: "Courier New", monospace;
-  transition: all 0.1s;
+  font-family: inherit;
+  transition: all 0.3s ease;
   outline: none;
-  box-shadow: inset 4px 4px 0px rgba(20, 20, 20, 0.8);
 }
 
+/* todo: Placeholder styling */
 .contact-input::placeholder,
 .contact-textarea::placeholder {
-  color: #555;
-  text-transform: uppercase;
+  color: var(--contact-gray);
+  opacity: 0.8;
 }
 
-/* Focus: Bordo colorato e movimento */
+/* todo: Focus states per input */
 .contact-input:focus,
 .contact-textarea:focus {
-  border-color: var(--contact-gold);
-  background: #111;
-  box-shadow: 5px 5px 0px var(--contact-purple);
-  transform: translate(-2px, -2px);
-  z-index: 2;
+  border-color: var(--contact-purple);
+  box-shadow: 
+    0 0 0 3px rgba(108, 33, 255, 0.1),
+    0 8px 25px rgba(108, 33, 255, 0.15);
+  transform: translateY(-2px);
 }
 
+/* todo: Stili specifici per textarea */
 .contact-textarea {
   line-height: 1.6;
-  min-height: 150px;
-  resize: vertical;
 }
 
-/* Bottone di invio (Arcade Style) */
+/* todo: Bottone di invio */
 .contact-submit-btn {
-  background: var(--contact-purple);
-  border: 3px solid #000;
-  border-radius: 0;
+  background: linear-gradient(135deg, var(--contact-purple), #8c4dff);
+  border: none;
+  border-radius: 12px;
   padding: 18px 30px;
-  color: #fff;
+  color: var(--contact-light);
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.1s;
+  transition: all 0.3s ease;
   position: relative;
+  overflow: hidden;
   margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-family: "Cinzel", serif;
-  text-transform: uppercase;
-  box-shadow: 6px 6px 0px #000;
 }
 
+/* todo: Effetto hover sul bottone */
 .contact-submit-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px #fff; /* Hover bianco */
-  background: #7c3aff;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(108, 33, 255, 0.4);
 }
 
+/* todo: Effetto attivo sul bottone */
 .contact-submit-btn:active {
-  transform: translate(2px, 2px); /* Click fisico */
-  box-shadow: 0px 0px 0px #000;
+  transform: translateY(-1px);
 }
 
+/* todo: Stato disabilitato del bottone */
 .contact-submit-btn:disabled {
-  background: #555;
-  color: #aaa;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
-  border-color: #333;
 }
 
-/* ========================================
-   MESSAGGI DI STATO (Popup Style)
-   ======================================== */
+/* todo: Messaggio di stato */
 .status-message {
   padding: 16px 20px;
-  border-radius: 0;
-  font-size: 14px;
-  font-weight: 700;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
   text-align: center;
   margin-top: 20px;
-  animation: fadeInUpSteps 0.3s steps(5);
-  border: 3px solid #000;
-  box-shadow: 4px 4px 0px #000;
-  font-family: monospace;
-  text-transform: uppercase;
+  animation: fadeInUp 0.5s ease;
 }
 
+/* todo: Stato di successo */
 .status-success {
-  background: #10b981;
-  color: #000;
+  background: rgba(76, 175, 80, 0.1);
+  border: 2px solid var(--contact-success);
+  color: var(--contact-success);
 }
 
+/* todo: Stato di errore */
 .status-error {
-  background: #ef4444;
-  color: #fff;
+  background: rgba(255, 71, 87, 0.1);
+  border: 2px solid var(--contact-error);
+  color: var(--contact-error);
 }
 
+/* todo: Stato di loading */
 .status-loading {
-  background: var(--contact-gold);
-  color: #000;
+  background: rgba(216, 169, 40, 0.1);
+  border: 2px solid var(--contact-gold);
+  color: var(--contact-gold);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
 }
 
-/* Spinner quadrato */
+/* todo: Spinner di caricamento */
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 3px solid #000;
-  border-top: 3px solid transparent; /* Crea l'effetto rotazione */
-  border-radius: 0;
-  animation: spinPixel 0.8s steps(8) infinite;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-/* Animazioni */
-@keyframes fadeInUpSteps {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes spinPixel {
-  to { transform: rotate(360deg); }
-}
-
-/* ========================================
-   RESPONSIVE
-   ======================================== */
-@media (max-width: 1024px) {
-  .contact-content {
-    grid-template-columns: 1fr;
-    gap: 60px;
+/* todo: Animazioni */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* todo: Responsive design per tablet */
+@media (max-width: 1024px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .contact-info-section {
+    position: static;
+  }
+  
+  .contact-main-title {
+    font-size: 40px;
+  }
+}
+
+/* todo: Responsive design per mobile */
 @media (max-width: 768px) {
   .contact-page-container {
     padding: 60px 15px 30px;
   }
   
   .contact-form-card {
-    padding: 25px 20px;
-    box-shadow: 8px 8px 0px #000;
+    padding: 30px 25px;
   }
   
   .form-row {
@@ -368,9 +352,46 @@
     font-size: 32px;
   }
   
-  /* Su mobile la barra decorativa si adatta */
-  .contact-form-card::before {
-    font-size: 10px;
-    top: -22px;
+  .contact-description {
+    font-size: 16px;
   }
+}
+
+@media (max-width: 480px) {
+  .contact-main-title {
+    font-size: 28px;
+  }
+  
+  .contact-form-card {
+    padding: 25px 20px;
+    border-radius: 15px;
+  }
+  
+  .contact-form-title {
+    font-size: 24px;
+  }
+  
+  .contact-input,
+  .contact-textarea,
+  .contact-submit-btn {
+    padding: 14px 16px;
+  }
+  
+  .contact-textarea {
+    min-height: 120px;
+  }
+  
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
+
+/* todo: Accessibilità - Focus visibile per navigazione da tastiera */
+.contact-input:focus-visible,
+.contact-textarea:focus-visible,
+.contact-submit-btn:focus-visible {
+  outline: 3px solid var(--contact-gold);
+  outline-offset: 2px;
 }
