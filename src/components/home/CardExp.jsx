@@ -28,15 +28,49 @@ function CardExp ({ product, onViewDetails, onAddToCart }) {
                 Dettagli
               </button>
             )}
-            {/* todo: Pulsante acquista - mostrato solo se callback fornita */}
-            {onAddToCart && (
-              <button 
-                className="card-btn card-btn-cart"
-                onClick={() => onAddToCart(product)}
-              >
-                Acquista
-              </button>
-            )}
+{/* QUANTITÀ NEL CARRELLO */}
+{showActions && (
+  <div className="product-card__actions">
+    {onViewDetails && (
+      <button
+        className="product-card__btn product-card__btn--details"
+        onClick={() => onViewDetails(productSlug)}
+      >
+        Dettagli
+      </button>
+    )}
+
+    {/* 🔥 SE LA QUANTITÀ È 0 → MOSTRA ACQUISTA */}
+    {!product.cartQty || product.cartQty === 0 ? (
+      <button
+        className="product-card__btn product-card__btn--cart"
+        onClick={() => onAddToCart(product)}
+      >
+        Acquista
+      </button>
+    ) : (
+      /* 🔥 SE È >0 → MOSTRA I PULSANTI - QTY + */
+      <div className="product-qty-controls">
+        <button
+          className="qty-btn minus"
+          onClick={() => product.onDecrease(product.id)}
+        >
+          -
+        </button>
+
+        <span className="qty-display">{product.cartQty}</span>
+
+        <button
+          className="qty-btn plus"
+          onClick={() => product.onIncrease(product.id)}
+        >
+          +
+        </button>
+      </div>
+    )}
+  </div>
+)}
+
           </div>
         )}
       </div>

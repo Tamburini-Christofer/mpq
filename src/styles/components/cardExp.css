@@ -1,225 +1,125 @@
-/* todo: Container griglia per le card prodotto */
-.products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-/* todo: Card prodotto in stile fantasy con altezza fissa */
-.fancy-card {
-  background: #1a1a1a;
-  border: 4px solid #c9a347;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 25px rgba(0,0,0,0.8);
+/* ===== LIST MODE CARD ===== */
+.mpq-list-card {
   display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease;
-  height: 440px;
-  width: 100%;
-  position: relative;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px;
+  background: linear-gradient(145deg, #1c1a24, #17151d);
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  box-shadow: 0 0 14px rgba(108, 33, 255, 0.25);
+  transition: 0.25s ease;
 }
 
-/* todo: Badge promozione in alto a destra della card */
-.card-badge {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  font-weight: bold;
-  color: #fff;
-  border-radius: 6px;
-  z-index: 10;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-family: "Inter", sans-serif;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+.mpq-list-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(108, 33, 255, 0.45);
 }
 
-/* todo: Badge verde per prodotti in offerta */
-.card-badge--sale {
-  background: linear-gradient(135deg, #10b981, #059669);
-  box-shadow: 0 2px 8px 2px rgba(16, 185, 129, 0.4);
+/* Thumbnail */
+.mpq-list-thumb img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--gold);
 }
 
-/* todo: Card generica */
-.card {
-  background: #1a1a1a;
-  border-radius: 12px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/* todo: Effetto hover sulla card */
-.fancy-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 35px rgba(255, 200, 100, 0.5);
-}
-
-/* todo: Contenitore immagine con altezza fissa */
-.card-image-wrapper {
-  width: 100%;
-  height: 200px;
-  border-bottom: 3px solid #c9a347;
-  overflow: hidden;
-}
-
-/* todo: Immagine responsiva che riempie il contenitore */
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  object-position: center;
-  display: block;
-  filter: saturate(1.1) contrast(1.2);
-}
-
-/* todo: Corpo della card con testo */
-.card-body {
-  padding: 18px 5px;
-  text-align: center;
-  color: #e7d9b3;
-  font-family: "Cinzel", serif;
+/* Content */
+.mpq-list-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 6px;
 }
 
-/* todo: Titolo del prodotto */
-.card-body h3 {
-  font-size: 1rem;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 2px black;
-}
-
-/* todo: Prezzo del prodotto */
-.price {
-  font-size: 1.1rem;
+.mpq-list-title {
+  font-size: 20px;
   font-weight: bold;
-  color: #ffdf7f;
-  margin-bottom: 10px;
+  color: var(--gold);
+  margin-bottom: 5px;
 }
 
-/* todo: Container per prezzi in promozione (originale + scontato) */
-.price-container {
+/* Prezzi */
+.mpq-list-price {
+  font-size: 18px;
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 10px;
+  align-items: center;
 }
 
-/* todo: Prezzo originale barrato */
-.price--original {
-  font-size: 0.75rem !important;
-  color: #ff4444 !important;
-  text-decoration: line-through !important;
-  font-weight: normal !important;
-  opacity: 0.8 !important;
+.mpq-list-price .old-price {
+  color: red;
+  text-decoration: line-through;
+  opacity: 0.6;
 }
 
-/* todo: Prezzo scontato */
-.price--discount {
-  font-size: 1.1rem !important;
-  color: #ffdf7f !important;
-  font-weight: bold !important;
+.mpq-list-price .discounted-price {
+  color: white;
+  font-weight: bold;
 }
 
-/* Selettore più specifico per prezzo barrato nel Shop */
-.fancy-card .price-container .price--original {
-  font-size: 0.75rem !important;
-  color: #ff4444 !important;
-  text-decoration: line-through !important;
-  font-weight: normal !important;
-  opacity: 0.8 !important;
-}
-
-/* Selettore con data attribute per massima specificità nel Shop */
-.fancy-card span[data-original-price="true"] {
-  font-size: 0.75rem !important;
-  color: #ff4444 !important;
-  text-decoration: line-through !important;
-  font-weight: normal !important;
-  opacity: 0.8 !important;
-}
-
-/* todo: Container pulsanti card */
-.card-buttons {
+/* Extra info */
+.mpq-list-info {
   display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-top: auto;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  font-size: 14px;
 }
 
-/* todo: Stile base pulsanti card */
-.card-btn {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  border-radius: 6px;
-  cursor: pointer;
+.mpq-list-info strong {
+  color: var(--gold);
+}
+
+/* Short description */
+.mpq-list-desc {
+  font-size: 14px;
+  opacity: 0.8;
+  line-height: 1.3;
+  max-width: 600px;
+}
+
+/* Actions */
+.mpq-list-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mpq-list-actions button {
+  min-width: 130px;
+}
+
+/* Style buttons (reuse grid style) */
+.btn-details,
+.btn-buy {
+  padding: 10px 16px;
+  border-radius: 10px;
   font-family: "Cinzel", serif;
-  transition: all 0.2s ease;
-  font-weight: 600;
-}
-
-/* todo: Pulsante dettagli (oro pieno) */
-.card-btn-details {
-  background: linear-gradient(135deg, #c9a347, #a68533);
-  border: 2px solid #c9a347;
-  color: #1a1a1a;
-}
-
-/* todo: Hover pulsante dettagli */
-.card-btn-details:hover {
-  background: linear-gradient(135deg, #d4b359, #b89640);
-  box-shadow: 0 0 10px rgba(201, 163, 71, 0.5);
-  transform: translateY(-2px);
-}
-
-/* todo: Pulsante acquista (bordo oro) */
-.card-btn-cart {
-  background: linear-gradient(#2a2a2a, #1a1a1a);
-  border: 2px solid #c9a347;
-  color: #f5e4c3;
-}
-
-/* todo: Hover pulsante acquista */
-.card-btn-cart:hover {
-  background: #3a2a00;
-  color: #ffe8b6;
-  box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
-  transform: translateY(-2px);
-}
-
-/* todo: Pulsanti deprecati - manteniamo per compatibilità */
-.buy-btn,
-.details-btn {
-  padding: 10px 18px;
-  font-size: 1rem;
-  border: 2px solid #c9a347;
-  background: linear-gradient(#2a2a2a, #1a1a1a);
-  color: #f5e4c3;
-  border-radius: 6px;
+  font-size: 14px;
   cursor: pointer;
-  font-family: "Cinzel", serif;
-  transition: 0.2s ease;
+  transition: 0.2s;
 }
 
-
-
-/* todo: Effetto hover sul pulsante */
-.buy-btn:hover {
-  background: #3a2a00;
-  color: #ffe8b6;
-  box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
+.btn-details {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
 }
 
-/* todo: Sfondo generale della pagina */
-body {
-  background-color: #141218;
+.btn-details:hover {
+  background: var(--gold);
+  color: var(--dark);
+}
+
+.btn-buy {
+  background: var(--purple);
+  border: 2px solid var(--purple);
+  color: white;
+  box-shadow: 0 0 10px rgba(108, 33, 255, 0.4);
+}
+
+.btn-buy:hover {
+  background: #7d46ff;
+  transform: translateY(-2px);
 }

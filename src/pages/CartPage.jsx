@@ -1,0 +1,150 @@
+import React, { useEffect, useState } from "react";
+import "../styles/pages/CartPage.css";
+
+import { cartAPI, emitCartUpdate } from "../services/api";
+import FreeShippingBanner from "../components/shop/FreeShippingBanner";
+
+function CartPage() {
+  const [cart, setCart] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // NOTIFICHE
+  const [notification, setNotification] = useState(null);
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 2500);
+  };
+
+  // CARICA CARRELLO
+  const loadCart = async () => {
+    try {
+      const data = await cartAPI.get();
+      setCart(data);
+    } catch {
+      showNotification("Errore caricamento carrello", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCart();
+  }, []);
+
+  // OPERAZIONI CARRELLO
+  const removeFromCart = async (id) => {
+    try {
+      await cartAPI.remove(id);
+      loadCart();
+      window.emitCartUpdate && emitCartUpdate();
+      showNotification("Prodotto rimosso", "error");
+    } catch {
+      showNotification("Errore rimozione", "error");
+    }
+  };
+
+  const increaseQuantity = async (id) => {
+    const item = cart.find((i) => i.id === id);
+    if (!item) return;
+    await cartAPI.update(id, item.quantity + 1);
+    loadCart();
+    window.emitCartUpdate && emitCartUpdate();
+  };
+
+  const decreaseQuantity = async (id) => {
+    const item = cart.find((i) => i.id === id);
+    if (!item) return;
+
+    if (item.quantity === 1) {
+      removeFromCart(id);
+      return;
+    }
+
+    await cartAPI.update(id, item.quantity - 1);
+    loadCart();
+    window.emitCartUpdate && emitCartUpdate();
+  };
+
+  // TOTALE
+  const subtotal = cart.reduce(
+    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    0
+  );
+
+  const SHIPPING_THRESHOLD = 40;
+  const SHIPPING_COST = 4.99;
+
+  const isFreeShipping = subtotal >= SHIPPING_THRESHOLD;
+  const shippingCost = isFreeShipping ? 0 : SHIPPING_COST;
+
+  const totalAmount = subtotal + shippingCost;
+
+  return (
+    <div className="cart-section">
+
+      {notification && (
+        <div className={`notification ${notification.type}`}>
+          {notification.message}
+        </div>
+      )}
+
+      <h2 className="section-title">Carrello</h2>
+
+      {/* BANNER SPEDIZIONE */}
+      {cart.length > 0 && (
+        <FreeShippingBanner
+          subtotal={subtotal}
+          threshold={SHIPPING_THRESHOLD}
+        />
+      )}
+
+      {/* CARRELLO VUOTO */}
+      {cart.length === 0 ? (
+        <div className="empty-cart">
+          <p>Il carrello è vuoto.</p>
+          <p>Aggiungi prodotti per procedere!</p>
+          <img src="/public/icon/EmptyShop.png" alt="empty" />
+        </div>
+      ) : (
+        <div className="cart-items">
+          {cart.map((item) => {
+            const price = parseFloat(item.price);
+            return (
+              <div key={item.id} className="cart-item">
+                <div className="item-info">
+                  <span className="item-name">{item.name}</span>
+                  <span className="item-price">{price.toFixed(2)}€</span>
+                </div>
+
+                <div className="quantity-controls">
+                  <button className="quantity-btn-c" onClick={() => decreaseQuantity(item.id)}>
+                    -
+                  </button>
+                  <span>{item.quantity}</span>
+                  <button className="quantity-btn-c" onClick={() => increaseQuantity(item.id)}>
+                    +
+                  </button>
+                </div>
+
+                <div className="item-total">
+                  <span className="total-price">
+                    {(price * item.quantity).toFixed(2)}€
+                  </span>
+                  <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
+                    Rimuovi
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="cart-total">
+            <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default CartPage;

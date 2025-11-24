@@ -52,16 +52,13 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     <>
       {error && <div className="payment-error">{error}</div>}
       <div className="buttons-row">
-        <button type="button" className="cancel-btn" onClick={onClose}>
-          Annulla Ordine
-        </button>
         <button 
           type="button"
           className="pay-btn" 
           onClick={handlePayClick}
           disabled={loading}
         >
-          {loading ? 'Reindirizzamento a Stripe...' : `Paga ${totalAmount.toFixed(2)}€`}
+          {loading ? 'Reindirizzamento a Stripe...' : `Procedi al pagamento`}
         </button>
       </div>
     </>

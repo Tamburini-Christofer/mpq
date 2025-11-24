@@ -313,3 +313,28 @@
     transform: rotate(360deg);
   }
 }
+.buttons-row{
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-btn {
+background: linear-gradient(135deg, #ff2121, #ff0000);
+    color: white;
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s 
+ease;
+    font-family: "Cinzel", serif;
+    width: 100%;
+    margin-right: 30px;
+}
+
+/* Hover */
+.cancel-btn:hover {
+  transform: translateY(-2px);
+}
+

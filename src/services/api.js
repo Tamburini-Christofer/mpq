@@ -48,11 +48,14 @@ export const productsAPI = {
 export const cartAPI = {
   // Ottieni carrello
   get: async () => {
+    console.log('API: cartAPI.get() called.');
     try {
       const sessionId = getSessionId();
       const response = await fetch(`${API_BASE_URL}/cart/${sessionId}`);
       if (!response.ok) throw new Error('Errore nel caricamento del carrello');
-      return await response.json();
+      const data = await response.json();
+      console.log('API: cartAPI.get() response data:', data);
+      return data;
     } catch (error) {
       console.error('Errore API cart.get:', error);
       return [];
@@ -89,6 +92,38 @@ export const cartAPI = {
       return await response.json();
     } catch (error) {
       console.error('Errore API cart.update:', error);
+      throw error;
+    }
+  },
+
+  // Aumenta quantità
+  increase: async (productId) => {
+    try {
+      const sessionId = getSessionId();
+      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}/increase`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Errore nell\'aumento della quantità');
+      return await response.json();
+    } catch (error) {
+      console.error('Errore API cart.increase:', error);
+      throw error;
+    }
+  },
+
+  // Diminuisci quantità
+  decrease: async (productId) => {
+    try {
+      const sessionId = getSessionId();
+      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}/decrease`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Errore nella diminuzione della quantità');
+      return await response.json();
+    } catch (error) {
+      console.error('Errore API cart.decrease:', error);
       throw error;
     }
   },
@@ -170,5 +205,6 @@ export const checkoutAPI = {
 
 // Evento personalizzato per sincronizzare il carrello tra componenti
 export const emitCartUpdate = () => {
+  console.log('API: emitCartUpdate() called, dispatching CustomEvent "cartUpdate".');
   window.dispatchEvent(new CustomEvent('cartUpdate'));
 };

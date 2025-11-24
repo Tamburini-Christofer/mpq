@@ -1,53 +1,140 @@
-import '../../styles/components/NavBar.css'
-import { NavLink } from 'react-router-dom';
+import '../../styles/components/NavBar.css';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
-import { useState, useEffect } from 'react';
-import { cartAPI } from '../../services/api';
+import { useState, useEffect, useRef } from 'react';
+import { cartAPI, emitCartUpdate } from '../../services/api';
 
 function NavBar() {
-  //todo Stato per contare prodotti in wishlist (rimane localStorage)
+  const navigate = useNavigate();
+
   const [wishlistCount, setWishlistCount] = useState(0);
-  //todo Stato per contare prodotti nel carrello (da API)
   const [cartCount, setCartCount] = useState(0);
-  
-  //todo Carica conteggio wishlist e carrello al mount
+
+  const [showCartPreview, setShowCartPreview] = useState(false);
+  const [animateClose, setAnimateClose] = useState(false);
+
+  const [cartItems, setCartItems] = useState([]);
+  const [cartTotal, setCartTotal] = useState(0);
+
+  const [loadingItemId, setLoadingItemId] = useState(null);
+
+  const openTimer = useRef(null);
+  const closeTimer = useRef(null);
+
+  const FALLBACK_IMAGE = "/fallback-product.png";
+
+  const FREE_SHIPPING_THRESHOLD = 40; // soglia per spesa gratuita
+
   useEffect(() => {
     updateWishlistCount();
-    updateCartCount();
-    
-    //todo Listener per aggiornare quando cambia wishlist o carrello
+    updateCartData();
+
     window.addEventListener('wishlistUpdate', updateWishlistCount);
     window.addEventListener('storage', updateWishlistCount);
-    window.addEventListener('cartUpdate', updateCartCount);
-    
+    window.addEventListener('cartUpdate', updateCartData);
+
     return () => {
       window.removeEventListener('wishlistUpdate', updateWishlistCount);
       window.removeEventListener('storage', updateWishlistCount);
-      window.removeEventListener('cartUpdate', updateCartCount);
+      window.removeEventListener('cartUpdate', updateCartData);
     };
   }, []);
-  
-  //todo Aggiorna conteggio prodotti wishlist (rimane localStorage)
+
   const updateWishlistCount = () => {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     setWishlistCount(wishlist.length);
   };
-  
-  //todo Aggiorna conteggio prodotti carrello (da API)
-  const updateCartCount = async () => {
+
+  const updateCartData = async () => {
     try {
       const cart = await cartAPI.get();
+
       const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+
       setCartCount(totalItems);
+      setCartItems(cart);
+      setCartTotal(totalPrice.toFixed(2));
     } catch (error) {
-      console.error('Errore caricamento carrello:', error);
       setCartCount(0);
+      setCartItems([]);
+      setCartTotal(0);
     }
+  };
+
+  const closeCartPreview = () => {
+    clearTimeout(closeTimer.current);
+
+    closeTimer.current = setTimeout(() => {
+      setAnimateClose(true);
+      setTimeout(() => {
+        setShowCartPreview(false);
+        setAnimateClose(false);
+      }, 220);
+    }, 220);
+  };
+
+  const handleHoverOpen = () => {
+    clearTimeout(openTimer.current);
+    clearTimeout(closeTimer.current);
+
+    openTimer.current = setTimeout(() => {
+      setShowCartPreview(true);
+    }, 180);
+  };
+
+  const handleHoverLeave = () => {
+    closeCartPreview();
+  };
+
+  const increaseQty = async (id) => {
+    setLoadingItemId(id);
+    try {
+      await cartAPI.increase(id);
+      emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nell'aumentare la quantità:", error);
+    } finally {
+      setLoadingItemId(null);
+    }
+  };
+
+  const decreaseQty = async (id, qty) => {
+    setLoadingItemId(id);
+    try {
+      if (qty <= 1) {
+        await removeItem(id);
+      } else {
+        await cartAPI.decrease(id);
+        emitCartUpdate();
+      }
+    } catch (error) {
+      console.error("Errore nel diminuire la quantità:", error);
+    } finally {
+      setLoadingItemId(null);
+    }
+  };
+
+  const removeItem = async (id) => {
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, removing: true } : item
+      )
+    );
+
+    setTimeout(async () => {
+      await cartAPI.remove(id);
+      emitCartUpdate();
+    }, 250);
+  };
+
+  const goToCheckout = () => {
+    navigate("/shop/checkout");
   };
 
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar navbar-sticky">
         <div className="navbar-logo">
           <NavLink to="/">
             <img src="./src/img/Logo_no_bg.png" alt="Logo" className="logo-icon" />
@@ -57,29 +144,103 @@ function NavBar() {
         <ul className="navbar-links">
           <li><NavLink to="/">Home</NavLink></li>
           <li><NavLink to="/shop">Shop</NavLink></li>
-          {/* <li><NavLink to="/categories">Categories</NavLink></li> */}
           <li><NavLink to="/staff">Staff</NavLink></li>
           <li><NavLink to="/contatti">Assistenza</NavLink></li>
         </ul>
 
         <div className="navbar-actions">
+
           <NavLink to="/wishlist" className="wishlist-icon-link">
             <span className="wishlist-icon">
               <FaHeart />
-              {wishlistCount > 0 && (
-                <span className="wishlist-badge">{wishlistCount}</span>
-              )}
+              {wishlistCount > 0 && <span className="wishlist-badge">{wishlistCount}</span>}
             </span>
           </NavLink>
-          
-          <NavLink to="/shop?tab=cart" className="cart-icon-link">
-            <span className="cart-icon">
-              <FaShoppingCart />
-              {cartCount > 0 && (
-                <span className="cart-badge">{cartCount}</span>
-              )}
-            </span>
-          </NavLink>
+
+          <div
+            className="cart-wrapper"
+            onMouseEnter={handleHoverOpen}
+            onMouseLeave={handleHoverLeave}
+          >
+            <button className="cart-icon-link">
+              <span className="cart-icon">
+                <FaShoppingCart />
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+              </span>
+            </button>
+
+            {showCartPreview && (
+              <div className={`cart-preview ${animateClose ? "closing" : ""}`}>
+                <h4>Carrello</h4>
+
+                {cartItems.length === 0 ? (
+                  <p className="empty-cart">Il carrello è vuoto.</p>
+                ) : (
+                  <ul className="cart-preview-list">
+                    {cartItems.map(item => (
+                      <li
+                        key={item.id}
+                        className={`cart-preview-item fade-in ${item.removing ? "removing" : ""}`}
+                      >
+                        <img
+                          src={item.image || FALLBACK_IMAGE}
+                          onError={(e) => e.target.src = FALLBACK_IMAGE}
+                          alt={item.name}
+                        />
+                        <div className="info">
+                          <span>{item.name}</span>
+                          <div className="qty-controls">
+                            <button
+                              className="qty-btn"
+                              disabled={loadingItemId === item.id}
+                              onClick={() => decreaseQty(item.id, item.quantity)}
+                            >
+                              {loadingItemId === item.id ? <span className="spinner"></span> : "−"}
+                            </button>
+                            <span className="qty-number">{item.quantity}</span>
+                            <button
+                              className="qty-btn"
+                              disabled={loadingItemId === item.id}
+                              onClick={() => increaseQty(item.id)}
+                            >
+                              {loadingItemId === item.id ? <span className="spinner"></span> : "+"}
+                            </button>
+                            <span
+                              className="remove-btn"
+                              onClick={() => removeItem(item.id)}
+                            >
+                              Rimuovi
+                            </span>
+                          </div>
+                        </div>
+                        <span className="price">{item.price}€</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {cartItems.length > 0 && (
+                  <div className="cart-total-box">
+                    <span>Totale:</span>
+                    <strong>{cartTotal}€</strong>
+                    {parseFloat(cartTotal) >= FREE_SHIPPING_THRESHOLD && (
+                      <div className="free-shipping-text" style={{color: '#4ade80', fontWeight: 'bold', marginTop: '6px'}}>
+                        Spesa gratuita!
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <button
+                  className="btn-checkout"
+                  onClick={goToCheckout}
+                >
+                  Vai al Checkout
+                </button>
+
+              </div>
+            )}
+          </div>
 
           <button className="btn-levelup">Level Up!</button>
         </div>
