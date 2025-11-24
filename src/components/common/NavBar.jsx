@@ -1,4 +1,5 @@
 import '../../styles/components/NavBar.css';
+import Logo from '../../img/Logo_no_bg.png';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useState, useEffect, useRef } from 'react';
@@ -137,7 +138,7 @@ function NavBar() {
       <nav className="navbar navbar-sticky">
         <div className="navbar-logo">
           <NavLink to="/">
-            <img src="./src/img/Logo_no_bg.png" alt="Logo" className="logo-icon" />
+            <img src={Logo} alt="Logo" className="logo-icon" />
           </NavLink>
         </div>
 

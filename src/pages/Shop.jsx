@@ -174,6 +174,11 @@ const Shop = ({ defaultTab = "shop" }) => {
     return () => clearTimeout(timeoutId);
   }, [filters, searchValue, sortValue]);
 
+  // Sync activeTab with defaultTab prop when route changes
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab]);
+
   // Aggiorna la query string ogni volta che cambiano parametri rilevanti
   useEffect(() => {
     // Evita di aggiornare subito durante il mount iniziale (abbiamo già parsato la URL)
