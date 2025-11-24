@@ -617,3 +617,106 @@
 }
 
 /* END FILE */
+
+/* Styles per SweetAlert2 personalizzato (wishlist) */
+.swal-wishlist-popup {
+  border-radius: 12px !important;
+  padding: 20px !important;
+  /* dark mode background */
+  background: linear-gradient(180deg, #0f1114 0%, #121317 100%) !important;
+  color: #e6eef8 !important;
+  box-shadow: 0 14px 40px rgba(2,6,23,0.7) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+.swal-wishlist-popup .swal2-title {
+  font-weight: 900;
+  color: var(--gold) !important; /* use project gold accent */
+  text-shadow: 0 2px 10px rgba(0,0,0,0.7);
+}
+.swal-wishlist-popup .swal2-html-container {
+  color: #d7e6ff !important;
+  opacity: 0.95;
+}
+.swal-wishlist-confirm {
+  /* gradient matching project palette: purple -> gold */
+  background: linear-gradient(135deg, var(--purple) 0%, var(--gold) 100%) !important;
+  color: #0b0b0b !important;
+  border: none !important;
+  box-shadow: 0 10px 30px rgba(122,51,255,0.14) !important;
+}
+.swal-wishlist-cancel {
+  background: transparent !important;
+  color: var(--gold) !important;
+  border: 1px solid rgba(216,169,40,0.12) !important;
+}
+.swal-wishlist-confirm:hover {
+  filter: brightness(1.03);
+}
+.swal-wishlist-popup .swal2-footer {
+  border-top: 1px solid rgba(255,255,255,0.02) !important;
+}
+
+/* (Old heart-break animation removed) */
+
+/* Simple check display for wishlist-clear modal (no animation) */
+.swal-check-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px;
+}
+.swal-check-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.04);
+  font-size: 48px;
+  color: var(--gold);
+}
+.swal-check-icon {
+  transform: scale(1);
+  transition: transform 260ms cubic-bezier(.2,.9,.3,1), box-shadow 260ms ease;
+  position: relative;
+  overflow: visible;
+}
+.swal-check-icon::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  border: 2px solid rgba(222,163,39,0.18);
+  opacity: 0;
+}
+.swal-check-icon.animate {
+  animation: swal-pop 520ms cubic-bezier(.175,.885,.32,1.275) both;
+  box-shadow: 0 14px 42px rgba(222,163,39,0.16);
+}
+.swal-check-icon.animate::after {
+  animation: swal-ring 520ms cubic-bezier(.2,.9,.3,1) both;
+}
+
+@keyframes swal-pop {
+  0% { transform: scale(0.22) rotate(-18deg); opacity: 0; }
+  50% { transform: scale(1.28) rotate(8deg); opacity: 1; }
+  75% { transform: scale(0.94) rotate(-4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes swal-ring {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.6; }
+  60% { transform: translate(-50%, -50%) scale(1.6); opacity: 0.28; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+.swal-check-label {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 1rem;
+}

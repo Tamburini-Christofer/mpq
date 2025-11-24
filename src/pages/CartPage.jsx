@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CartPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { toast } from 'react-hot-toast';
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
 function CartPage() {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // NOTIFICHE
-  const [notification, setNotification] = useState(null);
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 2500);
-  };
+  // Notifications handled via react-hot-toast
 
   // CARICA CARRELLO
   const loadCart = async () => {
@@ -21,7 +17,7 @@ function CartPage() {
       const data = await cartAPI.get();
       setCart(data);
     } catch {
-      showNotification("Errore caricamento carrello", "error");
+      toast.error("Errore caricamento carrello");
     } finally {
       setLoading(false);
     }
@@ -37,9 +33,10 @@ function CartPage() {
       await cartAPI.remove(id);
       loadCart();
       window.emitCartUpdate && emitCartUpdate();
-      showNotification("Prodotto rimosso", "error");
+      const name = cart.find(i => i.id === id)?.name || 'Prodotto';
+      toast.error(`"${name}" rimosso dal carrello`);
     } catch {
-      showNotification("Errore rimozione", "error");
+      toast.error("Errore rimozione");
     }
   };
 
@@ -82,11 +79,7 @@ function CartPage() {
   return (
     <div className="cart-section">
 
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          {notification.message}
-        </div>
-      )}
+      
 
       <h2 className="section-title">Carrello</h2>
 

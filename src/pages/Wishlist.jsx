@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/common/ProductCard";
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 function Wishlist() {
   const navigate = useNavigate();
   const [wishlistItems, setWishlistItems] = useState([]);
-  const [notification, setNotification] = useState(null);
   const [cart, setCart] = useState([]);
 
   const loadWishlist = () => {
@@ -39,10 +41,7 @@ function Wishlist() {
     };
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
-  };
+  // notifications via react-hot-toast
 
   const handleViewDetails = (slug) => {
     navigate(`/details/${slug}`);
@@ -53,9 +52,10 @@ function Wishlist() {
       await cartAPI.add(product.id, 1);
       await loadCart(); // aggiorna lo stato locale
       emitCartUpdate(); // notifica altri componenti
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      // mostra toast di successo
+      toast.success(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
-      showNotification("Errore nell'aggiunta al carrello", "error");
+      toast.error("Errore nell'aggiunta al carrello");
       console.error(error);
     }
   };
@@ -64,34 +64,108 @@ function Wishlist() {
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
     const updatedWishlist = wishlist.filter((item) => item.id !== product.id);
     localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
-    setWishlistItems(updatedWishlist);
-    window.dispatchEvent(new Event("wishlistUpdate"));
-    showNotification(`"${product.name}" rimosso dalla wishlist`);
+      setWishlistItems(updatedWishlist);
+      window.dispatchEvent(new Event("wishlistUpdate"));
+      // styled toast: removal -> white bg with red heart
+      toast(`"${product.name}" rimosso dalla wishlist`, {
+        icon: '❤',
+        style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+      });
   };
 
-  const handleClearWishlist = () => {
-    if (window.confirm("Vuoi davvero svuotare la wishlist?")) {
+  const handleClearWishlist = async () => {
+    const result = await Swal.fire({
+      title: 'Svuotare la wishlist?',
+      text: 'Questa azione rimuoverà tutti i prodotti salvati nella tua wishlist.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Svuota wishlist',
+      cancelButtonText: 'Annulla',
+      reverseButtons: true,
+      focusCancel: true,
+      customClass: {
+        popup: 'swal-wishlist-popup',
+        confirmButton: 'swal-wishlist-confirm',
+        cancelButton: 'swal-wishlist-cancel'
+      }
+    });
+
+    if (result.isConfirmed) {
       localStorage.setItem("wishlist", JSON.stringify([]));
       setWishlistItems([]);
       window.dispatchEvent(new Event("wishlistUpdate"));
-      showNotification("Wishlist svuotata");
+      // mostra un feedback compatto con icona di check (nessuna animazione)
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Wishlist svuotata</div>
+          </div>
+        `,
+        timer: 1200,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-wishlist-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) {
+            // animate the check using CSS class (SweetAlert2 opens the popup first)
+            setTimeout(() => icon.classList.add('animate'), 40);
+          }
+        }
+      });
     }
   };
 
   const handleMoveAllToCart = async () => {
     if (wishlistItems.length === 0) return;
     try {
+      const result = await Swal.fire({
+        title: `Aggiungere ${wishlistItems.length} prodotti al carrello?`,
+        text: 'Questa azione aggiungerà tutti i prodotti presenti nella wishlist al carrello.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Aggiungi tutti',
+        cancelButtonText: 'Annulla',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-wishlist-popup',
+          confirmButton: 'swal-wishlist-confirm',
+          cancelButton: 'swal-wishlist-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
+      // Aggiungi tutti i prodotti (sequenziale per compatibilità con API)
       for (const product of wishlistItems) {
         await cartAPI.add(product.id, 1);
       }
+
       localStorage.setItem("wishlist", JSON.stringify([]));
       setWishlistItems([]);
       await loadCart();
       emitCartUpdate();
       window.dispatchEvent(new Event("wishlistUpdate"));
-      showNotification("Tutti i prodotti sono stati aggiunti al carrello!");
+
+      // mostra feedback con spunta animata
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Prodotti aggiunti al carrello</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-wishlist-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
     } catch (error) {
-      showNotification("Errore durante l'aggiunta dei prodotti", "error");
+      toast.error("Errore durante l'aggiunta dei prodotti");
       console.error(error);
     }
   };
@@ -103,7 +177,7 @@ function Wishlist() {
       emitCartUpdate();
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
-      showNotification("Errore nell'aggiornamento del carrello", "error");
+      toast.error("Errore nell'aggiornamento del carrello");
     }
   };
 
@@ -119,21 +193,13 @@ function Wishlist() {
       emitCartUpdate();
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
-      showNotification("Errore nell'aggiornamento del carrello", "error");
+      toast.error("Errore nell'aggiornamento del carrello");
     }
   };
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">{notification.type === "success" ? "✓" : "ℹ"}</span>
-            <span className="notification-message">{notification.message}</span>
-            <button className="notification-close" onClick={() => setNotification(null)}>✕</button>
-          </div>
-        </div>
-      )}
+      
 
       <div className="wishlist-page">
         <div className="wishlist-header">

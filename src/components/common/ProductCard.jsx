@@ -1,12 +1,20 @@
 
 import "../../styles/components/ProductCard.css";
 import React, { useState } from "react";
-import { cartAPI } from "../../services/api";
+import { cartAPI, emitCartUpdate } from "../../services/api";
+import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 // Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
+  if (!name) return "";
+  // normalizza i caratteri accentati in ASCII (es. è -> e), poi sostituisce i non-alphanumerici
   return name
+    .toString()
     .toLowerCase()
+    .normalize('NFD') // decomposes accents
+    .replace(/\p{Diacritic}/gu, '') // rimuove i diacritici
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 };
@@ -72,7 +80,8 @@ function ProductCard({
   else if (product.isPopular) displayBadge = "popular";
   else displayBadge = badge;
   const badgeData = badgeConfig[displayBadge];
-  const productSlug = generateSlug(product.name);
+  // Usa lo slug già fornito dal backend se presente; altrimenti generalo in modo compatibile
+  const productSlug = product.slug ? product.slug : generateSlug(product.name);
   const [isInWishlist, setIsInWishlist] = useState(() => {
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
     return wishlist.some(w => w.id === product.id);
@@ -95,18 +104,46 @@ function ProductCard({
 
   // Gestione wishlist: aggiorna locale, globale e dispatcha evento
   const toggleWishlist = () => {
+    // Se il componente genitore ha fornito un handler, usalo (evita doppia scrittura)
+    if (onToggleWishlist) {
+      // Aggiornamento ottimistico dell'UI
+      setIsInWishlist(prev => !prev);
+      try {
+        onToggleWishlist(product);
+      } catch {
+        // se fallisce, rollback dello stato locale
+        setIsInWishlist(prev => !prev);
+      }
+      return;
+    }
+
+    // Fallback: gestione locale se non esiste handler esterno
     const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
     const exists = wishlist.some(w => w.id === product.id);
     let updated;
+    let action;
     if (exists) {
       updated = wishlist.filter(w => w.id !== product.id);
+      action = 'remove';
     } else {
       updated = [...wishlist, product];
+      action = 'add';
     }
     localStorage.setItem("wishlist", JSON.stringify(updated));
     setIsInWishlist(!exists);
-    window.dispatchEvent(new Event("wishlistUpdate"));
-    if (onToggleWishlist) onToggleWishlist(product);
+    window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } }));
+    // mostra notifica globale
+    if (action === 'add') {
+      toast.success(`${product.name} aggiunto alla wishlist`, {
+        icon: '🤍',
+        style: { background: '#ef4444', color: '#ffffff' }
+      });
+    } else {
+      toast(`${product.name} rimosso dalla wishlist`, {
+        icon: '❤',
+        style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+      });
+    }
   };
 
   // Sincronizza displayQty con il carrello globale quando viene emesso cartUpdate
@@ -151,8 +188,10 @@ function ProductCard({
       <button
         className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
         onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}
+        aria-pressed={isInWishlist}
+        aria-label={isInWishlist ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
       >
-        {isInWishlist ? "♥" : "♡"}
+        <span className="heart">{isInWishlist ? "♥" : "♡"}</span>
       </button>
 
       <img
@@ -211,11 +250,57 @@ function ProductCard({
             {!showQtyControls ? (
               <button
                 className="product-card__btn product-card__btn--cart"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
-                  onAddToCart && onAddToCart(product);
-                  setDisplayQty((d) => (d > 0 ? d : 1));
-                  setShowQtyControls(true);
+                  // chiedi conferma con SweetAlert2
+                  try {
+                    const result = await Swal.fire({
+                      title: `Aggiungere "${product.name}" al carrello?`,
+                      icon: 'question',
+                      showCancelButton: true,
+                      confirmButtonText: 'Aggiungi',
+                      cancelButtonText: 'Annulla',
+                      reverseButtons: true,
+                      focusCancel: true,
+                      customClass: {
+                        popup: 'swal-wishlist-popup',
+                        confirmButton: 'swal-wishlist-confirm',
+                        cancelButton: 'swal-wishlist-cancel'
+                      }
+                    });
+
+                    if (result.isConfirmed) {
+                      // se il genitore gestisce l'aggiunta, delega
+                      if (onAddToCart) {
+                        await onAddToCart(product);
+                      } else {
+                        await cartAPI.add(product.id, 1);
+                        emitCartUpdate();
+                      }
+                      // mostra feedback compatto con spunta animata
+                      await Swal.fire({
+                        html: `
+                          <div class="swal-check-wrap">
+                            <div class="swal-check-icon" aria-hidden="true">✓</div>
+                            <div class="swal-check-label">Prodotto aggiunto</div>
+                          </div>
+                        `,
+                        timer: 1200,
+                        showConfirmButton: false,
+                        customClass: { popup: 'swal-wishlist-popup' },
+                        didOpen: (popup) => {
+                          const icon = popup.querySelector('.swal-check-icon');
+                          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+                        }
+                      });
+
+                      setDisplayQty((d) => (d > 0 ? d : 1));
+                      setShowQtyControls(true);
+                    }
+                  } catch (err) {
+                    console.error('Errore aggiunta al carrello:', err);
+                    toast.error('Errore nell\'aggiunta al carrello');
+                  }
                 }}
               >
                 Acquista

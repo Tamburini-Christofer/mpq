@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
 
@@ -29,7 +30,6 @@ function Details() {
 
   const [quantity, setQuantity] = useState(1);
   const [animClass, setAnimClass] = useState("");
-  const [notification, setNotification] = useState(null);
   const relatedRef = useRef(null);
 
   const loadCart = async () => {
@@ -65,12 +65,7 @@ function Details() {
     return () => window.removeEventListener('cartUpdate', loadCart);
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
+  // use react-hot-toast for notifications
 
   const increaseQty = () => {
     setAnimClass("increment");
@@ -102,10 +97,10 @@ function Details() {
     try {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      toast.success(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
-      showNotification("Errore nell'aggiunta al carrello", "error");
+      toast.error("Errore nell'aggiunta al carrello");
     }
   };
 
@@ -171,10 +166,10 @@ function Details() {
     try {
       await cartAPI.add(prod.id, 1);
       emitCartUpdate();
-      showNotification(`"${prod.name}" aggiunto al carrello!`);
+      toast.success(`"${prod.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta correlato:", error);
-      showNotification("Errore nell'aggiunta al carrello", "error");
+      toast.error("Errore nell'aggiunta al carrello");
     }
   };
 
@@ -184,7 +179,7 @@ function Details() {
       emitCartUpdate();
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
-      showNotification("Errore nell'aggiornamento del carrello", "error");
+      toast.error("Errore nell'aggiornamento del carrello");
     }
   };
 
@@ -199,7 +194,7 @@ function Details() {
       emitCartUpdate();
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
-      showNotification("Errore nell'aggiornamento del carrello", "error");
+      toast.error("Errore nell'aggiornamento del carrello");
     }
   };
 
@@ -222,22 +217,7 @@ function Details() {
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === "success" ? "✓" : "ℹ"}
-            </span>
-            <span className="notification-message">{notification.message}</span>
-            <button
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      
 
       <button className="back-to-home-btn" onClick={() => navigate("/")}>
         ← Torna alla Home

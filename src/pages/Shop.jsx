@@ -5,6 +5,7 @@ import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
 import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { toast } from 'react-hot-toast';
 
 import ProductCard from "../components/common/ProductCard";
 import CheckoutForm from "../components/shop/CheckoutForm";
@@ -40,12 +41,6 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [notification, setNotification] = useState(null);
-
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 2500);
-  };
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -67,7 +62,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
         setProducts(mapped);
       } catch {
-        showNotification("Errore caricamento prodotti", "error");
+        toast.error("Errore caricamento prodotti");
       } finally {
         setLoading(false);
       }
@@ -98,10 +93,11 @@ const Shop = ({ defaultTab = "shop" }) => {
       await cartAPI.add(product.id, 1);
       await fetchCart();
       emitCartUpdate();
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      // mostra toast di successo (react-hot-toast)
+      toast.success(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
-      showNotification("Errore aggiunta al carrello", "error");
+      toast.error("Errore aggiunta al carrello");
     }
   };
 
@@ -134,10 +130,11 @@ const Shop = ({ defaultTab = "shop" }) => {
     try {
       await cartAPI.remove(productId);
       await fetchCart();
-      showNotification("Prodotto rimosso", "error");
+      const name = cart.find((i) => i.id === productId)?.name || "Prodotto";
+      toast.error(`"${name}" rimosso dal carrello`);
       emitCartUpdate();
     } catch {
-      showNotification("Errore rimozione", "error");
+      toast.error("Errore rimozione");
     }
   };
 
@@ -207,6 +204,7 @@ const Shop = ({ defaultTab = "shop" }) => {
     try {
       await cartAPI.clear();
       emitCartUpdate();
+      toast.success("Carrello svuotato");
       setShowCheckoutForm(false);
       navigate("/shop");
     } catch (err) {
@@ -216,22 +214,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   return (
     <div className="shop-ui-container">
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === "success" ? "✓" : "ℹ"}
-            </span>
-            <span className="notification-message">{notification.message}</span>
-            <button
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      
 
       <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
@@ -346,13 +329,29 @@ const Shop = ({ defaultTab = "shop" }) => {
                           const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
                           const exists = wishlist.some(w => w.id === product.id);
                           let updated;
+                          let action;
                           if (exists) {
                             updated = wishlist.filter(w => w.id !== product.id);
+                            action = 'remove';
                           } else {
                             updated = [...wishlist, product];
+                            action = 'add';
                           }
                           localStorage.setItem("wishlist", JSON.stringify(updated));
-                          window.dispatchEvent(new Event("wishlistUpdate"));
+                          // dispatch dettagliato per sincronizzazione
+                          window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
+                          // notifica globale (react-hot-toast) - stile wishlist
+                          if (action === 'add') {
+                            toast.success(`${product.name} aggiunto alla wishlist`, {
+                              icon: '🤍',
+                              style: { background: '#ef4444', color: '#ffffff' }
+                            });
+                          } else {
+                            toast(`${product.name} rimosso dalla wishlist`, {
+                              icon: '❤',
+                              style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+                            });
+                          }
                         }}
                       />
                     ))}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CheckoutPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { toast } from 'react-hot-toast';
 import CheckoutForm from "../components/shop/CheckoutForm";
 
 function CheckoutPage() {
@@ -47,6 +48,9 @@ function CheckoutPage() {
       // Svuota tutto il carrello
       await cartAPI.clear();
       emitCartUpdate();
+
+      // notifica globale: ordine annullato / carrello svuotato
+      toast.success('Ordine annullato — carrello svuotato');
 
       // Aggiorna stato
       await loadCart();

@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useState, useEffect, useRef } from 'react';
 import { cartAPI, emitCartUpdate } from '../../services/api';
+import { toast } from 'react-hot-toast';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -125,6 +126,8 @@ function NavBar() {
     setTimeout(async () => {
       await cartAPI.remove(id);
       emitCartUpdate();
+      const name = cartItems.find(i => i.id === id)?.name || 'Prodotto';
+      toast.error(`"${name}" rimosso dal carrello`);
     }, 250);
   };
 
