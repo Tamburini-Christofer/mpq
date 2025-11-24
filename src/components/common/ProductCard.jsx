@@ -1,91 +1,245 @@
 
 import "../../styles/components/ProductCard.css";
+import { useState } from "react";
 
 // Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
   return name
-    .toLowerCase()
-    .trim()
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-};
+    if (variant === "compact") {
+      const [expanded, setExpanded] = useState(false);
+      return (
+        <div className={`product-card product-card--compact ${typeClass}${expanded ? " expanded" : ""}`}>
+          <img
+            className={`product-card__image${expanded ? " expanded" : ""}`}
+            src={product.image}
+            alt={product.name}
+          />
 
-//todo Componente card prodotto riutilizzabile
-//todo Props:
-//todo - product: oggetto prodotto con {name, price, image}
-//todo - badge: tipo di badge ("popular", "new", "sale", null)
-//todo - variant: variante di visualizzazione ("carousel", "grid", "compact")
-//todo - onViewDetails: callback per visualizzare dettagli (riceve slug)
-//todo - onAddToCart: callback per aggiungere al carrello
-//todo - showActions: boolean per mostrare/nascondere pulsanti
-export default function ProductCard({ 
-  product, 
-  badge = null,
-  variant = "carousel",
-  onViewDetails = null, 
-  onAddToCart = null,
-  showActions = true
-}) {
-  if (!product) return null;
+          <div className="product-card__info">
+            <h3 className="product-card__title">{product.name}</h3>
+            <div className="product-card__meta">
+              <span className="product-card__category">
+                Categoria: {
+                  product.category_id === 1 ? "Film" :
+                  product.category_id === 2 ? "Serie TV" :
+                  product.category_id === 3 ? "Anime" : "Altro"
+                }
+              </span>
+              {product.stock !== undefined && (
+                <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
+              )}
+            </div>
+            {product.description && (
+              expanded ? (
+                <p className="product-card__desc-full">{product.description}</p>
+              ) : (
+                <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+              )
+            )}
 
-  //todo Genera lo slug dal nome del prodotto
+            {hasDiscount ? (
+              <div className="product-card__price-container">
+                <span className="product-card__price--discount">
+                  {finalPrice.toFixed(2)}€
+                </span>
+                <span
+                  className="product-card__price--original"
+                  data-original-price="true"
+                >
+                  {originalPrice.toFixed(2)}€
+                </span>
+              </div>
+            ) : (
+              <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
+            )}
+          </div>
+
+          <div className="product-card__actions">
+            <button
+              className="product-card__btn product-card__btn--details small"
+              onClick={() => setExpanded((e) => !e)}
+            >
+              {expanded ? "Nascondi" : "Dettagli"}
+            </button>
+
+            {qty === 0 ? (
+              <button
+                className="product-card__btn product-card__btn--cart small"
+                onClick={handleAdd}
+              >
+                Acquista
+              </button>
+            ) : (
+              <div className="product-qty-controls small">
+                <button className="qty-btn small" onClick={handleDecrease}>
+                  -
+                </button>
+                <span className="qty-display small">{qty}</span>
+                <button className="qty-btn small" onClick={handleIncrease}>
+                  +
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+  const hasDiscount = discount > 0;
+  const originalPrice = parseFloat(product.price) || 0;
+  const finalPrice = hasDiscount
+    ? originalPrice * (1 - discount / 100)
+    : originalPrice;
+
+  const displayBadge = hasDiscount ? "sale" : badge;
+  const badgeData = badgeConfig[displayBadge];
+  const typeClass = displayBadge ? `product-card--${displayBadge}` : "";
+
   const productSlug = generateSlug(product.name);
 
-  //todo Mappa i tipi di badge alle classi CSS e testi
-  const badgeConfig = {
-    popular: { className: "product-card__badge--popular", text: "POPOLARE" },
-    new: { className: "product-card__badge--new", text: "NUOVO ARRIVO" },
-    sale: { className: "product-card__badge--sale", text: "OFFERTA" }
-  };
+  // Versione compact
+  if (variant === "compact") {
+    return (
+      <div className={`product-card product-card--compact ${typeClass}`}>
+        <img
+          className="product-card__image"
+          src={product.image}
+          alt={product.name}
+        />
 
-  const badgeData = badgeConfig[badge];
+        <div className="product-card__info">
+          <h3 className="product-card__title">{product.name}</h3>
 
+          <div className="product-card__meta">
+            <span className="product-card__category">
+              Categoria: {
+                product.category_id === 1 ? "Film" :
+                product.category_id === 2 ? "Serie TV" :
+                product.category_id === 3 ? "Anime" : "Altro"
+              }
+            </span>
+            {product.stock !== undefined && (
+              <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
+            )}
+          </div>
+          {product.description && (
+            <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+          )}
+
+          {hasDiscount ? (
+            <div className="product-card__price-container">
+              <span className="product-card__price--discount">
+                {finalPrice.toFixed(2)}€
+              </span>
+              <span
+                className="product-card__price--original"
+                data-original-price="true"
+              >
+                {originalPrice.toFixed(2)}€
+              </span>
+            </div>
+          ) : (
+            <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
+          )}
+        </div>
+
+        <div className="product-card__actions">
+          <button
+            className="product-card__btn product-card__btn--details"
+            onClick={() => onViewDetails && onViewDetails(productSlug)}
+          >
+            Dettagli
+          </button>
+
+          {qty === 0 ? (
+            <button
+              className="product-card__btn product-card__btn--cart"
+              onClick={handleAdd}
+            >
+              Acquista
+            </button>
+          ) : (
+            <div className="product-qty-controls">
+              <button className="qty-btn" onClick={handleDecrease}>
+                -
+              </button>
+              <span className="qty-display">{qty}</span>
+              <button className="qty-btn" onClick={handleIncrease}>
+                +
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Versione griglia/shop/carousel
   return (
-    <div className={`product-card product-card--${variant}`}>
-      {/* todo: Badge se specificato */}
+    <div className={`product-card product-card--${variant} ${typeClass}`}>
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
           {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
 
-      {/* todo: Immagine prodotto */}
-      <img 
-        src={product.image} 
-        alt={product.name} 
-        className="product-card__image" 
+      <button
+        className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
+        onClick={toggleWishlist}
+      >
+        {isInWishlist ? "♥" : "♡"}
+      </button>
+
+      <img
+        className="product-card__image"
+        src={product.image}
+        alt={product.name}
       />
 
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
-        <p className="product-card__price">{product.price.toFixed(2)}€</p>
 
-        {/* todo: Pulsanti azione (se abilitati) */}
-        {showActions && (onViewDetails || onAddToCart) && (
+        {hasDiscount ? (
+          <div className="product-card__price-container">
+            <span className="product-card__price--discount">
+              {finalPrice.toFixed(2)}€
+            </span>
+            <span
+              className="product-card__price--original"
+              data-original-price="true"
+            >
+              {originalPrice.toFixed(2)}€
+            </span>
+          </div>
+        ) : (
+          <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
+        )}
+
+        {showActions && (
           <div className="product-card__actions">
-            {/* todo: Pulsante dettagli - passa lo slug generato */}
-            {onViewDetails && (
-              <button
-                className="product-card__btn product-card__btn--details"
-                onClick={() => onViewDetails(productSlug)}
-              >
-                Dettagli
-              </button>
-            )}
+            <button
+              className="product-card__btn product-card__btn--details"
+              onClick={() => onViewDetails && onViewDetails(productSlug)}
+            >
+              Dettagli
+            </button>
 
             {qty === 0 ? (
               <button
                 className="product-card__btn product-card__btn--cart"
-                onClick={() => onAddToCart(product)}
+                onClick={handleAdd}
               >
                 Acquista
               </button>
+            ) : (
+              <div className="product-qty-controls">
+                <button className="qty-btn" onClick={handleDecrease}>
+                  -
+                </button>
+                <span className="qty-display">{qty}</span>
+                <button className="qty-btn" onClick={handleIncrease}>
+                  +
+                </button>
+              </div>
             )}
           </div>
         )}
