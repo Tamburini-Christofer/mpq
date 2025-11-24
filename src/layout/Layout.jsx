@@ -28,9 +28,8 @@ const Layout = () => {
         <main>
             <Outlet />
         </main>
-        <footer>
-            <Footer />
-        </footer>
+        {/* Nascondi il footer nella pagina shop e nei suoi sotto-percorsi */}
+        { !location.pathname.startsWith('/shop') && <Footer /> }
         </>
     )
 }
