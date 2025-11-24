@@ -121,16 +121,16 @@ function Details() {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     const selected = shuffled.slice(0, 6);
-    return selected.map((prod) => ({
-      ...prod,
-      originalIndex: productsData.findIndex((p) => p.id === prod.id),
-      hasDiscount:
-        prod.discount && typeof prod.discount === "number" && prod.discount > 0,
-      finalPrice:
-        prod.discount && typeof prod.discount === "number" && prod.discount > 0
-          ? parseFloat(prod.price) * (1 - prod.discount / 100)
-          : parseFloat(prod.price),
-    }));
+    return selected.map((prod) => {
+      const disc = Number(prod.discount) || 0;
+      const price = parseFloat(prod.price) || 0;
+      return {
+        ...prod,
+        originalIndex: productsData.findIndex((p) => p.id === prod.id),
+        hasDiscount: disc > 0,
+        finalPrice: disc > 0 ? price * (1 - disc / 100) : price,
+      };
+    });
   }, [product, productsData]);
 
   const scrollCarousel = (ref, direction) => {
@@ -216,9 +216,9 @@ function Details() {
   }
 
   const price = parseFloat(product.price) || 0;
-  const hasDiscount =
-    product.discount && typeof product.discount === "number" && product.discount > 0;
-  const finalPrice = hasDiscount ? price * (1 - product.discount / 100) : price;
+  const discount = Number(product.discount) || 0;
+  const hasDiscount = discount > 0;
+  const finalPrice = hasDiscount ? price * (1 - discount / 100) : price;
 
   return (
     <>
@@ -272,7 +272,7 @@ function Details() {
               className="product-badge"
               data-discount={hasDiscount ? "true" : "false"}
             >
-              {hasDiscount ? `-${product.discount}% OFFERTA` : "Featured Quest"}
+              {hasDiscount ? `-${discount}% OFFERTA` : "Featured Quest"}
             </span>
           </div>
 
