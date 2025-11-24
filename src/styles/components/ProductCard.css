@@ -82,6 +82,25 @@
   border-width: 3px !important;
   box-shadow: 0 0 32px 0 #ff3b3b44, 0 12px 32px #ff3b3b22;
 }
+/* Nuove regole per label e card: popolare, offerta, nuovi arrivi */
+.product-card--popular {
+  border: var(--label-popolare-border) !important;
+}
+.product-card--popular:hover {
+  box-shadow: var(--label-popolare-shadow-hover) !important;
+}
+.product-card--sale {
+  border: var(--label-offerta-border) !important;
+}
+.product-card--sale:hover {
+  box-shadow: var(--label-offerta-shadow-hover) !important;
+}
+.product-card--new {
+  border: var(--label-nuoviarrivi-border) !important;
+}
+.product-card--new:hover {
+  box-shadow: var(--label-nuoviarrivi-shadow-hover) !important;
+}
 .product-card--popular:hover {
   border-color: #7A33FF !important;
   border-width: 3px !important;
@@ -148,7 +167,7 @@
 }
 .product-card__badge--popular { background: linear-gradient(90deg,#7a33ff 60%,#4d82f4 100%); box-shadow: 0 0 12px #7a33ff88; }
 .product-card__badge--new { background: linear-gradient(90deg,#ff3b3b 60%,#d62121 100%); box-shadow: 0 0 12px #ff3b3b88; }
-.product-card__badge--sale { background: linear-gradient(90deg,#10b981 60%,#7a33ff 100%); box-shadow: 0 0 12px #10b98188; }
+.product-card__badge--sale { background: linear-gradient(90deg,#10b981 60%,#10b981); box-shadow: 0 0 12px #10b98188; }
 
 /* Pulsante wishlist (lasciato invariato per compatibilità) */
 .product-card__wishlist-btn {

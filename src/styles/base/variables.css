@@ -4,6 +4,20 @@
    ========================================== */
 
 :root {
+    /* Label Popolare */
+    --label-popolare-color: #4d82f4;
+    --label-popolare-border: 2px solid #4d82f4;
+    --label-popolare-shadow-hover: 0 0 8px 2px #4d82f4;
+
+    /* Label Offerta */
+    --label-offerta-color: #4caf50;
+    --label-offerta-border: 2px solid #4caf50;
+    --label-offerta-shadow-hover: 0 0 8px 2px #4caf50;
+
+    /* Label Nuovi Arrivi */
+    --label-nuoviarrivi-color: #f44336;
+    --label-nuoviarrivi-border: 2px solid #f44336;
+    --label-nuoviarrivi-shadow-hover: 0 0 8px 2px #f44336;
   /* Colori principali */
   --color-primary: #D8A928;        /* Oro principale */
   --color-primary-dark: #836b0d;   /* Oro scuro per hover */
