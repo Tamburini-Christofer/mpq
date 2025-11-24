@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
 import Toast from "../components/common/Toast";
 import { Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 
 //todo Importo il componente NavBar
 import NavBar from "../components/common/NavBar";
@@ -33,7 +34,25 @@ const Layout = () => {
             setNotification({ message, type, duration });
         };
         window.addEventListener('showNotification', handler);
-        return () => window.removeEventListener('showNotification', handler);
+        // central listener for cart add/remove events to show lateral toasts
+        const cartHandler = (e) => {
+            const d = e?.detail || {};
+            // Ignore events originating from Details: Details shows its own toast
+            if (d.origin === 'details') return;
+            const action = d.action;
+            const product = d.product || {};
+            const name = product.name || product || 'Prodotto';
+            if (action === 'add') {
+                toast.success(`"${name}" aggiunto al carrello!`);
+            } else if (action === 'remove') {
+                toast.error(`"${name}" rimosso dal carrello`);
+            }
+        };
+            window.addEventListener('cartAction', cartHandler);
+            return () => {
+                window.removeEventListener('showNotification', handler);
+                window.removeEventListener('cartAction', cartHandler);
+            };
     }, []);
 
     return (

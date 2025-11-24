@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
 //todo Importiamo le API per gestire prodotti e carrello
-import { productsAPI, cartAPI, emitCartUpdate } from '../services/api';
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from '../services/api';
 import { toast } from 'react-hot-toast';
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from '../components/common/ProductCard';
@@ -181,8 +181,8 @@ function HomePage() {
             
             emitCartUpdate();
             
-                // mostra toast di successo
-                toast.success(`"${product.name}" aggiunto al carrello!`);
+                // central notification
+                    emitCartAction('add', { id: product.id, name: product.name });
         } catch (error) {
             console.error('Errore aggiunta al carrello:', error);
                 toast.error('Errore nell\'aggiunta al carretto');
@@ -193,6 +193,11 @@ function HomePage() {
         try {
             await cartAPI.increase(productId);
             emitCartUpdate();
+            // centralized notification for plus action
+            try {
+                const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
+                emitCartAction('add', { id: productId, name });
+            } catch {}
         } catch (error) {
             console.error("Errore nell'aumentare la quantità:", error);
             toast.error("Errore nell'aggiornamento del carrello");
@@ -204,8 +209,15 @@ function HomePage() {
             const item = cart.find(i => i.id === productId);
             if (item && item.quantity > 1) {
                 await cartAPI.decrease(productId);
+                // when decreasing quantity (but not removing), emit a remove action
+                try {
+                    const name = item?.name || 'Prodotto';
+                    emitCartAction('remove', { id: productId, name });
+                } catch {}
             } else {
                 await cartAPI.remove(productId);
+                const name = item?.name || 'Prodotto';
+                emitCartAction('remove', { id: productId, name });
             }
             emitCartUpdate();
         } catch (error) {

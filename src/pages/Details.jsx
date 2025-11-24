@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
 import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
@@ -94,9 +94,15 @@ function Details() {
 
   const addToCart = async () => {
     if (!product) return;
+    if (!quantity || quantity <= 0) return; // nothing to add
     try {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
+      // Dispatch cartAction with origin so Layout can ignore it and Details shows the toast
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id: product.id, name: product.name, quantity }, origin: 'details' } }));
+      } catch {}
+      // Show a single toast from Details (Layout ignores origin 'details')
       toast.success(`"${product.name}" aggiunto al carrello!`);
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
@@ -166,7 +172,7 @@ function Details() {
     try {
       await cartAPI.add(prod.id, 1);
       emitCartUpdate();
-      toast.success(`"${prod.name}" aggiunto al carrello!`);
+      emitCartAction('add', { id: prod.id, name: prod.name });
     } catch (error) {
       console.error("Errore aggiunta correlato:", error);
       toast.error("Errore nell'aggiunta al carrello");
@@ -190,6 +196,8 @@ function Details() {
         await cartAPI.decrease(productId);
       } else {
         await cartAPI.remove(productId);
+        const name = item?.name || 'Prodotto';
+        emitCartAction('remove', { id: productId, name });
       }
       emitCartUpdate();
     } catch (error) {

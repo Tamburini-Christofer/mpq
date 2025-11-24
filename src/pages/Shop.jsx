@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
-import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
 import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 import ProductCard from "../components/common/ProductCard";
 import CheckoutForm from "../components/shop/CheckoutForm";
@@ -85,7 +87,18 @@ const Shop = ({ defaultTab = "shop" }) => {
   useEffect(() => {
     fetchCart();
     window.addEventListener('cartUpdate', fetchCart);
-    return () => window.removeEventListener('cartUpdate', fetchCart);
+    // listener per chiudere sidebar/mobile menu quando altre parti dell'app richiedono la navigazione
+    const closeHandler = () => {
+      setShowFilters(false);
+      setActiveTab('checkout');
+      // scroll to top so checkout is visible
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('closeSidebar', closeHandler);
+    return () => {
+      window.removeEventListener('cartUpdate', fetchCart);
+      window.removeEventListener('closeSidebar', closeHandler);
+    };
   }, []);
 
   const handleAddToCart = async (product) => {
@@ -93,8 +106,8 @@ const Shop = ({ defaultTab = "shop" }) => {
       await cartAPI.add(product.id, 1);
       await fetchCart();
       emitCartUpdate();
-      // mostra toast di successo (react-hot-toast)
-      toast.success(`"${product.name}" aggiunto al carrello!`);
+      // central notification
+      emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
       toast.error("Errore aggiunta al carrello");
@@ -106,6 +119,11 @@ const Shop = ({ defaultTab = "shop" }) => {
       await cartAPI.increase(productId);
       await fetchCart();
       emitCartUpdate();
+      // centralized notification for plus action
+      try {
+        const name = cart.find((i) => i.id === productId)?.name || 'Prodotto';
+        emitCartAction('add', { id: productId, name });
+      } catch {}
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     }
@@ -116,8 +134,12 @@ const Shop = ({ defaultTab = "shop" }) => {
       const item = cart.find((i) => i.id === productId);
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
+        // emit remove action for decrement
+        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch {}
       } else {
         await cartAPI.remove(productId);
+        const name = item?.name || 'Prodotto';
+        emitCartAction('remove', { id: productId, name });
       }
       await fetchCart();
       emitCartUpdate();
@@ -131,7 +153,11 @@ const Shop = ({ defaultTab = "shop" }) => {
       await cartAPI.remove(productId);
       await fetchCart();
       const name = cart.find((i) => i.id === productId)?.name || "Prodotto";
-      toast.error(`"${name}" rimosso dal carrello`);
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id: productId, name } } }));
+      } catch {
+        toast.error(`"${name}" rimosso dal carrello`);
+      }
       emitCartUpdate();
     } catch {
       toast.error("Errore rimozione");
@@ -202,10 +228,45 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const handleCancelOrder = async () => {
     try {
+      const result = await Swal.fire({
+        title: 'Svuotare il carrello?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Svuota carrello',
+        cancelButtonText: 'Annulla',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-wishlist-popup',
+          confirmButton: 'swal-wishlist-confirm',
+          cancelButton: 'swal-wishlist-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
       await cartAPI.clear();
       emitCartUpdate();
-      toast.success("Carrello svuotato");
+      await fetchCart();
       setShowCheckoutForm(false);
+
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Carrello svuotato</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-wishlist-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
+
       navigate("/shop");
     } catch (err) {
       console.error("Errore annullamento ordine:", err);

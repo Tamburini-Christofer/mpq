@@ -3,7 +3,7 @@ import "../styles/pages/Wishlist.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/common/ProductCard";
-import { cartAPI, emitCartUpdate } from "../services/api";
+import { cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -52,8 +52,8 @@ function Wishlist() {
       await cartAPI.add(product.id, 1);
       await loadCart(); // aggiorna lo stato locale
       emitCartUpdate(); // notifica altri componenti
-      // mostra toast di successo
-      toast.success(`"${product.name}" aggiunto al carrello!`);
+      // notifica centralizzata per mostrare il toast laterale
+      emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
       toast.error("Errore nell'aggiunta al carrello");
       console.error(error);
@@ -77,7 +77,7 @@ function Wishlist() {
     const result = await Swal.fire({
       title: 'Svuotare la wishlist?',
       text: 'Questa azione rimuoverà tutti i prodotti salvati nella tua wishlist.',
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
       confirmButtonText: 'Svuota wishlist',
       cancelButtonText: 'Annulla',
@@ -140,6 +140,7 @@ function Wishlist() {
       // Aggiungi tutti i prodotti (sequenziale per compatibilità con API)
       for (const product of wishlistItems) {
         await cartAPI.add(product.id, 1);
+        emitCartAction('add', { id: product.id, name: product.name });
       }
 
       localStorage.setItem("wishlist", JSON.stringify([]));
@@ -175,6 +176,10 @@ function Wishlist() {
       await cartAPI.increase(productId);
       await loadCart();
       emitCartUpdate();
+      try {
+        const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
+        emitCartAction('add', { id: productId, name });
+      } catch {}
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
       toast.error("Errore nell'aggiornamento del carrello");
@@ -188,6 +193,8 @@ function Wishlist() {
         await cartAPI.decrease(productId);
       } else {
         await cartAPI.remove(productId);
+        const name = item?.name || 'Prodotto';
+        emitCartAction('remove', { id: productId, name });
       }
       await loadCart();
       emitCartUpdate();
