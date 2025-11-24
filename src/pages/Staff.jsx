@@ -63,13 +63,13 @@ export default function Staff() {
   return (
     <div className="staff-page-container">
       
-      {/* ===== HEADER ===== */}
+      {/* ===== HEADER =====
       <div className="staff-header">
         <h1 className="staff-main-title">Il Nostro Team</h1>
         <p className="staff-subtitle">
           Le persone straordinarie che rendono possibile MyPocketQuest
         </p>
-      </div>
+      </div> */}
 
       {/* ===== GRIGLIA MEMBRI DEL TEAM ===== */}
       <div className="team-grid">

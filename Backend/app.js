@@ -7,7 +7,7 @@ const PORT = 3000;
 
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'],
     methods: [ 'GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -16,6 +16,10 @@ app.use(cors({
 const productRoutes = require('./routes/productRoutes');
 // collegamento della route per i pagamenti
 const paymentRoutes = require('./routes/paymentRoutes');
+// collegamento della route per il carrello
+const cartRoutes = require('./routes/cartRoutes');
+// collegamento della route per il checkout
+const checkoutRoutes = require('./routes/checkoutRoutes');
 
 //abilitazione lettura JSON
 app.use(express.json());
@@ -26,12 +30,14 @@ app.use('/products', productRoutes);
 //uso della route
 app.use('/payment', paymentRoutes);
 
+//uso della route per il carrello
+app.use('/cart', cartRoutes);
+
+//uso della route per il checkout
+app.use('/checkout', checkoutRoutes);
+
 //uso della route
-app.use('/orders', require('./routes/shopRouter.js'));
-//rotta home
-app.get("/", (req, res) => {
-    console.log("hai richiesto la home page");
-})
+app.use('/orders', require('./routes/ordersRouter.js'));
 
 
 // Middleware globale errorHandler

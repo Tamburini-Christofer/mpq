@@ -6,6 +6,7 @@ const HttpError = require('../utils/HttpError');
 
 exports.getProducts = async (req, res, next) => {
     try {
+        console.log('📦 Richiesta GET /products ricevuta');
         const { category_id } = req.query;
         let query = `
         SELECT p.*, c.name as category_name
@@ -20,7 +21,9 @@ exports.getProducts = async (req, res, next) => {
             params.push(category_id);
         }
 
+        console.log('📝 Query SQL:', query);
         const [rows] = await db.query(query, params);
+        console.log('✅ Prodotti trovati:', rows.length);
         res.json(rows);
     } catch (err) {
         next(err);
@@ -64,36 +67,72 @@ exports.createProduct = async (req, res, next) => {
             image,
             price,
             discount,
-            popularity = 0
+            popularity = 0,
+            min_age
         } = req.body;
 
-        if (!name || !category_id || !price) {
-            return next(new HttpError("Nome, categoria e prezzo sono obbligatori", 400));
-        }
 
-        if (discount && (isNaN(discount) || discount < 0)) {
-            const err = new Error("Sconto non valido");
+        if (category_id !== 1 && category_id !== 2 && category_id !== 3) {
+            const err = new Error("le categorie possibili sono: 1 per film, 2 per serie tv, 3 per anime");
             err.status = 400;
-            return next(err);
+            return next(err)
         }
 
-        if (popularity && (isNaN(popularity) || popularity < 0)) {
-            const err = new Error("popolarità non valido");
+        if (!name || !category_id || !image) {
+            return next(new HttpError("Nome, categoria, prezzo e immagini sono obbligatori", 400));
+        }
+
+        if (typeof name !== "string" || typeof image !== "string" || typeof description !== "string") {
+            const err = new Error("Il nome, immagine o descrizione inserita non è una stringa");
             err.status = 400;
-            return next(err);
+            return next(err)
         }
 
-        if (isNaN(price) || price < 0) {
+        if (isNaN(price) || price <= 0 || price > 999.99) {
             const err = new Error("Prezzo non valido");
             err.status = 400;
             return next(err);
+        }
+
+        if (discount && (isNaN(discount) || discount < 0 || discount >= price)) {
+            const err = new Error("Sconto non valido, dev'essere maggiore di zero e inferiore al prezzo originale.");
+            err.status = 400;
+            return next(err);
+        }
+
+        if (popularity && (isNaN(popularity) || popularity < 1 || popularity > 10)) {
+            const err = new Error("popolarità non valida, inserire un valore da 1 a 10");
+            err.status = 400;
+            return next(err);
+        }
+
+        if (category_id < 0 || !category_id) {
+            const err = new Error("id-categoria non esistente o non inserito.");
+            err.status = 400;
+            return next(err);
+        }
+
+        if (min_age < 0 || isNaN(min_age)) {
+            const err = new Error("l'età non può essere un numero negativo o inferiore a 1 e dev'essere per forza un numero.");
+            err.status = 400;
+            return next(err);
+        }
+
+
+        let { disability } = req.body;
+        disability = Number(disability);
+
+        if ((disability !== 0 && disability !== 1) || isNaN(disability)) {
+            const err = new Error("il valore può essere 0 se il prodotto è accessibile, 1 se non lo è.");
+            err.status = 400;
+            return next(err)
         }
 
         const finalSlug = slug || slugify(name, { lower: true, strict: true });
 
         const [existing] = await db.query("SELECT id FROM products WHERE slug = ?", [finalSlug]);
         if (existing.length > 0) {
-             const err = new Error("Slug già trovato, cambiare nome per evitare duplicati")
+            const err = new Error("Slug già trovato, cambiare nome per evitare duplicati")
             err.status = 400;
             return next(err);
         }
@@ -146,7 +185,7 @@ exports.updateProduct = async (req, res, next) => {
             [finalSlug, id]
         );
         if (duplicate.length > 0) {
-             const err = new Error("Slug già trovato, cambiare nome per evitare duplicati")
+            const err = new Error("Slug già trovato, cambiare nome per evitare duplicati")
             err.status = 400;
             return next(err);
         }
@@ -169,7 +208,7 @@ exports.updateProduct = async (req, res, next) => {
         if (finalSlug) addField("slug", finalSlug);
 
         if (fields.length === 0) {
-             const err = new Error("Nessun campo da aggiornare.")
+            const err = new Error("Nessun campo da aggiornare.")
             err.status = 400;
             return next(err);
         }

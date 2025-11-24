@@ -99,7 +99,7 @@
 
 /* todo: Sidebar laterale con logo e menu di navigazione */
 .sidebar {
-  width: 280px;
+  width: 300px;
   background: #1a1720;
   border-right: 2px solid var(--gold);
   padding: 30px 20px;
@@ -146,25 +146,7 @@
   opacity: 0.7;
 }
 
-/* todo: Pannello filtri che sostituisce la sidebar */
-.filters-panel {
-  width: 280px;
-  min-width: 280px;
-  background: #1a1720;
-  border-right: 2px solid var(--purple);
-  box-shadow: 0 0 20px rgba(108, 33, 255, 0.2);
-  animation: fadeIn 0.3s ease;
-  position: fixed;
-  left: 0;
-  top: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  height: 100vh;
-  z-index: 2000;
-}
+
 
 /* todo: Animazione fade semplice */
 @keyframes fadeIn {
@@ -175,6 +157,118 @@
     opacity: 1;
   }
 }
+
+/* ================================================
+   FILTERS PANEL — VERSIONE ORIGINALE MPQ IDENTICA
+   ================================================ */
+
+.filters-panel {
+  position: fixed;
+  width: 300px;
+  min-width: 300px;
+  background: #1b1a24;               /* colore identico allo screenshot */
+  border-right: 2px solid var(--purple);
+  
+  padding: 30px 25px;                 /* padding grande come l’originale */
+  display: flex;
+  flex-direction: column;
+  gap: 35px;                          /* grande separazione tra sezioni */
+                /* NON fixed */
+  height: auto;
+  top: auto;
+  left: auto;
+
+  box-shadow: 0 0 25px rgba(108, 33, 255, 0.15);
+  animation: fadeFilters 0.25s ease;
+}
+
+/* animazione originale */
+@keyframes fadeFilters {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* TITOLI SEZIONI */
+.filters-panel h4 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 20px 0;
+}
+
+/* SEARCH BOX */
+.search-in-filters {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: #1f1e28;
+  border: 1px solid var(--purple);
+  border-radius: 10px;
+  gap: 12px;
+}
+
+.search-icon {
+  color: var(--gold);
+  font-size: 20px;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 15px;
+  width: 100%;
+}
+
+/* OPZIONI */
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  margin: 12px 0;
+}
+
+.filter-option input[type="checkbox"] {
+  accent-color: var(--purple);
+  cursor: pointer;
+}
+
+/* PREZZO MIN–MAX */
+.price-inputs {
+  display: flex;
+  gap: 15px;
+}
+
+.price-number-input {
+  width: 90px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--purple);
+  background: #222;
+  color: white;
+  font-size: 15px;
+}
+
+.price-number-input:focus {
+  outline: 1px solid var(--gold);
+}
+
+/* PICCOLE LABEL (MIN/MAX) */
+.price-input-wrapper label {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 0 3px;
+  margin: 0 1px;
+}
+
+
+
 
 /* todo: Pulsanti del menu di navigazione */
 /* todo: Stile base per i pulsanti di menu (Shop, Carrello, Checkout) */
@@ -210,6 +304,8 @@
   margin-left: 280px;
 }
 
+
+
 /* todo: Titoli delle sezioni principali (Carrello, Checkout) */
 .section-title-shop  {
   font-size: 28px;
@@ -223,6 +319,44 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
+  margin-left: 280px;
+  
+}
+
+
+.products .product-card__image {
+  height: 230px;
+}
+
+/* todo: Layout lista - card orizzontali */
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-card__info{
+  background-color: transparent;
+}
+
+.products-list .product-card {
+  width: 100%;
+  max-width: 100%;
+  flex-direction: row;
+}
+
+.products-list .product-card__image {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px 0 0 10px;
+}
+
+.products-list .product-card__info {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border-radius: 0 0 10px 10px;
 }
 
 .card {
@@ -275,25 +409,34 @@
   margin-bottom: 10px;
 }
 
-/* todo: Container lista prodotti nel carrello */
-.cart-items {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* todo: Singolo item nel carrello con layout orizzontale */
 .cart-item {
-  background: #1c1a24;
-  padding: 20px;
-  border: 1px solid var(--gold);
-  border-radius: 8px;
+  background: linear-gradient(145deg, #1c1a24, #17151d);
+  padding: 22px 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(216, 169, 40, 0.25);
+  
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
+  gap: 22px;
+  margin: 10px 0;
+
+  /* Glow elegante */
+  box-shadow:
+    0 0 12px rgba(108, 33, 255, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  transition: 0.25s ease;
 }
 
+/* Hover ancora più premium */
+.cart-item:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 0 18px rgba(108, 33, 255, 0.45),
+    0 0 8px rgba(216, 169, 40, 0.35),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
 /* todo: Sezione informazioni prodotto (nome e prezzo) */
 .item-info {
   display: flex;
@@ -321,18 +464,40 @@
   gap: 10px;
 }
 
+
+
 /* todo: Pulsanti + e - per modificare la quantità */
-.quantity-btn {
-  background: var(--purple);
+
+.quantity-btn, .quantity-btn-c {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   border: none;
-  color: var(--light);
-  width: 30px;
-  height: 30px;
-  border-radius: 6px;
+  background: linear-gradient(135deg, #7c3aed 0%, #e7c46c 100%);
+  color: #fff;
+  font-size: 1.3rem;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: 0.2s;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.25), 0 2px 8px rgba(231, 196, 108, 0.18);
+  transition: transform 0.18s cubic-bezier(.4,2,.3,1), box-shadow 0.18s cubic-bezier(.4,2,.3,1), background 0.18s;
+  outline: none;
+  position: relative;
+}
+
+.quantity-btn:active, .quantity-btn-c:active {
+  transform: scale(0.92);
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.18);
+}
+
+.quantity-btn:hover, .quantity-btn-c:hover {
+  background: linear-gradient(135deg, #e7c46c 0%, #7c3aed 100%);
+  color: #7c3aed;
+  box-shadow: 0 10px 28px rgba(231, 196, 108, 0.25), 0 4px 16px rgba(124, 58, 237, 0.18);
+  border: 2px solid #e7c46c;
+  z-index: 2;
 }
 
 /* todo: Effetto hover sui pulsanti quantità */
@@ -424,14 +589,10 @@
 
 /* todo: Singolo item nel riepilogo checkout */
 .checkout-item {
-  background: #1c1a24;
-  padding: 15px 20px;
-  border: 1px solid var(--purple);
-  border-radius: 8px;
+  padding: 15px 20px 15px 0;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 /* todo: Sezione info prodotto nel checkout (nome e dettagli) */
@@ -493,11 +654,31 @@
 
 /* todo: Sezione riepilogo finale con totale e pulsanti */
 .checkout-summary {
-  border-top: 2px solid var(--gold);
-  padding-top: 20px;
+  width: 100%;
+  padding: 25px 30px;
+  background: linear-gradient(145deg, #1c1a24, #17151d);
+  border: 2px solid rgba(216, 169, 40, 0.25);
   display: flex;
   flex-direction: column;
-  align-items: end;
+
+  animation: fadeSummary 0.35s ease-out;
+}
+
+.checkout-summary h3{
+  color: var(--gold);
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+@keyframes fadeSummary {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* todo: Sezione codice promozionale */
@@ -627,7 +808,7 @@
 .checkout-actions {
   display: flex;
   gap: 15px;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 }
 
@@ -691,7 +872,6 @@
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
   padding: 0px 20px;
-
 }
 
 /* todo: Layout lista per visualizzazione prodotti in linea orizzontale */
@@ -705,18 +885,21 @@
 
 /* todo: Container controlli per cambiare visualizzazione griglia/lista */
 .view-controls {
-  position: sticky;
-  top: 0;
-  background-color: #141218;
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  z-index: 100;
-  padding: 15px 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    left: 69%;
+    background-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    z-index: 100;
+    padding: 15px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    width: 48%;
 }
 
 /* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */
@@ -734,6 +917,7 @@
   gap: 8px;
   transition: all 0.2s ease;
   font-family: "Cinzel", serif;
+  height: 50px;
 }
 
 /* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
@@ -755,153 +939,10 @@
   font-size: 16px;
 }
 
-/* todo: Effetto hover sulla card (ingrandimento e glow dorato) */
-.fancy-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 35px rgba(255, 200, 100, 0.5);
-}
-
-/* todo: Contenitore immagine con altezza fissa 320px */
-.card-image-wrapper {
-  width: 100%;
-  height: 230px;
-  border-bottom: 3px solid #c9a347;
-  flex-shrink: 0;
-}
-
-/* todo: Immagine prodotto responsive che copre tutto il contenitore */
-.card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  display: block;
-  filter: saturate(1.1) contrast(1.2);
-}
-
-/* todo: Corpo della card con nome e prezzo (font fantasy) */
-.card-body {
-  padding: 0;
-  text-align: center;
-  color: #e7d9b3;
-  font-family: "Cinzel", serif;
-  flex: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* todo: Titolo/nome del prodotto nella card */
-.card-body h3 {
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-  text-shadow: 1px 1px 2px black;
-}
-
-/* todo: Prezzo del prodotto in oro */
-.price {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #ffdf7f;
-}
-
-/* todo: Pulsante "Aggiungi" stile fantasy con gradiente scuro */
-.buy-btn {
-  margin: 0;
-  padding: 10px 18px;
-  font-size: 1rem;
-  border: 2px solid #c9a347;
-  background: linear-gradient(#2a2a2a, #1a1a1a);
-  color: #f5e4c3;
-  border-radius: 6px;
-  cursor: pointer;
-  font-family: "Cinzel", serif;
-  transition: 0.2s ease;
-}
-
-/* todo: Effetto hover sul pulsante aggiungi (sfondo oro scuro e glow) */
-.buy-btn:hover {
-  background: #3a2a00;
-  color: #ffe8b6;
-  box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
-}
-
-/* todo: Card in modalità lista (layout orizzontale, senza bordi) */
-.products.list .fancy-card {
-  flex-direction: row;
-  align-items: center;
-  padding: 15px;
-  height: auto;
-  max-height: none;
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
-
-/* todo: Immagine piccola stile icona in modalità lista (90x90px) */
-.products.list .card-image-wrapper {
-  width: 90px;
-  min-width: 90px;
-  height: 90px;   
-  border-radius: 8px;
-  border-bottom: none;
-  border-right: none;
-}
-
-/* todo: Immagine in modalità lista (quadrata e arrotondata) */
-.products.list .card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 6px;
-}
-
-/* todo: Corpo card in lista (layout orizzontale con info affiancate) */
-.products.list .card-body {
-  flex: 1;
-  padding: 0 20px;
-  text-align: left;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 30px;
-  justify-content: flex-start;
-}
-
-/* todo: Titolo prodotto in lista (allineato a sinistra) */
-.products.list .card-body h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0;
-  min-width: 200px;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-}
-
-/* todo: Prezzo in lista (più grande e visibile) */
-.products.list .price {
-  font-size: 1.3rem;
-  font-weight: bold;
-  min-width: 80px;
-}
-
-/* todo: Container dettagli aggiuntivi in lista (categoria, disponibilità) */
-.products.list .card-details {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-  padding-left: 20px;
-  border-left: 2px solid rgba(201, 163, 71, 0.3);
-}
-
-/* todo: Dettagli nascosti in visualizzazione griglia */
-.card-details {
-  display: none;
-}
-
-/* todo: Dettagli visibili solo in visualizzazione lista */
-.products.list .card-details {
-  display: flex;
-}
+/* ===================================
+   LEGACY CODE - .fancy-card rimosso
+   Ora si usa ProductCard component
+   =================================== */
 
 /* todo: Singolo dettaglio (ID, Categoria, Disponibilità) */
 .detail-item {
@@ -962,4 +1003,18 @@
 /* todo: Colore di sfondo generale della pagina */
 body {
   background-color: #141218;
+}
+
+.qt{
+  color: var(--gold);
+  margin-left: 20px;
+}
+
+.sub{
+  color: var(--gold);
+}
+
+.products-grid,
+.products-list{
+  margin-left: 0px;
 }

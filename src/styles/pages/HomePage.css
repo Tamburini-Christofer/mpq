@@ -171,7 +171,7 @@
 .section-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #D8A928;
   margin-bottom: 25px;
 }
 
@@ -181,8 +181,8 @@
   gap: 20px;
   /*todo overflow-x:auto permette lo scroll orizzontale*/
   overflow-x: auto;
-  padding-bottom: 20px;
-  margin-bottom: 0;
+  padding: 30px 0;
+  margin: 0;
   /*todo nowrap mantiene tutte le card su una singola riga*/
   flex-wrap: nowrap;
   /* Nascondiamo la barra di scorrimento nativa */
@@ -345,7 +345,8 @@
 /* --- STILE PER LO SCORRIMENTO CONTROLLATO --- */
 
 .latest-section-wrapper,
-.best-sellers-section-wrapper {
+.best-sellers-section-wrapper,
+.promotional-section-wrapper {
   position: relative;
   padding-top: 20px;
 }
@@ -373,7 +374,8 @@
 
 /* MOSTRA I PULSANTI QUANDO SI PASSA SOPRA AL CONTENITORE PRINCIPALE */
 .latest-section-wrapper:hover .scroll-btn,
-.best-sellers-section-wrapper:hover .scroll-btn {
+.best-sellers-section-wrapper:hover .scroll-btn,
+.promotional-section-wrapper:hover .scroll-btn {
   opacity: 1;
   visibility: visible;
 }
