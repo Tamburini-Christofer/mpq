@@ -39,6 +39,7 @@ function ProductCard({
   const [expanded, setExpanded] = useState(false);
   // Stato locale per mostrare i controlli quantità dopo il primo acquisto
   const [showQtyControls, setShowQtyControls] = useState(qty > 0);
+<<<<<<< HEAD
   // displayQty: stato locale mostrato nella UI (sincronizzato con prop `qty` o `product.cartQty`)
   const [displayQty, setDisplayQty] = useState(() => {
     return qty || product.cartQty || 0;
@@ -55,6 +56,12 @@ function ProductCard({
     if (next > 0) setShowQtyControls(true);
   }, [qty, product.cartQty]);
 
+=======
+  React.useEffect(() => {
+    setShowQtyControls(qty > 0);
+  }, [qty]);
+
+>>>>>>> 7af14e43a5d1d226d1e8510b2e5e42ac0c0f325e
   const discount = product.discount || 0;
   const hasDiscount = discount > 0;
   const originalPrice = parseFloat(product.price) || 0;
@@ -106,6 +113,7 @@ function ProductCard({
     localStorage.setItem("wishlist", JSON.stringify(updated));
     setIsInWishlist(!exists);
     window.dispatchEvent(new Event("wishlistUpdate"));
+<<<<<<< HEAD
     if (onToggleWishlist) onToggleWishlist(product);
   };
 
@@ -136,6 +144,12 @@ function ProductCard({
 
   // Gestione quantità: ora delegata alle funzioni prop
 
+=======
+  };
+
+  // Gestione quantità: ora delegata alle funzioni prop
+
+>>>>>>> 7af14e43a5d1d226d1e8510b2e5e42ac0c0f325e
   // Unico wrapper per tutte le varianti
   return (
     <div className={`product-card product-card--${variant} ${cardTypeClass}`}
@@ -214,7 +228,10 @@ function ProductCard({
                 onClick={(e) => {
                   e.stopPropagation();
                   onAddToCart && onAddToCart(product);
+<<<<<<< HEAD
                   setDisplayQty((d) => (d > 0 ? d : 1));
+=======
+>>>>>>> 7af14e43a5d1d226d1e8510b2e5e42ac0c0f325e
                   setShowQtyControls(true);
                 }}
               >
@@ -222,6 +239,7 @@ function ProductCard({
               </button>
             ) : (
               <div className="product-qty-controls">
+<<<<<<< HEAD
                 <button className="qty-btn" onClick={(e) => {
                   e.stopPropagation();
                   setDisplayQty((d) => {
@@ -239,6 +257,13 @@ function ProductCard({
                   setDisplayQty((d) => d + 1);
                   onIncrease && onIncrease(product.id);
                 }}>
+=======
+                <button className="qty-btn" onClick={(e) => { e.stopPropagation(); onDecrease && onDecrease(product.id); }}>
+                  -
+                </button>
+                <span className="qty-display">{qty}</span>
+                <button className="qty-btn" onClick={(e) => { e.stopPropagation(); onIncrease && onIncrease(product.id); }}>
+>>>>>>> 7af14e43a5d1d226d1e8510b2e5e42ac0c0f325e
                   +
                 </button>
               </div>
