@@ -75,6 +75,11 @@ function CheckoutPage() {
       // Chiudi modale del form
       setShowCheckoutForm(false);
 
+      // Notify app that checkout is closed/finished so menu can hide
+      try {
+        window.dispatchEvent(new CustomEvent('checkoutClosed'));
+      } catch (e) {}
+
       // Mostra feedback con spunta animata
       await Swal.fire({
         html: `

@@ -26,6 +26,8 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [viewMode, setViewMode] = useState("grid");
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [checkoutAvailable, setCheckoutAvailable] = useState(false);
+  const [checkoutJustEnabled, setCheckoutJustEnabled] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
@@ -84,22 +86,67 @@ const Shop = ({ defaultTab = "shop" }) => {
     }
   };
 
+  // Make checkout available automatically when cart has items;
+  // Keep checkout hidden by default. Only enable it when the user
+  // explicitly clicks "Procedi al checkout". However, if the cart
+  // becomes empty, always disable the checkout entry and navigate
+  // away from the checkout view if currently active.
+  useEffect(() => {
+    const isEmpty = !cart || cart.length === 0;
+    if (isEmpty) {
+      if (checkoutAvailable) setCheckoutAvailable(false);
+      if (activeTab === 'checkout') {
+        setActiveTab('shop');
+        navigate('/shop');
+      }
+    }
+    // otherwise do nothing: do NOT auto-enable checkout just because
+    // there are items — enablement happens when clicking the button.
+  }, [cart]);
+
   useEffect(() => {
     fetchCart();
     window.addEventListener('cartUpdate', fetchCart);
     // listener per chiudere sidebar/mobile menu quando altre parti dell'app richiedono la navigazione
     const closeHandler = () => {
       setShowFilters(false);
+      // ensure checkout becomes available when triggered from other components
+      setCheckoutAvailable(true);
+      setCheckoutJustEnabled(true);
+      setTimeout(() => setCheckoutJustEnabled(false), 420);
       setActiveTab('checkout');
       // scroll to top so checkout is visible
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
     window.addEventListener('closeSidebar', closeHandler);
+    const checkoutClosedHandler = () => {
+      setCheckoutAvailable(false);
+      setActiveTab('shop');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('checkoutClosed', checkoutClosedHandler);
     return () => {
       window.removeEventListener('cartUpdate', fetchCart);
       window.removeEventListener('closeSidebar', closeHandler);
+      window.removeEventListener('checkoutClosed', checkoutClosedHandler);
     };
   }, []);
+
+  // when switching to checkout tab, scroll smoothly to the checkout section
+  useEffect(() => {
+    if (activeTab === 'checkout') {
+      // wait a tick so the checkout section is rendered
+      setTimeout(() => {
+        const el = document.querySelector('.checkout-section');
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+          window.scrollTo({ top, behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 80);
+    }
+  }, [activeTab]);
 
   const handleAddToCart = async (product) => {
     try {
@@ -250,6 +297,9 @@ const Shop = ({ defaultTab = "shop" }) => {
       emitCartUpdate();
       await fetchCart();
       setShowCheckoutForm(false);
+      // hide checkout entry after cancelling the order
+      setCheckoutAvailable(false);
+      setActiveTab('shop');
 
       await Swal.fire({
         html: `
@@ -307,15 +357,18 @@ const Shop = ({ defaultTab = "shop" }) => {
             Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
-          <button
-            className={activeTab === "checkout" ? "menu-btn active" : "menu-btn"}
-            onClick={() => {
-              setActiveTab("checkout");
-              navigate("/shop/checkout");
-            }}
-          >
-            Checkout
-          </button>
+          {/* show Checkout menu only when checkoutAvailable is true */}
+          {checkoutAvailable && (
+            <button
+              className={`${activeTab === "checkout" ? "menu-btn active" : "menu-btn"} ${checkoutJustEnabled ? 'menu-btn-enter' : ''}`}
+              onClick={() => {
+                setActiveTab("checkout");
+                navigate("/shop/checkout");
+              }}
+            >
+              Checkout
+            </button>
+          )}
         </div>
       </aside>
 
@@ -477,6 +530,21 @@ const Shop = ({ defaultTab = "shop" }) => {
 
                 <div className="cart-total">
                   <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+                  {cart.length > 0 && (
+                    <div style={{ marginTop: 12 }}>
+                      <button
+                        className="payment-btn"
+                        onClick={() => {
+                          // enable checkout entry and navigate to it with smooth scroll
+                          setCheckoutAvailable(true);
+                          setActiveTab('checkout');
+                          navigate('/shop/checkout');
+                        }}
+                      >
+                        Procedi al checkout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

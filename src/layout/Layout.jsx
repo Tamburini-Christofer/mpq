@@ -37,11 +37,13 @@ const Layout = () => {
         // central listener for cart add/remove events to show lateral toasts
         const cartHandler = (e) => {
             const d = e?.detail || {};
+            console.log('Layout cartHandler received cartAction', d);
             // Ignore events originating from Details: Details shows its own toast
             if (d.origin === 'details') return;
             const action = d.action;
             const product = d.product || {};
             const name = product.name || product || 'Prodotto';
+            console.log('Layout cartHandler -> about to show toast for', { action, name });
             if (action === 'add') {
                 toast.success(`"${name}" aggiunto al carrello!`);
             } else if (action === 'remove') {
