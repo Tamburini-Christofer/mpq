@@ -172,6 +172,7 @@ function Wishlist() {
                   onAddToCart={() => handleAddToCart(product)}
                   onIncrease={handleIncrease}
                   onDecrease={handleDecrease}
+                    onToggleWishlist={() => handleRemoveFromWishlist(product)}
                 />
               </div>
             ))}

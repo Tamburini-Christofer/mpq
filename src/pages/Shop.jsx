@@ -334,6 +334,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                         product={{
                           ...p,
                           cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+                          isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
                         }}
                         variant={viewMode === "grid" ? "grid" : "compact"}
                         onViewDetails={(slug) => navigate(`/details/${slug}`)}
@@ -341,6 +342,18 @@ const Shop = ({ defaultTab = "shop" }) => {
                         onIncrease={increaseQuantity}
                         onDecrease={decreaseQuantity}
                         cart={cart}
+                        onToggleWishlist={(product) => {
+                          const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+                          const exists = wishlist.some(w => w.id === product.id);
+                          let updated;
+                          if (exists) {
+                            updated = wishlist.filter(w => w.id !== product.id);
+                          } else {
+                            updated = [...wishlist, product];
+                          }
+                          localStorage.setItem("wishlist", JSON.stringify(updated));
+                          window.dispatchEvent(new Event("wishlistUpdate"));
+                        }}
                       />
                     ))}
                 </div>

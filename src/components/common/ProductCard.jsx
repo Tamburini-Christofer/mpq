@@ -20,14 +20,15 @@ function ProductCard({
   onDecrease,
   qty = 0,
   showActions = true,
+  onToggleWishlist,
 }) {
   // Configurazione badge
   const badgeConfig = {
-    popular: { text: "Popolare", className: "badge-popular" },
-    new: { text: "Novità", className: "badge-new" },
-    sale: { text: "Offerta", className: "badge-sale" },
-    related: { text: "Correlato", className: "badge-related" },
-    wishlist: { text: "Wishlist", className: "badge-wishlist" },
+    popular: { text: "Popolare", className: "product-card__badge--popular" },
+    new: { text: "Novità", className: "product-card__badge--new" },
+    sale: { text: "Offerta", className: "product-card__badge--sale" },
+    related: { text: "Correlato", className: "product-card__badge--related" },
+    wishlist: { text: "Wishlist", className: "product-card__badge--wishlist" },
     grid: { text: "", className: "" },
     compact: { text: "", className: "" },
     carousel: { text: "", className: "" },
@@ -45,20 +46,60 @@ function ProductCard({
   const hasDiscount = discount > 0;
   const originalPrice = parseFloat(product.price) || 0;
   const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
-  const displayBadge = hasDiscount ? "sale" : badge;
+  // Determina la classe della card in base ai dati prodotto
+  let cardTypeClass = variant === "compact" ? (expanded ? "expanded" : "collapsed") : "";
+  if (product.isPopular) cardTypeClass += " product-card--popular";
+  if (hasDiscount) cardTypeClass += " product-card--sale";
+  if (product.isNew) cardTypeClass += " product-card--new";
+
+  // Badge: priorità offerta > nuovo > popolare
+  let displayBadge = null;
+  if (hasDiscount) displayBadge = "sale";
+  else if (product.isNew) displayBadge = "new";
+  else if (product.isPopular) displayBadge = "popular";
+  else displayBadge = badge;
   const badgeData = badgeConfig[displayBadge];
   const productSlug = generateSlug(product.name);
-  const typeClass = variant === "compact" ? (expanded ? "expanded" : "collapsed") : "";
-  const [isInWishlist, setIsInWishlist] = useState(product.isInWishlist || false);
+  const [isInWishlist, setIsInWishlist] = useState(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    return wishlist.some(w => w.id === product.id);
+  });
 
-  // Gestione wishlist (placeholder)
-  const toggleWishlist = () => setIsInWishlist((prev) => !prev);
+  React.useEffect(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    setIsInWishlist(wishlist.some(w => w.id === product.id));
+    const handler = () => {
+      const updated = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setIsInWishlist(updated.some(w => w.id === product.id));
+    };
+    window.addEventListener("wishlistUpdate", handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener("wishlistUpdate", handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, [product.id]);
+
+  // Gestione wishlist: aggiorna locale, globale e dispatcha evento
+  const toggleWishlist = () => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    const exists = wishlist.some(w => w.id === product.id);
+    let updated;
+    if (exists) {
+      updated = wishlist.filter(w => w.id !== product.id);
+    } else {
+      updated = [...wishlist, product];
+    }
+    localStorage.setItem("wishlist", JSON.stringify(updated));
+    setIsInWishlist(!exists);
+    window.dispatchEvent(new Event("wishlistUpdate"));
+  };
 
   // Gestione quantità: ora delegata alle funzioni prop
 
   // Unico wrapper per tutte le varianti
   return (
-    <div className={`product-card product-card--${variant} ${typeClass}`}
+    <div className={`product-card product-card--${variant} ${cardTypeClass}`}
       onClick={variant === "compact" ? () => setExpanded((prev) => !prev) : undefined}
       style={variant === "compact" ? { cursor: "pointer" } : {}}
     >
