@@ -3,6 +3,8 @@ import "../styles/pages/CheckoutPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
 import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import CheckoutForm from "../components/shop/CheckoutForm";
 
 function CheckoutPage() {
@@ -45,24 +47,62 @@ function CheckoutPage() {
   // 👉 FUNZIONE ANNULLA ORDINE (svuota tutto)
   const handleCancelOrder = async () => {
     try {
+      const result = await Swal.fire({
+        title: 'Annullare l\'ordine?',
+        text: 'Se continui verrà svuotato il carrello e l\'ordine sarà annullato.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Annulla ordine',
+        cancelButtonText: 'Rimani',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-wishlist-popup',
+          confirmButton: 'swal-wishlist-confirm',
+          cancelButton: 'swal-wishlist-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
       // Svuota tutto il carrello
       await cartAPI.clear();
       emitCartUpdate();
 
-      // notifica globale: ordine annullato / carrello svuotato
-      toast.success('Ordine annullato — carrello svuotato');
-
       // Aggiorna stato
       await loadCart();
 
-      // Chiudi modale
+      // Chiudi modale del form
       setShowCheckoutForm(false);
+
+      // Notify app that checkout is closed/finished so menu can hide
+      try {
+        window.dispatchEvent(new CustomEvent('checkoutClosed'));
+      } catch (e) {}
+
+      // Mostra feedback con spunta animata
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Ordine annullato</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-wishlist-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
 
       // Torna indietro
       window.history.back();
 
     } catch (err) {
       console.error("Errore annullamento ordine:", err);
+      toast.error('Errore nell\'annullamento dell\'ordine');
     }
   };
 

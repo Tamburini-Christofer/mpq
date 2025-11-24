@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
 import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
@@ -94,10 +94,13 @@ function Details() {
 
   const addToCart = async () => {
     if (!product) return;
+    if (!quantity || quantity <= 0) return; // nothing to add
     try {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
-      toast.success(`"${product.name}" aggiunto al carrello!`);
+      // Use centralized emit so Layout's Toaster shows the notification (same logic as Home)
+      console.log('Details.addToCart -> emitting add for', { id: product.id, name: product.name, quantity });
+      emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
       toast.error("Errore nell'aggiunta al carrello");
@@ -166,7 +169,10 @@ function Details() {
     try {
       await cartAPI.add(prod.id, 1);
       emitCartUpdate();
-      toast.success(`"${prod.name}" aggiunto al carrello!`);
+      // Informazioni emesse con origin in modo che Layout non mostri il toast duplicato
+      // Centralized emit (same as HomePage): let Layout handle the toast
+      console.log('Details.handleAddToCartFromCarousel -> emitting add for', { id: prod.id, name: prod.name });
+      emitCartAction('add', { id: prod.id, name: prod.name });
     } catch (error) {
       console.error("Errore aggiunta correlato:", error);
       toast.error("Errore nell'aggiunta al carrello");
@@ -177,6 +183,10 @@ function Details() {
     try {
       await cartAPI.increase(productId);
       emitCartUpdate();
+      const prod = productsData.find(p => p.id === productId) || cart.find(i => i.id === productId);
+      const name = prod?.name || 'Prodotto';
+      console.log('Details.handleIncrease -> emitting add for', { id: productId, name });
+      emitCartAction('add', { id: productId, name });
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
       toast.error("Errore nell'aggiornamento del carrello");
@@ -186,10 +196,17 @@ function Details() {
   const handleDecrease = async (productId) => {
     try {
       const item = cart.find(i => i.id === productId);
+      const prod = productsData.find(p => p.id === productId) || item;
+      const name = prod?.name || 'Prodotto';
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
+        // Central emit: let Layout show global toast
+        console.log('Details.handleDecrease -> emitting remove (decrease) for', { id: productId, name });
+        emitCartAction('remove', { id: productId, name });
       } else {
         await cartAPI.remove(productId);
+        console.log('Details.handleDecrease -> emitting remove (delete) for', { id: productId, name });
+        emitCartAction('remove', { id: productId, name });
       }
       emitCartUpdate();
     } catch (error) {

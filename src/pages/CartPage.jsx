@@ -32,9 +32,13 @@ function CartPage() {
     try {
       await cartAPI.remove(id);
       loadCart();
-      window.emitCartUpdate && emitCartUpdate();
+      emitCartUpdate();
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
-      toast.error(`"${name}" rimosso dal carrello`);
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+      } catch {
+        toast.error(`"${name}" rimosso dal carrello`);
+      }
     } catch {
       toast.error("Errore rimozione");
     }
@@ -45,7 +49,11 @@ function CartPage() {
     if (!item) return;
     await cartAPI.update(id, item.quantity + 1);
     loadCart();
-    window.emitCartUpdate && emitCartUpdate();
+    emitCartUpdate();
+    try {
+      const name = cart.find(i => i.id === id)?.name || 'Prodotto';
+      window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
+    } catch {}
   };
 
   const decreaseQuantity = async (id) => {
@@ -59,7 +67,11 @@ function CartPage() {
 
     await cartAPI.update(id, item.quantity - 1);
     loadCart();
-    window.emitCartUpdate && emitCartUpdate();
+    emitCartUpdate();
+    try {
+      const name = cart.find(i => i.id === id)?.name || 'Prodotto';
+      window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+    } catch {}
   };
 
   // TOTALE

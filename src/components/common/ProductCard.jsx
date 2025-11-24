@@ -1,10 +1,8 @@
 
 import "../../styles/components/ProductCard.css";
 import React, { useState } from "react";
-import { cartAPI, emitCartUpdate } from "../../services/api";
+import { cartAPI, emitCartUpdate, emitCartAction } from "../../services/api";
 import { toast } from 'react-hot-toast';
-import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
 
 // Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
@@ -252,54 +250,23 @@ function ProductCard({
                 className="product-card__btn product-card__btn--cart"
                 onClick={async (e) => {
                   e.stopPropagation();
-                  // chiedi conferma con SweetAlert2
                   try {
-                    const result = await Swal.fire({
-                      title: `Aggiungere "${product.name}" al carrello?`,
-                      icon: 'question',
-                      showCancelButton: true,
-                      confirmButtonText: 'Aggiungi',
-                      cancelButtonText: 'Annulla',
-                      reverseButtons: true,
-                      focusCancel: true,
-                      customClass: {
-                        popup: 'swal-wishlist-popup',
-                        confirmButton: 'swal-wishlist-confirm',
-                        cancelButton: 'swal-wishlist-cancel'
-                      }
-                    });
-
-                    if (result.isConfirmed) {
-                      // se il genitore gestisce l'aggiunta, delega
-                      if (onAddToCart) {
-                        await onAddToCart(product);
-                      } else {
-                        await cartAPI.add(product.id, 1);
-                        emitCartUpdate();
-                      }
-                      // mostra feedback compatto con spunta animata
-                      await Swal.fire({
-                        html: `
-                          <div class="swal-check-wrap">
-                            <div class="swal-check-icon" aria-hidden="true">✓</div>
-                            <div class="swal-check-label">Prodotto aggiunto</div>
-                          </div>
-                        `,
-                        timer: 1200,
-                        showConfirmButton: false,
-                        customClass: { popup: 'swal-wishlist-popup' },
-                        didOpen: (popup) => {
-                          const icon = popup.querySelector('.swal-check-icon');
-                          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
-                        }
-                      });
-
-                      setDisplayQty((d) => (d > 0 ? d : 1));
-                      setShowQtyControls(true);
+                    // delega se il genitore gestisce l'aggiunta (parent shows toast/side feedback)
+                    if (onAddToCart) {
+                      await onAddToCart(product);
+                      // parent is responsible for emitting cartAction / showing toasts
+                    } else {
+                      await cartAPI.add(product.id, 1);
+                      emitCartUpdate();
+                      // emit a single centralized cartAction so Layout shows the toast
+                      emitCartAction('add', { id: product.id, name: product.name });
                     }
+
+                    setDisplayQty((d) => (d > 0 ? d : 1));
+                    setShowQtyControls(true);
                   } catch (err) {
                     console.error('Errore aggiunta al carrello:', err);
-                    toast.error('Errore nell\'aggiunta al carrello');
+                    toast.error("Errore nell'aggiunta al carrello");
                   }
                 }}
               >
@@ -307,22 +274,48 @@ function ProductCard({
               </button>
             ) : (
               <div className="product-qty-controls">
-                <button className="qty-btn" onClick={(e) => {
+                <button className="qty-btn" onClick={async (e) => {
                   e.stopPropagation();
                   setDisplayQty((d) => {
                     const next = Math.max(d - 1, 0);
                     if (next === 0) setShowQtyControls(false);
                     return next;
                   });
-                  onDecrease && onDecrease(product.id);
+                  try {
+                    if (onDecrease) {
+                      // delegate to parent; parent is responsible for emitting cartAction
+                      await Promise.resolve(onDecrease(product.id));
+                    } else {
+                      await cartAPI.decrease(product.id);
+                      emitCartUpdate();
+                      // centralized notification for minus action when card handles API directly
+                      emitCartAction('remove', { id: product.id, name: product.name });
+                    }
+                  } catch (err) {
+                    console.error('Errore nella diminuzione quantità:', err);
+                    toast.error("Errore nell'aggiornamento del carrello");
+                  }
                 }}>
                   -
                 </button>
                 <span className="qty-display">{displayQty}</span>
-                <button className="qty-btn" onClick={(e) => {
+                <button className="qty-btn" onClick={async (e) => {
                   e.stopPropagation();
                   setDisplayQty((d) => d + 1);
-                  onIncrease && onIncrease(product.id);
+                  try {
+                    if (onIncrease) {
+                      // delegate to parent; parent should emit cartAction if needed
+                      await Promise.resolve(onIncrease(product.id));
+                    } else {
+                      await cartAPI.increase(product.id);
+                      emitCartUpdate();
+                      // centralized notification for plus action when card handles API directly
+                      emitCartAction('add', { id: product.id, name: product.name });
+                    }
+                  } catch (err) {
+                    console.error('Errore nell\'aumento quantità:', err);
+                    toast.error("Errore nell'aggiornamento del carrello");
+                  }
                 }}>
                   +
                 </button>
