@@ -1,94 +1,145 @@
-//todo Importiamo gli stili della card prodotto
-import "../../styles/components/ProductCard.css";
 
-//todo Funzione per generare slug SEO-friendly dal nome prodotto
-//todo Converte "Il Padrino" → "il-padrino"
+import "../../styles/components/ProductCard.css";
+import React, { useState } from "react";
+
+// Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
   return name
     .toLowerCase()
-    .trim()
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 };
 
-//todo Componente card prodotto riutilizzabile
-//todo Props:
-//todo - product: oggetto prodotto con {name, price, image}
-//todo - badge: tipo di badge ("popular", "new", "sale", null)
-//todo - variant: variante di visualizzazione ("carousel", "grid", "compact")
-//todo - onViewDetails: callback per visualizzare dettagli (riceve slug)
-//todo - onAddToCart: callback per aggiungere al carrello
-//todo - showActions: boolean per mostrare/nascondere pulsanti
-export default function ProductCard({ 
-  product, 
-  badge = null,
-  variant = "carousel",
-  onViewDetails = null, 
-  onAddToCart = null,
-  showActions = true
+function ProductCard({
+  product,
+  variant = "grid",
+  badge,
+  onViewDetails,
+  showActions = true,
 }) {
-  if (!product) return null;
-
-  //todo Genera lo slug dal nome del prodotto
-  const productSlug = generateSlug(product.name);
-
-  //todo Mappa i tipi di badge alle classi CSS e testi
+  // Configurazione badge
   const badgeConfig = {
-    popular: { className: "product-card__badge--popular", text: "POPOLARE" },
-    new: { className: "product-card__badge--new", text: "NUOVO ARRIVO" },
-    sale: { className: "product-card__badge--sale", text: "OFFERTA" }
+    popular: { text: "Popolare", className: "badge-popular" },
+    new: { text: "Novità", className: "badge-new" },
+    sale: { text: "Offerta", className: "badge-sale" },
+    related: { text: "Correlato", className: "badge-related" },
+    wishlist: { text: "Wishlist", className: "badge-wishlist" },
+    grid: { text: "", className: "" },
+    compact: { text: "", className: "" },
+    carousel: { text: "", className: "" },
   };
 
-  const badgeData = badgeConfig[badge];
+  // Stato espansione per la variante compatta
+  const [expanded, setExpanded] = useState(false);
 
+  const discount = product.discount || 0;
+  const hasDiscount = discount > 0;
+  const originalPrice = parseFloat(product.price) || 0;
+  const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
+  const displayBadge = hasDiscount ? "sale" : badge;
+  const badgeData = badgeConfig[displayBadge];
+  const productSlug = generateSlug(product.name);
+  const typeClass = variant === "compact" ? (expanded ? "expanded" : "collapsed") : "";
+  const [qty, setQty] = useState(product.qty || 0);
+  const [isInWishlist, setIsInWishlist] = useState(product.isInWishlist || false);
+
+  // Gestione wishlist (placeholder)
+  const toggleWishlist = () => setIsInWishlist((prev) => !prev);
+
+  // Gestione quantità (placeholder)
+  const handleAdd = () => setQty(qty + 1);
+  const handleIncrease = () => setQty(qty + 1);
+  const handleDecrease = () => setQty(qty > 0 ? qty - 1 : 0);
+
+  // Unico wrapper per tutte le varianti
   return (
-    <div className={`product-card product-card--${variant}`}>
-      {/* todo: Badge se specificato */}
+    <div className={`product-card product-card--${variant} ${typeClass}`}
+      onClick={variant === "compact" ? () => setExpanded((prev) => !prev) : undefined}
+      style={variant === "compact" ? { cursor: "pointer" } : {}}
+    >
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
-          {badgeData.text}
+          {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
 
-      {/* todo: Immagine prodotto */}
-      <img 
-        src={product.image} 
-        alt={product.name} 
-        className="product-card__image" 
+      <button
+        className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
+        onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}
+      >
+        {isInWishlist ? "♥" : "♡"}
+      </button>
+
+      <img
+        className="product-card__image"
+        src={product.image}
+        alt={product.name}
       />
 
-      {/* todo: Informazioni prodotto */}
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
-        <p className="product-card__price">{product.price.toFixed(2)}€</p>
 
-        {/* todo: Pulsanti azione (se abilitati) */}
-        {showActions && (onViewDetails || onAddToCart) && (
-          <div className="product-card__actions">
-            {/* todo: Pulsante dettagli - passa lo slug generato */}
-            {onViewDetails && (
-              <button
-                className="product-card__btn product-card__btn--details"
-                onClick={() => onViewDetails(productSlug)}
-              >
-                Dettagli
-              </button>
+        {variant === "compact" && (
+          <div className="product-card__meta">
+            <span className="product-card__category">
+              Categoria: {
+                product.category_id === 1 ? "Film" :
+                product.category_id === 2 ? "Serie TV" :
+                product.category_id === 3 ? "Anime" : "Altro"
+              }
+            </span>
+            {product.stock !== undefined && (
+              <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
             )}
+          </div>
+        )}
 
-            {/* todo: Pulsante carrello */}
-            {onAddToCart && (
+        {variant === "compact" && product.description && (
+          <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+        )}
+
+        {hasDiscount ? (
+          <div className="product-card__price-container">
+            <span className="product-card__price--discount">
+              {finalPrice.toFixed(2)}€
+            </span>
+            <span
+              className="product-card__price--original"
+              data-original-price="true"
+            >
+              {originalPrice.toFixed(2)}€
+            </span>
+          </div>
+        ) : (
+          <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
+        )}
+
+        {showActions && (
+          <div className="product-card__actions">
+            <button
+              className="product-card__btn product-card__btn--details"
+              onClick={(e) => { e.stopPropagation(); onViewDetails && onViewDetails(productSlug); }}
+            >
+              Dettagli
+            </button>
+
+            {qty === 0 ? (
               <button
                 className="product-card__btn product-card__btn--cart"
-                onClick={() => onAddToCart(product)}
+                onClick={(e) => { e.stopPropagation(); handleAdd(); }}
               >
                 Acquista
               </button>
+            ) : (
+              <div className="product-qty-controls">
+                <button className="qty-btn" onClick={(e) => { e.stopPropagation(); handleDecrease(); }}>
+                  -
+                </button>
+                <span className="qty-display">{qty}</span>
+                <button className="qty-btn" onClick={(e) => { e.stopPropagation(); handleIncrease(); }}>
+                  +
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -96,3 +147,7 @@ export default function ProductCard({
     </div>
   );
 }
+
+export default ProductCard;
+
+
