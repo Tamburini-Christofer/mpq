@@ -57,7 +57,7 @@ function CartPage() {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
       logAction(ACTIONS.CART_ADD, { id, name });
-    } catch {}
+    } catch (err) { void err; }
   };
 
   const decreaseQuantity = async (id) => {
@@ -76,7 +76,7 @@ function CartPage() {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
       logAction(ACTIONS.CART_REMOVE, { id, name });
-    } catch {}
+    } catch (err) { void err; }
   };
 
   // TOTALE

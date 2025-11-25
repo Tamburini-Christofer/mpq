@@ -2,6 +2,7 @@ import '../../styles/components/NavBar.css';
 import Logo from '../../img/Logo_no_bg.png';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
+import Swal from 'sweetalert2';
 import { useState, useEffect, useRef } from 'react';
 import { cartAPI, emitCartUpdate } from '../../services/api';
 import { logAction } from '../../utils/logger';
@@ -75,7 +76,8 @@ function NavBar() {
       setCartCount(totalItems);
       setCartItems(cart);
       setCartTotal(totalPrice.toFixed(2));
-    } catch (error) {
+    } catch (err) {
+      console.error('Errore nel recuperare dati carrello:', err);
       setCartCount(0);
       setCartItems([]);
       setCartTotal(0);
@@ -117,7 +119,7 @@ function NavBar() {
         try {
           window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
           logAction(ACTIONS.CART_ADD_NAVBAR, { id, name });
-        } catch {}
+        } catch (err) { void err; }
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     } finally {
@@ -138,7 +140,7 @@ function NavBar() {
         try {
           window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
           logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
-        } catch {}
+        } catch (err) { void err; }
       }
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
@@ -169,6 +171,63 @@ function NavBar() {
     }, 250);
   };
 
+  const clearCartFromNav = async () => {
+    try {
+      const result = await Swal.fire({
+        title: 'Svuotare il carrello?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Svuota carrello',
+        cancelButtonText: 'Annulla',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
+      await cartAPI.clear();
+      emitCartUpdate();
+      await updateCartData();
+
+      // centralized event so other components can react
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'clear' } }));
+        logAction(ACTIONS.CART_CLEAR_NAVBAR, {});
+      } catch {
+        // fallback
+        toast.success('Carrello svuotato');
+      }
+
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Carrello svuotato</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-dark-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
+
+    } catch (err) {
+      console.error('Errore svuotamento carrello:', err);
+      toast.error('Errore nello svuotare il carrello');
+    }
+  };
+
   const goToCheckout = () => {
     // close mobile/sidebar menus across the app before navigating
     try {
@@ -176,8 +235,10 @@ function NavBar() {
     } catch {
       // ignore
     }
-    navigate("/shop/checkout");
+    navigate("/shop/cart");
   };
+
+  
 
   return (
     <>
@@ -203,6 +264,8 @@ function NavBar() {
               {wishlistCount > 0 && <span className="wishlist-badge">{wishlistCount}</span>}
             </span>
           </NavLink>
+
+          
 
           <div
             className="cart-wrapper"
@@ -282,7 +345,14 @@ function NavBar() {
                   className="btn-checkout"
                   onClick={goToCheckout}
                 >
-                  Vai al Checkout
+                  Vai al Carrello
+                </button>
+
+                <button
+                  className="btn-clear-cart-preview"
+                  onClick={async (e) => { e.preventDefault(); await clearCartFromNav(); }}
+                >
+                  Svuota carrello
                 </button>
 
               </div>
@@ -298,6 +368,7 @@ function NavBar() {
           </button>
           <button className="btn-levelup">Level Up!</button>
         </div>
+
       </nav>
     </>
   );

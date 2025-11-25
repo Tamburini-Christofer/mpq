@@ -206,7 +206,7 @@ function HomePage() {
             try {
                 const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
                     emitCartAction('add', { id: productId, name });
-            } catch {}
+            } catch (err) { void err; }
         } catch (error) {
             console.error("Errore nell'aumentare la quantità:", error);
             toast.error("Errore nell'aggiornamento del carrello");
@@ -222,7 +222,7 @@ function HomePage() {
                 try {
                     const name = item?.name || 'Prodotto';
                     emitCartAction('remove', { id: productId, name });
-                } catch {}
+                } catch (err) { void err; }
             } else {
                 await cartAPI.remove(productId);
                 const name = item?.name || 'Prodotto';

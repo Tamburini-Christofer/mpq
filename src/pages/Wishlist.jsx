@@ -91,9 +91,11 @@ function Wishlist() {
       reverseButtons: true,
       focusCancel: true,
       customClass: {
-        popup: 'swal-wishlist-popup',
-        confirmButton: 'swal-wishlist-confirm',
-        cancelButton: 'swal-wishlist-cancel'
+        popup: 'swal-dark-popup',
+        title: 'swal-dark-title',
+        content: 'swal-dark-content',
+        confirmButton: 'swal-dark-confirm',
+        cancelButton: 'swal-dark-cancel'
       }
     });
 
@@ -111,7 +113,7 @@ function Wishlist() {
         `,
         timer: 1200,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) {
@@ -136,9 +138,11 @@ function Wishlist() {
         reverseButtons: true,
         focusCancel: true,
         customClass: {
-          popup: 'swal-wishlist-popup',
-          confirmButton: 'swal-wishlist-confirm',
-          cancelButton: 'swal-wishlist-cancel'
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
         }
       });
 
@@ -166,7 +170,7 @@ function Wishlist() {
         `,
         timer: 1400,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
@@ -186,7 +190,7 @@ function Wishlist() {
       try {
         const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
         emitCartAction('add', { id: productId, name });
-      } catch {}
+      } catch (err) { void err; }
     } catch (error) {
       logError("Errore nell'aumentare la quantità", error);
       toast.error("Errore nell'aggiornamento del carrello");

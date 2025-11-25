@@ -340,7 +340,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       try {
         const name = cart.find((i) => i.id === productId)?.name || 'Prodotto';
         emitCartAction('add', { id: productId, name });
-      } catch {}
+      } catch (err) { void err; }
     } catch (error) {
       logError("Errore nell'aumentare la quantità", error);
     }
@@ -360,7 +360,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       if (item.quantity > 1) {
         await cartAPI.decrease(productId);
         // emit remove action for decrement
-        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch {}
+        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch (err) { void err; }
       } else {
         await cartAPI.remove(productId);
         const name = item?.name || 'Prodotto';
@@ -373,7 +373,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       // show a user-friendly message when removal fails
       try {
         toast.error(error?.message || 'Errore nel diminuire la quantità');
-      } catch {}
+      } catch (err) { void err; }
     }
   };
 
@@ -430,9 +430,11 @@ const Shop = ({ defaultTab = "shop" }) => {
         reverseButtons: true,
         focusCancel: true,
         customClass: {
-          popup: 'swal-wishlist-popup',
-          confirmButton: 'swal-wishlist-confirm',
-          cancelButton: 'swal-wishlist-cancel'
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
         }
       });
 
@@ -455,7 +457,7 @@ const Shop = ({ defaultTab = "shop" }) => {
         `,
         timer: 1400,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
@@ -465,7 +467,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       
     } catch (err) {
       logError('Errore svuotamento carrello', err);
-      try { toast.error('Errore durante lo svuotamento del carrello'); } catch {}
+      try { toast.error('Errore durante lo svuotamento del carrello'); } catch (err) { void err; }
     }
   };
 

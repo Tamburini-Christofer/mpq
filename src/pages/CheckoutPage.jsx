@@ -62,9 +62,11 @@ function CheckoutPage() {
         reverseButtons: true,
         focusCancel: true,
         customClass: {
-          popup: 'swal-wishlist-popup',
-          confirmButton: 'swal-wishlist-confirm',
-          cancelButton: 'swal-wishlist-cancel'
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
         }
       });
 
@@ -83,7 +85,7 @@ function CheckoutPage() {
       // Notify app that checkout is closed/finished so menu can hide
       try {
         window.dispatchEvent(new CustomEvent('checkoutClosed'));
-      } catch (e) {}
+      } catch (err) { void err; }
 
       // Mostra feedback con spunta animata
       await Swal.fire({
@@ -95,7 +97,7 @@ function CheckoutPage() {
         `,
         timer: 1400,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
