@@ -1,14 +1,70 @@
 // API BASE URL
 const API_BASE_URL = 'http://localhost:3000';
 
-// Genera o recupera session ID
+// Genera o recupera session ID (persistente in localStorage per tab/finestre)
 const getSessionId = () => {
-  let sessionId = sessionStorage.getItem('sessionId');
+  let sessionId = localStorage.getItem('sessionId');
   if (!sessionId) {
     sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    sessionStorage.setItem('sessionId', sessionId);
+    localStorage.setItem('sessionId', sessionId);
   }
   return sessionId;
+};
+
+// Legge eventuale parametro `cart` dalla querystring, decodifica da Base64 JSON
+const readCartParam = () => {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('cart');
+    if (!encoded) return null;
+    const json = decodeURIComponent(atob(encoded));
+    const items = JSON.parse(json);
+    if (Array.isArray(items)) return items;
+  } catch (e) {
+    console.warn('Errore parsing cart param:', e);
+  }
+  return null;
+};
+
+// Applica il cart dalla querystring al carrello server per la sessione corrente.
+// Questa operazione viene eseguita solo una volta per sessione (flag in localStorage).
+const applyCartFromUrlIfPresent = async () => {
+  try {
+    if (localStorage.getItem('cartFromUrlApplied') === '1') return;
+    const items = readCartParam();
+    if (!items || items.length === 0) return;
+
+    localStorage.setItem('cartFromUrlApplied', '1');
+
+    const sessionId = getSessionId();
+    console.log('Applying shared cart to session', sessionId, items);
+
+    // Svuota il carrello corrente (ignora errori)
+    try { await fetch(`${API_BASE_URL}/cart/${sessionId}`, { method: 'DELETE' }); } catch (e) { /* ignore */ }
+
+    // Aggiungi tutti gli item al server
+    for (const it of items) {
+      const productId = it.productId ?? it.id ?? it.product_id;
+      const quantity = it.quantity ?? 1;
+      if (!productId) continue;
+      try {
+        await fetch(`${API_BASE_URL}/cart/${sessionId}/items`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ productId, quantity })
+        });
+      } catch (e) {
+        console.warn('Errore aggiunta item shared cart:', e);
+      }
+    }
+
+    // Rimuovi il parametro `cart` dall'URL per non riapplicarlo
+    const url = new URL(window.location.href);
+    url.searchParams.delete('cart');
+    window.history.replaceState({}, document.title, url.toString());
+  } catch (e) {
+    console.error('applyCartFromUrlIfPresent error', e);
+  }
 };
 
 // ===== PRODUCTS API =====
@@ -91,6 +147,8 @@ export const cartAPI = {
   get: async () => {
     console.log('API: cartAPI.get() called.');
     try {
+      // Se l'URL contiene un carrello condiviso, applicalo una volta per la sessione
+      await applyCartFromUrlIfPresent();
       const sessionId = getSessionId();
       const response = await fetch(`${API_BASE_URL}/cart/${sessionId}`);
       if (!response.ok) throw new Error('Errore nel caricamento del carrello');
