@@ -100,7 +100,7 @@
 
 /* todo: Sottotitolo del form */
 .email-form-subtitle {
-  color: var(--email-gray);
+  color: white;
   font-size: 16px;
   text-align: center;
   margin-bottom: 20px;
