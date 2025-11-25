@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/common/ProductCard";
 import { cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -23,7 +25,7 @@ function Wishlist() {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      console.error("Errore caricamento carrello:", error);
+      logError("Errore caricamento carrello", error);
     }
   };
 
@@ -32,12 +34,16 @@ function Wishlist() {
     loadCart();
     window.addEventListener("storage", loadWishlist);
     window.addEventListener("wishlistUpdate", loadWishlist);
-    window.addEventListener("cartUpdate", loadCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
+    window.addEventListener("cartUpdate", handler);
 
     return () => {
       window.removeEventListener("storage", loadWishlist);
       window.removeEventListener("wishlistUpdate", loadWishlist);
-      window.removeEventListener("cartUpdate", loadCart);
+      window.removeEventListener("cartUpdate", handler);
     };
   }, []);
 
@@ -56,7 +62,7 @@ function Wishlist() {
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
       toast.error("Errore nell'aggiunta al carrello");
-      console.error(error);
+      logError('Errore aggiunta wishlist->carrello', error);
     }
   };
 
@@ -71,6 +77,7 @@ function Wishlist() {
         icon: '❤',
         style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
       });
+      logAction(ACTIONS.WISHLIST_REMOVE, { id: product.id, name: product.name });
   };
 
   const handleClearWishlist = async () => {
@@ -167,7 +174,7 @@ function Wishlist() {
       });
     } catch (error) {
       toast.error("Errore durante l'aggiunta dei prodotti");
-      console.error(error);
+      logError('Errore moveAllToCart', error);
     }
   };
 
@@ -181,7 +188,7 @@ function Wishlist() {
         emitCartAction('add', { id: productId, name });
       } catch {}
     } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
+      logError("Errore nell'aumentare la quantità", error);
       toast.error("Errore nell'aggiornamento del carrello");
     }
   };
@@ -191,6 +198,7 @@ function Wishlist() {
       const item = cart.find(i => i.id === productId);
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
+        logAction(ACTIONS.CART_REMOVE, { id: productId });
       } else {
         await cartAPI.remove(productId);
         const name = item?.name || 'Prodotto';
@@ -199,7 +207,7 @@ function Wishlist() {
       await loadCart();
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
+      logError("Errore nel diminuire la quantità", error);
       toast.error("Errore nell'aggiornamento del carrello");
     }
   };

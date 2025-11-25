@@ -4,8 +4,9 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 async function sendPaymentConfirmationEmail({ to, amount, currency = 'EUR', paymentIntentId, date }) {
   try {
+    const from = `MyPocketFive <${process.env.EMAIL_USER || 'mypocketfive@gmail.com'}>`;
     await resend.emails.send({
-      from: 'Il tuo negozio <mypocketfive@gmail.com>', 
+      from,
       to,
       subject: 'Pagamento ricevuto – Grazie per il tuo acquisto!',
       html: `
@@ -24,4 +25,42 @@ async function sendPaymentConfirmationEmail({ to, amount, currency = 'EUR', paym
   }
 }
 
-module.exports = { sendPaymentConfirmationEmail };
+async function sendOrderConfirmation(toCustomerEmail, customerName, orderNumber, pdfLink = '#') {
+  try {
+    const from = `MyPocketFive <${process.env.EMAIL_USER || 'mypocketfive@gmail.com'}>`;
+    // Email to customer
+    await resend.emails.send({
+      from,
+      to: toCustomerEmail,
+      subject: `Conferma ordine ${orderNumber}`,
+      html: `
+        <h2>Grazie per il tuo ordine, ${customerName}!</h2>
+        <p>Il tuo ordine <strong>${orderNumber}</strong> è stato ricevuto correttamente.</p>
+        <p>Troverai il riepilogo e la ricevuta all'indirizzo email indicato.</p>
+        <p>Link riepilogo: <a href="${pdfLink}">${pdfLink}</a></p>
+        <hr>
+        <p>Grazie per aver scelto MyPocketFive.</p>
+      `,
+    });
+
+    // Email to company
+    const companyEmail = process.env.EMAIL_USER || 'mypocketfive@gmail.com';
+    await resend.emails.send({
+      from,
+      to: companyEmail,
+      subject: `Nuovo ordine ricevuto: ${orderNumber}`,
+      html: `
+        <h2>Nuovo ordine: ${orderNumber}</h2>
+        <p>Cliente: ${customerName} &lt;${toCustomerEmail}&gt;</p>
+        <p>Apri il pannello ordini per il dettaglio, oppure scarica il riepilogo: <a href="${pdfLink}">${pdfLink}</a></p>
+      `,
+    });
+
+    console.log(`Order emails sent for ${orderNumber} to ${toCustomerEmail} and ${companyEmail}`);
+  } catch (error) {
+    console.error('Errore invio email ordine:', error);
+    throw error;
+  }
+}
+
+module.exports = { sendPaymentConfirmationEmail, sendOrderConfirmation };

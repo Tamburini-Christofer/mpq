@@ -5,6 +5,8 @@ import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -21,6 +23,7 @@ const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const mountedRef = useRef(false);
+  const itemsPerPageInitRef = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -165,6 +168,13 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   // Caricamento iniziale
   useEffect(() => {
+    // Evita il doppio caricamento iniziale: la prima esecuzione viene
+    // ignorata perché i prodotti sono già stati caricati dal parser della query string.
+    if (!itemsPerPageInitRef.current) {
+      itemsPerPageInitRef.current = true;
+      return;
+    }
+
     loadProducts(1);
   }, [itemsPerPage]); // Ricarica quando cambia items per pagina
 
@@ -216,8 +226,8 @@ const Shop = ({ defaultTab = "shop" }) => {
     try {
       const cartData = await cartAPI.get();
       setCart(cartData);
-    } catch {
-      console.error("Errore nel fetch del carrello");
+    } catch (err) {
+      logError('Errore nel fetch del carrello', err);
     }
   };
 
@@ -241,7 +251,14 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   useEffect(() => {
     fetchCart();
-    window.addEventListener('cartUpdate', fetchCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) {
+        setCart(e.detail.cart);
+      } else {
+        fetchCart();
+      }
+    };
+    window.addEventListener('cartUpdate', handler);
     // listener per chiudere sidebar/mobile menu quando altre parti dell'app richiedono la navigazione
     const closeHandler = () => {
       setShowFilters(false);
@@ -261,7 +278,7 @@ const Shop = ({ defaultTab = "shop" }) => {
     };
     window.addEventListener('checkoutClosed', checkoutClosedHandler);
     return () => {
-      window.removeEventListener('cartUpdate', fetchCart);
+      window.removeEventListener('cartUpdate', handler);
       window.removeEventListener('closeSidebar', closeHandler);
       window.removeEventListener('checkoutClosed', checkoutClosedHandler);
     };
@@ -291,7 +308,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       // central notification
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      console.error("Errore aggiunta al carrello:", error);
+      logError('Errore aggiunta al carrello', error);
       toast.error("Errore aggiunta al carrello");
     }
   };
@@ -307,7 +324,7 @@ const Shop = ({ defaultTab = "shop" }) => {
         emitCartAction('add', { id: productId, name });
       } catch {}
     } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
+      logError("Errore nell'aumentare la quantità", error);
     }
   };
 
@@ -326,7 +343,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       await fetchCart();
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
+      logError("Errore nel diminuire la quantità", error);
     }
   };
 
@@ -337,6 +354,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       const name = cart.find((i) => i.id === productId)?.name || "Prodotto";
       try {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id: productId, name } } }));
+        logAction(ACTIONS.CART_REMOVE_NAVBAR, { id: productId, name });
       } catch {
         toast.error(`"${name}" rimosso dal carrello`);
       }
@@ -416,7 +434,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
       navigate("/shop");
     } catch (err) {
-      console.error("Errore annullamento ordine:", err);
+      logError('Errore annullamento ordine', err);
     }
   };
 

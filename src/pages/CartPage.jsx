@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CartPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { logAction } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
@@ -36,6 +38,7 @@ function CartPage() {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       try {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+        logAction(ACTIONS.CART_REMOVE, { id, name });
       } catch {
         toast.error(`"${name}" rimosso dal carrello`);
       }
@@ -53,6 +56,7 @@ function CartPage() {
     try {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
+      logAction(ACTIONS.CART_ADD, { id, name });
     } catch {}
   };
 
@@ -71,6 +75,7 @@ function CartPage() {
     try {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+      logAction(ACTIONS.CART_REMOVE, { id, name });
     } catch {}
   };
 

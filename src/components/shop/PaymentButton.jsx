@@ -23,7 +23,9 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
         body: JSON.stringify({
           cartItems: cartItems,
           customerData: formData,
-          successUrl: `${window.location.origin}/`,
+          // include a query param so the frontend can detect successful checkout
+          // and clear localStorage. Also include the session id placeholder.
+          successUrl: `${window.location.origin}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${window.location.origin}/shop`
         })
       });
