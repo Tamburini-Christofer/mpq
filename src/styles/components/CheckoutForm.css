@@ -1,43 +1,70 @@
-.cancel-order-btn.danger {
-  background: linear-gradient(135deg, #ff3b3b, #c80000);
-  color: white;
-  border: none;
-  font-weight: 700;
-  font-family: "Cinzel", serif;
-  padding: 14px 26px;
-  border-radius: 12px;
-  box-shadow: 0 8px 25px rgba(255, 59, 59, 0.25);
-  transition: 0.25s;
-}
-.cancel-order-btn.danger:hover {
-  background: linear-gradient(135deg, #c80000, #ff3b3b);
-  box-shadow: 0 12px 35px rgba(255, 59, 59, 0.35);
-  transform: translateY(-2px) scale(1.04);
-}
 /* ========================================
-   VARIABILI GLOBALI MIGLIORATE
-   ======================================== */
+   VARIABILI GLOBALI E MAPPATURA NEO-BRUTALIST
+   ======================================== */
 :root {
-  --checkout-purple: #7a33ff;
-  --checkout-purple-glow: rgba(122, 51, 255, 0.6);
-  --checkout-gold: #e7c46c;
-  --checkout-gold-light: #f8d98c;
-  --checkout-dark: #141218;
-  --checkout-light: #ffffff;
+  /* Base Neo-Brutalist */
+  --purple: #6c21ff;
+  --gold: #d8a928;
+  --dark: #141218;
+  --light: #ffffff;
+  --pixel-border: #000000;
+  --shadow-depth: 4px;
+  --red-alert: #ff4757;
+
+  /* Mappatura delle variabili checkout originali */
+  --checkout-purple: var(--purple);
+  --checkout-purple-glow: rgba(108, 33, 255, 0.4);
+  /* Manteniamo la versione soft per i glow interni */
+  --checkout-gold: var(--gold);
+  --checkout-gold-light: #e7c46c;
+  /* Manteniamo la variante chiara */
+  --checkout-dark: var(--dark);
+  --checkout-light: var(--light);
   --checkout-gray: #9d9da3;
-  --checkout-card-bg: #1b1822;
+  --checkout-card-bg: #1a1720;
+  /* Sfondo scuro hard */
   --checkout-card-bg-light: #221f2b;
   --checkout-input-bg: #2d2a36;
 }
 
+
 /* ========================================
-   OVERLAY & ANIMAZIONI
-   ======================================== */
+   BOTTONE CANCEL (Neo-Brutalist)
+   ======================================== */
+.cancel-order-btn.danger {
+  background: var(--red-alert);
+  /* Colore rosso hard */
+  color: white;
+  border: 3px solid var(--pixel-border);
+  /* Bordo spesso e nero */
+  font-weight: 700;
+  font-family: "Cinzel", serif;
+  padding: 14px 26px;
+  border-radius: 0;
+  /* SQUADRATO */
+  /* Ombra netta e dura */
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  transition: 0.1s;
+}
+
+.cancel-order-btn.danger:hover {
+  background: #c80000;
+  /* Tonalità più scura per hover */
+  /* Ombra più pronunciata con colore (effetto "scatto") */
+  box-shadow: 6px 6px 0 var(--pixel-border);
+  transform: translate(-2px, -2px) scale(1.02);
+}
+
+
+/* ========================================
+   OVERLAY & ANIMAZIONI
+   ======================================== */
 .checkout-overlay {
   position: fixed;
   inset: 0;
   background: rgba(10, 8, 12, 0.85);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
+  /* Filtro meno intenso */
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -54,76 +81,95 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 /* ========================================
-   CONTAINER PRINCIPALE
-   ======================================== */
+   CONTAINER PRINCIPALE (Neo-Brutalist)
+   ======================================== */
 .checkout-form-container {
   background: var(--checkout-card-bg);
-  border-radius: 22px;
+  border-radius: 0;
+  /* SQUADRATO */
   width: 100%;
   max-width: 900px;
   overflow: hidden;
-  box-shadow:
-    0 0 25px rgba(122, 51, 255, 0.25),
-    0 0 80px rgba(231, 196, 108, 0.15),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  border: 3px solid var(--pixel-border);
+  /* Bordo esterno nero spesso */
+  /* Ombra netta con colore Gold */
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--checkout-gold);
   animation: slideUp 0.35s ease;
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ========================================
-   HEADER
-   ======================================== */
+   HEADER
+   ======================================== */
 .checkout-form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 28px 38px 20px;
   background: var(--checkout-card-bg-light);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 3px solid var(--purple);
+  /* Bordo viola netto */
 }
 
 .checkout-form-title {
   font-size: 30px;
   font-family: "Cinzel", serif;
-  background: linear-gradient(135deg, var(--checkout-light), var(--checkout-gold-light));
+  /* Manteniamo il gradient per il testo, ma con colori hard */
+  background: linear-gradient(135deg, var(--checkout-light), var(--checkout-gold));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: 800;
+  font-weight: 900;
   margin-bottom: 10px;
 }
 
 .close-btn {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
+  border-radius: 0;
+  /* SQUADRATO */
   background: transparent;
-  border: 2px solid rgba(255, 255, 255, 0.15);
+  border: 3px solid var(--checkout-gray);
+  /* Bordo spesso */
   color: var(--checkout-gray);
   font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.25s;
+  transition: 0.15s;
+  box-shadow: 2px 2px 0 var(--pixel-border);
 }
 
 .close-btn:hover {
   border-color: var(--checkout-gold);
   color: var(--checkout-gold);
-  transform: rotate(90deg) scale(1.08);
+  transform: rotate(4deg) scale(1.08);
+  /* Effetto scattante */
 }
 
 /* ========================================
-   FORM
-   ======================================== */
+   FORM
+   ======================================== */
 .checkout-form {
   padding: 35px 40px 45px;
   display: flex;
@@ -132,10 +178,14 @@
 }
 
 .form-section {
-  background: rgba(255, 255, 255, 0.02);
+  background: #141218;
+  /* Sfondo hard dark */
   padding: 22px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 0;
+  /* SQUADRATO */
+  border: 2px solid var(--purple);
+  /* Bordo viola */
+  box-shadow: 3px 3px 0 var(--pixel-border);
 }
 
 .section-title-form {
@@ -144,11 +194,13 @@
   font-weight: 700;
   font-family: "Cinzel", serif;
   margin-bottom: 15px;
+  border-bottom: 2px dashed var(--purple);
+  padding-bottom: 5px;
 }
 
 /* ========================================
-   INPUTS
-   ======================================== */
+   INPUTS
+   ======================================== */
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -164,38 +216,50 @@
 .input-label {
   color: var(--checkout-light);
   font-size: 14px;
-  opacity: 0.85;
-  margin: 20px 0;
+  opacity: 1;
+  /* Rendo opacità 1 per un look più netto */
+  margin: 20px 0 6px;
+  /* Spazio leggermente aggiustato */
 }
 
 .checkout-input,
 .checkout-textarea {
   background: var(--checkout-input-bg);
-  border: 2px solid transparent;
-  border-radius: 14px;
+  border: 3px solid var(--pixel-border);
+  /* Bordo nero spesso */
+  border-radius: 0;
+  /* SQUADRATO */
   padding: 14px 18px;
   color: var(--checkout-light);
   font-size: 16px;
-  transition: 0.25s ease;
+  transition: 0.15s ease;
+  box-shadow: 2px 2px 0 var(--purple);
+  /* Ombra viola netta */
 }
 
 .checkout-input:focus,
 .checkout-textarea:focus {
-  border-color: var(--checkout-purple);
-  box-shadow: 0 0 10px var(--checkout-purple-glow);
+  border-color: var(--checkout-gold);
+  /* Bordo gold al focus */
+  box-shadow: 4px 4px 0 var(--purple);
+  /* Ombra più pronunciata */
 }
 
 /* ========================================
-   CHECKBOX
-   ======================================== */
+   CHECKBOX
+   ======================================== */
 .checkbox-group {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(231, 196, 108, 0.06);
-  border: 1px solid rgba(231, 196, 108, 0.2);
+  background: #141218;
+  /* Sfondo hard dark */
+  border: 2px solid var(--checkout-gold);
+  /* Bordo gold */
   padding: 14px 18px;
-  border-radius: 12px;
+  border-radius: 0;
+  /* SQUADRATO */
+  box-shadow: 3px 3px 0 var(--purple);
 }
 
 .checkbox-group label {
@@ -204,13 +268,17 @@
 }
 
 /* ========================================
-   RIEPILOGO ORDINE
-   ======================================== */
+   RIEPILOGO ORDINE
+   ======================================== */
 .order-summary {
-  background: rgba(122, 51, 255, 0.08);
-  border: 1px solid rgba(122, 51, 255, 0.25);
-  border-radius: 16px;
+  background: #141218;
+  /* Sfondo hard dark */
+  border: 3px solid var(--purple);
+  /* Bordo viola spesso */
+  border-radius: 0;
+  /* SQUADRATO */
   padding: 22px;
+  box-shadow: 4px 4px 0 var(--pixel-border);
 }
 
 .summary-list {
@@ -238,17 +306,20 @@
 
 .summary-value {
   font-weight: 700;
+  font-family: monospace;
 }
 
 .summary-subtotal,
 .summary-shipping {
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  border-top: 2px dashed var(--checkout-gray);
+  /* Linea netta dashed */
   padding-top: 10px;
 }
 
 /* Totale */
 .summary-total {
-  border-top: 2px solid var(--checkout-gold);
+  border-top: 3px solid var(--checkout-gold);
+  /* Bordo gold spesso */
   margin-top: 10px;
   padding-top: 12px;
 }
@@ -256,17 +327,20 @@
 .total-label {
   font-size: 20px;
   color: var(--checkout-gold-light);
+  text-shadow: 1px 1px 0 var(--pixel-border);
 }
 
 .total-value {
   font-size: 26px;
   font-weight: 900;
   color: var(--checkout-gold-light);
+  font-family: monospace;
+  text-shadow: 2px 2px 0 var(--pixel-border);
 }
 
 /* ========================================
-   BOTTONI AZIONE
-   ======================================== */
+   BOTTONI AZIONE (Neo-Brutalist)
+   ======================================== */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -276,45 +350,62 @@
 
 .secondary-btn {
   background: transparent;
-  border: 2px solid var(--checkout-gray);
+  border: 3px solid var(--checkout-gray);
   color: var(--checkout-gray);
   padding: 14px 26px;
-  border-radius: 12px;
-  transition: 0.25s;
+  border-radius: 0;
+  /* SQUADRATO */
+  transition: 0.1s;
+  font-weight: 700;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
 }
 
 .secondary-btn:hover {
   border-color: var(--checkout-light);
   color: var(--checkout-light);
-  transform: translateY(-2px);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--purple);
 }
 
 .payment-btn {
-  background: linear-gradient(135deg, var(--checkout-purple), #9b6aff);
+  background: var(--purple);
+  /* Sfondo solido viola */
   color: white;
   padding: 16px 30px;
-  border-radius: 12px;
-  border: none;
-  font-weight: 700;
+  border-radius: 0;
+  /* SQUADRATO */
+  border: 3px solid var(--pixel-border);
+  font-weight: 800;
   font-family: "Cinzel", serif;
-  box-shadow: 0 8px 25px rgba(122, 51, 255, 0.4);
-  transition: 0.25s;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--checkout-gold);
+  transition: 0.1s;
 }
 
 .payment-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 35px rgba(122, 51, 255, 0.55);
+  background: #9b6aff;
+  /* Tonalità più chiara per hover */
+  transform: translate(-3px, -3px);
+  box-shadow: 8px 8px 0 var(--checkout-gold);
 }
 
 /* ========================================
-   SCROLLBAR
-   ======================================== */
+   SCROLLBAR (Neo-Brutalist)
+   ======================================== */
 .checkout-form-container::-webkit-scrollbar {
   width: 8px;
 }
 
 .checkout-form-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--checkout-purple), var(--checkout-gold));
-  border-radius: 10px;
+  background: var(--gold);
+  /* Thumb gold */
+  border: 1px solid var(--pixel-border);
+  border-radius: 0;
+  /* SQUADRATO */
 }
 
+.checkout-form-container::-webkit-scrollbar-track {
+  background: var(--dark);
+  border-radius: 0;
+}

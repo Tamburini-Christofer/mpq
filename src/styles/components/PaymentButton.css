@@ -1,340 +1,366 @@
+/* --- Variabili Stile Globali (Per riferimento) --- */
+:root {
+    --purple: #6c21ff;
+    --gold: #d8a928;
+    --dark: #141218;
+    --light: #ffffff;
+    --pixel-border: #000000;
+    --shadow-depth: 4px;
+    --red-alert: #ff4757;
+    /* Variabili del checkout (mappate alle hard colors) */
+    --checkout-purple: var(--purple);
+    --checkout-gold: var(--gold);
+}
+
 /* ========================================
-   PAYMENT BUTTON STYLES
-   ======================================== */
+   OVERLAY & ANIMAZIONI
+   ======================================== */
 
 /* Overlay per la carta di credito */
 .card-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  animation: fadeIn 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 8, 12, 0.85); /* Sfondo scuro e opaco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
 }
 
 .card-overlay-content {
-  background: white;
-  border-radius: 16px;
-  padding: 32px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
+    background: var(--dark);
+    border-radius: 0; /* SQUADRATO */
+    border: 3px solid var(--pixel-border); /* Bordo nero spesso */
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    /* Ombra netta viola */
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--purple);
+    animation: slideUp 0.3s ease;
 }
 
 .card-overlay-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    border-bottom: 2px dashed var(--gold);
+    padding-bottom: 10px;
 }
 
 .card-overlay-header h3 {
-  font-family: "Cinzel", serif;
-  font-size: 24px;
-  color: #1f2937;
-  margin: 0;
+    font-family: "Cinzel", serif;
+    font-size: 24px;
+    color: var(--gold);
+    margin: 0;
+    text-shadow: 1px 1px 0 var(--pixel-border);
 }
 
 .card-close-btn {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #6b7280;
-  cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.2s;
+    background: none;
+    border: 3px solid var(--red-alert); /* Bordo rosso hard */
+    font-size: 20px;
+    color: var(--red-alert);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0; /* SQUADRATO */
+    transition: all 0.15s;
+    font-weight: 900;
 }
 
 .card-close-btn:hover {
-  background: #f3f4f6;
-  color: #1f2937;
+    background: var(--red-alert);
+    color: var(--light);
+    transform: rotate(4deg) scale(1.08);
 }
 
 .card-overlay-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
 }
+
+/* ========================================
+   BOTTONI DI AZIONE NEL MODAL
+   ======================================== */
 
 .cancel-card-btn,
 .confirm-pay-btn {
-  flex: 1;
-  padding: 14px 24px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Cinzel", serif;
-  border: none;
+    flex: 1;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-family: "Cinzel", serif;
+    border: 3px solid var(--pixel-border); /* Bordo nero spesso */
+    text-transform: uppercase;
 }
 
 .cancel-card-btn {
-  background: #f3f4f6;
-  color: #4b5563;
+    background: #4b5563; /* Grigio scuro */
+    color: var(--light);
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
 }
 
 .cancel-card-btn:hover:not(:disabled) {
-  background: #e5e7eb;
+    background: #6b7280;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--gold);
 }
 
 .confirm-pay-btn {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  color: white;
-  box-shadow: 0 4px 12px rgba(108, 33, 255, 0.3);
+    background: var(--purple); /* Viola hard */
+    color: white;
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold); /* Ombra gold hard */
 }
 
 .confirm-pay-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(108, 33, 255, 0.4);
+    transform: translate(-2px, -2px);
+    background: #8c4dff;
+    box-shadow: 6px 6px 0 var(--pixel-border);
 }
 
 .confirm-pay-btn:disabled,
 .cancel-card-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
 }
 
+/* Animazioni (Mantenute, ma adattate per look hard) */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes slideUp {
-  from {
-    transform: translateY(30px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
-/* Form Stripe */
+/* ========================================
+   FORM STRIPE E INPUTS
+   ======================================== */
 .stripe-form {
-  width: 100%;
+    width: 100%;
 }
 
 .card-element-container {
-  margin-bottom: 20px;
-  padding: 16px;
-  background: #f9fafb;
-  border-radius: 12px;
-  border: 2px solid #e5e7eb;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #141218; /* Sfondo hard dark */
+    border-radius: 0; /* SQUADRATO */
+    border: 2px solid var(--purple); /* Bordo viola */
+    box-shadow: 3px 3px 0 var(--pixel-border);
 }
 
 .card-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 8px;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--light);
+    margin-bottom: 8px;
+    text-transform: uppercase;
 }
 
-/* Stile per CardElement Stripe */
+/* Stile per CardElement Stripe (Simulazione Neo-Brutalist) */
+/* NOTA: Poiché non possiamo toccare direttamente gli stili interni di Stripe,
+   applichiamo il look al contenitore e all'input (se possibile) */
 .card-element-container .StripeElement {
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: white;
-  transition: border-color 0.2s;
+    padding: 12px;
+    background: #2d2a36; /* Sfondo input scuro */
+    border: 2px solid var(--pixel-border); /* Bordo nero */
+    border-radius: 0; /* SQUADRATO */
+    transition: border-color 0.2s;
+    box-shadow: 1px 1px 0 var(--gold);
 }
 
 .card-element-container .StripeElement--focus {
-  border-color: #6c21ff;
-  box-shadow: 0 0 0 3px rgba(108, 33, 255, 0.1);
+    border-color: var(--gold);
+    box-shadow: 3px 3px 0 var(--purple);
 }
 
 .card-element-container .StripeElement--invalid {
-  border-color: #ef4444;
+    border-color: var(--red-alert);
 }
 
-/* Messaggio di errore */
+/* ========================================
+   MESSAGGIO DI ERRORE (Neo-Brutalist)
+   ======================================== */
 .payment-error {
-  background: linear-gradient(135deg, #dc2626, #ef4444);
-  color: white;
-  padding: 16px 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  font-weight: 600;
-  border-left: 5px solid #991b1b;
-  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.35);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  animation: errorShake 0.5s ease, errorSlideIn 0.4s ease;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
+    background: var(--red-alert);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 0; /* SQUADRATO */
+    margin-bottom: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    border: 3px solid var(--pixel-border);
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: errorShake 0.5s ease, errorSlideIn 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
 }
 
 .payment-error::before {
-  content: "⚠";
-  font-size: 24px;
-  flex-shrink: 0;
+    content: "⚠";
+    font-size: 24px;
+    flex-shrink: 0;
+    text-shadow: 2px 2px 0 var(--pixel-border);
 }
 
-.payment-error::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  animation: errorShine 2s ease-in-out infinite;
-}
-
+/* Manteniamo le animazioni originali per shake e shine */
 @keyframes errorShake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
-  20%, 40%, 60%, 80% { transform: translateX(8px); }
+0%, 100% { transform: translateX(0); }
+10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+20%, 40%, 60%, 80% { transform: translateX(8px); }
 }
 
 @keyframes errorSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+from {
+opacity: 0;
+transform: translateY(-20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
 }
 
 @keyframes errorShine {
-  0% { left: -100%; }
-  50%, 100% { left: 100%; }
+0% { left: -100%; }
+50%, 100% { left: 100%; }
 }
 
-/* Pulsante Paga */
+/* ========================================
+   PULSANTI DI PAGAMENTO FINALE
+   ======================================== */
+
+/* Pulsante Paga (pay-btn) */
 .pay-btn {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  color: white;
-  border: none;
-  padding: 16px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Cinzel", serif;
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
-  width: 100%;
+    background: var(--purple);
+    color: white;
+    border: 3px solid var(--pixel-border);
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-family: "Cinzel", serif;
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold);
+    width: 100%;
+    text-transform: uppercase;
 }
 
 .pay-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
-  background: linear-gradient(135deg, #7c31ff, #9c5dff);
-}
-
-.pay-btn:active:not(:disabled) {
-  transform: translateY(-1px);
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--gold);
+    background: #7c31ff;
 }
 
 .pay-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  background: #9ca3af;
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #9ca3af;
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
 }
 
+/* Pulsante Paga (payment-button - se usato come componente) */
 .payment-button {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  color: white;
-  border: none;
-  padding: 16px 32px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: "Cinzel", serif;
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  margin-top: 20px;
+    background: var(--purple);
+    color: white;
+    border: 3px solid var(--pixel-border);
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    transition: all 0.1s ease;
+    font-family: "Cinzel", serif;
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    margin-top: 20px;
+    text-transform: uppercase;
 }
 
 .payment-button:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
-  background: linear-gradient(135deg, #7c31ff, #9c5dff);
-}
-
-.payment-button:active:not(:disabled) {
-  transform: translateY(-1px);
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--gold);
+    background: #7c31ff;
 }
 
 .payment-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
 }
 
 .payment-button img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
 }
 
 /* Spinner di caricamento */
 .payment-spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 0; /* SQUADRATO */
+    animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-.buttons-row{
-  display: flex;
-  justify-content: space-between;
+    to { transform: rotate(360deg); }
 }
 
+/* Row di bottoni */
+.buttons-row{
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Pulsante Annulla (cancel-btn) */
 .cancel-btn {
-background: linear-gradient(135deg, #ff2121, #ff0000);
+    background: var(--red-alert); /* Rosso hard */
     color: white;
     padding: 16px 32px;
     font-size: 16px;
-    font-weight: 600;
-    border-radius: 12px;
+    font-weight: 800;
+    border-radius: 0; /* SQUADRATO */
     cursor: pointer;
-    transition: all 0.3s 
-ease;
+    transition: all 0.1s ease;
     font-family: "Cinzel", serif;
     width: 100%;
     margin-right: 30px;
+    border: 3px solid var(--pixel-border);
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+    text-transform: uppercase;
 }
 
 /* Hover */
 .cancel-btn:hover {
-  transform: translateY(-2px);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--gold);
 }
-

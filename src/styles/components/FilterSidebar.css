@@ -1,105 +1,167 @@
+/* --- Variabili Stile Globali Ripristinate --- */
+:root {
+    --purple: #6c21ff;
+    --gold: #d8a928;
+    --dark: #141218;
+    --light: #ffffff;
+    --pixel-border: #000000;
+    --shadow-depth: 4px;
+}
+
 /* SIDEBAR FILTRI IDENTICA A QUELLA ORIGINALE */
 .filters-sidebar {
-  width: 260px;
-  background: #1a1720;
-  border-right: 2px solid var(--purple);
-  padding: 25px 20px;
-  height: 100%;
-  box-shadow: 0 0 20px rgba(108, 33, 255, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  bottom: 0;
-  overflow-y: auto;
+    width: 280px; /* Leggermente più larga per impatto */
+    background: #1a1720; /* Sfondo scuro per il contenitore */
+    border-right: 3px solid var(--purple); /* Bordo spesso e viola */
+    border-top: 3px solid var(--purple); /* Aggiungo bordo superiore */
+    padding: 30px 20px;
+    height: 100%;
+    /* Rimuovo l'ombra soft, uso ombra hard se necessario */
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    bottom: 0;
+    overflow-y: auto;
+    box-shadow: 6px 0 0 var(--pixel-border); /* Ombra hard a destra */
 }
 
 /* TITOLO SEZIONE */
 .filter-group h4 {
-  color: var(--gold);
-  margin-bottom: 10px;
-  font-size: 18px;
-  letter-spacing: 0.5px;
+    color: var(--gold);
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: 2px dashed var(--purple); /* Linea di separazione */
+    padding-bottom: 5px;
 }
 
 /* GRUPPI */
 .filter-group {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
-/* OPZIONI */
+/* OPZIONI CHECKBOX */
 .filter-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: var(--light);
+    cursor: pointer;
+    transition: color 0.1s;
+}
+
+.filter-option:hover {
+    color: var(--gold);
 }
 
 .filter-option input[type="checkbox"] {
-  cursor: pointer;
-  accent-color: var(--purple);
+    /* Stile Neo-Brutalist per Checkbox */
+    appearance: none; /* Rimuove l'aspetto nativo */
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--purple); /* Bordo viola */
+    background: var(--dark);
+    cursor: pointer;
+    position: relative;
+    border-radius: 0; /* Squadrato */
+    transition: all 0.1s;
+}
+
+.filter-option input[type="checkbox"]:checked {
+    background: var(--gold); /* Sfondo Oro quando selezionato */
+    border-color: var(--pixel-border);
+}
+
+.filter-option input[type="checkbox"]:checked::after {
+    /* Segno di spunta simulato in pixel art */
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 4px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--pixel-border);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
 }
 
 /* SEARCH */
 .search-in-filters {
-  display: flex;
-  align-items: center;
-  background: #15131a;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--purple);
+    display: flex;
+    align-items: center;
+    background: var(--dark);
+    padding: 8px 10px;
+    border-radius: 0;
+    border: 3px solid var(--purple);
+    box-shadow: 3px 3px 0 var(--pixel-border);
 }
 
 .search-icon {
-  color: var(--gold);
-  font-size: 20px;
+    color: var(--gold);
+    font-size: 20px;
 }
 
 .search-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  margin-left: 10px;
-  width: 100%;
-  color: var(--light);
-  font-size: 15px;
+    background: transparent;
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    width: 100%;
+    color: var(--light);
+    font-size: 0.9rem;
+    /* Aggiungo focus style */
+}
+
+.search-input:focus {
+    color: var(--gold);
 }
 
 /* PREZZO */
 .price-inputs {
-  display: flex;
-  gap: 15px;
+    display: flex;
+    gap: 15px;
 }
 
 .price-input-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .price-number-input {
-  padding: 8px;
-  background: #15131a;
-  border: 1px solid var(--purple);
-  color: var(--light);
-  border-radius: 6px;
-  width: 90px;
-  font-size: 14px;
+    padding: 8px;
+    background: var(--dark);
+    border: 2px solid var(--purple);
+    color: var(--gold); /* Testo prezzo in oro */
+    border-radius: 0;
+    width: 90px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: monospace;
+    box-shadow: 2px 2px 0 var(--pixel-border);
 }
 
 .price-number-input:focus {
-  outline: 1px solid var(--gold);
+    outline: 2px solid var(--gold);
+    border-color: var(--gold);
+    box-shadow: 2px 2px 0 var(--pixel-border);
 }
 
 /* MOBILE FIX */
 @media (max-width: 900px) {
-  .filters-sidebar {
-    flex-direction: column;
-    width: 100%;
-    height: auto;
-    border-right: none;
-    border-bottom: 2px solid var(--purple);
-    padding: 20px;
-  }
+    .filters-sidebar {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 3px solid var(--purple);
+        border-top: none; /* Rimuovo il bordo top se è un pannello che si espande */
+        padding: 20px;
+        box-shadow: 0 6px 0 var(--pixel-border); /* Ombra hard in basso */
+    }
 }

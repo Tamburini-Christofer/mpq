@@ -1,516 +1,471 @@
-/* --- NOTIFICHE --- */
+/* ==========================================
+   HOMEPAGE - PIXEL / NEO-BRUTALIST STYLE
+   ========================================== */
+
+/* VARIABILI (Palette Sobria) */
+:root {
+    --pixel-dark: #141218;
+    --pixel-light: #ffffff;
+    --pixel-gold: #D8A928;
+    --pixel-secondary: #775a28; /* Sostituto del viola neon */
+    --pixel-border: #000000;
+    --success-color: #558B6E;
+    --danger-color: #A33C3C;
+}
+
+/* --- NOTIFICHE (Retro Popup) --- */
 .notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  animation: slideIn 0.3s ease;
-  max-width: 400px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    background: var(--pixel-light);
+    border-radius: 0; /* Squadrato */
+    box-shadow: 6px 6px 0px var(--pixel-border); /* Ombra Hard */
+    animation: slideInSteps 0.3s steps(5); /* Animazione a scatti */
+    max-width: 400px;
+    border: 3px solid var(--pixel-border);
+    font-family: 'Courier New', monospace;
 }
 
 .notification.success {
-  border-left: 4px solid #10b981;
+    border-left: 8px solid var(--success-color);
 }
 
 .notification.error {
-  border-left: 4px solid #ef4444;
+    border-left: 8px solid var(--danger-color);
 }
 
 .notification-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
 }
 
 .notification-icon {
-  font-size: 1.2rem;
-  font-weight: bold;
+    font-size: 1.2rem;
+    font-weight: 900;
+    text-shadow: 1px 1px 0 #000;
 }
 
-.notification.success .notification-icon {
-  color: #10b981;
-}
-
-.notification.error .notification-icon {
-  color: #ef4444;
-}
+.notification.success .notification-icon { color: var(--success-color); }
+.notification.error .notification-icon { color: var(--danger-color); }
 
 .notification-message {
-  flex: 1;
-  color: #374151;
-  font-size: 0.95rem;
+    flex: 1;
+    color: #000;
+    font-weight: 700;
+    font-size: 0.9rem;
 }
 
 .notification-close {
-  background: none;
-  border: none;
-  color: #9ca3af;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.2s;
+    background: none;
+    border: 2px solid transparent;
+    color: #000;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.1s;
 }
 
 .notification-close:hover {
-  color: #374151;
+    background: var(--pixel-border);
+    color: var(--pixel-light);
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateX(400px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+@keyframes slideInSteps {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 /* --- CONTENITORE PRINCIPALE --- */
 .homepage {
-  /* max-width: 1400px; */
-  margin: 0 auto;
-  padding: 0 50px;
+    margin: 0 auto;
+    padding: 0 50px;
+    font-family: 'Courier New', monospace;
 }
 
 /* --- HERO SECTION --- */
 .hero-section {
-  min-height: 80vh;
-  width: 100%;
-  margin-bottom: 80px;
-  position: relative;
+    min-height: 80vh;
+    width: 100%;
+    margin-bottom: 80px;
+    position: relative;
+    /* Separatore inferiore */
+    border-bottom: 4px solid var(--pixel-border);
 }
 
 .hero-title {
-  font-family: "Pixelify Sans", sans-serif;
-  font-size: 9rem;
-  font-weight: 900;
-  line-height: 1.1;
-  color: #D8A928;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+    font-family: "Pixelify Sans", sans-serif;
+    font-size: 9rem;
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--pixel-gold);
+    /* Ombra testo solida e profonda */
+    text-shadow: 6px 6px 0px var(--pixel-border), 10px 10px 0px rgba(255,255,255,0.1);
 }
 
 .hero-title-purple {
-  color: #772284;
-  font-family: Arial, Helvetica, sans-serif;
+    color: var(--purple); /* Colore più sobrio */
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
 }
 
+/* Pulsante Arcade Gigante */
 .btn-get-started {
-  background-color: #D8A928;
-  color: #772284;
-  font-weight: bold;
-  font-family: "Pixelify Sans", sans-serif;
-  padding: 30px 80px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 2rem;
-  margin-top: 20px;
-  transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    background-color: var(--pixel-gold);
+    color: var(--pixel-border);
+    font-weight: 900;
+    font-family: "Pixelify Sans", sans-serif;
+    padding: 30px 80px;
+    border: 4px solid var(--pixel-border);
+    border-radius: 0; /* Squadrato */
+    cursor: pointer;
+    font-size: 2rem;
+    margin-top: 40px;
+    transition: all 0.1s;
+    box-shadow: 8px 8px 0px var(--pixel-border); /* Ombra Hard */
+    text-transform: uppercase;
 }
 
 .btn-get-started:hover {
-  transform: scale(1.1);
+    transform: translate(-2px, -2px);
+    box-shadow: 12px 12px 0px var(--pixel-light);
+    background-color: #e6c200;
 }
 
-/* --- HERO-RIGHT: Contenitore del Video (Sfondo) --- */
+.btn-get-started:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0;
+}
+
+/* Contenitore Video (Cornice Monitor) */
 .hero-right {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  background-color: #121212;
-  overflow: hidden;
-  border-radius: 8px;
-  margin-top: 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: #000;
+    overflow: hidden;
+    border-radius: 0;
+    margin-top: 20px;
+    
+    /* Cornice */
+    border: 4px solid var(--pixel-border);
+    box-shadow: inset 0 0 50px #000; /* Vignettatura interna */
 }
 
-/* --- ELEMENTO VIDEO --- */
+/* Elemento Video */
 .hero-video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0.2;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.15;
 }
 
-/* --- HERO-LEFT: Contenitore del Testo (Sopra il Video) --- */
+/* Contenitore Testo */
 .hero-left {
-  position: relative;
-  z-index: 99;
-  width: 100%;
-  height: 100%;
-  min-height: 80vh;
-
-  /* CENTRATURA DEL CONTENUTO */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 0 40px;
+    position: relative;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
 }
 
-/* --- SEZIONI QUESTS (Latest Arrivals, Best Sellers) --- */
-
+/* --- SEZIONI QUESTS (Caroselli) --- */
 .quests-section {
-  margin-bottom: 80px;
+    margin-bottom: 80px;
 }
 
 .section-title {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #D8A928;
-  margin-bottom: 25px;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--pixel-gold);
+    margin-bottom: 25px;
+    font-family: "Pixelify Sans", sans-serif;
+    text-shadow: 3px 3px 0 var(--pixel-border);
+    border-left: 8px solid var(--pixel-purple);
+    padding-left: 20px;
 }
 
-/*todo Contenitore delle card nei caroselli*/
+/* Container Scrollabile */
 .cards-list {
-  display: flex;
-  gap: 20px;
-  /*todo overflow-x:auto permette lo scroll orizzontale*/
-  overflow-x: auto;
-  padding: 30px 0;
-  margin: 0;
-  /*todo nowrap mantiene tutte le card su una singola riga*/
-  flex-wrap: nowrap;
-  /* Nascondiamo la barra di scorrimento nativa */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  /*todo scroll-behavior:smooth rende lo scroll animato e fluido*/
-  scroll-behavior: smooth;
-  /*todo -webkit-overflow-scrolling:touch migliora lo scroll su iOS*/
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling su iOS */
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    padding: 30px 10px; /* Padding verticale per le ombre */
+    margin: 0;
+    flex-wrap: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Nascondi la barra di scorrimento per Chrome, Safari e Opera */
 .cards-list::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
-/*todo Stile per ogni singola card del carosello*/
+/* --- CARD PRODOTTO (Stile Unificato) --- */
 .card-placeholder {
-  width: 150px;
-  min-height: 180px;
-  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
-  border-radius: 12px;
-  /*todo overflow:visible permette di vedere elementi che escono dalla card (es: shadow al hover)*/
-  overflow: visible;
-  /*todo flex-shrink:0 impedisce alle card di ridursi nel carosello*/
-  flex-shrink: 0;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  border: 2px solid #333;
-  /*todo position:relative necessario per posizionare la label in absolute*/
-  position: relative;
-  /*todo flex-direction:column dispone immagine e info verticalmente*/
-  display: flex;
-  flex-direction: column;
+    width: 260px; /* Larghezza aumentata per stile blocky */
+    min-height: 400px;
+    background: #1c1c1c;
+    border-radius: 0; /* Squadrato */
+    overflow: visible;
+    flex-shrink: 0;
+    transition: all 0.1s;
+    cursor: pointer;
+    border: 3px solid var(--pixel-border);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 6px 6px 0px var(--pixel-border); /* Ombra Brutalist */
 }
 
 .card-placeholder:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(216, 169, 40, 0.3);
-  border-color: #D8A928;
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px var(--pixel-gold);
+    border-color: var(--pixel-gold);
 }
 
-/*todo Label "POPOLARE" o "NUOVO ARRIVO" in alto a destra della card*/
+/* Label (Tag) */
 .card-label {
-  /*todo position:absolute con top/right per posizionare nell'angolo*/
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  padding: 5px 12px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  color: #fff;
-  border-radius: 4px;
-  /*todo z-index:5 assicura che la label stia sopra l'immagine*/
-  z-index: 5;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  width: 100%;
+    position: absolute;
+    top: -12px; /* Esce dalla card */
+    right: -12px;
+    padding: 6px 10px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    color: #fff;
+    border-radius: 0;
+    z-index: 5;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: auto;
+    min-width: 100px;
+    text-align: center;
+    border: 2px solid var(--pixel-border);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.5);
 }
 
-/*todo Label blu per i prodotti popolari*/
+/* Colori Label Sobri */
 .card-label-popular {
-  background-color: #4d82f4;
-  box-shadow: 0 5px 10px 2px rgba(37, 99, 235, 0.4);
+    background-color: var(--pixel-secondary);
+    color: #fff;
 }
 
-/*todo Label rossa per i nuovi arrivi*/
 .card-label-new {
-  background-color: #d62121;
-  box-shadow: 0 2px 8px 2px rgba(220, 38, 38, 0.4);
+    background-color: var(--danger-color);
+    color: #fff;
 }
 
 .card-image {
-  width: 100% !important;
-  height: 120px !important;
-  object-fit: cover;
-  display: block;
-  border-radius: 10px 10px 0 0;
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover;
+    display: block;
+    border-radius: 0;
+    border-bottom: 3px solid var(--pixel-border);
 }
 
-/*todo Contenitore delle informazioni sotto l'immagine (nome, prezzo, pulsanti)*/
+/* Info Card */
 .card-info {
-  padding: 15px;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  /*todo flex:1 fa occupare tutto lo spazio disponibile nella card*/
-  flex: 1;
-  border-radius: 0 0 10px 10px;
+    padding: 15px;
+    background: #1c1c1c;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    border-radius: 0;
+    font-family: 'Courier New', monospace;
 }
 
 .card-title {
-  color: #D8A928;
-  font-size: 1rem;
-  font-weight: bold;
-  margin: 0;
-  font-family: "Cinzel", serif;
-  min-height: 2.4em;
-  line-height: 1.2em;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+    color: var(--pixel-gold);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    font-family: "Cinzel", serif;
+    min-height: 2.4em;
+    line-height: 1.2em;
+    overflow: hidden;
+    text-transform: uppercase;
 }
 
 .card-price {
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin: 0;
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
 }
 
-/*todo Contenitore dei due pulsanti (Vedi Dettaglio e Aggiungi al Carrello)*/
+/* Pulsanti Card */
 .card-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
 }
 
-/*todo Stile base per i pulsanti delle card*/
 .card-btn {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: "Cinzel", serif;
+    padding: 10px 15px;
+    border: 2px solid var(--pixel-border);
+    border-radius: 0;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-family: "Pixelify Sans", sans-serif;
+    text-transform: uppercase;
+    box-shadow: 3px 3px 0px var(--pixel-border);
 }
 
-/*todo Pulsante "Vedi Dettaglio" con background oro*/
+/* Dettagli */
 .card-btn-details {
-  background-color: transparent;
-  color: #D8A928;
-  border: 2px solid #D8A928;
+    background-color: transparent;
+    color: var(--pixel-gold);
+    border-color: var(--pixel-gold);
 }
 
 .card-btn-details:hover {
-  background-color: #e6c200;
-  transform: scale(1.02);
-  color:black
+    background-color: var(--pixel-gold);
+    color: var(--pixel-border);
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--pixel-border);
 }
 
-/*todo Pulsante "Aggiungi al Carrello" con bordo oro (trasparente)*/
+/* Carrello */
 .card-btn-cart {
-  background-color: transparent;
-  color: #D8A928;
-  border: 2px solid #D8A928;
+    background-color: var(--pixel-secondary);
+    color: #fff;
+    border-color: var(--pixel-border);
 }
 
-/*todo Al hover il pulsante carrello si riempie di oro*/
 .card-btn-cart:hover {
-  background-color: #D8A928;
-  color: #121212;
+    background-color: #8a6a30;
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--pixel-light);
 }
 
-/* --- STILE PER LO SCORRIMENTO CONTROLLATO --- */
-
+/* --- SCROLL BUTTONS (Frecce Laterali) --- */
 .latest-section-wrapper,
 .best-sellers-section-wrapper,
 .promotional-section-wrapper {
-  position: relative;
-  padding-top: 20px;
+    position: relative;
+    padding-top: 20px;
 }
 
 .scroll-btn {
-  position: absolute;
-  top: 60%;
-  transform: translateY(-50%);
-
-  background-color: #D8A928;
-  color: #121212;
-  border: none;
-  border-radius: 8px;
-  width: 40px;
-  height: 200px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: background-color 0.2s, opacity 0.3s, visibility 0.3s;
-  opacity: 0;
-  visibility: hidden;
+    position: absolute;
+    top: 60%;
+    transform: translateY(-50%);
+    
+    background-color: var(--pixel-gold);
+    color: var(--pixel-border);
+    border: 3px solid var(--pixel-border);
+    border-radius: 0; /* Squadrato */
+    width: 40px;
+    height: 80px; /* Rettangolare verticale */
+    font-size: 1.5rem;
+    font-weight: 900;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 5px 5px 0px var(--pixel-border);
+    transition: all 0.1s;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* MOSTRA I PULSANTI QUANDO SI PASSA SOPRA AL CONTENITORE PRINCIPALE */
+/* MOSTRA I PULSANTI SU HOVER */
 .latest-section-wrapper:hover .scroll-btn,
 .best-sellers-section-wrapper:hover .scroll-btn,
 .promotional-section-wrapper:hover .scroll-btn {
-  opacity: 1;
-  visibility: visible;
+    opacity: 1;
+    visibility: visible;
 }
 
 .scroll-btn:hover {
-  background-color: #836b0d;
+    background-color: #e6c200;
+    transform: translateY(-50%) translate(-2px, -2px);
+    box-shadow: 7px 7px 0px #fff;
 }
 
-/* Posizionamento dei pulsanti */
-.scroll-left {
-  left: -45px;
+.scroll-btn:active {
+    transform: translateY(-50%) translate(2px, 2px);
+    box-shadow: 0 0 0;
 }
 
-.scroll-right {
-  right: -45px;
-}
+.scroll-left { left: -20px; }
+.scroll-right { right: -20px; }
 
 /* --- RESPONSIVE MOBILE --- */
 @media screen and (max-width: 768px) {
-  .homepage {
-    padding: 0 20px;
-  }
+    .homepage { padding: 0 15px; }
 
-  /* Hero section mobile */
-  .hero-section {
-    min-height: 60vh;
-    margin-bottom: 40px;
-  }
+    /* Hero */
+    .hero-section { min-height: 60vh; margin-bottom: 40px; }
+    .hero-title { font-size: 3.5rem; text-shadow: 4px 4px 0 var(--pixel-border); }
+    .btn-get-started { 
+        padding: 15px 30px; 
+        font-size: 1.2rem; 
+        box-shadow: 6px 6px 0 var(--pixel-border);
+    }
+    .hero-left { min-height: 60vh; padding: 0 15px; }
 
-  .hero-title {
-    font-size: 3.5rem;
-  }
+    /* Sezioni */
+    .quests-section { margin-bottom: 50px; }
+    .section-title { font-size: 1.8rem; margin-bottom: 20px; }
 
-  .btn-get-started {
-    padding: 15px 40px;
-    font-size: 1.2rem;
-  }
+    /* Card Mobile */
+    .card-placeholder {
+        width: 180px;
+        min-height: 320px;
+    }
+    .card-image { height: 140px !important; }
+    .card-info { padding: 10px; }
+    .card-title { font-size: 0.9rem; }
+    .card-price { font-size: 1.1rem; }
+    .card-btn { padding: 8px; font-size: 0.75rem; }
+    .card-label { 
+        padding: 4px 8px; 
+        font-size: 0.65rem; 
+        min-width: 80px; 
+        top: -10px; right: -5px;
+    }
 
-  .hero-left {
-    min-height: 60vh;
-    padding: 0 20px;
-  }
+    /* Scroll Buttons Mobile */
+    .scroll-btn {
+        opacity: 1;
+        visibility: visible;
+        width: 30px;
+        height: 60px;
+        font-size: 1.2rem;
+        border-width: 2px;
+        box-shadow: 3px 3px 0 var(--pixel-border);
+    }
+    .scroll-left { left: -5px; }
+    .scroll-right { right: -5px; }
 
-  /* Sezioni carosello mobile */
-  .quests-section {
-    margin-bottom: 50px;
-  }
-
-  .section-title {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-  }
-
-  /* Card mobile più piccole */
-  .card-placeholder {
-    width: 180px;
-    min-height: 200px;
-  }
-
-  .card-image {
-    height: 180px;
-  }
-
-  .card-info {
-    padding: 10px;
-  }
-
-  .card-title {
-    font-size: 0.85rem;
-  }
-
-  .card-price {
-    font-size: 1rem;
-  }
-
-  .card-btn {
-    padding: 8px 12px;
-    font-size: 0.8rem;
-  }
-
-  .card-label {
-    padding: 4px 8px;
-    font-size: 0.65rem;
-  }
-
-  /* Pulsanti carosello sempre visibili su mobile */
-  .scroll-btn {
-    opacity: 1;
-    visibility: visible;
-    width: 35px;
-    height: 120px;
-    font-size: 1.2rem;
-  }
-
-  .scroll-left {
-    left: -15px;
-  }
-
-  .scroll-right {
-    right: -15px;
-  }
-
-  .cards-list {
-    gap: 15px;
-    padding-bottom: 15px;
-  }
+    .cards-list { gap: 15px; padding-bottom: 20px; }
 }
 
 /* Tablet */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
-  .homepage {
-    padding: 0 30px;
-  }
-
-  .hero-title {
-    font-size: 6rem;
-  }
-
-  .btn-get-started {
-    padding: 20px 60px;
-    font-size: 1.5rem;
-  }
-
-  .card-placeholder {
-    width: 220px;
-    min-height: 470px;
-  }
-
-  .card-image {
-    height: 220px;
-  }
-
-  /* Pulsanti sempre visibili anche su tablet */
-  .scroll-btn {
-    opacity: 1;
-    visibility: visible;
-  }
+    .homepage { padding: 0 30px; }
+    .hero-title { font-size: 6rem; }
+    .card-placeholder { width: 220px; }
+    .scroll-btn { opacity: 1; visibility: visible; }
 }
