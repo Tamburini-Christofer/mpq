@@ -4,7 +4,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
-import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 import ProductCard from "../components/common/ProductCard";
 import CheckoutForm from "../components/shop/CheckoutForm";
@@ -26,6 +29,8 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [viewMode, setViewMode] = useState("grid");
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+  const [checkoutAvailable, setCheckoutAvailable] = useState(false);
+  const [checkoutJustEnabled, setCheckoutJustEnabled] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
@@ -216,21 +221,78 @@ const Shop = ({ defaultTab = "shop" }) => {
     }
   };
 
+  // Make checkout available automatically when cart has items;
+  // Keep checkout hidden by default. Only enable it when the user
+  // explicitly clicks "Procedi al checkout". However, if the cart
+  // becomes empty, always disable the checkout entry and navigate
+  // away from the checkout view if currently active.
+  useEffect(() => {
+    const isEmpty = !cart || cart.length === 0;
+    if (isEmpty) {
+      if (checkoutAvailable) setCheckoutAvailable(false);
+      if (activeTab === 'checkout') {
+        setActiveTab('shop');
+        navigate('/shop');
+      }
+    }
+    // otherwise do nothing: do NOT auto-enable checkout just because
+    // there are items — enablement happens when clicking the button.
+  }, [cart]);
+
   useEffect(() => {
     fetchCart();
     window.addEventListener('cartUpdate', fetchCart);
-    return () => window.removeEventListener('cartUpdate', fetchCart);
+    // listener per chiudere sidebar/mobile menu quando altre parti dell'app richiedono la navigazione
+    const closeHandler = () => {
+      setShowFilters(false);
+      // ensure checkout becomes available when triggered from other components
+      setCheckoutAvailable(true);
+      setCheckoutJustEnabled(true);
+      setTimeout(() => setCheckoutJustEnabled(false), 420);
+      setActiveTab('checkout');
+      // scroll to top so checkout is visible
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('closeSidebar', closeHandler);
+    const checkoutClosedHandler = () => {
+      setCheckoutAvailable(false);
+      setActiveTab('shop');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('checkoutClosed', checkoutClosedHandler);
+    return () => {
+      window.removeEventListener('cartUpdate', fetchCart);
+      window.removeEventListener('closeSidebar', closeHandler);
+      window.removeEventListener('checkoutClosed', checkoutClosedHandler);
+    };
   }, []);
+
+  // when switching to checkout tab, scroll smoothly to the checkout section
+  useEffect(() => {
+    if (activeTab === 'checkout') {
+      // wait a tick so the checkout section is rendered
+      setTimeout(() => {
+        const el = document.querySelector('.checkout-section');
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+          window.scrollTo({ top, behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 80);
+    }
+  }, [activeTab]);
 
   const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
       await fetchCart();
       emitCartUpdate();
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      // central notification
+      emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
       console.error("Errore aggiunta al carrello:", error);
-      showNotification("Errore aggiunta al carrello", "error");
+      toast.error("Errore aggiunta al carrello");
     }
   };
 
@@ -239,6 +301,11 @@ const Shop = ({ defaultTab = "shop" }) => {
       await cartAPI.increase(productId);
       await fetchCart();
       emitCartUpdate();
+      // centralized notification for plus action
+      try {
+        const name = cart.find((i) => i.id === productId)?.name || 'Prodotto';
+        emitCartAction('add', { id: productId, name });
+      } catch {}
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     }
@@ -249,8 +316,12 @@ const Shop = ({ defaultTab = "shop" }) => {
       const item = cart.find((i) => i.id === productId);
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
+        // emit remove action for decrement
+        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch {}
       } else {
         await cartAPI.remove(productId);
+        const name = item?.name || 'Prodotto';
+        emitCartAction('remove', { id: productId, name });
       }
       await fetchCart();
       emitCartUpdate();
@@ -263,10 +334,15 @@ const Shop = ({ defaultTab = "shop" }) => {
     try {
       await cartAPI.remove(productId);
       await fetchCart();
-      showNotification("Prodotto rimosso", "error");
+      const name = cart.find((i) => i.id === productId)?.name || "Prodotto";
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id: productId, name } } }));
+      } catch {
+        toast.error(`"${name}" rimosso dal carrello`);
+      }
       emitCartUpdate();
     } catch {
-      showNotification("Errore rimozione", "error");
+      toast.error("Errore rimozione");
     }
   };
 
@@ -296,9 +372,48 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   const handleCancelOrder = async () => {
     try {
+      const result = await Swal.fire({
+        title: 'Svuotare il carrello?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Svuota carrello',
+        cancelButtonText: 'Annulla',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-wishlist-popup',
+          confirmButton: 'swal-wishlist-confirm',
+          cancelButton: 'swal-wishlist-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
       await cartAPI.clear();
       emitCartUpdate();
+      await fetchCart();
       setShowCheckoutForm(false);
+      // hide checkout entry after cancelling the order
+      setCheckoutAvailable(false);
+      setActiveTab('shop');
+
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Carrello svuotato</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-wishlist-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
+
       navigate("/shop");
     } catch (err) {
       console.error("Errore annullamento ordine:", err);
@@ -307,22 +422,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   return (
     <div className="shop-ui-container">
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === "success" ? "✓" : "ℹ"}
-            </span>
-            <span className="notification-message">{notification.message}</span>
-            <button
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      
 
       <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
@@ -354,15 +454,18 @@ const Shop = ({ defaultTab = "shop" }) => {
             Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
-          <button
-            className={activeTab === "checkout" ? "menu-btn active" : "menu-btn"}
-            onClick={() => {
-              setActiveTab("checkout");
-              navigate("/shop/checkout");
-            }}
-          >
-            Checkout
-          </button>
+          {/* show Checkout menu only when checkoutAvailable is true */}
+          {checkoutAvailable && (
+            <button
+              className={`${activeTab === "checkout" ? "menu-btn active" : "menu-btn"} ${checkoutJustEnabled ? 'menu-btn-enter' : ''}`}
+              onClick={() => {
+                setActiveTab("checkout");
+                navigate("/shop/checkout");
+              }}
+            >
+              Checkout
+            </button>
+          )}
         </div>
       </aside>
 
@@ -417,34 +520,57 @@ const Shop = ({ defaultTab = "shop" }) => {
             ) : (
               <>
                 <div className={`products products-${viewMode}`}>
-                  {products.map((p) => (
-                    <ProductCard
-                      key={p.id}
-                      product={{
-                        ...p,
-                        cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
-                        isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
-                      }}
-                      variant={viewMode === "grid" ? "grid" : "compact"}
-                      onViewDetails={(slug) => navigate(`/details/${slug}`)}
-                      onAddToCart={handleAddToCart}
-                      onIncrease={increaseQuantity}
-                      onDecrease={decreaseQuantity}
-                      cart={cart}
-                      onToggleWishlist={(product) => {
-                        const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-                        const exists = wishlist.some(w => w.id === product.id);
-                        let updated;
-                        if (exists) {
-                          updated = wishlist.filter(w => w.id !== product.id);
-                        } else {
-                          updated = [...wishlist, product];
-                        }
-                        localStorage.setItem("wishlist", JSON.stringify(updated));
-                        window.dispatchEvent(new Event("wishlistUpdate"));
-                      }}
-                    />
-                  ))}
+{products.map((p) => (
+  <ProductCard
+    key={p.id}
+    product={{
+      ...p,
+      // Controlla la quantità nel carrello
+      cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+      // Controlla se è già nella wishlist (leggendo dal localStorage)
+      isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
+    }}
+    variant={viewMode === "grid" ? "grid" : "compact"}
+    onViewDetails={(slug) => navigate(`/details/${slug}`)}
+    onAddToCart={handleAddToCart}
+    onIncrease={increaseQuantity}
+    onDecrease={decreaseQuantity}
+    cart={cart}
+    // Qui uniamo la logica "migliore" del main
+    onToggleWishlist={(product) => {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      const exists = wishlist.some(w => w.id === product.id);
+      let updated;
+      let action;
+
+      if (exists) {
+        updated = wishlist.filter(w => w.id !== product.id);
+        action = 'remove';
+      } else {
+        updated = [...wishlist, product];
+        action = 'add';
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+
+      // Dispatch dettagliato per sincronizzare altri componenti (es. header)
+      window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
+
+      // Notifiche visive (prese dal main perché sono più carine)
+      if (action === 'add') {
+        toast.success(`${product.name} aggiunto alla wishlist`, {
+          icon: '🤍',
+          style: { background: '#ef4444', color: '#ffffff' }
+        });
+      } else {
+        toast(`${product.name} rimosso dalla wishlist`, {
+          icon: '❤',
+          style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+        });
+      }
+    }}
+  />
+))}
                 </div>
 
                 {/* Componente di paginazione */}
@@ -511,6 +637,21 @@ const Shop = ({ defaultTab = "shop" }) => {
 
                 <div className="cart-total">
                   <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+                  {cart.length > 0 && (
+                    <div style={{ marginTop: 12 }}>
+                      <button
+                        className="payment-btn"
+                        onClick={() => {
+                          // enable checkout entry and navigate to it with smooth scroll
+                          setCheckoutAvailable(true);
+                          setActiveTab('checkout');
+                          navigate('/shop/checkout');
+                        }}
+                      >
+                        Procedi al checkout
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

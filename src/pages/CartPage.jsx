@@ -2,18 +2,14 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CartPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { toast } from 'react-hot-toast';
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
 function CartPage() {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // NOTIFICHE
-  const [notification, setNotification] = useState(null);
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 2500);
-  };
+  // Notifications handled via react-hot-toast
 
   // CARICA CARRELLO
   const loadCart = async () => {
@@ -21,7 +17,7 @@ function CartPage() {
       const data = await cartAPI.get();
       setCart(data);
     } catch {
-      showNotification("Errore caricamento carrello", "error");
+      toast.error("Errore caricamento carrello");
     } finally {
       setLoading(false);
     }
@@ -36,10 +32,15 @@ function CartPage() {
     try {
       await cartAPI.remove(id);
       loadCart();
-      window.emitCartUpdate && emitCartUpdate();
-      showNotification("Prodotto rimosso", "error");
+      emitCartUpdate();
+      const name = cart.find(i => i.id === id)?.name || 'Prodotto';
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+      } catch {
+        toast.error(`"${name}" rimosso dal carrello`);
+      }
     } catch {
-      showNotification("Errore rimozione", "error");
+      toast.error("Errore rimozione");
     }
   };
 
@@ -48,7 +49,11 @@ function CartPage() {
     if (!item) return;
     await cartAPI.update(id, item.quantity + 1);
     loadCart();
-    window.emitCartUpdate && emitCartUpdate();
+    emitCartUpdate();
+    try {
+      const name = cart.find(i => i.id === id)?.name || 'Prodotto';
+      window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
+    } catch {}
   };
 
   const decreaseQuantity = async (id) => {
@@ -62,7 +67,11 @@ function CartPage() {
 
     await cartAPI.update(id, item.quantity - 1);
     loadCart();
-    window.emitCartUpdate && emitCartUpdate();
+    emitCartUpdate();
+    try {
+      const name = cart.find(i => i.id === id)?.name || 'Prodotto';
+      window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+    } catch {}
   };
 
   // TOTALE
@@ -82,11 +91,7 @@ function CartPage() {
   return (
     <div className="cart-section">
 
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          {notification.message}
-        </div>
-      )}
+      
 
       <h2 className="section-title">Carrello</h2>
 

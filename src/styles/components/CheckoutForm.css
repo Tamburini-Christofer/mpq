@@ -47,6 +47,12 @@
   overflow-y: auto;
 }
 
+/* Ensure SweetAlert2 modals appear above the checkout overlay
+   The checkout overlay uses z-index: 10000, so set Swal container higher. */
+.swal2-container {
+  z-index: 30000 !important;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

@@ -307,3 +307,14 @@ export const emitCartUpdate = () => {
   console.log('API: emitCartUpdate() called, dispatching CustomEvent "cartUpdate".');
   window.dispatchEvent(new CustomEvent('cartUpdate'));
 };
+
+// Emit a cart action event with details { action: 'add'|'remove', product: { id, name } }
+export const emitCartAction = (action, product) => {
+  try {
+    // debug: log emission
+    console.log('emitCartAction -> emitting', { action, product });
+    window.dispatchEvent(new CustomEvent('cartAction', { detail: { action, product } }));
+  } catch {
+    // ignore
+  }
+};

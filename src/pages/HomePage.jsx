@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
 //todo Importiamo le API per gestire prodotti e carrello
-import { productsAPI, cartAPI, emitCartUpdate } from '../services/api';
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from '../services/api';
+import { toast } from 'react-hot-toast';
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from '../components/common/ProductCard';
 
@@ -15,21 +16,14 @@ function HomePage() {
     // Stato per tracciare il video corrente
     const [currentVideoSrc, setCurrentVideoSrc] = useState(heroVideoAnime);
     
-    //todo Stato per gestire le notifiche quando si aggiunge un prodotto al carrello
-    const [notification, setNotification] = useState(null);
+    // notifications via react-hot-toast
     
     const [cart, setCart] = useState([]);
     //todo Stato per i prodotti caricati dal backend
     const [productsData, setProductsData] = useState([]);
     const [loading, setLoading] = useState(true);
     
-    //todo Funzione per mostrare notifiche temporanee (3 secondi)
-    const showNotification = (message, type = 'success') => {
-        setNotification({ message, type });
-        setTimeout(() => {
-            setNotification(null);
-        }, 3000);
-    };
+    // using react-hot-toast: toast.success / toast.error
 
     //todo Creiamo riferimenti (ref) per accedere direttamente agli elementi DOM dei caroselli
     //todo Questi ref vengono usati per controllare lo scroll orizzontale e gestire i touch events
@@ -63,9 +57,9 @@ function HomePage() {
                 setLoading(true);
                 const data = await productsAPI.getAllUnpaginated();
                 setProductsData(data);
-            } catch (error) {
+                } catch (error) {
                 console.error('Errore caricamento prodotti:', error);
-                showNotification('Errore nel caricamento dei prodotti', 'error');
+                toast.error('Errore nel caricamento dei prodotti');
             } finally {
                 setLoading(false);
             }
@@ -187,10 +181,11 @@ function HomePage() {
             
             emitCartUpdate();
             
-            showNotification(`"${product.name}" aggiunto al carretto!`);
+                // central notification
+                    emitCartAction('add', { id: product.id, name: product.name });
         } catch (error) {
             console.error('Errore aggiunta al carrello:', error);
-            showNotification('Errore nell\'aggiunta al carretto', 'error');
+                toast.error('Errore nell\'aggiunta al carretto');
         }
     };
 
@@ -198,9 +193,14 @@ function HomePage() {
         try {
             await cartAPI.increase(productId);
             emitCartUpdate();
+            // centralized notification for plus action
+            try {
+                const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
+                emitCartAction('add', { id: productId, name });
+            } catch {}
         } catch (error) {
             console.error("Errore nell'aumentare la quantità:", error);
-            showNotification("Errore nell'aggiornamento del carrello", "error");
+            toast.error("Errore nell'aggiornamento del carrello");
         }
     };
 
@@ -209,13 +209,20 @@ function HomePage() {
             const item = cart.find(i => i.id === productId);
             if (item && item.quantity > 1) {
                 await cartAPI.decrease(productId);
+                // when decreasing quantity (but not removing), emit a remove action
+                try {
+                    const name = item?.name || 'Prodotto';
+                    emitCartAction('remove', { id: productId, name });
+                } catch {}
             } else {
                 await cartAPI.remove(productId);
+                const name = item?.name || 'Prodotto';
+                emitCartAction('remove', { id: productId, name });
             }
             emitCartUpdate();
         } catch (error) {
             console.error("Errore nel diminuire la quantità:", error);
-            showNotification("Errore nell'aggiornamento del carrello", "error");
+            toast.error("Errore nell'aggiornamento del carrello");
         }
     };
 
@@ -223,22 +230,7 @@ function HomePage() {
     return (
         <>
             {/* todo: Notifica quando si aggiunge un prodotto al carrello */}
-            {notification && (
-                <div className={`notification ${notification.type}`}>
-                    <div className="notification-content">
-                        <span className="notification-icon">
-                            {notification.type === 'success' ? '✓' : 'ℹ'}
-                        </span>
-                        <span className="notification-message">{notification.message}</span>
-                        <button 
-                            className="notification-close"
-                            onClick={() => setNotification(null)}
-                        >
-                            ✕
-                        </button>
-                    </div>
-                </div>
-            )}
+            
 
             <div className="homepage">
 
