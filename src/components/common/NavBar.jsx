@@ -289,6 +289,13 @@ function NavBar() {
             )}
           </div>
 
+          <button
+            className="btn-show-welcome"
+            title="Mostra benvenuto"
+            onClick={() => window.dispatchEvent(new Event('openWelcome'))}
+          >
+            Benvenuto
+          </button>
           <button className="btn-levelup">Level Up!</button>
         </div>
       </nav>

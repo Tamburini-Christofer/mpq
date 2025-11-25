@@ -13,11 +13,16 @@
 
 /* todo: Container principale del form email */
 .email-sender-container {
+  /* Fullscreen overlay so the popup appears above everything */
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0 */
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
   font-family: "Inter", sans-serif;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent backdrop */
+  z-index: 9999; /* very high so it's above other app elements */
 }
 
 /* todo: Card contenente il form */
@@ -33,6 +38,7 @@
   border: 2px solid transparent;
   background-clip: padding-box;
   position: relative;
+  z-index: 10000; /* ensure the card itself is above the backdrop */
 }
 
 /* todo: Effetto brillante sul bordo della card */
