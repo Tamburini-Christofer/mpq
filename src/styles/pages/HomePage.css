@@ -130,8 +130,9 @@
 
 .btn-get-started:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 12px 12px 0px var(--pixel-light);
+    box-shadow: 12px 12px 0px #6C21FF;
     background-color: #e6c200;
+    color: #6C21FF;
 }
 
 .btn-get-started:active {
@@ -375,7 +376,7 @@
     border: 3px solid var(--pixel-border);
     border-radius: 0; /* Squadrato */
     width: 40px;
-    height: 80px; /* Rettangolare verticale */
+    height: 200px; /* Rettangolare verticale */
     font-size: 1.5rem;
     font-weight: 900;
     cursor: pointer;

@@ -204,9 +204,9 @@
 .careers-title {
   font-size: 48px;
   font-weight: 900;
-  color: var(--staff-light);
+  color: var(--staff-gold);
   margin-bottom: 24px;
-  font-family: "Cinzel", serif;
+  font-family: "Pixelify Sans", sans-serif;
   text-shadow: 4px 4px 0px #000;
   border-left: 8px solid var(--staff-gold);
   padding-left: 20px;
