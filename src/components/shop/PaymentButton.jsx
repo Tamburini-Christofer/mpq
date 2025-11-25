@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import '../../styles/components/PaymentButton.css';
-import stripePromise from '../../services/stripe';
 
 export default function PaymentButton({ totalAmount, cartItems, formData, onClose }) {
   const [loading, setLoading] = useState(false);

@@ -133,19 +133,18 @@ export const productsAPI = {
     }
   },
 
-  // Ottieni tutti i prodotti senza paginazione (per compatibilità)
+  // Ottieni tutti i prodotti senza paginazione (compatibilità)
+  // Reuse `getAll` (with a large `limit`) so we benefit from the per-URL
+  // dedupe/cache implemented there and avoid duplicate simultaneous requests.
   getAllUnpaginated: async (categoryId = null) => {
     try {
-      const url = categoryId 
-        ? `${API_BASE_URL}/products?category_id=${categoryId}&limit=1000`
-        : `${API_BASE_URL}/products?limit=1000`;
-      
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
-      const result = await response.json();
-      return result.products || result; // Gestisce sia il nuovo formato che il vecchio
+      const opts = { limit: 1000 };
+      if (categoryId) opts.categoryId = categoryId;
+      const data = await productsAPI.getAll(opts);
+      // `getAll` returns the same shape { products, pagination }
+      return data && data.products ? data.products : data;
     } catch (error) {
-      console.error('Errore API getAllUnpaginated:', error);
+      console.error('Errore API getAllUnpaginated (via getAll):', error);
       throw error;
     }
   },

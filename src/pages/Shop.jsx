@@ -23,6 +23,7 @@ const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const mountedRef = useRef(false);
+  const itemsPerPageInitRef = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -167,6 +168,13 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   // Caricamento iniziale
   useEffect(() => {
+    // Evita il doppio caricamento iniziale: la prima esecuzione viene
+    // ignorata perché i prodotti sono già stati caricati dal parser della query string.
+    if (!itemsPerPageInitRef.current) {
+      itemsPerPageInitRef.current = true;
+      return;
+    }
+
     loadProducts(1);
   }, [itemsPerPage]); // Ricarica quando cambia items per pagina
 
