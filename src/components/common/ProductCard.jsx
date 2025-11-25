@@ -2,6 +2,8 @@
 import "../../styles/components/ProductCard.css";
 import React, { useState } from "react";
 import { cartAPI, emitCartUpdate, emitCartAction } from "../../services/api";
+import { logAction } from '../../utils/logger';
+import ACTIONS from '../../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 
 // Funzione per generare slug SEO-friendly
@@ -136,20 +138,28 @@ function ProductCard({
         icon: '🤍',
         style: { background: '#ef4444', color: '#ffffff' }
       });
+      // dev-friendly concise log
+      logAction(ACTIONS.WISHLIST_ADD, { id: product.id, name: product.name });
     } else {
       toast(`${product.name} rimosso dalla wishlist`, {
         icon: '❤',
         style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
       });
+      logAction(ACTIONS.WISHLIST_REMOVE, { id: product.id, name: product.name });
     }
   };
 
   // Sincronizza displayQty con il carrello globale quando viene emesso cartUpdate
   React.useEffect(() => {
     let mounted = true;
-    const handler = async () => {
+    const handler = async (e) => {
       try {
-        const currentCart = await cartAPI.get();
+        let currentCart;
+        if (e && e.detail && e.detail.cart) {
+          currentCart = e.detail.cart;
+        } else {
+          currentCart = await cartAPI.get();
+        }
         if (!mounted) return;
         const item = currentCart.find(i => i.id === product.id);
         const qtyFromCart = item ? item.quantity : 0;

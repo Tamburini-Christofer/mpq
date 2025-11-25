@@ -4,6 +4,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useState, useEffect, useRef } from 'react';
 import { cartAPI, emitCartUpdate } from '../../services/api';
+import { logAction } from '../../utils/logger';
+import ACTIONS from '../../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 
 function NavBar() {
@@ -33,12 +35,28 @@ function NavBar() {
 
     window.addEventListener('wishlistUpdate', updateWishlistCount);
     window.addEventListener('storage', updateWishlistCount);
-    window.addEventListener('cartUpdate', updateCartData);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) {
+        try {
+          const cart = e.detail.cart;
+          const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+          const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+          setCartCount(totalItems);
+          setCartItems(cart);
+          setCartTotal(totalPrice.toFixed(2));
+        } catch {
+          updateCartData();
+        }
+      } else {
+        updateCartData();
+      }
+    };
+    window.addEventListener('cartUpdate', handler);
 
     return () => {
       window.removeEventListener('wishlistUpdate', updateWishlistCount);
       window.removeEventListener('storage', updateWishlistCount);
-      window.removeEventListener('cartUpdate', updateCartData);
+      window.removeEventListener('cartUpdate', handler);
     };
   }, []);
 
@@ -96,7 +114,10 @@ function NavBar() {
       await cartAPI.increase(id);
       emitCartUpdate();
       // centralized notification for plus from navbar
-      try { window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } })); } catch {}
+        try {
+          window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
+          logAction(ACTIONS.CART_ADD_NAVBAR, { id, name });
+        } catch {}
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     } finally {
@@ -114,7 +135,10 @@ function NavBar() {
         await cartAPI.decrease(id);
         emitCartUpdate();
         // centralized notification for minus from navbar
-        try { window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } })); } catch {}
+        try {
+          window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+          logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
+        } catch {}
       }
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
@@ -135,9 +159,10 @@ function NavBar() {
       emitCartUpdate();
       const name = cartItems.find(i => i.id === id)?.name || 'Prodotto';
       // emit centralized remove action so Layout shows a single toast
-      try {
+        try {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
-      } catch {
+        logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
+        } catch {
         // fallback: show toast directly if dispatch fails
         toast.error(`"${name}" rimosso dal carrello`);
       }

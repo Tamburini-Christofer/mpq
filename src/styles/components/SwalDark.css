@@ -1,0 +1,47 @@
+/* Dark theme styles for SweetAlert2 popups, using app CSS variables */
+.swal-dark-popup {
+  /* Solid, non-transparent background for maximum contrast */
+  background-color: var(--bg-dark-card) !important;
+  background-image: none !important;
+  color: var(--text-light) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  font-family: var(--font-primary) !important;
+  padding: 24px !important;
+  width: min(720px, 92%) !important;
+}
+
+.swal-dark-title {
+  color: var(--color-primary) !important;
+  font-family: var(--font-heading) !important;
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+}
+
+.swal-dark-content {
+  color: var(--text-gray) !important;
+  font-size: var(--font-md) !important;
+  margin-top: 8px !important;
+}
+
+.swal-dark-confirm {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark)) !important;
+  color: var(--text-light) !important;
+  border: none !important;
+  box-shadow: 0 8px 18px rgba(216,169,40,0.18) !important;
+  padding: 10px 18px !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+}
+
+/* Ensure icons use the theme colors */
+.swal2-icon.swal2-success {
+  background-color: transparent !important;
+}
+.swal2-success .swal2-success-ring {
+  border-color: rgba(255,255,255,0.08) !important;
+}
+.swal2-success .swal2-success-line-tip, .swal2-success .swal2-success-line-long {
+  background: var(--text-light) !important;
+}

@@ -6,6 +6,8 @@ import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
 //todo Importiamo le API per gestire prodotti e carrello
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from '../services/api';
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from '../components/common/ProductCard';
@@ -46,8 +48,15 @@ function HomePage() {
 
     // Aggiungi listener per l'aggiornamento del carrello
     useEffect(() => {
-        window.addEventListener('cartUpdate', loadCart);
-        return () => window.removeEventListener('cartUpdate', loadCart);
+        const handler = (e) => {
+            if (e && e.detail && e.detail.cart) {
+                setCart(e.detail.cart);
+            } else {
+                loadCart();
+            }
+        };
+        window.addEventListener('cartUpdate', handler);
+        return () => window.removeEventListener('cartUpdate', handler);
     }, []);
 
     //todo Carica prodotti dal backend
@@ -57,9 +66,9 @@ function HomePage() {
                 setLoading(true);
                 const data = await productsAPI.getAllUnpaginated();
                 setProductsData(data);
-                } catch (error) {
-                console.error('Errore caricamento prodotti:', error);
-                toast.error('Errore nel caricamento dei prodotti');
+                    } catch (error) {
+                    logError('Errore caricamento prodotti', error);
+                    toast.error('Errore nel caricamento dei prodotti');
             } finally {
                 setLoading(false);
             }
@@ -182,7 +191,7 @@ function HomePage() {
             emitCartUpdate();
             
                 // central notification
-                    emitCartAction('add', { id: product.id, name: product.name });
+                            emitCartAction('add', { id: product.id, name: product.name });
         } catch (error) {
             console.error('Errore aggiunta al carrello:', error);
                 toast.error('Errore nell\'aggiunta al carretto');
@@ -196,7 +205,7 @@ function HomePage() {
             // centralized notification for plus action
             try {
                 const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
-                emitCartAction('add', { id: productId, name });
+                    emitCartAction('add', { id: productId, name });
             } catch {}
         } catch (error) {
             console.error("Errore nell'aumentare la quantità:", error);
@@ -217,7 +226,7 @@ function HomePage() {
             } else {
                 await cartAPI.remove(productId);
                 const name = item?.name || 'Prodotto';
-                emitCartAction('remove', { id: productId, name });
+                    emitCartAction('remove', { id: productId, name });
             }
             emitCartUpdate();
         } catch (error) {
