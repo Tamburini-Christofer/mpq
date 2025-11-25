@@ -239,6 +239,16 @@
   pointer-events: none;
 }
 
+/* Animazione per l'apparizione della voce Checkout */
+@keyframes menuEnter {
+  0% { transform: translateY(-8px); opacity: 0; }
+  60% { transform: translateY(4px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.menu-btn-enter {
+  animation: menuEnter 360ms cubic-bezier(.2,.9,.3,1) both;
+}
+
 /* todo: Area contenuto principale a destra della sidebar */
 .content {
   flex: 1;

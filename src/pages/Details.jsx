@@ -1,8 +1,13 @@
+
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { productsAPI, cartAPI, emitCartUpdate } from "../services/api";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
+import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
+
 
 const generateSlug = (name) => {
   return name
@@ -29,7 +34,6 @@ function Details() {
 
   const [quantity, setQuantity] = useState(1);
   const [animClass, setAnimClass] = useState("");
-  const [notification, setNotification] = useState(null);
   const relatedRef = useRef(null);
 
   const loadCart = async () => {
@@ -37,7 +41,7 @@ function Details() {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      console.error("Errore caricamento carrello:", error);
+      logError("Errore caricamento carrello", error);
     }
   };
 
@@ -47,10 +51,10 @@ function Details() {
         setLoading(true);
         const data = await productsAPI.getBySlug(slug);
         setProduct(data);
-        const allProducts = await productsAPI.getAll();
+        const allProducts = await productsAPI.getAllUnpaginated();
         setProductsData(allProducts);
       } catch (error) {
-        console.error("Errore caricamento prodotto:", error);
+        logError("Errore caricamento prodotto", error);
         setProduct(null);
       } finally {
         setLoading(false);
@@ -61,16 +65,15 @@ function Details() {
   }, [slug]);
 
   useEffect(() => {
-    window.addEventListener('cartUpdate', loadCart);
-    return () => window.removeEventListener('cartUpdate', loadCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
+    window.addEventListener('cartUpdate', handler);
+    return () => window.removeEventListener('cartUpdate', handler);
   }, []);
 
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type });
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
-  };
+  // use react-hot-toast for notifications
 
   const increaseQty = () => {
     setAnimClass("increment");
@@ -99,13 +102,15 @@ function Details() {
 
   const addToCart = async () => {
     if (!product) return;
+    if (!quantity || quantity <= 0) return; // nothing to add
     try {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
-      showNotification(`"${product.name}" aggiunto al carrello!`);
+      // Use centralized emit so Layout's Toaster shows the notification (same logic as Home)
+      emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      console.error("Errore aggiunta al carrello:", error);
-      showNotification("Errore nell'aggiunta al carrello", "error");
+      logError("Errore aggiunta al carrello", error);
+      toast.error("Errore nell'aggiunta al carrello");
     }
   };
 
@@ -121,16 +126,16 @@ function Details() {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     const selected = shuffled.slice(0, 6);
-    return selected.map((prod) => ({
-      ...prod,
-      originalIndex: productsData.findIndex((p) => p.id === prod.id),
-      hasDiscount:
-        prod.discount && typeof prod.discount === "number" && prod.discount > 0,
-      finalPrice:
-        prod.discount && typeof prod.discount === "number" && prod.discount > 0
-          ? parseFloat(prod.price) * (1 - prod.discount / 100)
-          : parseFloat(prod.price),
-    }));
+    return selected.map((prod) => {
+      const disc = Number(prod.discount) || 0;
+      const price = parseFloat(prod.price) || 0;
+      return {
+        ...prod,
+        originalIndex: productsData.findIndex((p) => p.id === prod.id),
+        hasDiscount: disc > 0,
+        finalPrice: disc > 0 ? price * (1 - disc / 100) : price,
+      };
+    });
   }, [product, productsData]);
 
   const scrollCarousel = (ref, direction) => {
@@ -171,10 +176,12 @@ function Details() {
     try {
       await cartAPI.add(prod.id, 1);
       emitCartUpdate();
-      showNotification(`"${prod.name}" aggiunto al carrello!`);
+      // Informazioni emesse con origin in modo che Layout non mostri il toast duplicato
+      // Centralized emit (same as HomePage): let Layout handle the toast
+      emitCartAction('add', { id: prod.id, name: prod.name });
     } catch (error) {
-      console.error("Errore aggiunta correlato:", error);
-      showNotification("Errore nell'aggiunta al carrello", "error");
+      logError("Errore aggiunta correlato", error);
+      toast.error("Errore nell'aggiunta al carrello");
     }
   };
 
@@ -182,24 +189,32 @@ function Details() {
     try {
       await cartAPI.increase(productId);
       emitCartUpdate();
+      const prod = productsData.find(p => p.id === productId) || cart.find(i => i.id === productId);
+      const name = prod?.name || 'Prodotto';
+      emitCartAction('add', { id: productId, name });
     } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
-      showNotification("Errore nell'aggiornamento del carrello", "error");
+      logError("Errore nell'aumentare la quantità", error);
+      toast.error("Errore nell'aggiornamento del carrello");
     }
   };
 
   const handleDecrease = async (productId) => {
     try {
       const item = cart.find(i => i.id === productId);
+      const prod = productsData.find(p => p.id === productId) || item;
+      const name = prod?.name || 'Prodotto';
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
+        // Central emit: let Layout show global toast
+        emitCartAction('remove', { id: productId, name });
       } else {
         await cartAPI.remove(productId);
+        emitCartAction('remove', { id: productId, name });
       }
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
-      showNotification("Errore nell'aggiornamento del carrello", "error");
+      logError("Errore nel diminuire la quantità", error);
+      toast.error("Errore nell'aggiornamento del carrello");
     }
   };
 
@@ -214,30 +229,15 @@ function Details() {
       </div>
     );
   }
-
   const price = parseFloat(product.price) || 0;
-  const hasDiscount =
-    product.discount && typeof product.discount === "number" && product.discount > 0;
-  const finalPrice = hasDiscount ? price * (1 - product.discount / 100) : price;
+  const discount = Number(product.discount) || 0;
+  const hasDiscount = discount > 0;
+  const finalPrice = hasDiscount ? price * (1 - discount / 100) : price;
+
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === "success" ? "✓" : "ℹ"}
-            </span>
-            <span className="notification-message">{notification.message}</span>
-            <button
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      
 
       <button className="back-to-home-btn" onClick={() => navigate("/")}>
         ← Torna alla Home
@@ -272,12 +272,11 @@ function Details() {
               className="product-badge"
               data-discount={hasDiscount ? "true" : "false"}
             >
-              {hasDiscount ? `-${product.discount}% OFFERTA` : "Featured Quest"}
+              {hasDiscount ? `-${discount}% OFFERTA` : "Featured Quest"}
             </span>
           </div>
 
           <p className="product-short-desc">{product.description}</p>
-
           <div className="product-actions">
             <div className="product-quantity-row">
               <span className="qty-label">Quantità</span>
@@ -308,18 +307,15 @@ function Details() {
               Contenuti esclusivi sbloccabili • Aggiornamenti futuri inclusi
             </div>
           </div>
-
           {relatedProducts.length > 0 && (
             <section className="quests-section related-section-wrapper">
               <h2 className="section-title">Prodotti correlati</h2>
-
               <button
                 className="scroll-btn scroll-left"
                 onClick={() => scrollCarousel(relatedRef, -1)}
               >
                 &lt;
               </button>
-
               <div
                 ref={relatedRef}
                 className="cards-list related-cards-list"
@@ -341,7 +337,6 @@ function Details() {
                   />
                 ))}
               </div>
-
               <button
                 className="scroll-btn scroll-right"
                 onClick={() => scrollCarousel(relatedRef, 1)}
@@ -355,5 +350,5 @@ function Details() {
     </>
   );
 }
-
 export default Details;
+

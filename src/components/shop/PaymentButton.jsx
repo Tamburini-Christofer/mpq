@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
 import '../../styles/components/PaymentButton.css';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_YOUR_KEY');
 
 export default function PaymentButton({ totalAmount, cartItems, formData, onClose }) {
   const [loading, setLoading] = useState(false);
@@ -19,29 +16,33 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     setError(null);
 
     try {
-      const stripe = await stripePromise;
-
-      // Crea una sessione di checkout Stripe
+      // Crea una sessione di checkout Stripe sul backend
       const response = await fetch('http://localhost:3000/payment/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           cartItems: cartItems,
           customerData: formData,
-          successUrl: `${window.location.origin}/`,
+          // include a query param so the frontend can detect successful checkout
+          // and clear localStorage. Also include the session id placeholder.
+          successUrl: `${window.location.origin}/?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
           cancelUrl: `${window.location.origin}/shop`
         })
       });
 
-      const { sessionId } = await response.json();
-
-      // Reindirizza a Stripe Checkout
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-
-      if (error) {
-        setError(error.message);
-        setLoading(false);
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Server error creating checkout session');
       }
+
+      const { sessionUrl } = await response.json();
+
+      if (!sessionUrl) {
+        throw new Error('No session URL returned from server');
+      }
+
+      // Browser redirect to Stripe Checkout page (new recommended flow)
+      window.location.href = sessionUrl;
     } catch (err) {
       setError(err.message || 'Errore durante il pagamento. Riprova.');
       setLoading(false);

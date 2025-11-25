@@ -7,24 +7,120 @@ const HttpError = require('../utils/HttpError');
 exports.getProducts = async (req, res, next) => {
     try {
         console.log('📦 Richiesta GET /products ricevuta');
-        const { category_id } = req.query;
+        const { category_id, page = 1, limit = 10, search, sortBy = 'recent', priceMin, priceMax, onSale, matureContent, accessibility } = req.query;
+        
+        // Converti i parametri in numeri
+        const currentPage = parseInt(page);
+        const limitNum = parseInt(limit);
+        const offset = (currentPage - 1) * limitNum;
+        
+        // Query base
         let query = `
         SELECT p.*, c.name as category_name
         FROM products p
         JOIN category c ON p.category_id = c.id
         `;
+        
+        let countQuery = `
+        SELECT COUNT(*) as total
+        FROM products p
+        JOIN category c ON p.category_id = c.id
+        `;
 
-        const params = []
+        const params = [];
+        const countParams = [];
+        let whereConditions = [];
 
+        // Filtri
         if (category_id) {
-            query += " WHERE p.category_id = ? ";
+            whereConditions.push("p.category_id = ?");
             params.push(category_id);
+            countParams.push(category_id);
         }
 
+        if (search && search.trim() !== '') {
+            whereConditions.push("p.name LIKE ?");
+            params.push(`%${search.trim()}%`);
+            countParams.push(`%${search.trim()}%`);
+        }
+
+        if (priceMin) {
+            whereConditions.push("p.price >= ?");
+            params.push(parseFloat(priceMin));
+            countParams.push(parseFloat(priceMin));
+        }
+
+        if (priceMax) {
+            whereConditions.push("p.price <= ?");
+            params.push(parseFloat(priceMax));
+            countParams.push(parseFloat(priceMax));
+        }
+
+        if (onSale === 'true') {
+            whereConditions.push("p.discount > 0");
+        }
+
+        if (matureContent === 'true') {
+            whereConditions.push("p.min_age >= 18");
+        }
+
+        if (accessibility === 'true') {
+            whereConditions.push("p.disability = 1");
+        }
+
+        // Aggiungi condizioni WHERE se presenti
+        if (whereConditions.length > 0) {
+            const whereClause = " WHERE " + whereConditions.join(" AND ");
+            query += whereClause;
+            countQuery += whereClause;
+        }
+
+        // Ordinamento
+        switch (sortBy) {
+            case 'price-asc':
+                query += " ORDER BY p.price ASC";
+                break;
+            case 'price-desc':
+                query += " ORDER BY p.price DESC";
+                break;
+            case 'name-asc':
+                query += " ORDER BY p.name ASC";
+                break;
+            case 'name-desc':
+                query += " ORDER BY p.name DESC";
+                break;
+            default:
+                query += " ORDER BY p.id DESC"; // recent
+        }
+
+        // Paginazione
+        query += " LIMIT ? OFFSET ?";
+        params.push(limitNum, offset);
+
         console.log('📝 Query SQL:', query);
+        console.log('📊 Parametri:', params);
+
+        // Esegui entrambe le query
         const [rows] = await db.query(query, params);
-        console.log('✅ Prodotti trovati:', rows.length);
-        res.json(rows);
+        const [countResult] = await db.query(countQuery, countParams);
+        
+        const total = countResult[0].total;
+        const totalPages = Math.ceil(total / limitNum);
+
+        console.log('✅ Prodotti trovati:', rows.length, 'di', total);
+
+        // Restituisce i dati con metadati di paginazione
+        res.json({
+            products: rows,
+            pagination: {
+                currentPage,
+                totalPages,
+                totalItems: total,
+                itemsPerPage: limitNum,
+                hasNextPage: currentPage < totalPages,
+                hasPrevPage: currentPage > 1
+            }
+        });
     } catch (err) {
         next(err);
     }

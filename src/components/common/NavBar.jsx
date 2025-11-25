@@ -1,8 +1,12 @@
 import '../../styles/components/NavBar.css';
+import Logo from '../../img/Logo_no_bg.png';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useState, useEffect, useRef } from 'react';
 import { cartAPI, emitCartUpdate } from '../../services/api';
+import { logAction } from '../../utils/logger';
+import ACTIONS from '../../utils/actionTypes';
+import { toast } from 'react-hot-toast';
 
 function NavBar() {
   const navigate = useNavigate();
@@ -31,12 +35,28 @@ function NavBar() {
 
     window.addEventListener('wishlistUpdate', updateWishlistCount);
     window.addEventListener('storage', updateWishlistCount);
-    window.addEventListener('cartUpdate', updateCartData);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) {
+        try {
+          const cart = e.detail.cart;
+          const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+          const totalPrice = cart.reduce((sum, item) => sum + item.quantity * item.price, 0);
+          setCartCount(totalItems);
+          setCartItems(cart);
+          setCartTotal(totalPrice.toFixed(2));
+        } catch {
+          updateCartData();
+        }
+      } else {
+        updateCartData();
+      }
+    };
+    window.addEventListener('cartUpdate', handler);
 
     return () => {
       window.removeEventListener('wishlistUpdate', updateWishlistCount);
       window.removeEventListener('storage', updateWishlistCount);
-      window.removeEventListener('cartUpdate', updateCartData);
+      window.removeEventListener('cartUpdate', handler);
     };
   }, []);
 
@@ -90,8 +110,14 @@ function NavBar() {
   const increaseQty = async (id) => {
     setLoadingItemId(id);
     try {
+      const name = cartItems.find(i => i.id === id)?.name || 'Prodotto';
       await cartAPI.increase(id);
       emitCartUpdate();
+      // centralized notification for plus from navbar
+        try {
+          window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
+          logAction(ACTIONS.CART_ADD_NAVBAR, { id, name });
+        } catch {}
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     } finally {
@@ -105,8 +131,14 @@ function NavBar() {
       if (qty <= 1) {
         await removeItem(id);
       } else {
+        const name = cartItems.find(i => i.id === id)?.name || 'Prodotto';
         await cartAPI.decrease(id);
         emitCartUpdate();
+        // centralized notification for minus from navbar
+        try {
+          window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+          logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
+        } catch {}
       }
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
@@ -125,10 +157,25 @@ function NavBar() {
     setTimeout(async () => {
       await cartAPI.remove(id);
       emitCartUpdate();
+      const name = cartItems.find(i => i.id === id)?.name || 'Prodotto';
+      // emit centralized remove action so Layout shows a single toast
+        try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+        logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
+        } catch {
+        // fallback: show toast directly if dispatch fails
+        toast.error(`"${name}" rimosso dal carrello`);
+      }
     }, 250);
   };
 
   const goToCheckout = () => {
+    // close mobile/sidebar menus across the app before navigating
+    try {
+      window.dispatchEvent(new Event('closeSidebar'));
+    } catch {
+      // ignore
+    }
     navigate("/shop/checkout");
   };
 
@@ -137,7 +184,7 @@ function NavBar() {
       <nav className="navbar navbar-sticky">
         <div className="navbar-logo">
           <NavLink to="/">
-            <img src="./src/img/Logo_no_bg.png" alt="Logo" className="logo-icon" />
+            <img src={Logo} alt="Logo" className="logo-icon" />
           </NavLink>
         </div>
 
