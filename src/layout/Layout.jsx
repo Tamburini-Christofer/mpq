@@ -1,6 +1,9 @@
 //todo Importo Outlet da react-router-dom per il rendering delle route figlie
-import { Outlet, useLocation } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
+import Swal from 'sweetalert2';
+import '../styles/components/SwalDark.css';
+import { cartAPI, emitCartUpdate } from '../services/api';
 import Toast from "../components/common/Toast";
 import { Toaster } from 'react-hot-toast';
 import { toast } from 'react-hot-toast';
@@ -54,6 +57,59 @@ const Layout = () => {
                 window.removeEventListener('cartAction', cartHandler);
             };
     }, []);
+
+    // Detect Stripe Checkout success (frontend receives ?checkout=success)
+    const navigate = useNavigate();
+    useEffect(() => {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const ok = params.get('checkout');
+            if (ok === 'success') {
+                // show informative alert
+                Swal.fire({
+                    title: 'Pagamento avvenuto',
+                    html: 'Grazie! Il pagamento è andato a buon fine. Riceverai a breve una email con il riepilogo dell\'ordine.',
+                    icon: 'success',
+                    confirmButtonText: 'Ok',
+                    background: 'var(--bg-dark-card)',
+                    color: 'var(--text-light)',
+                    customClass: {
+                        popup: 'swal-dark-popup',
+                        title: 'swal-dark-title',
+                        content: 'swal-dark-content',
+                        confirmButton: 'swal-dark-confirm'
+                    }
+                }).then(async () => {
+                    try {
+                        // clear localStorage entirely as requested
+                        localStorage.clear();
+                    } catch (e) {
+                        console.warn('Errore durante la pulizia di localStorage', e);
+                    }
+
+                    // also clear server-side cart for this session and notify listeners
+                    try {
+                        await cartAPI.clear();
+                        emitCartUpdate();
+                    } catch (e) {
+                        console.warn('Errore svuotamento carrello server-side after checkout:', e);
+                    }
+
+                    // refresh the page so UI reflects emptied cart and any state changes
+                    try {
+                        window.location.replace(window.location.pathname);
+                    } catch (e) {
+                        // fallback to navigate if replace fails
+                        navigate(window.location.pathname, { replace: true });
+                    }
+                });
+            }
+        } catch (err) {
+            // non-blocking
+            console.warn('Error checking checkout success param', err);
+        }
+        // run when location.search changes
+    }, [location.search, navigate]);
 
     return (
         <>

@@ -27,14 +27,26 @@ router.post('/webhook',
         const currency = paymentIntent.currency.toUpperCase();
 
         try {
-          await sendPaymentConfirmationEmail({                     
+          // send to customer
+          await sendPaymentConfirmationEmail({
             to: email,
             amount,
             currency,
             paymentIntentId: paymentIntent.id,
             date: new Date().toLocaleDateString('it-IT'),
           });
-          console.log(`Email inviata a ${email}`);
+          console.log(`Email inviata al cliente ${email}`);
+
+          // also notify company email
+          const companyEmail = process.env.EMAIL_USER || 'mypocketfive@gmail.com';
+          await sendPaymentConfirmationEmail({
+            to: companyEmail,
+            amount,
+            currency,
+            paymentIntentId: paymentIntent.id,
+            date: new Date().toLocaleDateString('it-IT'),
+          });
+          console.log(`Email inviata all'azienda ${companyEmail}`);
         } catch (emailErr) {
           console.error('Errore invio email:', emailErr);
         }
