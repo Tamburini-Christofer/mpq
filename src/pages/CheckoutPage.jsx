@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CheckoutPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { error as logError } from '../utils/logger';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -17,17 +18,21 @@ function CheckoutPage() {
       setCart(data);
       // emitCartUpdate(); // RIMOSSO: evita loop infinito
     } catch (err) {
-      console.error("Errore caricamento carrello:", err);
+      logError("Errore caricamento carrello", err);
     }
   };
 
   useEffect(() => {
     loadCart();
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
 
-    window.addEventListener("cartUpdate", loadCart);
+    window.addEventListener("cartUpdate", handler);
 
     return () => {
-      window.removeEventListener("cartUpdate", loadCart);
+      window.removeEventListener("cartUpdate", handler);
     };
   }, []);
 
@@ -101,7 +106,7 @@ function CheckoutPage() {
       window.history.back();
 
     } catch (err) {
-      console.error("Errore annullamento ordine:", err);
+      logError("Errore annullamento ordine", err);
       toast.error('Errore nell\'annullamento dell\'ordine');
     }
   };

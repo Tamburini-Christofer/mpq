@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
@@ -37,7 +39,7 @@ function Details() {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      console.error("Errore caricamento carrello:", error);
+      logError("Errore caricamento carrello", error);
     }
   };
 
@@ -50,7 +52,7 @@ function Details() {
         const allProducts = await productsAPI.getAll();
         setProductsData(allProducts);
       } catch (error) {
-        console.error("Errore caricamento prodotto:", error);
+        logError("Errore caricamento prodotto", error);
         setProduct(null);
       } finally {
         setLoading(false);
@@ -61,8 +63,12 @@ function Details() {
   }, [slug]);
 
   useEffect(() => {
-    window.addEventListener('cartUpdate', loadCart);
-    return () => window.removeEventListener('cartUpdate', loadCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
+    window.addEventListener('cartUpdate', handler);
+    return () => window.removeEventListener('cartUpdate', handler);
   }, []);
 
   // use react-hot-toast for notifications
@@ -99,10 +105,9 @@ function Details() {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
       // Use centralized emit so Layout's Toaster shows the notification (same logic as Home)
-      console.log('Details.addToCart -> emitting add for', { id: product.id, name: product.name, quantity });
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      console.error("Errore aggiunta al carrello:", error);
+      logError("Errore aggiunta al carrello", error);
       toast.error("Errore nell'aggiunta al carrello");
     }
   };
@@ -171,10 +176,9 @@ function Details() {
       emitCartUpdate();
       // Informazioni emesse con origin in modo che Layout non mostri il toast duplicato
       // Centralized emit (same as HomePage): let Layout handle the toast
-      console.log('Details.handleAddToCartFromCarousel -> emitting add for', { id: prod.id, name: prod.name });
       emitCartAction('add', { id: prod.id, name: prod.name });
     } catch (error) {
-      console.error("Errore aggiunta correlato:", error);
+      logError("Errore aggiunta correlato", error);
       toast.error("Errore nell'aggiunta al carrello");
     }
   };
@@ -185,10 +189,9 @@ function Details() {
       emitCartUpdate();
       const prod = productsData.find(p => p.id === productId) || cart.find(i => i.id === productId);
       const name = prod?.name || 'Prodotto';
-      console.log('Details.handleIncrease -> emitting add for', { id: productId, name });
       emitCartAction('add', { id: productId, name });
     } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
+      logError("Errore nell'aumentare la quantità", error);
       toast.error("Errore nell'aggiornamento del carrello");
     }
   };
@@ -201,16 +204,14 @@ function Details() {
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
         // Central emit: let Layout show global toast
-        console.log('Details.handleDecrease -> emitting remove (decrease) for', { id: productId, name });
         emitCartAction('remove', { id: productId, name });
       } else {
         await cartAPI.remove(productId);
-        console.log('Details.handleDecrease -> emitting remove (delete) for', { id: productId, name });
         emitCartAction('remove', { id: productId, name });
       }
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
+      logError("Errore nel diminuire la quantità", error);
       toast.error("Errore nell'aggiornamento del carrello");
     }
   };
