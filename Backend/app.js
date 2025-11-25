@@ -18,9 +18,8 @@ const productRoutes = require('./routes/productRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 //collegamento della route per la email
 const stripeWebHook = require('./routes/StripeWebhook.js')
-
-
 app.use('/api/stripe/webhook', stripeWebHook);
+
 //abilitazione lettura JSON
 app.use(express.json());
 

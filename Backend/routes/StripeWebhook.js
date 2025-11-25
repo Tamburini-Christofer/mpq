@@ -18,10 +18,8 @@ router.post('/webhook',
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // CORREZIONE: == invece di =   e   payment_intent.succeeded
     if (event.type === 'payment_intent.succeeded') {
       const paymentIntent = event.data.object;
-
       const email = paymentIntent.receipt_email || paymentIntent.metadata.email;
 
       if (email) {
