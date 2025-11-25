@@ -71,46 +71,61 @@ const applyCartFromUrlIfPresent = async () => {
 
 export const productsAPI = {
   // Ottieni tutti i prodotti con paginazione
+  // Accetta un oggetto `options` o un semplice `categoryId` (per compatibilità).
   getAll: async (options = {}) => {
     try {
-      // simple in-flight dedupe + short TTL cache to avoid duplicate product requests
-      if (!productsAPI._cache) {
-        productsAPI._cache = { lastResult: null, lastTime: 0, lastPromise: null };
-      }
-      const now = Date.now();
       const TTL = 700; // ms
+      // normalizza l'argomento: se è un ID (number/string) lo trattiamo come categoryId
+      let opts = options;
+      if (options === null || options === undefined) opts = {};
+      if (typeof options !== 'object') opts = { categoryId: options };
 
-      const url = categoryId 
-        ? `${API_BASE_URL}/products?category_id=${categoryId}`
-        : `${API_BASE_URL}/products`;
+      // costruisci query params dalla options
+      const params = new URLSearchParams();
+      if (opts.page) params.set('page', String(opts.page));
+      if (opts.limit) params.set('limit', String(opts.limit));
+      // backend expects `search` (not `q`)
+      if (opts.search) params.set('search', String(opts.search));
+      // backend expects `sortBy`
+      if (opts.sortBy) params.set('sortBy', String(opts.sortBy));
+      if (opts.priceMin != null) params.set('priceMin', String(opts.priceMin));
+      if (opts.priceMax != null) params.set('priceMax', String(opts.priceMax));
+      // backend compares string 'true' for these flags
+      if (opts.onSale) params.set('onSale', 'true');
+      if (opts.matureContent) params.set('matureContent', 'true');
+      if (opts.accessibility) params.set('accessibility', 'true');
+      if (opts.categoryId) params.set('category_id', String(opts.categoryId));
 
-      // if there's an ongoing fetch for products, return the same promise
-      if (productsAPI._cache.lastPromise) {
-        return productsAPI._cache.lastPromise;
-      }
+      const url = `${API_BASE_URL}/products${params.toString() ? `?${params.toString()}` : ''}`;
 
-      // if we have a recent cached result, return it
-      if (productsAPI._cache.lastResult && (now - productsAPI._cache.lastTime) < TTL) {
-        return productsAPI._cache.lastResult;
-      }
+      // cache/dedupe per-URL
+      if (!productsAPI._cacheMap) productsAPI._cacheMap = {};
+      const entry = productsAPI._cacheMap[url] || { lastResult: null, lastTime: 0, lastPromise: null };
+      const now = Date.now();
+
+      if (entry.lastPromise) return entry.lastPromise;
+      if (entry.lastResult && (now - entry.lastTime) < TTL) return entry.lastResult;
 
       const p = (async () => {
         try {
           const response = await fetch(url);
           if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
           const data = await response.json();
-          productsAPI._cache.lastResult = data;
-          productsAPI._cache.lastTime = Date.now();
+          entry.lastResult = data;
+          entry.lastTime = Date.now();
+          productsAPI._cacheMap[url] = entry;
           return data;
         } catch (error) {
           console.error('Errore API getAll:', error);
           throw error;
         } finally {
-          productsAPI._cache.lastPromise = null;
+          entry.lastPromise = null;
+          productsAPI._cacheMap[url] = entry;
         }
       })();
 
-      productsAPI._cache.lastPromise = p;
+      entry.lastPromise = p;
+      productsAPI._cacheMap[url] = entry;
       return p;
     } catch (error) {
       console.error('Errore API getAll (outer):', error);
@@ -351,7 +366,7 @@ const _shouldLog = (label, payload, windowMs = 800) => {
     _recentLog.payload = p;
     _recentLog.time = now;
     return true;
-  } catch (e) {
+  } catch {
     return true;
   }
 };
@@ -384,9 +399,9 @@ export const emitCartUpdate = () => {
       if (_shouldLog(ACTIONS.CART_UPDATE, { note: 'cartUpdate dispatched' })) {
         logAction(ACTIONS.CART_UPDATE, { note: 'cartUpdate dispatched' });
       }
-    } catch (e) {
+    } catch {
       // fallback: still dispatch event without data so listeners can decide to fetch
-      try { window.dispatchEvent(new CustomEvent('cartUpdate')); } catch {}
+      try { window.dispatchEvent(new CustomEvent('cartUpdate')); } catch { /* ignore */ }
     }
   })();
 };
