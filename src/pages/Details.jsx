@@ -47,7 +47,7 @@ function Details() {
         setLoading(true);
         const data = await productsAPI.getBySlug(slug);
         setProduct(data);
-        const allProducts = await productsAPI.getAll();
+        const allProducts = await productsAPI.getAllUnpaginated();
         setProductsData(allProducts);
       } catch (error) {
         console.error("Errore caricamento prodotto:", error);

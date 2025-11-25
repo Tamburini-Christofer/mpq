@@ -55,7 +55,7 @@ function HomePage() {
         const loadProducts = async () => {
             try {
                 setLoading(true);
-                const data = await productsAPI.getAll();
+                const data = await productsAPI.getAllUnpaginated();
                 setProductsData(data);
                 } catch (error) {
                 console.error('Errore caricamento prodotti:', error);

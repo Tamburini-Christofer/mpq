@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
@@ -15,9 +15,12 @@ import CheckoutPage from "./CheckoutPage";
 import ShopComponent from "../components/shop/ShopComponent";
 import SearchSortBar from "../components/shop/SearchSortBar";
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
+import Pagination from "../components/shop/Pagination";
 
 const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const mountedRef = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -35,47 +38,179 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [sortValue, setSortValue] = useState("recent");
 
   const [filters, setFilters] = useState({
-    priceRange: { min: 0, max: 200, current: 200 },
+    priceRange: { min: 0, max: 200 },
     categories: [],
     matureContent: false,
+    accessibility: false,
     onSale: false,
   });
 
-  const [visibleProducts, setVisibleProducts] = useState(10);
+  // Stato per la paginazione
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    hasNextPage: false,
+    hasPrevPage: false
+  });
+  
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [notification, setNotification] = useState(null);
 
+  // Inizializza lo stato dei filtri dalla query string (se presente)
   useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await productsAPI.getAll();
+    const params = new URLSearchParams(window.location.search);
 
-        const mapped = data.map((p) => ({
-          ...p,
-          category:
-            p.category_id === 1
-              ? "film"
-              : p.category_id === 2
-              ? "series"
-              : p.category_id === 3
-              ? "anime"
-              : "film",
-        }));
+    const q = params.get("q") || "";
+    const sort = params.get("sort") || "recent";
+    const page = parseInt(params.get("page")) || 1;
+    const limit = parseInt(params.get("limit")) || 10;
 
-        setProducts(mapped);
-      } catch {
-        toast.error("Errore caricamento prodotti");
-      } finally {
-        setLoading(false);
-      }
-    };
+    const priceMin = params.get("priceMin");
+    const priceMax = params.get("priceMax");
+    const categories = params.get("categories");
 
-    loadProducts();
+    const onSale = params.get("onSale") === "1";
+    const matureContent = params.get("matureContent") === "1";
+    const accessibility = params.get("accessibility") === "1";
+
+    setSearchValue(q);
+    setSortValue(sort);
+    setItemsPerPage(limit);
+    setCurrentPage(page);
+
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: {
+        min: priceMin !== null ? parseFloat(priceMin) : prev.priceRange.min,
+        max: priceMax !== null ? parseFloat(priceMax) : prev.priceRange.max,
+      },
+      categories: categories ? categories.split(",").filter(Boolean) : prev.categories,
+      onSale,
+      matureContent,
+      accessibility,
+    }));
+
+    // Carica i prodotti in base alla pagina trovata nella query string
+    loadProducts(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const showNotification = (message, type = "success") => {
+    setNotification({ message, type });
+    setTimeout(() => setNotification(null), 2500);
+  };
+
+  const loadProducts = async (page = 1, resetPage = false) => {
+    try {
+      setLoading(true);
+      
+      // Se resetPage è true, usa la pagina 1, altrimenti usa la pagina passata
+      const targetPage = resetPage ? 1 : page;
+      
+      const options = {
+        page: targetPage,
+        limit: itemsPerPage,
+        search: searchValue,
+        sortBy: sortValue,
+        priceMin: filters.priceRange.min,
+        priceMax: filters.priceRange.max,
+        onSale: filters.onSale,
+        matureContent: filters.matureContent,
+        accessibility: filters.accessibility
+      };
+      
+      // Gestione filtro categorie - supporta multiple categorie
+      if (filters.categories.length > 0) {
+        const categoryMap = { "film": 1, "series": 2, "anime": 3 };
+        // Per ora prendiamo solo la prima categoria (limitazione API)
+        const categoryId = categoryMap[filters.categories[0]];
+        if (categoryId) options.categoryId = categoryId;
+      }
+
+      const data = await productsAPI.getAll(options);
+      
+      const mapped = data.products.map((p) => ({
+        ...p,
+        category:
+          p.category_id === 1
+            ? "film"
+            : p.category_id === 2
+            ? "series"
+            : p.category_id === 3
+            ? "anime"
+            : "film",
+      }));
+
+      setProducts(mapped);
+      setPagination(data.pagination);
+      
+      if (resetPage) {
+        setCurrentPage(1);
+      } else {
+        setCurrentPage(targetPage);
+      }
+      
+    } catch (error) {
+      console.error('Errore caricamento prodotti:', error);
+      showNotification("Errore caricamento prodotti", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Caricamento iniziale
+  useEffect(() => {
+    loadProducts(1);
+  }, [itemsPerPage]); // Ricarica quando cambia items per pagina
+
   const [cart, setCart] = useState([]);
+
+  // Effetti per ricaricare i prodotti quando cambiano i filtri
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      loadProducts(1, true); // Reset alla pagina 1 quando cambiano i filtri
+    }, 300); // Debounce di 300ms
+    
+    return () => clearTimeout(timeoutId);
+  }, [filters, searchValue, sortValue]);
+
+  // Sync activeTab with defaultTab prop when route changes
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab]);
+
+  // Aggiorna la query string ogni volta che cambiano parametri rilevanti
+  useEffect(() => {
+    // Evita di aggiornare subito durante il mount iniziale (abbiamo già parsato la URL)
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
+
+    const params = new URLSearchParams();
+
+    if (searchValue) params.set("q", searchValue);
+    if (sortValue) params.set("sort", sortValue);
+    if (currentPage) params.set("page", String(currentPage));
+    if (itemsPerPage) params.set("limit", String(itemsPerPage));
+
+    params.set("priceMin", String(filters.priceRange.min));
+    params.set("priceMax", String(filters.priceRange.max));
+
+    if (filters.categories && filters.categories.length > 0)
+      params.set("categories", filters.categories.join(","));
+
+    params.set("onSale", filters.onSale ? "1" : "0");
+    params.set("matureContent", filters.matureContent ? "1" : "0");
+    params.set("accessibility", filters.accessibility ? "1" : "0");
+
+    setSearchParams(params, { replace: true });
+  }, [filters, searchValue, sortValue, currentPage, itemsPerPage, setSearchParams]);
 
   const fetchCart = async () => {
     try {
@@ -211,54 +346,16 @@ const Shop = ({ defaultTab = "shop" }) => {
     }
   };
 
-  const getFilteredAndSortedProducts = () => {
-    let filtered = [...products];
-
-    if (searchValue.trim() !== "") {
-      filtered = filtered.filter((p) =>
-        p.name.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    }
-
-    filtered = filtered.filter(
-      (p) =>
-        parseFloat(p.price) >= filters.priceRange.min &&
-        parseFloat(p.price) <= filters.priceRange.max
-    );
-
-    if (filters.categories.length > 0) {
-      filtered = filtered.filter((p) => filters.categories.includes(p.category));
-    }
-
-    if (filters.matureContent) {
-      filtered = filtered.filter((p) => (parseInt(p.min_age) || 0) >= 18);
-    }
-
-    if (filters.onSale) {
-      filtered = filtered.filter((p) => parseFloat(p.discount) > 0);
-    }
-
-    switch (sortValue) {
-      case "price-asc":
-        filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-        break;
-      case "price-desc":
-        filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-        break;
-      case "name-asc":
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case "name-desc":
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        break;
-    }
-
-    return filtered;
+  // Gestori per la paginazione
+  const handlePageChange = (newPage) => {
+    loadProducts(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
-  const loadMoreProducts = () => setVisibleProducts((prev) => prev + 10);
+  
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    // loadProducts sarà chiamato automaticamente dall'useEffect che monitora itemsPerPage
+  };
 
   const subtotal = cart.reduce(
     (sum, item) => sum + parseFloat(item.price) * item.quantity,
@@ -423,61 +520,71 @@ const Shop = ({ defaultTab = "shop" }) => {
             ) : (
               <>
                 <div className={`products products-${viewMode}`}>
-                  {getFilteredAndSortedProducts()
-                    .slice(0, visibleProducts)
-                    .map((p) => (
-                      <ProductCard
-                        key={p.id}
-                        product={{
-                          ...p,
-                          cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
-                          isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
-                        }}
-                        variant={viewMode === "grid" ? "grid" : "compact"}
-                        onViewDetails={(slug) => navigate(`/details/${slug}`)}
-                        onAddToCart={handleAddToCart}
-                        onIncrease={increaseQuantity}
-                        onDecrease={decreaseQuantity}
-                        cart={cart}
-                        onToggleWishlist={(product) => {
-                          const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-                          const exists = wishlist.some(w => w.id === product.id);
-                          let updated;
-                          let action;
-                          if (exists) {
-                            updated = wishlist.filter(w => w.id !== product.id);
-                            action = 'remove';
-                          } else {
-                            updated = [...wishlist, product];
-                            action = 'add';
-                          }
-                          localStorage.setItem("wishlist", JSON.stringify(updated));
-                          // dispatch dettagliato per sincronizzazione
-                          window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
-                          // notifica globale (react-hot-toast) - stile wishlist
-                          if (action === 'add') {
-                            toast.success(`${product.name} aggiunto alla wishlist`, {
-                              icon: '🤍',
-                              style: { background: '#ef4444', color: '#ffffff' }
-                            });
-                          } else {
-                            toast(`${product.name} rimosso dalla wishlist`, {
-                              icon: '❤',
-                              style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
-                            });
-                          }
-                        }}
-                      />
-                    ))}
+{products.map((p) => (
+  <ProductCard
+    key={p.id}
+    product={{
+      ...p,
+      // Controlla la quantità nel carrello
+      cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+      // Controlla se è già nella wishlist (leggendo dal localStorage)
+      isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
+    }}
+    variant={viewMode === "grid" ? "grid" : "compact"}
+    onViewDetails={(slug) => navigate(`/details/${slug}`)}
+    onAddToCart={handleAddToCart}
+    onIncrease={increaseQuantity}
+    onDecrease={decreaseQuantity}
+    cart={cart}
+    // Qui uniamo la logica "migliore" del main
+    onToggleWishlist={(product) => {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      const exists = wishlist.some(w => w.id === product.id);
+      let updated;
+      let action;
+
+      if (exists) {
+        updated = wishlist.filter(w => w.id !== product.id);
+        action = 'remove';
+      } else {
+        updated = [...wishlist, product];
+        action = 'add';
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+
+      // Dispatch dettagliato per sincronizzare altri componenti (es. header)
+      window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
+
+      // Notifiche visive (prese dal main perché sono più carine)
+      if (action === 'add') {
+        toast.success(`${product.name} aggiunto alla wishlist`, {
+          icon: '🤍',
+          style: { background: '#ef4444', color: '#ffffff' }
+        });
+      } else {
+        toast(`${product.name} rimosso dalla wishlist`, {
+          icon: '❤',
+          style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+        });
+      }
+    }}
+  />
+))}
                 </div>
 
-                {visibleProducts < getFilteredAndSortedProducts().length && (
-                  <div className="load-more-container">
-                    <button className="load-more-btn" onClick={loadMoreProducts}>
-                      Carica altri 10 prodotti
-                    </button>
-                  </div>
-                )}
+                {/* Componente di paginazione */}
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  totalItems={pagination.totalItems}
+                  itemsPerPage={itemsPerPage}
+                  hasNextPage={pagination.hasNextPage}
+                  hasPrevPage={pagination.hasPrevPage}
+                  onPageChange={handlePageChange}
+                  onItemsPerPageChange={handleItemsPerPageChange}
+                  itemsPerPageOptions={[10, 20, 50]}
+                />
               </>
             )}
           </div>
