@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
@@ -6,6 +7,7 @@ import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
+
 
 const generateSlug = (name) => {
   return name
@@ -49,7 +51,7 @@ function Details() {
         setLoading(true);
         const data = await productsAPI.getBySlug(slug);
         setProduct(data);
-        const allProducts = await productsAPI.getAll();
+        const allProducts = await productsAPI.getAllUnpaginated();
         setProductsData(allProducts);
       } catch (error) {
         logError("Errore caricamento prodotto", error);
@@ -227,11 +229,11 @@ function Details() {
       </div>
     );
   }
-
   const price = parseFloat(product.price) || 0;
   const discount = Number(product.discount) || 0;
   const hasDiscount = discount > 0;
   const finalPrice = hasDiscount ? price * (1 - discount / 100) : price;
+
 
   return (
     <>
@@ -275,7 +277,6 @@ function Details() {
           </div>
 
           <p className="product-short-desc">{product.description}</p>
-
           <div className="product-actions">
             <div className="product-quantity-row">
               <span className="qty-label">Quantità</span>
@@ -306,18 +307,15 @@ function Details() {
               Contenuti esclusivi sbloccabili • Aggiornamenti futuri inclusi
             </div>
           </div>
-
           {relatedProducts.length > 0 && (
             <section className="quests-section related-section-wrapper">
               <h2 className="section-title">Prodotti correlati</h2>
-
               <button
                 className="scroll-btn scroll-left"
                 onClick={() => scrollCarousel(relatedRef, -1)}
               >
                 &lt;
               </button>
-
               <div
                 ref={relatedRef}
                 className="cards-list related-cards-list"
@@ -339,7 +337,6 @@ function Details() {
                   />
                 ))}
               </div>
-
               <button
                 className="scroll-btn scroll-right"
                 onClick={() => scrollCarousel(relatedRef, 1)}
@@ -353,5 +350,5 @@ function Details() {
     </>
   );
 }
-
 export default Details;
+

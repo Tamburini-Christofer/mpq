@@ -17,9 +17,7 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     setError(null);
 
     try {
-      const stripe = await stripePromise;
-
-      // Crea una sessione di checkout Stripe
+      // Crea una sessione di checkout Stripe sul backend
       const response = await fetch('http://localhost:3000/payment/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -31,15 +29,19 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
         })
       });
 
-      const { sessionId } = await response.json();
-
-      // Reindirizza a Stripe Checkout
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-
-      if (error) {
-        setError(error.message);
-        setLoading(false);
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Server error creating checkout session');
       }
+
+      const { sessionUrl } = await response.json();
+
+      if (!sessionUrl) {
+        throw new Error('No session URL returned from server');
+      }
+
+      // Browser redirect to Stripe Checkout page (new recommended flow)
+      window.location.href = sessionUrl;
     } catch (err) {
       setError(err.message || 'Errore durante il pagamento. Riprova.');
       setLoading(false);

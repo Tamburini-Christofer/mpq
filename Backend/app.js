@@ -19,6 +19,9 @@ app.use(cors({
 const productRoutes = require('./routes/productRoutes');
 // collegamento della route per i pagamenti
 const paymentRoutes = require('./routes/paymentRoutes');
+//collegamento della route per la email
+const stripeWebHook = require('./routes/StripeWebhook.js')
+app.use('/api/stripe/webhook', stripeWebHook);
 // collegamento della route per il carrello
 const cartRoutes = require('./routes/cartRoutes');
 // collegamento della route per il checkout
