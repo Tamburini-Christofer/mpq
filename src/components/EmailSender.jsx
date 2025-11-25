@@ -28,22 +28,33 @@ export default function EmailSender({ onClose }) {
     e.preventDefault();
     setStatus("Registrazione in corso...");
 
-    //todo Configurazione EmailJS per inviare l'email
+    // Configurazione EmailJS per inviare l'email
+    // Costruisco un oggetto templateParams con chiavi comuni usate nei template EmailJS
+    const templateParams = {
+      name: formData.name,
+      from_name: formData.name,
+      user_name: formData.name,
+
+      email: formData.email,
+      to_email: formData.email,
+      user_email: formData.email,
+
+      message: formData.message || "",
+    }
+
     emailjs
-    //todo Invio dell'email utilizzando il servizio, template e user ID di EmailJS
       .send(
-        //todo Qui va impostato l'email service Gmail
         "service_yrfxb13",
-        //todo Qui va impostato il template creato su EmailJS
         "template_93d9uh2",
-        formData,
-        //todo Qui viene impostata la key
+        templateParams,
         "-wnk8k24vEMFJaNQS"
       )
     //todo Gestione del successo o fallimento dell'invio
       .then(() => {
         setStatus("Registrazione completata! Controlla la tua email per il messaggio di benvenuto.");
         setFormData({ name: "", email: "", message: "" });
+        // Chiudo il pop-up automaticamente dopo 1.2s
+        if (onClose) setTimeout(() => onClose(), 1200);
       })
       .catch(() => {
         setStatus("Errore nella registrazione. Riprova più tardi.");
@@ -74,12 +85,13 @@ export default function EmailSender({ onClose }) {
         
         <form className="email-form" onSubmit={sendEmail}>
           <div className="input-group">
+            <label className="input-label" htmlFor="name">Nome</label>
             <input
               id="name"
               className="email-input"
               type="text"
               name="name"
-              placeholder="Il Vostro nome, My Lord"
+              placeholder="Inserisci il tuo nome"
               value={formData.name}
               onChange={handleChange}
               required
@@ -87,17 +99,20 @@ export default function EmailSender({ onClose }) {
           </div>
 
           <div className="input-group">
+            <label className="input-label" htmlFor="email">Email</label>
             <input
               id="email"
               className="email-input"
               type="email"
               name="email"
-              placeholder="La Vostra email, Mio Sire"
+              placeholder="La tua email"
               value={formData.email}
               onChange={handleChange}
               required
             />
           </div>
+
+          {/* password removed: we only collect name and email for welcome */}
 
           <button
             className="email-submit-btn"

@@ -1,5 +1,5 @@
 import './App.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Layout from './layout/Layout.jsx'
 import HomePage from './pages/HomePage.jsx'
@@ -9,26 +9,31 @@ import Contact from './pages/Contact.jsx'
 import Wishlist from './pages/Wishlist.jsx'
 import Staff from './pages/Staff.jsx'
 import NotFoundPages from './pages/NotFoundPages.jsx'
+import EmailSender from './components/EmailSender.jsx'
+import './styles/components/SwalDark.css'
 
 function App () {
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true)
-
-  useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome')
-    if (hasSeenWelcome) {
-      setShowWelcomeModal(false)
+  const [showWelcome, setShowWelcome] = useState(() => {
+    try {
+      return !localStorage.getItem('hasSeenWelcome')
+    } catch (e) {
+      console.warn('Error checking welcome popup flag', e)
+      return false
     }
-  }, [])
+  })
 
-  const handleCloseModal = () => {
-    setShowWelcomeModal(false)
-    localStorage.setItem('hasSeenWelcome', 'true')
+  const closeWelcome = () => {
+    try {
+      localStorage.setItem('hasSeenWelcome', 'true')
+    } catch (e) {
+      console.warn('Could not set hasSeenWelcome', e)
+    }
+    setShowWelcome(false)
   }
 
   return (
     <>
-      {/* eventuale WelcomeModal se lo usi ancora */}
-
+      {showWelcome && <EmailSender onClose={closeWelcome} />}
       <BrowserRouter>
         <Routes>
           <Route path='/details/:slug' element={<Dettagli />} />
