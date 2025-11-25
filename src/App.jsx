@@ -1,61 +1,45 @@
-//todo Importo il file css contenente gli stili globali
 import './App.css'
-//todo Importo useState per gestire lo stato del modal di benvenuto
 import { useState, useEffect } from 'react'
-//todo Importo i componenti necessari da react-router-dom
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-//todo Importo il layout principale dell'applicazione
 import Layout from './layout/Layout.jsx'
-//todo Improto componenti delle pagine
 import HomePage from './pages/HomePage.jsx'
-//todo Importo la pagina Dettagli
 import Dettagli from './pages/Details.jsx'
-//todo importo la pagina Shop
 import Shop from './pages/Shop.jsx'
-//todo Importo la pagina Contatti
 import Contact from './pages/Contact.jsx'
-//todo Importo la pagina Staff
-import Staff from './pages/Staff.jsx'
-//todo Importo la pagina Wishlist
 import Wishlist from './pages/Wishlist.jsx'
-//todo Importo la pagina NotFoundPage
+import Staff from './pages/Staff.jsx'
 import NotFoundPages from './pages/NotFoundPages.jsx'
-//todo Importo il componente EmailSender per il modal di benvenuto
-import EmailSender from './components/EmailSender.jsx'
 
-function App() {
-  //todo Stato per controllare se mostrare il modal di benvenuto
-  const [showWelcome, setShowWelcome] = useState(false)
-  
-  //todo Al primo caricamento controllo se l'utente ha già visto il modal
+function App () {
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true)
+
   useEffect(() => {
     const hasSeenWelcome = localStorage.getItem('hasSeenWelcome')
-    if (!hasSeenWelcome) {
-      setShowWelcome(true)
+    if (hasSeenWelcome) {
+      setShowWelcomeModal(false)
     }
   }, [])
-  
-  //todo Funzione per chiudere il modal e salvare la preferenza
-  const handleCloseWelcome = () => {
-    setShowWelcome(false)
+
+  const handleCloseModal = () => {
+    setShowWelcomeModal(false)
     localStorage.setItem('hasSeenWelcome', 'true')
   }
 
   return (
     <>
-      {/* todo: Modal di benvenuto con EmailSender */}
-      {showWelcome && (
-        <div className="welcome-modal-overlay">
-          <EmailSender onClose={handleCloseWelcome} />
-        </div>
-      )}
-      
+      {/* eventuale WelcomeModal se lo usi ancora */}
+
       <BrowserRouter>
         <Routes>
           <Route path='/details/:slug' element={<Dettagli />} />
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
+
+            {/* 🟣 SHOP + VARIANTI */}
             <Route path='/shop' element={<Shop />} />
+            <Route path='/shop/cart' element={<Shop defaultTab="cart" />} />
+            <Route path='/shop/checkout' element={<Shop defaultTab="checkout" />} />
+
             <Route path='/wishlist' element={<Wishlist />} />
             <Route path='/contatti' element={<Contact />} />
             <Route path='/staff' element={<Staff />} />

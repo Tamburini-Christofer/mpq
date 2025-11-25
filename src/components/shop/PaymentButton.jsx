@@ -1,8 +1,5 @@
 import { useState } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
 import '../../styles/components/PaymentButton.css';
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_YOUR_KEY');
 
 export default function PaymentButton({ totalAmount, cartItems, formData, onClose }) {
   const [loading, setLoading] = useState(false);
@@ -19,9 +16,7 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     setError(null);
 
     try {
-      const stripe = await stripePromise;
-
-      // Crea una sessione di checkout Stripe
+      // Crea una sessione di checkout Stripe sul backend
       const response = await fetch('http://localhost:3000/payment/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -33,15 +28,19 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
         })
       });
 
-      const { sessionId } = await response.json();
-
-      // Reindirizza a Stripe Checkout
-      const { error } = await stripe.redirectToCheckout({ sessionId });
-
-      if (error) {
-        setError(error.message);
-        setLoading(false);
+      if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(errText || 'Server error creating checkout session');
       }
+
+      const { sessionUrl } = await response.json();
+
+      if (!sessionUrl) {
+        throw new Error('No session URL returned from server');
+      }
+
+      // Browser redirect to Stripe Checkout page (new recommended flow)
+      window.location.href = sessionUrl;
     } catch (err) {
       setError(err.message || 'Errore durante il pagamento. Riprova.');
       setLoading(false);
@@ -52,16 +51,13 @@ export default function PaymentButton({ totalAmount, cartItems, formData, onClos
     <>
       {error && <div className="payment-error">{error}</div>}
       <div className="buttons-row">
-        <button type="button" className="cancel-btn" onClick={onClose}>
-          Annulla Ordine
-        </button>
         <button 
           type="button"
           className="pay-btn" 
           onClick={handlePayClick}
           disabled={loading}
         >
-          {loading ? 'Reindirizzamento a Stripe...' : `Paga ${totalAmount.toFixed(2)}€`}
+          {loading ? 'Reindirizzamento a Stripe...' : `Procedi al pagamento`}
         </button>
       </div>
     </>

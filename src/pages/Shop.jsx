@@ -1,378 +1,511 @@
-//todo: Importiamo React e useState per creare componenti e gestire stati
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-//todo: Importiamo il CSS del componente Shop per lo stile
-import "../styles/pages/Shop.css"; 
-
-//todo: Importiamo gli stili delle card
+import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
-//todo: Importiamo i prodotti dal file JSON
-import productsData from "../JSON/products.json";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { toast } from 'react-hot-toast';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
-//todo: Importiamo il componente CheckoutForm
+import ProductCard from "../components/common/ProductCard";
 import CheckoutForm from "../components/shop/CheckoutForm";
-
-//todo: Importiamo il componente ShopComponent per i filtri
+import CheckoutPage from "./CheckoutPage";
 import ShopComponent from "../components/shop/ShopComponent";
-
-//todo: Importiamo SearchSortBar per la barra di ricerca
 import SearchSortBar from "../components/shop/SearchSortBar";
-
-//todo: Importiamo il componente FreeShippingBanner per la spedizione gratuita
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
+import Pagination from "../components/shop/Pagination";
 
-//todo: Creo il componente principale Shop
-const Shop = () => {
+const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
-  
-  //todo: Scroll istantaneo all'inizio della pagina quando si carica
+  const [searchParams, setSearchParams] = useSearchParams();
+  const mountedRef = useRef(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  
-  //todo: Stato per sapere quale tab è attivo (Shop, Carrello o Checkout)
-  const [activeTab, setActiveTab] = useState("shop");
-  
-  //todo: Stato per la modalità di visualizzazione (grid o list)
+
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [viewMode, setViewMode] = useState("grid");
-  
-  //todo: Stato per mostrare/nascondere il form di checkout
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-  
-  //todo: Stato per mostrare/nascondere i filtri
+  const [checkoutAvailable, setCheckoutAvailable] = useState(false);
+  const [checkoutJustEnabled, setCheckoutJustEnabled] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  
-  //todo: Stato per la ricerca
-  const [searchValue, setSearchValue] = useState('');
-  
-  //todo: Stato per l'ordinamento
-  const [sortValue, setSortValue] = useState('recent');
-  
-  //todo: Stato per i filtri
+
+  const [searchValue, setSearchValue] = useState("");
+
+  const [sortValue, setSortValue] = useState("recent");
+
   const [filters, setFilters] = useState({
-    priceRange: { 
-      min: 0,
-      max: 100,
-      current: 100
-    },
+    priceRange: { min: 0, max: 200 },
     categories: [],
-    difficulties: []
+    matureContent: false,
+    accessibility: false,
+    onSale: false,
+  });
+
+  // Stato per la paginazione
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    hasNextPage: false,
+    hasPrevPage: false
   });
   
-  //todo: Stato per gestire il numero di prodotti visibili (inizia con 10)
-  const [visibleProducts, setVisibleProducts] = useState(10);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  //todo: Lista di prodotti disponibili nello shop (sono degli esempi)
-  //todo: Array statico di prodotti demo (da collegare poi a un DB o API)
-    const products = productsData.map((p, index) => ({
-      ...p,
-      originalIndex: index,
-      category: p.category_id === 1 ? "film" : 
-                p.category_id === 2 ? "series" : 
-                p.category_id === 3 ? "anime" : "film"
-    }));
-
-  //todo: Stato per i prodotti aggiunti al carrello (carica da localStorage se presente)
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-
-  //todo: Sincronizza il carrello con localStorage ogni volta che cambia
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  //todo: Ascolta i cambiamenti del localStorage da altre pagine (es. Details)
-  useEffect(() => {
-    const handleStorageChange = () => {
-      const savedCart = localStorage.getItem('cart');
-      if (savedCart) {
-        setCart(JSON.parse(savedCart));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  //todo: Stato per gestire le notifiche popup (es. "Prodotto aggiunto!")
   const [notification, setNotification] = useState(null);
 
-  //todo: Stato per memorizzare il codice promozionale inserito dall'utente
-  const [promoCode, setPromoCode] = useState('');
-  //todo: Stato booleano che indica se il codice promozionale è stato applicato con successo
-  const [promoApplied, setPromoApplied] = useState(false);
-  //todo: Stato per il messaggio di feedback (successo/errore) del codice promozionale
-  const [promoMessage, setPromoMessage] = useState('');
+  // Inizializza lo stato dei filtri dalla query string (se presente)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
 
-  //todo: Funzione per mostrare una notifica
-  const showNotification = (message, type = 'success') => {
+    const q = params.get("q") || "";
+    const sort = params.get("sort") || "recent";
+    const page = parseInt(params.get("page")) || 1;
+    const limit = parseInt(params.get("limit")) || 10;
+
+    const priceMin = params.get("priceMin");
+    const priceMax = params.get("priceMax");
+    const categories = params.get("categories");
+
+    const onSale = params.get("onSale") === "1";
+    const matureContent = params.get("matureContent") === "1";
+    const accessibility = params.get("accessibility") === "1";
+
+    setSearchValue(q);
+    setSortValue(sort);
+    setItemsPerPage(limit);
+    setCurrentPage(page);
+
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: {
+        min: priceMin !== null ? parseFloat(priceMin) : prev.priceRange.min,
+        max: priceMax !== null ? parseFloat(priceMax) : prev.priceRange.max,
+      },
+      categories: categories ? categories.split(",").filter(Boolean) : prev.categories,
+      onSale,
+      matureContent,
+      accessibility,
+    }));
+
+    // Carica i prodotti in base alla pagina trovata nella query string
+    loadProducts(page);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const showNotification = (message, type = "success") => {
     setNotification({ message, type });
-    //todo: La notifica scompare automaticamente dopo 3 secondi
-    setTimeout(() => {
-      setNotification(null);
-    }, 3000);
+    setTimeout(() => setNotification(null), 2500);
   };
 
-  //todo: Funzione per aggiungere un prodotto al carrello
-  const addToCart = (product) => {
-    //todo: Controllo se il prodotto era già nel carrello (confronto per nome)
-    const wasInCart = cart.find(item => item.name === product.name);
-    
-    setCart((prev) => {
-      //todo: Trovo se esiste già l'item nel carrello
-      const existingItem = prev.find(item => item.name === product.name);
+  const loadProducts = async (page = 1, resetPage = false) => {
+    try {
+      setLoading(true);
       
-      if (existingItem) {
-        //todo: Se esiste, incremento la quantità di 1
-        return prev.map(item =>
-          item.name === product.name
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        //todo: Se non esiste, lo aggiungo con quantità iniziale 1
-        return [...prev, { ...product, quantity: 1 }];
+      // Se resetPage è true, usa la pagina 1, altrimenti usa la pagina passata
+      const targetPage = resetPage ? 1 : page;
+      
+      const options = {
+        page: targetPage,
+        limit: itemsPerPage,
+        search: searchValue,
+        sortBy: sortValue,
+        priceMin: filters.priceRange.min,
+        priceMax: filters.priceRange.max,
+        onSale: filters.onSale,
+        matureContent: filters.matureContent,
+        accessibility: filters.accessibility
+      };
+      
+      // Gestione filtro categorie - supporta multiple categorie
+      if (filters.categories.length > 0) {
+        const categoryMap = { "film": 1, "series": 2, "anime": 3 };
+        // Per ora prendiamo solo la prima categoria (limitazione API)
+        const categoryId = categoryMap[filters.categories[0]];
+        if (categoryId) options.categoryId = categoryId;
       }
-    });
 
-    //todo: Mostro una notifica diversa a seconda se era già nel carrello
-    if (wasInCart) {
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`);
-    } else {
-      showNotification(`"${product.name}" aggiunto al carretto!`);
+      const data = await productsAPI.getAll(options);
+      
+      const mapped = data.products.map((p) => ({
+        ...p,
+        category:
+          p.category_id === 1
+            ? "film"
+            : p.category_id === 2
+            ? "series"
+            : p.category_id === 3
+            ? "anime"
+            : "film",
+      }));
+
+      setProducts(mapped);
+      setPagination(data.pagination);
+      
+      if (resetPage) {
+        setCurrentPage(1);
+      } else {
+        setCurrentPage(targetPage);
+      }
+      
+    } catch (error) {
+      console.error('Errore caricamento prodotti:', error);
+      showNotification("Errore caricamento prodotti", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
-  //todo: Funzione per rimuovere completamente un prodotto dal carrello
-  const removeFromCart = (productName) => {
-    //todo: Trovo il prodotto da rimuovere per mostrare il nome nella notifica
-    const productToRemove = cart.find(item => item.name === productName);
+  // Caricamento iniziale
+  useEffect(() => {
+    loadProducts(1);
+  }, [itemsPerPage]); // Ricarica quando cambia items per pagina
+
+  const [cart, setCart] = useState([]);
+
+  // Effetti per ricaricare i prodotti quando cambiano i filtri
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      loadProducts(1, true); // Reset alla pagina 1 quando cambiano i filtri
+    }, 300); // Debounce di 300ms
     
-    setCart((prev) => prev.filter((item) => item.name !== productName));
-    
-    //todo: Mostro notifica di rimozione in rosso
-    if (productToRemove) {
-      showNotification(`"${productToRemove.name}" rimosso dal carretto!`, 'error');
+    return () => clearTimeout(timeoutId);
+  }, [filters, searchValue, sortValue]);
+
+  // Sync activeTab with defaultTab prop when route changes
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab]);
+
+  // Aggiorna la query string ogni volta che cambiano parametri rilevanti
+  useEffect(() => {
+    // Evita di aggiornare subito durante il mount iniziale (abbiamo già parsato la URL)
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
+
+    const params = new URLSearchParams();
+
+    if (searchValue) params.set("q", searchValue);
+    if (sortValue) params.set("sort", sortValue);
+    if (currentPage) params.set("page", String(currentPage));
+    if (itemsPerPage) params.set("limit", String(itemsPerPage));
+
+    params.set("priceMin", String(filters.priceRange.min));
+    params.set("priceMax", String(filters.priceRange.max));
+
+    if (filters.categories && filters.categories.length > 0)
+      params.set("categories", filters.categories.join(","));
+
+    params.set("onSale", filters.onSale ? "1" : "0");
+    params.set("matureContent", filters.matureContent ? "1" : "0");
+    params.set("accessibility", filters.accessibility ? "1" : "0");
+
+    setSearchParams(params, { replace: true });
+  }, [filters, searchValue, sortValue, currentPage, itemsPerPage, setSearchParams]);
+
+  const fetchCart = async () => {
+    try {
+      const cartData = await cartAPI.get();
+      setCart(cartData);
+    } catch {
+      console.error("Errore nel fetch del carrello");
     }
   };
 
-  //todo: Funzione per diminuire la quantità di un prodotto nel carrello
-  const decreaseQuantity = (productName) => {
-    //todo: Trovo il prodotto per controllare se sarà rimosso
-    const productToCheck = cart.find(item => item.name === productName);
-    const willBeRemoved = productToCheck && productToCheck.quantity === 1;
-    
-    setCart((prev) => {
-      return prev.map(item => {
-        if (item.name === productName) {
-          if (item.quantity === 1) {
-            //todo: Se la quantità è 1, rimuovo il prodotto dal carrello
-            return null;
-          }
-          //todo: Altrimenti diminuisco la quantità di 1
-          return { ...item, quantity: item.quantity - 1 };
+  // Make checkout available automatically when cart has items;
+  // Keep checkout hidden by default. Only enable it when the user
+  // explicitly clicks "Procedi al checkout". However, if the cart
+  // becomes empty, always disable the checkout entry and navigate
+  // away from the checkout view if currently active.
+  useEffect(() => {
+    const isEmpty = !cart || cart.length === 0;
+    if (isEmpty) {
+      if (checkoutAvailable) setCheckoutAvailable(false);
+      if (activeTab === 'checkout') {
+        setActiveTab('shop');
+        navigate('/shop');
+      }
+    }
+    // otherwise do nothing: do NOT auto-enable checkout just because
+    // there are items — enablement happens when clicking the button.
+  }, [cart]);
+
+  useEffect(() => {
+    fetchCart();
+    window.addEventListener('cartUpdate', fetchCart);
+    // listener per chiudere sidebar/mobile menu quando altre parti dell'app richiedono la navigazione
+    const closeHandler = () => {
+      setShowFilters(false);
+      // ensure checkout becomes available when triggered from other components
+      setCheckoutAvailable(true);
+      setCheckoutJustEnabled(true);
+      setTimeout(() => setCheckoutJustEnabled(false), 420);
+      setActiveTab('checkout');
+      // scroll to top so checkout is visible
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('closeSidebar', closeHandler);
+    const checkoutClosedHandler = () => {
+      setCheckoutAvailable(false);
+      setActiveTab('shop');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    window.addEventListener('checkoutClosed', checkoutClosedHandler);
+    return () => {
+      window.removeEventListener('cartUpdate', fetchCart);
+      window.removeEventListener('closeSidebar', closeHandler);
+      window.removeEventListener('checkoutClosed', checkoutClosedHandler);
+    };
+  }, []);
+
+  // when switching to checkout tab, scroll smoothly to the checkout section
+  useEffect(() => {
+    if (activeTab === 'checkout') {
+      // wait a tick so the checkout section is rendered
+      setTimeout(() => {
+        const el = document.querySelector('.checkout-section');
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+          window.scrollTo({ top, behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        return item;
-      }).filter(Boolean); //todo: Rimuovo eventuali elementi null
-    });
-    
-    //todo: Mostro notifica se il prodotto è stato completamente rimosso
-    if (willBeRemoved && productToCheck) {
-      showNotification(`"${productToCheck.name}" rimosso dal carretto!`, 'error');
+      }, 80);
+    }
+  }, [activeTab]);
+
+  const handleAddToCart = async (product) => {
+    try {
+      await cartAPI.add(product.id, 1);
+      await fetchCart();
+      emitCartUpdate();
+      // central notification
+      emitCartAction('add', { id: product.id, name: product.name });
+    } catch (error) {
+      console.error("Errore aggiunta al carrello:", error);
+      toast.error("Errore aggiunta al carrello");
     }
   };
 
-  //todo: Funzione per aumentare la quantità di un prodotto nel carrello
-  const increaseQuantity = (productName) => {
-    setCart((prev) => 
-      prev.map(item =>
-        item.name === productName
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+  const increaseQuantity = async (productId) => {
+    try {
+      await cartAPI.increase(productId);
+      await fetchCart();
+      emitCartUpdate();
+      // centralized notification for plus action
+      try {
+        const name = cart.find((i) => i.id === productId)?.name || 'Prodotto';
+        emitCartAction('add', { id: productId, name });
+      } catch {}
+    } catch (error) {
+      console.error("Errore nell'aumentare la quantità:", error);
+    }
   };
 
-  //todo: Funzione per filtrare e ordinare prodotti
-  const getFilteredAndSortedProducts = () => {
-    let filtered = [...products];
-
-    // Filtro per ricerca
-    if (searchValue) {
-      filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(searchValue.toLowerCase())
-      );
-    }
-
-    // Filtro per prezzo
-    if (filters.priceRange) {
-      filtered = filtered.filter(p => 
-        p.price <= filters.priceRange.current
-      );
-    }
-
-    // Filtro per categorie
-    if (filters.categories && filters.categories.length > 0) {
-      filtered = filtered.filter(p => 
-        filters.categories.includes(p.category)
-      );
-    }
-
-    // Ordinamento
-    switch(sortValue) {
-      case 'price-asc':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
-      case 'price-desc':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
-      case 'name-asc':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-      case 'name-desc':
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-      default:
-        // 'recent' - mantieni ordine originale
-        break;
-    }
-
-    return filtered;
-  };
-
-  //todo: Funzione per caricare altri 10 prodotti
-  const loadMoreProducts = () => {
-    setVisibleProducts(prev => prev + 10);
-  };
-
-  //todo: Funzione per validare e applicare il codice promozionale inserito dall'utente
-  const applyPromoCode = () => {
-    //todo: Confrontiamo il codice inserito con 'WELCOMEQUEST' (case-insensitive)
-    if (promoCode.trim().toUpperCase() === 'WELCOMEQUEST') {
-      //todo: Verifichiamo che il codice non sia già stato applicato in precedenza
-      if (!promoApplied) {
-        //todo: Settiamo promoApplied a true per indicare che il codice è valido e attivo
-        setPromoApplied(true);
-        //todo: Mostriamo messaggio di successo con icona check (✓)
-        setPromoMessage('✓ Codice promozionale applicato! Spese di spedizione gratuite.');
-        //todo: Mostriamo notifica popup verde per confermare l'applicazione
-        showNotification('Codice promozionale applicato con successo!', 'success');
+  const decreaseQuantity = async (productId) => {
+    try {
+      const item = cart.find((i) => i.id === productId);
+      if (item && item.quantity > 1) {
+        await cartAPI.decrease(productId);
+        // emit remove action for decrement
+        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch {}
       } else {
-        //todo: Se il codice è già stato applicato, mostriamo un avviso con icona warning (⚠)
-        setPromoMessage('⚠ Codice già applicato.');
+        await cartAPI.remove(productId);
+        const name = item?.name || 'Prodotto';
+        emitCartAction('remove', { id: productId, name });
       }
-    } else {
-      //todo: Se il codice non corrisponde, mostriamo errore con icona X (✗)
-      setPromoMessage('✗ Codice promozionale non valido.');
-      //todo: Resettiamo promoApplied a false in caso di codice errato
-      setPromoApplied(false);
+      await fetchCart();
+      emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nel diminuire la quantità:", error);
     }
   };
 
-  //todo: Inizio del render del componente
+  const removeFromCart = async (productId) => {
+    try {
+      await cartAPI.remove(productId);
+      await fetchCart();
+      const name = cart.find((i) => i.id === productId)?.name || "Prodotto";
+      try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id: productId, name } } }));
+      } catch {
+        toast.error(`"${name}" rimosso dal carrello`);
+      }
+      emitCartUpdate();
+    } catch {
+      toast.error("Errore rimozione");
+    }
+  };
+
+  // Gestori per la paginazione
+  const handlePageChange = (newPage) => {
+    loadProducts(newPage);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleItemsPerPageChange = (newItemsPerPage) => {
+    setItemsPerPage(newItemsPerPage);
+    // loadProducts sarà chiamato automaticamente dall'useEffect che monitora itemsPerPage
+  };
+
+  const subtotal = cart.reduce(
+    (sum, item) => sum + parseFloat(item.price) * item.quantity,
+    0
+  );
+
+  const SHIPPING_THRESHOLD = 40;
+  const SHIPPING_COST = 4.99;
+
+  const isFreeShipping = subtotal >= SHIPPING_THRESHOLD;
+  const shippingCost = isFreeShipping ? 0 : SHIPPING_COST;
+
+  const totalAmount = subtotal + shippingCost;
+
+  const handleCancelOrder = async () => {
+    try {
+      const result = await Swal.fire({
+        title: 'Svuotare il carrello?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Svuota carrello',
+        cancelButtonText: 'Annulla',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-wishlist-popup',
+          confirmButton: 'swal-wishlist-confirm',
+          cancelButton: 'swal-wishlist-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
+      await cartAPI.clear();
+      emitCartUpdate();
+      await fetchCart();
+      setShowCheckoutForm(false);
+      // hide checkout entry after cancelling the order
+      setCheckoutAvailable(false);
+      setActiveTab('shop');
+
+      await Swal.fire({
+        html: `
+          <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Carrello svuotato</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-wishlist-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
+
+      navigate("/shop");
+    } catch (err) {
+      console.error("Errore annullamento ordine:", err);
+    }
+  };
+
   return (
     <div className="shop-ui-container">
-      {/* todo: Mostro la notifica se esiste */}
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === 'success' ? '✓' : 'ℹ'}
-            </span>
-            <span className="notification-message">{notification.message}</span>
-            <button 
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      
 
-      {/* todo: Sidebar laterale con logo e menu */}
-      <aside className={`sidebar ${showFilters ? 'collapsed' : ''}`}>
+      <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
           <div className="icon"></div>
-          <h1 className="title">MyPocket<span>Quest</span></h1>
+          <h1 className="title">
+            MyPocket<span>Quest</span>
+          </h1>
           <p className="subtitle">Next Level: Real Life</p>
         </div>
 
-        {/* todo: Menu dei tab per navigare tra Shop, Carrello e Checkout */}
         <div className="menu">
           <button
             className={activeTab === "shop" ? "menu-btn active" : "menu-btn"}
-            onClick={() => setActiveTab("shop")}
+            onClick={() => {
+              setActiveTab("shop");
+              navigate("/shop");
+            }}
           >
             Shop
           </button>
 
           <button
             className={activeTab === "cart" ? "menu-btn active" : "menu-btn"}
-            onClick={() => setActiveTab("cart")}
+            onClick={() => {
+              setActiveTab("cart");
+              navigate("/shop/cart");
+            }}
           >
-            Carretto ({cart.length})
+            Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
-          <button
-            className={
-              activeTab === "checkout" ? "menu-btn active" : "menu-btn"
-            }
-            onClick={() => setActiveTab("checkout")}
-          >
-            Checkout
-          </button>
+          {/* show Checkout menu only when checkoutAvailable is true */}
+          {checkoutAvailable && (
+            <button
+              className={`${activeTab === "checkout" ? "menu-btn active" : "menu-btn"} ${checkoutJustEnabled ? 'menu-btn-enter' : ''}`}
+              onClick={() => {
+                setActiveTab("checkout");
+                navigate("/shop/checkout");
+              }}
+            >
+              Checkout
+            </button>
+          )}
         </div>
       </aside>
 
-      {/* todo: Pannello filtri */}
       {showFilters && (
         <div className="filters-panel">
-          <ShopComponent 
-            products={products}
+          <ShopComponent
             filters={filters}
             onFiltersChange={setFilters}
+            searchValue={searchValue}
+            onSearchChange={setSearchValue}
           />
         </div>
       )}
 
-      {/* todo: Contenuto principale */}
       <main className="content">
-        {/* todo: Sezione Shop */}
         {activeTab === "shop" && (
           <div className="shop-section">
-            {/* todo: Controlli per cambiare visualizzazione */}
             <div className="view-controls">
-              <div style={{display: 'flex', gap: '10px'}}>
-                <button 
+              <div style={{ display: "flex", gap: "10px" }}>
+                <button
                   className={viewMode === "grid" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("grid")}
-                  title="Visualizzazione a griglia"
                 >
-                  <span className="view-icon">⊞</span>
+                  ⊞
                 </button>
-                <button 
+                <button
                   className={viewMode === "list" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("list")}
-                  title="Visualizzazione a lista"
                 >
-                  <span className="view-icon">☰</span> 
+                  ☰
                 </button>
-                <button 
+                <button
                   className={showFilters ? "view-btn active" : "view-btn"}
                   onClick={() => setShowFilters(!showFilters)}
-                  title="Mostra/Nascondi Filtri"
                 >
-                  <span className="view-icon">⚙</span> Filtri
+                  ⚙ Filtri
                 </button>
               </div>
 
-              {/* todo: Barra di ricerca e ordinamento */}
-              <SearchSortBar 
+              <SearchSortBar
                 searchValue={searchValue}
                 onSearchChange={setSearchValue}
                 sortValue={sortValue}
@@ -380,311 +513,170 @@ const Shop = () => {
               />
             </div>
 
-            <div className={`products ${viewMode}`}>
-              {getFilteredAndSortedProducts().slice(0, visibleProducts).map((p) => (
-                <div key={p.name} className="card fancy-card">
-                  
-                  <div className="card-image-wrapper">
-                    <img src={p.image} alt={p.name} className="card-image" />
-                  </div>
-
-                  <div className="card-body">
-                    <h3>{p.name}</h3>
-                    <p className="price">{p.price.toFixed(2)}€</p>
-                    {viewMode === "list" && (
-                      <div className="card-details">
-                        <p className="detail-item"><span className="detail-label">Categoria:</span> Videogames</p>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="card-actions">
-                    {/*todo Navigazione alla pagina dettaglio usando originalIndex*/}
-                    <button className="details-btn" onClick={() => navigate(`/exp/${p.originalIndex}`)}>
-                      Dettagli
-                    </button>
-                    <button className="buy-btn" onClick={() => addToCart(p)}>
-                      {viewMode === "list" ? "Aggiungi al Carretto" : "Aggiungi"}
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Pulsante per caricare altri prodotti */}
-            {visibleProducts < getFilteredAndSortedProducts().length && (
-              <div className="load-more-container">
-                <button className="load-more-btn" onClick={loadMoreProducts}>
-                  Carica altri 10 prodotti ({getFilteredAndSortedProducts().length - visibleProducts} rimanenti)
-                </button>
-              </div>
-            )}
-
-          </div>
-        )}
-
-        {/* todo: Sezione Carrello */}
-        {activeTab === "cart" && (
-          <div className="cart-section">
-            <h2 className="section-title">Carretto</h2>
-
-            {/* todo: Banner spedizione gratuita */}
-            {cart.length > 0 && (
-              <FreeShippingBanner 
-                subtotal={cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)}
-                threshold={40}
-                promoApplied={promoApplied}
-              />
-            )}
-
-            {cart.length === 0 ? (
-              //todo: Messaggio se il carrello è vuoto
-              <div className="empty-cart">
-                <p>Il carretto è vuoto.</p>
-                <p>Vai al Shop per aggiungere prodotti!</p>
-                <img src="/public/icon/EmptyShop.png" alt="Il logo del carrello vuoto" />
-              </div>
-            ) : (
-              //todo: Lista prodotti nel carrello
-              <div className="cart-items">
-                {cart.map((item) => (
-                  <div key={item.id} className="cart-item">
-                    <div className="item-info">
-                      <span className="item-name">{item.name}</span>
-                      <span className="item-price">{item.price.toFixed(2)}€</span>
-                    </div>
-                    
-                    {/* todo: Controlli per cambiare la quantità */}
-                    <div className="quantity-controls">
-                      <button
-                        className="quantity-btn"
-                        onClick={() => decreaseQuantity(item.name)}
-                      >
-                        -
-                      </button>
-                      <span className="quantity">{item.quantity}</span>
-                      <button
-                        className="quantity-btn"
-                        onClick={() => increaseQuantity(item.name)}
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    {/* todo: Mostra totale per prodotto e bottone per rimuovere */}
-                    <div className="item-total">
-                      <span className="total-price">
-                        {(item.price * item.quantity).toFixed(2)}€
-                      </span>
-                      <button
-                        className="remove-btn"
-                        onClick={() => removeFromCart(item.name)}
-                      >
-                        Rimuovi
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                
-                {/* todo: Mostro totale del carrello */}
-                <div className="cart-total">
-                  <strong>
-                    Totale Carretto: {cart.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2)}€
-                  </strong>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* todo: Sezione Checkout */}
-        {activeTab === "checkout" && (
-          <div className="checkout-section">
-            <h2 className="section-title">Checkout</h2>
-            
-            {cart.length === 0 ? (
-              //todo: Messaggio se il carrello è vuoto
-              <div className="empty-checkout">
-                <p>Il carretto è vuoto.</p>
-                <p>Aggiungi prodotti al carretto per procedere al checkout.</p>
-                <img src="/public/icon/InShop.png" alt="Il logo del carrello vuoto" />
+            {loading ? (
+              <div className="loading-container">
+                <p>Caricamento prodotti...</p>
               </div>
             ) : (
               <>
-                {/* todo: Riepilogo prodotti nel checkout */}
-                <div className="checkout-items">
-                  <h3 className="checkout-subtitle">Riepilogo Ordine:</h3>
-                  
-                  {cart.map((item) => (
-                    <div key={item.id} className="checkout-item">
-                      <div className="checkout-item-info">
-                        <span className="checkout-item-name">{item.name}</span>
-                        <span className="checkout-item-details">
-                          {item.quantity} x {item.price.toFixed(2)}€
-                        </span>
-                      </div>
-                      
-                      <div className="checkout-item-actions">
-                        <span className="checkout-item-total">
-                          {(item.price * item.quantity).toFixed(2)}€
-                        </span>
-                        <button
-                          className="checkout-remove-btn"
-                          onClick={() => removeFromCart(item.name)}
-                          title="Rimuovi dal carretto"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  ))}
+                <div className={`products products-${viewMode}`}>
+{products.map((p) => (
+  <ProductCard
+    key={p.id}
+    product={{
+      ...p,
+      // Controlla la quantità nel carrello
+      cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+      // Controlla se è già nella wishlist (leggendo dal localStorage)
+      isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
+    }}
+    variant={viewMode === "grid" ? "grid" : "compact"}
+    onViewDetails={(slug) => navigate(`/details/${slug}`)}
+    onAddToCart={handleAddToCart}
+    onIncrease={increaseQuantity}
+    onDecrease={decreaseQuantity}
+    cart={cart}
+    // Qui uniamo la logica "migliore" del main
+    onToggleWishlist={(product) => {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      const exists = wishlist.some(w => w.id === product.id);
+      let updated;
+      let action;
+
+      if (exists) {
+        updated = wishlist.filter(w => w.id !== product.id);
+        action = 'remove';
+      } else {
+        updated = [...wishlist, product];
+        action = 'add';
+      }
+
+      localStorage.setItem("wishlist", JSON.stringify(updated));
+
+      // Dispatch dettagliato per sincronizzare altri componenti (es. header)
+      window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
+
+      // Notifiche visive (prese dal main perché sono più carine)
+      if (action === 'add') {
+        toast.success(`${product.name} aggiunto alla wishlist`, {
+          icon: '🤍',
+          style: { background: '#ef4444', color: '#ffffff' }
+        });
+      } else {
+        toast(`${product.name} rimosso dalla wishlist`, {
+          icon: '❤',
+          style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+        });
+      }
+    }}
+  />
+))}
                 </div>
 
-                {/* todo: Sezione per inserire il codice promozionale */}
-                <div className="promo-code-section">
-                  <h3 className="checkout-subtitle">Codice Promozionale:</h3>
-                  <div className="promo-code-input-group">
-                    {/*todo: Input di testo per inserire il codice promo (es: WELCOMEQUEST)*/}
-                    <input
-                      type="text"
-                      className="promo-code-input"
-                      placeholder="Inserisci codice (es: WELCOMEQUEST)"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      disabled={promoApplied}
-                    />
-                    {/*todo: Bottone per applicare il codice, disabilitato se già applicato*/}
-                    <button
-                      className="promo-code-btn"
-                      onClick={applyPromoCode}
-                      disabled={promoApplied}
-                    >
-                      {/*todo: Cambia testo del bottone: "Applicato" se attivo, "Applica" se disponibile*/}
-                      {promoApplied ? 'Applicato' : 'Applica'}
-                    </button>
-                  </div>
-                  {/*todo: Mostra messaggio di feedback solo se presente (successo in verde, errore in rosso)*/}
-                  {promoMessage && (
-                    <p className={`promo-message ${promoApplied ? 'success' : 'error'}`}>
-                      {promoMessage}
-                    </p>
-                  )}
-                </div>
-
-                {/* todo: Totale ordine e bottoni azioni */}
-                <div className="checkout-summary">
-                  {/*todo: Calcoliamo i valori fuori dalla IIFE per usarli anche nelle azioni*/}
-                  {(() => {
-                    //todo: Calcoliamo il subtotale sommando prezzo × quantità di ogni prodotto
-                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    //todo: Spese spedizione: 0€ se sopra 40€ O se promo applicata, altrimenti 4.99€
-                    const isFreeShipping = subtotal >= 40 || promoApplied;
-                    const shippingCost = isFreeShipping ? 0 : 4.99;
-                    //todo: Totale finale = subtotale + spese di spedizione
-                    const total = subtotal + shippingCost;
-                    
-                    return (
-                      <>
-                        <div className="checkout-total">
-                          {/*todo: Riga che mostra il subtotale (solo prodotti, senza spedizione)*/}
-                          <div className="checkout-subtotal">
-                            <span>Subtotale:</span>
-                            <span>{subtotal.toFixed(2)}€</span>
-                          </div>
-                          {/*todo: Riga spese di spedizione con logica promo e soglia 40€*/}
-                          <div className="checkout-shipping">
-                            <span>Spese di spedizione:</span>
-                            <span className={isFreeShipping ? 'free-shipping' : ''}>
-                              {/*todo: Se spedizione gratuita (sopra 40€ o promo), mostra prezzo barrato + "GRATIS" in verde*/}
-                              {isFreeShipping ? (
-                                <>
-                                  <span style={{textDecoration: 'line-through', color: '#999'}}>4.99€</span>
-                                  {' '}
-                                  <span style={{color: '#4ade80'}}>GRATIS</span>
-                                </>
-                              ) : (
-                                //todo: Altrimenti mostra il costo normale 4.99€
-                                '4.99€'
-                              )}
-                            </span>
-                          </div>
-                          {/*todo: Riga totale finale con bordo superiore per evidenziare*/}
-                          <div className="checkout-total-final">
-                            <h3>Totale Ordine:</h3>
-                            <h3>{total.toFixed(2)}€</h3>
-                          </div>
-                        </div>
-                        
-                        {/* todo: Banner spedizione gratuita */}
-                        <FreeShippingBanner 
-                          subtotal={subtotal}
-                          threshold={40}
-                          promoApplied={promoApplied}
-                        />
-                        
-                        <div className="checkout-actions">
-                          {/*todo: Mostriamo l'icona FreeShipping se sopra 40€ o se il codice promo è stato applicato*/}
-                          {isFreeShipping && (
-                            <img 
-                              src="/icon/FreeShipping.png" 
-                              alt="Spedizione Gratuita" 
-                              className="free-shipping-icon"
-                              title="Spedizione gratuita attiva!"
-                            />
-                          )}
-                          <button 
-                            className="clear-cart-btn"
-                            onClick={() => {
-                              const itemCount = cart.length;
-                              setCart([]);
-                              showNotification(`Carretto svuotato! ${itemCount} prodotti rimossi.`, 'error');
-                            }}
-                          >
-                            Svuota Carretto
-                          </button>
-                          <button 
-                            className="confirm-btn"
-                            onClick={() => setShowCheckoutForm(true)}
-                          >
-                            Conferma Acquisto e parti per la tua prossima avventura
-                          </button>
-                        </div>
-                      </>
-                    );
-                  })()}
-                </div>
+                {/* Componente di paginazione */}
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  totalItems={pagination.totalItems}
+                  itemsPerPage={itemsPerPage}
+                  hasNextPage={pagination.hasNextPage}
+                  hasPrevPage={pagination.hasPrevPage}
+                  onPageChange={handlePageChange}
+                  onItemsPerPageChange={handleItemsPerPageChange}
+                  itemsPerPageOptions={[10, 20, 50]}
+                />
               </>
             )}
           </div>
         )}
+
+        {activeTab === "cart" && (
+          <div className="cart-section">
+            <h2 className="section-title-shop">Carrello</h2>
+
+            {cart.length > 0 && (
+              <FreeShippingBanner subtotal={subtotal} threshold={40} promoApplied={false} />
+            )}
+
+            {cart.length === 0 ? (
+              <div className="empty-cart">
+                <p>Il carrello è vuoto.</p>
+                <p>Vai allo Shop per aggiungere prodotti!</p>
+                <img src="/public/icon/EmptyShop.png" alt="empty" />
+              </div>
+            ) : (
+              <div className="cart-items">
+                {cart.map((item) => {
+                  const price = parseFloat(item.price);
+                  return (
+                    <div key={item.id} className="cart-item">
+                      <div className="item-info">
+                        <span className="item-name">{item.name}</span>
+                        <span className="item-price">{price.toFixed(2)}€</span>
+                      </div>
+
+                      <div className="quantity-controls">
+                        <button className="quantity-btn-c" onClick={() => decreaseQuantity(item.id)}>
+                          -
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button className="quantity-btn-c" onClick={() => increaseQuantity(item.id)}>
+                          +
+                        </button>
+                      </div>
+
+                      <div className="item-total">
+                        <span className="total-price">{(price * item.quantity).toFixed(2)}€</span>
+                        <button className="remove-btn" onClick={() => removeFromCart(item.id)}>
+                          Rimuovi
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                <div className="cart-total">
+                  <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+                  {cart.length > 0 && (
+                    <div style={{ marginTop: 12 }}>
+                      <button
+                        className="payment-btn"
+                        onClick={() => {
+                          // enable checkout entry and navigate to it with smooth scroll
+                          setCheckoutAvailable(true);
+                          setActiveTab('checkout');
+                          navigate('/shop/checkout');
+                        }}
+                      >
+                        Procedi al checkout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "checkout" && (
+          <div className="checkout-section">
+            <CheckoutPage />
+          </div>
+        )}
       </main>
-      
-      {/* todo: Overlay form checkout */}
-      {/* todo: Passiamo 4 props al CheckoutForm: totalAmount (con spedizione), cartItems, shippingCost e isFreeShipping */}
-      {showCheckoutForm && (() => {
-        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        const isFreeShipping = subtotal >= 40 || promoApplied;
-        const shippingCost = isFreeShipping ? 0 : 4.99;
-        const totalAmount = subtotal + shippingCost;
-        
-        return (
-          <CheckoutForm
-            /* todo: Funzione callback per chiudere l'overlay quando l'utente clicca su X o annulla */
-            onClose={() => setShowCheckoutForm(false)}
-            /* todo: Totale calcolato con logica spedizione gratuita */
-            totalAmount={totalAmount}
-            /* todo: Passiamo intero carrello per mostrare dettagli prodotti nel riepilogo */
-            cartItems={cart}
-            /* todo: Costo spedizione: 0 se sopra 40€ o promo, 4.99 altrimenti */
-            shippingCost={shippingCost}
-            /* todo: Stato booleano per mostrare "GRATIS" barrato nel form */
-            isFreeShipping={isFreeShipping}
-          />
-        );
-      })()}
+
+      {showCheckoutForm && (
+        <CheckoutForm
+          onClose={() => setShowCheckoutForm(false)}
+          onCancelOrder={handleCancelOrder}
+          cartItems={cart}
+          totalAmount={totalAmount}
+          shippingCost={shippingCost}
+          isFreeShipping={isFreeShipping}
+        />
+      )}
     </div>
   );
 };
 
-//todo: Esporto il componente Shop così può essere usato in altre parti dell'app
 export default Shop;

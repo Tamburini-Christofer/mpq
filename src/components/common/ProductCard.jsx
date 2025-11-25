@@ -1,174 +1,325 @@
-//todo Importiamo gli stili della card prodotto
-import "../../styles/components/ProductCard.css";
-import { useState, useEffect } from "react";
 
-//todo Funzione per generare slug SEO-friendly dal nome prodotto
-//todo Converte "Il Padrino" → "il-padrino"
+import "../../styles/components/ProductCard.css";
+import React, { useState } from "react";
+import { cartAPI, emitCartUpdate, emitCartAction } from "../../services/api";
+import { toast } from 'react-hot-toast';
+
+// Funzione per generare slug SEO-friendly
 const generateSlug = (name) => {
+  if (!name) return "";
+  // normalizza i caratteri accentati in ASCII (es. è -> e), poi sostituisce i non-alphanumerici
   return name
+    .toString()
     .toLowerCase()
-    .trim()
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .normalize('NFD') // decomposes accents
+    .replace(/\p{Diacritic}/gu, '') // rimuove i diacritici
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 };
 
-//todo Componente card prodotto riutilizzabile
-//todo Props:
-//todo - product: oggetto prodotto con {name, price, image}
-//todo - badge: tipo di badge ("popular", "new", "sale", null)
-//todo - variant: variante di visualizzazione ("carousel", "grid", "compact")
-//todo - onViewDetails: callback per visualizzare dettagli (riceve slug)
-//todo - onAddToCart: callback per aggiungere al carrello
-//todo - showActions: boolean per mostrare/nascondere pulsanti
-export default function ProductCard({ 
-  product, 
-  badge = null,
-  variant = "carousel",
-  onViewDetails = null, 
-  onAddToCart = null,
-  showActions = true
+function ProductCard({
+  product,
+  variant = "grid",
+  badge,
+  onViewDetails,
+  onAddToCart,
+  onIncrease,
+  onDecrease,
+  qty = 0,
+  showActions = true,
+  onToggleWishlist,
 }) {
-  if (!product) return null;
-
-  //todo Genera lo slug dal nome del prodotto
-  const productSlug = generateSlug(product.name);
-  
-  //todo Stato per tracciare se il prodotto è in wishlist
-  const [isInWishlist, setIsInWishlist] = useState(false);
-  
-  //todo Controlla se il prodotto è in wishlist al mount e quando cambia
-  useEffect(() => {
-    checkWishlistStatus();
-    
-    //todo Listener per aggiornare stato quando cambia wishlist
-    const handleWishlistUpdate = () => checkWishlistStatus();
-    window.addEventListener('wishlistUpdate', handleWishlistUpdate);
-    window.addEventListener('storage', handleWishlistUpdate);
-    
-    return () => {
-      window.removeEventListener('wishlistUpdate', handleWishlistUpdate);
-      window.removeEventListener('storage', handleWishlistUpdate);
-    };
-  }, [product.name]);
-  
-  //todo Verifica se prodotto è in wishlist
-  const checkWishlistStatus = () => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    const inWishlist = wishlist.some(item => item.name === product.name);
-    setIsInWishlist(inWishlist);
-  };
-  
-  //todo Toggle wishlist (aggiungi/rimuovi)
-  const toggleWishlist = (e) => {
-    e.stopPropagation(); //todo Previeni click su card
-    
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    
-    if (isInWishlist) {
-      //todo Rimuovi da wishlist
-      const updatedWishlist = wishlist.filter(item => item.name !== product.name);
-      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
-      setIsInWishlist(false);
-    } else {
-      //todo Aggiungi a wishlist
-      wishlist.push(product);
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
-      setIsInWishlist(true);
-    }
-    
-    //todo Trigger evento per sincronizzare altre pagine
-    window.dispatchEvent(new Event('wishlistUpdate'));
-  };
-
-  //todo Mappa i tipi di badge alle classi CSS e testi
+  // Configurazione badge
   const badgeConfig = {
-    popular: { className: "product-card__badge--popular", text: "POPOLARE" },
-    new: { className: "product-card__badge--new", text: "NUOVO ARRIVO" },
-    sale: { className: "product-card__badge--sale", text: "OFFERTA" }
+    popular: { text: "Popolare", className: "product-card__badge--popular" },
+    new: { text: "Novità", className: "product-card__badge--new" },
+    sale: { text: "Offerta", className: "product-card__badge--sale" },
+    related: { text: "Correlato", className: "product-card__badge--related" },
+    wishlist: { text: "Wishlist", className: "product-card__badge--wishlist" },
+    grid: { text: "", className: "" },
+    compact: { text: "", className: "" },
+    carousel: { text: "", className: "" },
   };
 
-  //todo Determina il badge da mostrare: se c'è sconto automatico, mostra badge sale
-  const hasDiscount = product.discount && typeof product.discount === 'number' && product.discount > 0;
-  const displayBadge = hasDiscount ? 'sale' : badge;
+  // Stato espansione per la variante compatta
+  const [expanded, setExpanded] = useState(false);
+  // Stato locale per mostrare i controlli quantità dopo il primo acquisto
+  const [showQtyControls, setShowQtyControls] = useState(qty > 0);
+  // displayQty: stato locale mostrato nella UI (sincronizzato con prop `qty` o `product.cartQty`)
+  const [displayQty, setDisplayQty] = useState(() => {
+    return qty || product.cartQty || 0;
+  });
+
+  React.useEffect(() => {
+    setShowQtyControls((q) => (qty > 0 ? true : q));
+  }, [qty]);
+
+  // Mantieni displayQty sincronizzato con le props esterne
+  React.useEffect(() => {
+    const next = qty || product.cartQty || 0;
+    setDisplayQty(next);
+    if (next > 0) setShowQtyControls(true);
+  }, [qty, product.cartQty]);
+
+  const discount = product.discount || 0;
+  const hasDiscount = discount > 0;
+  const originalPrice = parseFloat(product.price) || 0;
+  const finalPrice = hasDiscount ? originalPrice * (1 - discount / 100) : originalPrice;
+  // Determina la classe della card in base ai dati prodotto
+  let cardTypeClass = variant === "compact" ? (expanded ? "expanded" : "collapsed") : "";
+  if (product.isPopular) cardTypeClass += " product-card--popular";
+  if (hasDiscount) cardTypeClass += " product-card--sale";
+  if (product.isNew) cardTypeClass += " product-card--new";
+
+  // Badge: priorità offerta > nuovo > popolare
+  let displayBadge = null;
+  if (hasDiscount) displayBadge = "sale";
+  else if (product.isNew) displayBadge = "new";
+  else if (product.isPopular) displayBadge = "popular";
+  else displayBadge = badge;
   const badgeData = badgeConfig[displayBadge];
+  // Usa lo slug già fornito dal backend se presente; altrimenti generalo in modo compatibile
+  const productSlug = product.slug ? product.slug : generateSlug(product.name);
+  const [isInWishlist, setIsInWishlist] = useState(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    return wishlist.some(w => w.id === product.id);
+  });
 
-  //todo Calcola prezzo originale e prezzo finale se c'è sconto
-  const originalPrice = product.price;
-  const finalPrice = hasDiscount ? originalPrice * (1 - product.discount / 100) : originalPrice;
+  React.useEffect(() => {
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    setIsInWishlist(wishlist.some(w => w.id === product.id));
+    const handler = () => {
+      const updated = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      setIsInWishlist(updated.some(w => w.id === product.id));
+    };
+    window.addEventListener("wishlistUpdate", handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener("wishlistUpdate", handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, [product.id]);
 
+  // Gestione wishlist: aggiorna locale, globale e dispatcha evento
+  const toggleWishlist = () => {
+    // Se il componente genitore ha fornito un handler, usalo (evita doppia scrittura)
+    if (onToggleWishlist) {
+      // Aggiornamento ottimistico dell'UI
+      setIsInWishlist(prev => !prev);
+      try {
+        onToggleWishlist(product);
+      } catch {
+        // se fallisce, rollback dello stato locale
+        setIsInWishlist(prev => !prev);
+      }
+      return;
+    }
+
+    // Fallback: gestione locale se non esiste handler esterno
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    const exists = wishlist.some(w => w.id === product.id);
+    let updated;
+    let action;
+    if (exists) {
+      updated = wishlist.filter(w => w.id !== product.id);
+      action = 'remove';
+    } else {
+      updated = [...wishlist, product];
+      action = 'add';
+    }
+    localStorage.setItem("wishlist", JSON.stringify(updated));
+    setIsInWishlist(!exists);
+    window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } }));
+    // mostra notifica globale
+    if (action === 'add') {
+      toast.success(`${product.name} aggiunto alla wishlist`, {
+        icon: '🤍',
+        style: { background: '#ef4444', color: '#ffffff' }
+      });
+    } else {
+      toast(`${product.name} rimosso dalla wishlist`, {
+        icon: '❤',
+        style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+      });
+    }
+  };
+
+  // Sincronizza displayQty con il carrello globale quando viene emesso cartUpdate
+  React.useEffect(() => {
+    let mounted = true;
+    const handler = async () => {
+      try {
+        const currentCart = await cartAPI.get();
+        if (!mounted) return;
+        const item = currentCart.find(i => i.id === product.id);
+        const qtyFromCart = item ? item.quantity : 0;
+        setDisplayQty(qtyFromCart);
+        if (qtyFromCart > 0) setShowQtyControls(true);
+        else setShowQtyControls(false);
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener("cartUpdate", handler);
+    // anche all'inizio sincronizziamo
+    handler();
+    return () => {
+      mounted = false;
+      window.removeEventListener("cartUpdate", handler);
+    };
+  }, [product.id]);
+
+  // Gestione quantità: ora delegata alle funzioni prop
+
+  // Unico wrapper per tutte le varianti
   return (
-    <div className={`product-card product-card--${variant}`}>
-      {/* todo: Badge se specificato o se c'è uno sconto */}
+    <div className={`product-card product-card--${variant} ${cardTypeClass}`}
+      onClick={variant === "compact" ? () => setExpanded((prev) => !prev) : undefined}
+      style={variant === "compact" ? { cursor: "pointer" } : {}}
+    >
       {badgeData && (
         <span className={`product-card__badge ${badgeData.className}`}>
-          {hasDiscount ? `-${product.discount}%` : badgeData.text}
+          {hasDiscount ? `-${discount}%` : badgeData.text}
         </span>
       )}
-      
-      {/* todo: Pulsante wishlist */}
-      <button 
-        className={`product-card__wishlist-btn ${isInWishlist ? 'active' : ''}`}
-        onClick={toggleWishlist}
-        title={isInWishlist ? 'Rimuovi dalla wishlist' : 'Aggiungi alla wishlist'}
+
+      <button
+        className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
+        onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}
+        aria-pressed={isInWishlist}
+        aria-label={isInWishlist ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
       >
-        {isInWishlist ? '♥' : '♡'}
+        <span className="heart">{isInWishlist ? "♥" : "♡"}</span>
       </button>
 
-      {/* todo: Immagine prodotto */}
-      <img 
-        src={product.image} 
-        alt={product.name} 
-        className="product-card__image" 
+      <img
+        className="product-card__image"
+        src={product.image}
+        alt={product.name}
       />
 
-      {/* todo: Informazioni prodotto */}
       <div className="product-card__info">
         <h3 className="product-card__title">{product.name}</h3>
-        
-        {/* todo: Mostra prezzi in base a presenza sconto */}
+
+        {variant === "compact" && (
+          <div className="product-card__meta">
+            <span className="product-card__category">
+              Categoria: {
+                product.category_id === 1 ? "Film" :
+                product.category_id === 2 ? "Serie TV" :
+                product.category_id === 3 ? "Anime" : "Altro"
+              }
+            </span>
+            {product.stock !== undefined && (
+              <span className="product-card__stock">Disponibilità: {product.stock > 0 ? `Disponibile (${product.stock})` : "Non disponibile"}</span>
+            )}
+          </div>
+        )}
+
+        {variant === "compact" && product.description && (
+          <p className="product-card__desc">{product.description.slice(0, 45)}{product.description.length > 45 ? "..." : ""}</p>
+        )}
+
         {hasDiscount ? (
           <div className="product-card__price-container">
-            <span className="product-card__price product-card__price--discount">
+            <span className="product-card__price--discount">
               {finalPrice.toFixed(2)}€
             </span>
-            <span 
-              className="product-card__price product-card__price--original"
+            <span
+              className="product-card__price--original"
               data-original-price="true"
             >
               {originalPrice.toFixed(2)}€
             </span>
           </div>
         ) : (
-          <p className="product-card__price">{product.price.toFixed(2)}€</p>
+          <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
         )}
 
-        {/* todo: Pulsanti azione (se abilitati) */}
-        {showActions && (onViewDetails || onAddToCart) && (
+        {showActions && (
           <div className="product-card__actions">
-            {/* todo: Pulsante dettagli - passa lo slug generato */}
-            {onViewDetails && (
-              <button
-                className="product-card__btn product-card__btn--details"
-                onClick={() => onViewDetails(productSlug)}
-              >
-                Dettagli
-              </button>
-            )}
+            <button
+              className="product-card__btn product-card__btn--details"
+              onClick={(e) => { e.stopPropagation(); onViewDetails && onViewDetails(productSlug); }}
+            >
+              Dettagli
+            </button>
 
-            {/* todo: Pulsante carrello */}
-            {onAddToCart && (
+            {!showQtyControls ? (
               <button
                 className="product-card__btn product-card__btn--cart"
-                onClick={() => onAddToCart(product)}
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  try {
+                    // delega se il genitore gestisce l'aggiunta (parent shows toast/side feedback)
+                    if (onAddToCart) {
+                      await onAddToCart(product);
+                      // parent is responsible for emitting cartAction / showing toasts
+                    } else {
+                      await cartAPI.add(product.id, 1);
+                      emitCartUpdate();
+                      // emit a single centralized cartAction so Layout shows the toast
+                      emitCartAction('add', { id: product.id, name: product.name });
+                    }
+
+                    setDisplayQty((d) => (d > 0 ? d : 1));
+                    setShowQtyControls(true);
+                  } catch (err) {
+                    console.error('Errore aggiunta al carrello:', err);
+                    toast.error("Errore nell'aggiunta al carrello");
+                  }
+                }}
               >
                 Acquista
               </button>
+            ) : (
+              <div className="product-qty-controls">
+                <button className="qty-btn" onClick={async (e) => {
+                  e.stopPropagation();
+                  setDisplayQty((d) => {
+                    const next = Math.max(d - 1, 0);
+                    if (next === 0) setShowQtyControls(false);
+                    return next;
+                  });
+                  try {
+                    if (onDecrease) {
+                      // delegate to parent; parent is responsible for emitting cartAction
+                      await Promise.resolve(onDecrease(product.id));
+                    } else {
+                      await cartAPI.decrease(product.id);
+                      emitCartUpdate();
+                      // centralized notification for minus action when card handles API directly
+                      emitCartAction('remove', { id: product.id, name: product.name });
+                    }
+                  } catch (err) {
+                    console.error('Errore nella diminuzione quantità:', err);
+                    toast.error("Errore nell'aggiornamento del carrello");
+                  }
+                }}>
+                  -
+                </button>
+                <span className="qty-display">{displayQty}</span>
+                <button className="qty-btn" onClick={async (e) => {
+                  e.stopPropagation();
+                  setDisplayQty((d) => d + 1);
+                  try {
+                    if (onIncrease) {
+                      // delegate to parent; parent should emit cartAction if needed
+                      await Promise.resolve(onIncrease(product.id));
+                    } else {
+                      await cartAPI.increase(product.id);
+                      emitCartUpdate();
+                      // centralized notification for plus action when card handles API directly
+                      emitCartAction('add', { id: product.id, name: product.name });
+                    }
+                  } catch (err) {
+                    console.error('Errore nell\'aumento quantità:', err);
+                    toast.error("Errore nell'aggiornamento del carrello");
+                  }
+                }}>
+                  +
+                </button>
+              </div>
             )}
           </div>
         )}
@@ -176,3 +327,7 @@ export default function ProductCard({
     </div>
   );
 }
+
+export default ProductCard;
+
+

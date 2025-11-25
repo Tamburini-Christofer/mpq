@@ -1,15 +1,12 @@
-// ...existing code...
-import "../styles/pages/Details.css"
-//todo useParams: hook per estrarre parametri dinamici dalla URL (es: /details/:slug)
-//todo useNavigate: hook per navigazione programmatica
-import { useParams, useNavigate } from "react-router-dom"
-import { useState, useEffect, useMemo, useRef } from "react"
-//todo Importiamo il database dei prodotti
-import productsData from "../JSON/products.json"
-//todo Importiamo ProductCard componente unificato per le card prodotto
-import ProductCard from "../components/common/ProductCard"
 
-//todo Funzione per generare slug SEO-friendly dal nome prodotto (deve essere identica a ProductCard)
+import React, { useState, useEffect, useMemo, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { toast } from 'react-hot-toast';
+import ProductCard from "../components/common/ProductCard";
+import "../styles/pages/Details.css";
+
+
 const generateSlug = (name) => {
   return name
     .toLowerCase()
@@ -21,193 +18,225 @@ const generateSlug = (name) => {
     .replace(/[ùúûü]/g, "u")
     .replace(/[^a-z0-9\s-]/g, "")
     .replace(/\s+/g, "-")
-    .replace(/-+/g, "-")
-}
-
-
+    .replace(/-+/g, "-");
+};
 
 function Details() {
-  //todo Estraiamo lo slug dalla URL (es: /details/il-padrino => slug = "il-padrino")
-  const { slug } = useParams()
-  const navigate = useNavigate()
-  //todo Cerchiamo il prodotto confrontando lo slug generato dal nome con quello dell'URL
-  const product = productsData.find(p => generateSlug(p.name) === slug)
+  const { slug } = useParams();
+  const navigate = useNavigate();
 
-  //todo Calcoliamo se il prodotto ha uno sconto attivo e il prezzo finale
-  const hasDiscount = product && product.discount && typeof product.discount === 'number' && product.discount > 0;
-  const finalPrice = hasDiscount ? product.price * (1 - product.discount / 100) : product?.price || 0;
+  const [product, setProduct] = useState(null);
+  const [productsData, setProductsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState([]);
 
-  const [quantity, setQuantity] = useState(1)
-  const [notification, setNotification] = useState(null)
+  const [quantity, setQuantity] = useState(1);
+  const [animClass, setAnimClass] = useState("");
+  const relatedRef = useRef(null);
 
-  // ref per carosello correlati
-  const relatedRef = useRef(null)
-
-  //todo Scroll istantaneo all'inizio della pagina quando si carica
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  const showNotification = (message, type = "success") => {
-    setNotification({ message, type })
-    setTimeout(() => {
-      setNotification(null)
-    }, 3000)
-  }
-
-  //todo Funzione per aggiungere il prodotto al carrello dalla pagina Details
-  const addToCart = () => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-    //todo Cerchiamo il prodotto nel carrello confrontando per nome (non per id)
-    const existingItem = cart.find((item) => item.name === product.name)
-
-    if (existingItem) {
-      //todo Se esiste già, aggiungiamo la quantità selezionata
-      existingItem.quantity += quantity
-      showNotification(`Quantità di "${product.name}" aumentata nel carretto!`)
-    } else {
-      //todo Se è nuovo, aggiungiamo l'intero oggetto prodotto con prezzo finale (scontato se applicabile) e la quantità
-      cart.push({ ...product, price: finalPrice, quantity })
-      showNotification(`"${product.name}" aggiunto al carrello!`)
+  const loadCart = async () => {
+    try {
+      const cartData = await cartAPI.get();
+      setCart(cartData);
+    } catch (error) {
+      console.error("Errore caricamento carrello:", error);
     }
+  };
 
-    localStorage.setItem('cart', JSON.stringify(cart))
-    window.dispatchEvent(new Event('cartUpdate'))
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        const data = await productsAPI.getBySlug(slug);
+        setProduct(data);
+        const allProducts = await productsAPI.getAllUnpaginated();
+        setProductsData(allProducts);
+      } catch (error) {
+        console.error("Errore caricamento prodotto:", error);
+        setProduct(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadProduct();
+    loadCart();
+  }, [slug]);
 
-    //todo Trigger storage event per sincronizzare con Shop e altre pagine aperte
-    window.dispatchEvent(new Event("storage"))
-  }
+  useEffect(() => {
+    window.addEventListener('cartUpdate', loadCart);
+    return () => window.removeEventListener('cartUpdate', loadCart);
+  }, []);
+
+  // use react-hot-toast for notifications
+
+  const increaseQty = () => {
+    setAnimClass("increment");
+    setTimeout(() => {
+      setAnimClass("");
+    }, 200);
+    setQuantity((q) => q + 1);
+  };
+
+  const decreaseQty = () => {
+    setQuantity((q) => {
+      if (q <= 1) {
+        setAnimClass("shake");
+        setTimeout(() => {
+          setAnimClass("");
+        }, 300);
+        return 1;
+      }
+      setAnimClass("decrement");
+      setTimeout(() => {
+        setAnimClass("");
+      }, 200);
+      return q - 1;
+    });
+  };
+
+  const addToCart = async () => {
+    if (!product) return;
+    if (!quantity || quantity <= 0) return; // nothing to add
+    try {
+      await cartAPI.add(product.id, quantity);
+      emitCartUpdate();
+      // Use centralized emit so Layout's Toaster shows the notification (same logic as Home)
+      console.log('Details.addToCart -> emitting add for', { id: product.id, name: product.name, quantity });
+      emitCartAction('add', { id: product.id, name: product.name });
+    } catch (error) {
+      console.error("Errore aggiunta al carrello:", error);
+      toast.error("Errore nell'aggiunta al carrello");
+    }
+  };
+
+  // Prodotti correlati con sconto e originalIndex
+  const relatedProducts = useMemo(() => {
+    if (!product || typeof product.category_id === "undefined") return [];
+    const sameCategory = productsData.filter(
+      (p) => p.category_id === product.category_id && p.id !== product.id
+    );
+    const shuffled = [...sameCategory];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    const selected = shuffled.slice(0, 6);
+    return selected.map((prod) => {
+      const disc = Number(prod.discount) || 0;
+      const price = parseFloat(prod.price) || 0;
+      return {
+        ...prod,
+        originalIndex: productsData.findIndex((p) => p.id === prod.id),
+        hasDiscount: disc > 0,
+        finalPrice: disc > 0 ? price * (1 - disc / 100) : price,
+      };
+    });
+  }, [product, productsData]);
+
+  const scrollCarousel = (ref, direction) => {
+    if (ref.current) {
+      const cardWidth = window.innerWidth < 768 ? 200 : 270;
+      const cardsToScroll = window.innerWidth < 768 ? 1 : 4;
+      const scrollAmount = cardWidth * cardsToScroll;
+
+      ref.current.scrollBy({
+        left: direction * scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  const handleTouchStart = (e, ref) => {
+    if (ref.current) {
+      ref.current.touchStartX = e.touches[0].clientX;
+      ref.current.scrollStartX = ref.current.scrollLeft;
+    }
+  };
+
+  const handleTouchMove = (e, ref) => {
+    if (!ref.current || !ref.current.touchStartX) return;
+    const touch = e.touches[0];
+    const diff = ref.current.touchStartX - touch.clientX;
+    ref.current.scrollLeft = ref.current.scrollStartX + diff;
+  };
+
+  const handleTouchEnd = (ref) => {
+    if (ref.current) {
+      ref.current.touchStartX = null;
+      ref.current.scrollStartX = null;
+    }
+  };
+
+  const handleAddToCartFromCarousel = async (prod) => {
+    try {
+      await cartAPI.add(prod.id, 1);
+      emitCartUpdate();
+      // Informazioni emesse con origin in modo che Layout non mostri il toast duplicato
+      // Centralized emit (same as HomePage): let Layout handle the toast
+      console.log('Details.handleAddToCartFromCarousel -> emitting add for', { id: prod.id, name: prod.name });
+      emitCartAction('add', { id: prod.id, name: prod.name });
+    } catch (error) {
+      console.error("Errore aggiunta correlato:", error);
+      toast.error("Errore nell'aggiunta al carrello");
+    }
+  };
+
+  const handleIncrease = async (productId) => {
+    try {
+      await cartAPI.increase(productId);
+      emitCartUpdate();
+      const prod = productsData.find(p => p.id === productId) || cart.find(i => i.id === productId);
+      const name = prod?.name || 'Prodotto';
+      console.log('Details.handleIncrease -> emitting add for', { id: productId, name });
+      emitCartAction('add', { id: productId, name });
+    } catch (error) {
+      console.error("Errore nell'aumentare la quantità:", error);
+      toast.error("Errore nell'aggiornamento del carrello");
+    }
+  };
+
+  const handleDecrease = async (productId) => {
+    try {
+      const item = cart.find(i => i.id === productId);
+      const prod = productsData.find(p => p.id === productId) || item;
+      const name = prod?.name || 'Prodotto';
+      if (item && item.quantity > 1) {
+        await cartAPI.decrease(productId);
+        // Central emit: let Layout show global toast
+        console.log('Details.handleDecrease -> emitting remove (decrease) for', { id: productId, name });
+        emitCartAction('remove', { id: productId, name });
+      } else {
+        await cartAPI.remove(productId);
+        console.log('Details.handleDecrease -> emitting remove (delete) for', { id: productId, name });
+        emitCartAction('remove', { id: productId, name });
+      }
+      emitCartUpdate();
+    } catch (error) {
+      console.error("Errore nel diminuire la quantità:", error);
+      toast.error("Errore nell'aggiornamento del carrello");
+    }
+  };
+
+  const handleViewDetails = (prodSlug) => {
+    navigate(`/details/${prodSlug}`);
+  };
 
   if (!product) {
     return (
       <div className="product-page">
         <h1>Prodotto non trovato</h1>
       </div>
-    )
+    );
   }
-
-  /* Prove per richiamare dei correlati 
-     Qui usiamo prodotti "correlati" semplicemente come:
-     - tutti gli altri prodotti tranne quello attuale
-     - max 12
-     - aggiungiamo originalIndex come in HomePage per compatibilità con ProductCard
-  */
-  const relatedProducts = useMemo(() => {
-    if (!product || typeof product.category_id === "undefined") {
-      console.warn("⚠️ Nessun category_id trovato per il prodotto:", product)
-      return []
-    }
-
-    // 1) filtra solo prodotti della stessa categoria, escluso il prodotto corrente
-    const sameCategory = productsData.filter(
-      (p) => p.category_id === product.category_id && p.name !== product.name
-    )
-
-    // 2) mescola in modo random (Fisher-Yates)
-    const shuffled = [...sameCategory]
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1))
-        ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-    }
-
-    // 3) prendi solo 6 prodotti randomici
-    const selected = shuffled.slice(0, 6)
-
-    // 4) aggiungi originalIndex per compatibilità
-    const withIndex = selected.map((prod) => ({
-      ...prod,
-      originalIndex: productsData.findIndex((p) => p.name === prod.name),
-    }))
-
-    console.log(
-      `🎯 PRODOTTI CORRELATI RANDOM (category_id = ${product.category_id}):`,
-      withIndex
-    )
-
-    return withIndex
-  }, [product])
-
-  // ---- FUNZIONI CAROSELLO (copiate/adattate da HomePage) ----
-
-  const scrollCarousel = (ref, direction) => {
-    if (ref.current) {
-      const cardWidth = window.innerWidth < 768 ? 200 : 270
-      const cardsToScroll = window.innerWidth < 768 ? 1 : 4
-      const scrollAmount = cardWidth * cardsToScroll
-
-      ref.current.scrollBy({
-        left: direction * scrollAmount,
-        behavior: "smooth",
-      })
-    }
-  }
-
-  const handleTouchStart = (e, ref) => {
-    if (ref.current) {
-      ref.current.touchStartX = e.touches[0].clientX
-      ref.current.scrollStartX = ref.current.scrollLeft
-    }
-  }
-
-  const handleTouchMove = (e, ref) => {
-    if (!ref.current || !ref.current.touchStartX) return
-
-    const touch = e.touches[0]
-    const diff = ref.current.touchStartX - touch.clientX
-    ref.current.scrollLeft = ref.current.scrollStartX + diff
-  }
-
-  const handleTouchEnd = (ref) => {
-    if (ref.current) {
-      ref.current.touchStartX = null
-      ref.current.scrollStartX = null
-    }
-  }
-
-  // ProductCard → onViewDetails(slug)
-  const handleViewDetails = (productSlug) => {
-    navigate(`/details/${productSlug}`)
-  }
-
-  // Aggiunta al carrello dalle card del carosello correlati
-  const handleAddToCartFromCarousel = (prod) => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || []
-    const existingItem = cart.find((item) => item.name === prod.name)
-
-    if (existingItem) {
-      existingItem.quantity += 1
-      showNotification(`Quantità di "${prod.name}" aumentata nel carrello!`)
-    } else {
-      cart.push({ ...prod, quantity: 1 })
-      showNotification(`"${prod.name}" aggiunto al carrello!`)
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart))
-    window.dispatchEvent(new Event("storage"))
-  }
-
+  const price = parseFloat(product.price) || 0;
+  const discount = Number(product.discount) || 0;
+  const hasDiscount = discount > 0;
+  const finalPrice = hasDiscount ? price * (1 - discount / 100) : price;
 
 
   return (
     <>
-      {notification && (
-        <div className={`notification ${notification.type}`}>
-          <div className="notification-content">
-            <span className="notification-icon">
-              {notification.type === "success" ? "✓" : "ℹ"}
-            </span>
-            <span className="notification-message">
-              {notification.message}
-            </span>
-            <button
-              className="notification-close"
-              onClick={() => setNotification(null)}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-      )}
+      
 
       <button className="back-to-home-btn" onClick={() => navigate("/")}>
         ← Torna alla Home
@@ -215,175 +244,77 @@ function Details() {
 
       <div className="product-page">
         <div className="product-gallery">
-
-          {/*     // TODO: immagine principale grande del prodotto
- */}    <div className="product-main-image">
-            {/*       // TODO: immagine animata (GIF) visualizzata come anteprima principale
- */}      <img
-              src={product.image}
-              alt={product.name}
-            />
+          <div className="product-main-image">
+            <img src={product.image} alt={product.name} />
           </div>
-
         </div>
 
-        {/* Colonna info prodotto */}  
         <div className="product-info">
+          <h1 className="product-title">{product.name}</h1>
+          <p className="product-subtitle">Avventura epica e contenuti esclusivi.</p>
 
-          {/*     // TODO: wrapper per categoria, titolo e sottotitolo
- */}    <div>
-            {/*       // TODO: categoria del prodotto, usata come label decorativa
- */}      <div className="product-category">QUEST • ADVENTURE</div>
-
-            {/*       // TODO: titolo principale del prodotto
- */}      <h1 className="product-title">{product.name}</h1>
-
-            {/*       // TODO: breve descrizione subito sotto il titolo
- */}      <p className="product-subtitle">
-              Avventura epica e contenuti esclusivi.
-            </p>
+          <div className="product-price-row">
+            {hasDiscount ? (
+              <>
+                <span className="product-price">{finalPrice.toFixed(2)}€</span>
+                <span className="product-old-price" data-strikethrough="true">
+                  {price.toFixed(2)}€
+                </span>
+              </>
+            ) : (
+              <span className="product-price">{price.toFixed(2)}€</span>
+            )}
           </div>
 
-          {/* Rating (commentato) */}
-          {/* 
-    // TODO: sezione delle stelle e recensioni (momentaneamente disattivata)
-    <div className="product-rating">
-      <span className="stars">★★★★☆</span>
-      <span>4,8 / 5 • 328 recensioni</span>
-    </div>
-    */}
-
-          {/*     TODO: wrapper del prezzo e del badge
- */}    <div>
-
-            {/*       // TODO: sezione prezzo con logica sconto corretta
- */}      <div className="product-price-row">
-              {hasDiscount ? (
-                <>
-                  <span className="product-price">{finalPrice.toFixed(2)}€</span>
-                  <span
-                    className="product-old-price"
-                    data-strikethrough="true"
-                  >
-                    {product.price.toFixed(2)}€
-                  </span>
-                </>
-              ) : (
-                <span className="product-price">{product.price.toFixed(2)}€</span>
-              )}
-            </div>
-
-            {/*       // TODO: badge che mostra sconto se presente, altrimenti Featured Quest
- */}      <div className="product-badge-wrapper">
-              <span
-                className="product-badge"
-                data-discount={hasDiscount ? "true" : "false"}
-              >
-                {hasDiscount ? `-${product.discount}% OFFERTA` : 'Featured Quest'}
-              </span>
-            </div>
+          <div className="product-badge-wrapper">
+            <span
+              className="product-badge"
+              data-discount={hasDiscount ? "true" : "false"}
+            >
+              {hasDiscount ? `-${discount}% OFFERTA` : "Featured Quest"}
+            </span>
           </div>
 
-          {/*     // TODO: descrizione principale del prodotto
- */}    <p className="product-short-desc">
-            {product.description}
-          </p>
-
-          {/* Opzioni */} 
-          <div className="product-options">
-
-            <div>
-              <div className="option-group-label">Formato</div>
-
-              <div className="size-options">
-                <button className="size-pill selected">Digitale</button>
-              </div>
-            </div>
-
-            <div>
-              <div className="option-group-label">Lingua</div>
-
-              <div className="size-options">
-                <button className="size-pill selected">IT</button>
-              </div>
-            </div>
-          </div>
-
-          {/* Azioni */} 
+          <p className="product-short-desc">{product.description}</p>
           <div className="product-actions">
             <div className="product-quantity-row">
               <span className="qty-label">Quantità</span>
 
-              <input
-                type="number"
-                className="qty-input"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              />
+              <div className="qty-wrapper">
+                <button className="qty-btn" onClick={decreaseQty}>
+                  −
+                </button>
+
+                <div className={`qty-display ${animClass}`}>
+                  <span>{quantity}</span>
+                </div>
+
+                <button className="qty-btn" onClick={increaseQty}>
+                  +
+                </button>
+              </div>
             </div>
 
             <button className="add-to-cart-btn" onClick={addToCart}>
-              <span>🪙 Aggiungi al carrello</span>
+              🪙 Aggiungi al carretto
             </button>
 
             <div className="stock-status">
               Disponibile • Consegna digitale immediata
             </div>
-
             <div className="extra-info">
               Contenuti esclusivi sbloccabili • Aggiornamenti futuri inclusi
             </div>
           </div>
-
-          {/* Tabs */} 
-          <div className="product-tabs">
-            <div className="tab-buttons">
-              <button className="tab-btn">Descrizione</button>
-              <button className="tab-btn active">Cosa è incluso</button>
-            </div>
-
-            <div className="tab-content">
-              <p>
-                📜 Sarai chiamato a…
-                <br />
-                Percorrere sentieri misteriosi come se stessi camminando lungo
-                i confini di Bosco Atro.
-                <br />
-                Raccogliere ingredienti “elfici” o preparare piccoli
-                manufatti...
-                {/* qui puoi tenere il tuo testo completo */}
-              </p>
-
-              <ul className="specs-list">
-                <li>
-                  <span className="spec-label">Durata:</span> 20 quest
-                </li>
-                <li>
-                  <span className="spec-label">File inclusi:</span> pdf
-                </li>
-                <li>
-                  <span className="spec-label">Bonus:</span> 1 quest finale
-                  extra
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* CAROSELLO PRODOTTI CORRELATI */} 
           {relatedProducts.length > 0 && (
-            <section className="quests-section related-section-wrapper d-flex flex-column">
+            <section className="quests-section related-section-wrapper">
               <h2 className="section-title">Prodotti correlati</h2>
-
-              {/* freccia sinistra */}
               <button
                 className="scroll-btn scroll-left"
                 onClick={() => scrollCarousel(relatedRef, -1)}
               >
                 &lt;
               </button>
-
-              {/* contenitore carosello con swipe touch */}
               <div
                 ref={relatedRef}
                 className="cards-list related-cards-list"
@@ -397,13 +328,14 @@ function Details() {
                     product={prod}
                     badge="related"
                     variant="carousel"
-                    onViewDetails={handleViewDetails}
-                    onAddToCart={handleAddToCartFromCarousel}
+                    cart={cart}
+                    onViewDetails={(slug) => handleViewDetails(slug)}
+                    onAddToCart={() => handleAddToCartFromCarousel(prod)}
+                    onIncrease={handleIncrease}
+                    onDecrease={handleDecrease}
                   />
                 ))}
               </div>
-
-              {/* freccia destra */}
               <button
                 className="scroll-btn scroll-right"
                 onClick={() => scrollCarousel(relatedRef, 1)}
@@ -415,8 +347,7 @@ function Details() {
         </div>
       </div>
     </>
-  )
+  );
 }
+export default Details;
 
-export default Details
-// ...existing code...

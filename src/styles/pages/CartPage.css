@@ -1,0 +1,140 @@
+.cart-page {
+  width: 100%;
+}
+
+.cart-title {
+  font-size: 1.8rem;
+  color: var(--mpq-gold);
+  margin-bottom: 20px;
+}
+
+.cart-empty {
+  opacity: 0.7;
+  margin-top: 20px;
+}
+
+.cart-items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  background: #1a1a1a;
+  padding: 12px;
+  border-radius: 10px;
+  gap: 15px;
+}
+
+.cart-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.cart-info {
+  flex: 1;
+  color: white;
+}
+
+.cart-qty button {
+  background: var(--mpq-purple);
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.cart-delete {
+  background: transparent;
+  color: #ff4444;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.cart-total {
+  margin-top: 30px;
+  font-size: 1.4rem;
+  color: var(--mpq-gold);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cart-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+/* Share cart button */
+.cart-total .share-cart-btn {
+  display: inline-block;
+  margin-left: 16px;
+  background: var(--mpq-purple, #6b46c1);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  white-space: nowrap;
+}
+.share-cart-btn:hover { opacity: 0.95; }
+
+/* Stronger, page-scoped rules to override global `.cart-total` styles */
+.cart-section .cart-total {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  overflow: visible !important;
+}
+.cart-section .cart-total-row { width: 100%; }
+.cart-section .share-cart-btn {
+  background: var(--mpq-purple, #6b46c1) !important;
+  color: #fff !important;
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-block !important;
+}
+
+/* Modal styles */
+.share-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.share-modal {
+  background: #fff;
+  color: #111;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 560px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+.share-link-input {
+  width: 100%;
+  padding: 8px 10px;
+  margin: 12px 0;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+.share-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.copy-btn, .close-btn { padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; }
+.copy-btn { background: var(--mpq-purple, #6b46c1); color: #fff; }
+.close-btn { background: #eee; color: #111; }
+.share-hint { font-size: 0.9rem; color: #666; margin-top: 10px; }
