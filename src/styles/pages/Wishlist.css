@@ -128,7 +128,7 @@
     font-weight: 900;
     color: var(--gold);
     margin-bottom: 10px;
-    font-family: "Cinzel", serif; /* Font più incisivo */
+    font-family: "Pixelify Sans", sans-serif;
     text-shadow: 3px 3px 0 var(--pixel-border);
     text-transform: uppercase;
 }

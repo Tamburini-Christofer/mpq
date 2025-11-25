@@ -1,25 +1,77 @@
-.notfound{
-    display:flex;
+/* ===== 404 PAGE (FULL SCREEN) ===== */
+.notfound {
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark); /* Sfondo scuro hard */
+    display: flex;
     align-items: center;
     justify-content: center;
-    img{
-        width: 300px;
-    }
+    flex-direction: column; /* Per centrare verticalmente l'intero contenuto */
+    padding: 20px;
+    /* Texture a griglia stile "Piano cartesiano" */
+  background-image: linear-gradient(#222 1px, transparent 1px),
+  linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 40px 40px;
+}
 
-    .notfoundbox{
-        display:flex;
-        align-items: center;
-        flex-direction: column;
-        margin-top: 38px;
-        color:rgb(121, 36, 138);
+.notfound img {
+    /* L'immagine (o l'elemento visivo di errore) */
+    width: clamp(200px, 60vw, 400px); /* Responsive max 400px */
+    height: auto;
+    border: 4px solid var(--gold);
+    box-shadow: 8px 8px 0 var(--purple);
+    margin-bottom: 40px;
+}
 
-        button{
-            padding:5px;
-            font-size: 20px;
-            font-weight: 700;
-            border-radius: 5px;
-            color: rgb(255, 217, 0);
-            background-color:rgb(121, 36, 138);
-        }
-    }
+.notfoundbox {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    /* Rimuovo il margin-top poiché stiamo centrando tutto */
+    
+    /* Colore testo principale Hard Gold/Light */
+    color: var(--light);
+    text-align: center;
+    padding: 20px;
+    border: 3px solid var(--purple);
+    background: #1a1720;
+    box-shadow: 6px 6px 0 var(--gold);
+}
+
+.notfoundbox h1 {
+    font-size: clamp(2rem, 10vw, 2rem);
+    font-family: "Cinzel", serif;
+    color: var(--red-alert);
+    text-shadow: 4px 4px 0 var(--pixel-border);
+    margin-bottom: 10px;
+}
+
+.notfoundbox p {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 30px;
+}
+
+.notfoundbox button {
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: 800;
+    border-radius: 0; /* SQUADRATO */
+    color: var(--dark);
+    background-color: var(--gold);
+    border: 3px solid var(--pixel-border);
+    cursor: pointer;
+    transition: all 0.1s;
+    text-transform: uppercase;
+    
+    /* Ombra Gold/Nero */
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+}
+
+.notfoundbox button:hover {
+    background-color: var(--purple);
+    color: var(--light);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--gold);
 }
