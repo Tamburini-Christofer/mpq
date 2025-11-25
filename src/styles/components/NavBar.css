@@ -21,25 +21,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 50px; /* Padding originale */
-    background-color: #1a1720; /* Sfondo scuro */
-    border-bottom: 3px solid var(--purple); /* Bordo viola spesso */
+    padding: 15px 50px;
+    /* Padding originale */
+    background-color: #1a1720;
+    /* Sfondo scuro */
+    border-bottom: 3px solid var(--purple);
+    /* Bordo viola spesso */
     z-index: 1000;
-    box-shadow: 0 var(--shadow-depth) 0 var(--pixel-border); /* Ombra hard sotto */
+    box-shadow: 0 var(--shadow-depth) 0 var(--pixel-border);
+    /* Ombra hard sotto */
     /* Aggiungo pattern di sfondo per il look retro */
-  background-image: linear-gradient(#222 1px, transparent 1px),
-  linear-gradient(90deg, #222 1px, transparent 1px);
-  background-size: 10px 10px;
+    background-image: linear-gradient(#222 1px, transparent 1px),
+        linear-gradient(90deg, #222 1px, transparent 1px);
+    background-size: 10px 10px;
 }
 
 .navbar-logo {
     display: flex;
     align-items: center;
-    font-size: 1.5rem; /* Dimensione originale */
+    font-size: 1.5rem;
+    /* Dimensione originale */
     font-weight: bold;
     color: var(--gold);
     text-shadow: 1px 1px 0 var(--pixel-border);
-    font-family: "Cinzel", serif; /* Stile estetico */
+    font-family: "Cinzel", serif;
+    /* Stile estetico */
 }
 
 .logo-icon {
@@ -57,11 +63,13 @@
 
 /* --- STILE PER I LINK E LA BARRA SOTTO --- */
 .navbar-links a {
-    color: var(--light); /* Testo bianco di default */
+    color: var(--light);
+    /* Testo bianco di default */
     font-family: 'Inter', sans-serif;
     text-decoration: none;
     font-weight: 700;
-    font-size: 1.3rem; /* Dimensione originale */
+    font-size: 1.3rem;
+    /* Dimensione originale */
     position: relative;
     display: inline-block;
     text-transform: uppercase;
@@ -73,14 +81,17 @@
 .navbar-links a::after {
     content: '';
     position: absolute;
-    bottom: -5px; /* Posizione originale */
+    bottom: -5px;
+    /* Posizione originale */
     left: 0;
     width: 100%;
-    height: 4px; /* Linea spessa */
+    height: 4px;
+    /* Linea spessa */
     background-color: var(--purple);
     transform: scaleX(0);
     transition: transform 0.2s ease-out;
-    transform-origin: bottom center; /* Origine originale */
+    transform-origin: bottom center;
+    /* Origine originale */
 }
 
 /* 3. CONDIZIONI PER MOSTRARE LA BARRA */
@@ -109,7 +120,8 @@
 }
 
 /* Icone e link */
-.wishlist-icon-link, .cart-icon-link {
+.wishlist-icon-link,
+.cart-icon-link {
     text-decoration: none;
     color: var(--light);
 }
@@ -117,32 +129,63 @@
 /* Icona wishlist con badge */
 .wishlist-icon {
     position: relative;
-    font-size: 1.5rem; /* Dimensione originale */
-    cursor: pointer;
-    transition: color 0.1s, transform 0.1s;
-    color: var(--red-alert); /* Rosso hard */
-    display: inline-block;
+    color: #fff;
+    background-color: #2d2d2d;
+    text-decoration: none;
+    /* Rendiamo l'icona un pulsante fisico quadrato */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    border: 2px solid #000;
+    /* Bordo nero */
+    border-radius: 0;
+    /* Squadrato */
+    box-shadow: 4px 4px 0px #000;
+    /* Ombra Hard */
+    transition: all 0.1s;
 }
 
 .wishlist-icon:hover {
-    color: #ff7787;
-    transform: scale(1.2); /* Leggero aumento per effetto scattante */
+    background-color: var(--gold);
+    /* Oro */
+    color: var(--red-alert);
+    /* Icona nera */
+    transform: translate(-2px, -2px);
+    /* Si sposta in alto a sx */
+    box-shadow: 6px 6px 0px #fff;
+    /* Ombra diventa bianca/luminosa */
+}
+
+.wishlist-icon:active {
+    transform: translate(2px, 2px);
+    /* Pressione fisica */
+    box-shadow: 0px 0px 0px #000;
 }
 
 /* Badge contatore wishlist */
 .wishlist-badge {
     position: absolute;
-    top: -8px; /* Posizione originale */
-    right: -10px; /* Posizione originale */
+    top: -8px;
+    /* Posizione originale */
+    right: -10px;
+    /* Posizione originale */
     background: var(--red-alert);
     color: var(--light);
     border: 2px solid var(--pixel-border);
-    font-size: 0.7rem; /* Dimensione originale */
+    font-size: 0.7rem;
+    /* Dimensione originale */
     font-weight: 900;
-    padding: 2px 6px; /* Padding originale */
-    border-radius: 0; /* Squadrato */
-    min-width: 18px; /* Larghezza originale */
-    height: 18px; /* Altezza originale */
+    padding: 2px 6px;
+    /* Padding originale */
+    border-radius: 0;
+    /* Squadrato */
+    min-width: 18px;
+    /* Larghezza originale */
+    height: 18px;
+    /* Altezza originale */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -155,9 +198,11 @@
     0% {
         transform: scale(0) rotate(-45deg);
     }
+
     50% {
         transform: scale(1.2) rotate(5deg);
     }
+
     100% {
         transform: scale(1) rotate(0);
     }
@@ -166,32 +211,57 @@
 /* Icona carrello */
 .cart-icon {
     position: relative;
-    font-size: 1.5rem; /* Dimensione originale */
-    cursor: pointer;
-    transition: color 0.1s, transform 0.1s;
-    display: inline-block;
-    color: var(--purple); /* Icona carrello in viola */
+    color: #fff;
+    background-color: #2d2d2d;
+    text-decoration: none;
+    /* Rendiamo l'icona un pulsante fisico quadrato */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+    border: 2px solid #000;
+    /* Bordo nero */
+    border-radius: 0;
+    /* Squadrato */
+    box-shadow: 4px 4px 0px #000;
+    /* Ombra Hard */
+    transition: all 0.1s;
 }
 
 .cart-icon:hover {
-    color: #9258ff;
-    transform: scale(1.2);
+    background-color: var(--gold);
+    /* Oro */
+    color: var(--purple);
+    /* Icona nera */
+    transform: translate(-2px, -2px);
+    /* Si sposta in alto a sx */
+    box-shadow: 6px 6px 0px #fff;
+    /* Ombra diventa bianca/luminosa */
 }
 
 /* Badge contatore carrello */
 .cart-badge {
     position: absolute;
-    top: -8px; /* Posizione originale */
-    right: -10px; /* Posizione originale */
+    top: -8px;
+    /* Posizione originale */
+    right: -10px;
+    /* Posizione originale */
     background: var(--gold);
     color: var(--dark);
     border: 2px solid var(--pixel-border);
-    font-size: 0.7rem; /* Dimensione originale */
+    font-size: 0.7rem;
+    /* Dimensione originale */
     font-weight: 900;
-    padding: 2px 6px; /* Padding originale */
-    border-radius: 0; /* Squadrato */
-    min-width: 18px; /* Larghezza originale */
-    height: 18px; /* Altezza originale */
+    padding: 2px 6px;
+    /* Padding originale */
+    border-radius: 0;
+    /* Squadrato */
+    min-width: 18px;
+    /* Larghezza originale */
+    height: 18px;
+    /* Altezza originale */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -204,7 +274,8 @@
     background-color: var(--gold);
     color: var(--dark);
     font-weight: bold;
-    padding: 10px 20px; /* Padding originale */
+    padding: 10px 20px;
+    /* Padding originale */
     border: 3px solid var(--pixel-border);
     border-radius: 0;
     cursor: pointer;
@@ -215,6 +286,7 @@
 
 .btn-levelup:hover {
     transform: translate(-2px, -2px);
+    color: #6C21FF;
     box-shadow: 6px 6px 0 var(--purple);
 }
 
@@ -229,28 +301,50 @@
 /* Contenitore principale */
 .cart-preview {
     position: absolute;
-    top: 43px; /* Posizione originale */
-    right: -120px; /* Posizione originale */
-    width: 500px; /* Larghezza originale */
+    top: 43px;
+    /* Posizione originale */
+    right: -120px;
+    /* Posizione originale */
+    width: 500px;
+    /* Larghezza originale */
     background: #1a1720;
     border-radius: 0;
-    padding: 22px; /* Padding originale */
-    border: 3px solid var(--gold); /* Bordo Oro spesso */
-    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border); /* Ombra hard */
+    padding: 22px;
+    /* Padding originale */
+    border: 3px solid var(--gold);
+    /* Bordo Oro spesso */
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+    /* Ombra hard */
     z-index: 999;
     opacity: 0;
     transform: translateY(-10px);
     animation: cartEnter .22s ease-out forwards;
 }
 
-@keyframes fadeCart { /* Rimuovo keyframe inutilizzato */
-from { opacity: 0; transform: translateY(-5px);}
-to { opacity: 1; transform: translateY(0);}
+@keyframes fadeCart {
+
+    /* Rimuovo keyframe inutilizzato */
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes cartEnter {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .cart-preview.closing {
@@ -258,12 +352,20 @@ to { opacity: 1; transform: translateY(0);}
 }
 
 @keyframes cartExit {
-    from { opacity: 1; transform: translateY(0); }
-    to { opacity: 0; transform: translateY(-10px); }
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 }
 
 .cart-preview h4 {
-    margin: 0 0 16px; /* Margin originale */
+    margin: 0 0 16px;
+    /* Margin originale */
     font-size: 1.1rem;
     font-weight: 700;
     color: var(--gold);
@@ -289,10 +391,12 @@ to { opacity: 1; transform: translateY(0);}
 .cart-preview-list::-webkit-scrollbar {
     width: 6px;
 }
+
 .cart-preview-list::-webkit-scrollbar-thumb {
     background: var(--purple);
     border-radius: 0;
 }
+
 .cart-preview-list::-webkit-scrollbar-track {
     background: #2a2a2d;
 }
@@ -301,8 +405,10 @@ to { opacity: 1; transform: translateY(0);}
 .cart-preview-item {
     display: flex;
     align-items: center;
-    margin-bottom: 18px; /* Margin originale */
-    padding: 12px; /* Padding originale */
+    margin-bottom: 18px;
+    /* Margin originale */
+    padding: 12px;
+    /* Padding originale */
     background: #141218;
     border-radius: 0;
     border: 2px solid var(--purple);
@@ -317,8 +423,15 @@ to { opacity: 1; transform: translateY(0);}
 }
 
 @keyframes fadeInItem {
-    from { opacity: 0; transform: translateX(10px); }
-    to  { opacity: 1; transform: translateX(0); }
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* Rimozione */
@@ -332,6 +445,7 @@ to { opacity: 1; transform: translateY(0);}
         transform: translateX(0);
         height: 70px;
     }
+
     to {
         opacity: 0;
         transform: translateX(-15px);
@@ -343,12 +457,15 @@ to { opacity: 1; transform: translateY(0);}
 
 /* Immagine prodotto */
 .cart-preview-item img {
-    width: 55px; /* Dimensione originale */
-    height: 55px; /* Dimensione originale */
+    width: 55px;
+    /* Dimensione originale */
+    height: 55px;
+    /* Dimensione originale */
     border-radius: 0;
     border: 1px solid var(--gold);
     object-fit: cover;
-    margin-right: 12px; /* Margin originale */
+    margin-right: 12px;
+    /* Margin originale */
 }
 
 .info {
@@ -359,15 +476,18 @@ to { opacity: 1; transform: translateY(0);}
 
 /* Quantità */
 .qty-controls {
-    margin-top: 5px; /* Adattato per estetica */
+    margin-top: 5px;
+    /* Adattato per estetica */
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 .qty-btn {
-    width: 28px; /* Dimensione originale */
-    height: 28px; /* Dimensione originale */
+    width: 28px;
+    /* Dimensione originale */
+    height: 28px;
+    /* Dimensione originale */
     border-radius: 0;
     background: var(--purple);
     color: white;
@@ -395,7 +515,8 @@ to { opacity: 1; transform: translateY(0);}
 .qty-number {
     color: var(--light);
     font-weight: 700;
-    font-size: 16px; /* Dimensione originale */
+    font-size: 16px;
+    /* Dimensione originale */
     font-family: monospace;
 }
 
@@ -411,9 +532,11 @@ to { opacity: 1; transform: translateY(0);}
 
 /* Rimuovi */
 .remove-btn {
-    margin-left: 20px; /* Margin originale */
+    margin-left: 20px;
+    /* Margin originale */
     color: var(--red-alert);
-    font-size: 13px; /* Dimensione originale */
+    font-size: 13px;
+    /* Dimensione originale */
     cursor: pointer;
     font-weight: 700;
     text-transform: uppercase;
@@ -426,7 +549,8 @@ to { opacity: 1; transform: translateY(0);}
 
 /* Prezzo */
 .price {
-    font-size: 16px; /* Dimensione originale */
+    font-size: 16px;
+    /* Dimensione originale */
     color: var(--gold);
     font-weight: 800;
     font-family: monospace;
@@ -436,16 +560,19 @@ to { opacity: 1; transform: translateY(0);}
 .cart-total-box {
     display: flex;
     justify-content: space-between;
-    margin-top: 18px; /* Margin originale */
+    margin-top: 18px;
+    /* Margin originale */
     padding: 12px 8px;
     color: var(--light);
-    font-size: 16px; /* Dimensione originale */
+    font-size: 16px;
+    /* Dimensione originale */
     border-top: 2px dashed var(--purple);
     border-bottom: 2px dashed var(--purple);
 }
 
 .cart-total-box strong {
-    font-size: 18px; /* Dimensione originale */
+    font-size: 18px;
+    /* Dimensione originale */
     color: var(--gold);
     font-family: monospace;
     text-shadow: 1px 1px 0 var(--pixel-border);
@@ -455,9 +582,12 @@ to { opacity: 1; transform: translateY(0);}
 .btn-checkout,
 .btn-fast-checkout {
     width: 100%;
-    padding: 12px; /* Padding originale */
-    margin-top: 14px; /* Margin originale */
-    font-size: 16px; /* Dimensione originale */
+    padding: 12px;
+    /* Padding originale */
+    margin-top: 14px;
+    /* Margin originale */
+    font-size: 16px;
+    /* Dimensione originale */
     font-weight: 800;
     border-radius: 0;
     cursor: pointer;
@@ -493,9 +623,9 @@ to { opacity: 1; transform: translateY(0);}
 .cart-icon-link,
 .cart-icon-link:focus,
 .cart-icon-link:active,
-.cart-wrapper > button,
-.cart-wrapper > button:focus,
-.cart-wrapper > button:active {
+.cart-wrapper>button,
+.cart-wrapper>button:focus,
+.cart-wrapper>button:active {
     background: transparent !important;
     border: none !important;
     outline: none !important;

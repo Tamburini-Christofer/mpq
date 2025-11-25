@@ -1,101 +1,131 @@
 /* todo: Variabili colore per mantenere coerenza con il tema dell'app */
 :root {
+  /* Mappatura dei colori per Neo-Brutalism */
   --email-purple: #6c21ff;
+  /* Accent Primary */
   --email-gold: #d8a928;
+  /* Accent Secondary/Highlight */
   --email-dark: #141218;
+  /* Main Background */
   --email-light: #ffffff;
-  --email-gray: #8e8e93;
+  /* Main Text */
+  --email-gray: #a1a1a1;
+  /* Placeholder/Subtle Text */
   --email-success: #4caf50;
   --email-error: #ff4757;
   --email-card-bg: #1c1a24;
+  /* Card Background Darker */
   --email-input-bg: #2a2636;
+  /* Input Background Dark */
+
+  /* Aggiunta di variabili Neo-Brutalist */
+  --pixel-border: #000000;
+  --shadow-depth: 6px;
 }
 
 /* todo: Container principale del form email */
 .email-sender-container {
-  /* Fullscreen overlay so the popup appears above everything */
+  /* Overlay mantenuto come previsto, ma con sfondo più scuro e solido */
   position: fixed;
-  inset: 0; /* top:0; right:0; bottom:0; left:0 */
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
-  font-family: "Inter", sans-serif;
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent backdrop */
-  z-index: 9999; /* very high so it's above other app elements */
+  font-family: "Cinzel", serif;
+  /* Uso un font più incisivo */
+  background: rgba(0, 0, 0, 0.9);
+  /* Sfondo quasi nero e solido */
+  z-index: 9999;
 }
 
 /* todo: Card contenente il form */
 .email-form-card {
   background: var(--email-card-bg);
-  border-radius: 20px;
-  padding: 20px 40px;
+  border-radius: 0;
+  /* SQUADRATO */
+  padding: 25px 35px;
+  /* Leggermente ridotto per look più compatto */
   width: 100%;
   max-width: 500px;
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.3),
-    0 0 0 1px rgba(216, 169, 40, 0.1);
-  border: 2px solid transparent;
+
+  /* Ombra netta e solida (Neo-Brutalist) */
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--email-purple);
+
+  border: 3px solid var(--pixel-border);
+  /* Bordo nero spesso e netto */
   background-clip: padding-box;
   position: relative;
-  z-index: 10000; /* ensure the card itself is above the backdrop */
+  z-index: 10000;
 }
 
-/* todo: Effetto brillante sul bordo della card */
+/* todo: Effetto brillante sul bordo della card (Rimosso/Sostituito) */
 .email-form-card::before {
+  /* Rimuovo l'effetto gradiente e brillante. 
+    Lascio un bordo secondario solido e gold all'interno dell'ombra. */
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, var(--email-purple), var(--email-gold), var(--email-purple));
+  background: transparent;
   z-index: -1;
-  margin: -2px;
-  border-radius: 20px;
-  opacity: 0.8;
+  margin: -3px;
+  /* Espandere il bordo di 3px */
+  border-radius: 0;
+  opacity: 1;
+  border: 3px solid var(--email-gold);
+  /* Bordo gold aggiuntivo */
+  clip-path: inset(3px);
+  /* Nasconde il bordo interno per far vedere solo quello esterno */
 }
 
 /* todo: Logo MyPocketQuest */
 .logo-box {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed var(--email-gold);
 }
 
 .logo-title {
   font-size: 32px;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--email-light);
   margin: 0;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 0 var(--pixel-border);
+  /* Ombra testo netta */
 }
 
 .logo-title span {
   color: var(--email-gold);
-  background: linear-gradient(135deg, var(--email-gold), #f1c935);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  /* Rimuovo i gradienti di testo */
+  -webkit-text-fill-color: var(--email-gold);
+  background-clip: initial;
+  background: initial;
 }
 
 .logo-subtitle {
   font-size: 14px;
-  color: var(--email-light);
+  color: var(--email-gray);
   margin: 5px 0 0 0;
-  opacity: 0.8;
+  opacity: 1;
+  font-style: italic;
 }
 
 /* todo: Titolo del form */
 .email-form-title {
   color: var(--email-light);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 26px;
+  font-weight: 700;
   text-align: center;
-  margin-bottom: 10px;
-  background: linear-gradient(135deg, var(--email-light), var(--email-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  margin-bottom: 15px;
+  /* Rimuovo i gradienti di testo */
+  -webkit-text-fill-color: var(--email-light);
+  background-clip: initial;
+  text-shadow: 1px 1px 0 var(--email-gold);
+  font-family: "Cinzel", serif;
 }
 
 /* todo: Sottotitolo del form */
@@ -103,15 +133,18 @@
   color: var(--email-gray);
   font-size: 16px;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   line-height: 1.5;
+  border-bottom: 2px dashed var(--email-purple);
+  padding-bottom: 15px;
 }
 
 /* todo: Stili del form */
 .email-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
+  /* Spazio ridotto */
 }
 
 /* todo: Gruppi di input per migliore organizzazione */
@@ -119,148 +152,173 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 /* todo: Label degli input */
 .input-label {
-  color: var(--email-light);
+  color: var(--email-gold);
   font-size: 14px;
-  font-weight: 500;
-  margin-left: 4px;
+  font-weight: 700;
+  margin-left: 0;
+  text-transform: uppercase;
 }
 
 /* todo: Stili base per input e textarea */
 .email-input,
 .email-textarea {
   background: var(--email-input-bg);
-  border: 2px solid transparent;
-  border-radius: 12px;
-  padding: 10px 20px;
+  border: 3px solid var(--pixel-border);
+  /* Bordo nero solido */
+  border-radius: 0;
+  /* SQUADRATO */
+  padding: 12px 15px;
   color: var(--email-light);
   font-size: 16px;
-  font-family: inherit;
-  transition: all 0.3s ease;
+  font-family: monospace;
+  /* Monospace per look da terminale */
+  transition: all 0.1s ease;
   outline: none;
-  position: relative;
+
+  /* Ombra interna netta */
+  box-shadow: inset 2px 2px 0 var(--pixel-border);
 }
 
 /* todo: Placeholder styling */
 .email-input::placeholder,
 .email-textarea::placeholder {
   color: var(--email-gray);
-  opacity: 0.8;
+  opacity: 1;
 }
 
-/* todo: Focus states per input */
+/* todo: Focus states per input (Neo-Brutalist) */
 .email-input:focus,
 .email-textarea:focus {
-  border-color: var(--email-purple);
-  box-shadow: 
-    0 0 0 3px rgba(108, 33, 255, 0.1),
-    0 8px 25px rgba(108, 33, 255, 0.15);
-  transform: translateY(-2px);
+  border-color: var(--email-gold);
+  /* Rimuovo box-shadow e transform soft */
+  box-shadow: 0 0 0 3px var(--email-purple);
+  transform: none;
 }
 
 /* todo: Stili specifici per textarea */
 .email-textarea {
   min-height: 120px;
   resize: vertical;
-  font-family: inherit;
   line-height: 1.5;
 }
 
 /* todo: Bottone di invio */
 .email-submit-btn {
-  background: linear-gradient(135deg, var(--email-purple), #8c4dff);
-  border: none;
-  border-radius: 12px;
+  background: var(--email-purple);
+  /* Sfondo solido */
+  border: 3px solid var(--pixel-border);
+  border-radius: 0;
+  /* SQUADRATO */
   padding: 18px 30px;
   color: var(--email-light);
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
+
+  /* Ombra netta Gold/Nero */
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--email-gold);
+
   position: relative;
   overflow: hidden;
-  margin-top: 10px;
+  margin-top: 15px;
+  text-transform: uppercase;
+  font-family: "Cinzel", serif;
 }
 
-/* todo: Effetto hover sul bottone */
+/* todo: Effetto hover sul bottone (Neo-Brutalist) */
 .email-submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(108, 33, 255, 0.4);
+  /* Spostamento aggressivo e cambio ombra */
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 var(--email-gold);
+  background: #8c4dff;
 }
 
 /* todo: Effetto attivo sul bottone */
 .email-submit-btn:active {
-  transform: translateY(-1px);
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--email-gold);
 }
 
 /* todo: Stato disabilitato del bottone */
 .email-submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  background: var(--email-gray);
 }
 
 /* todo: Pulsante per saltare la registrazione */
 .skip-btn {
   background: transparent;
-  border: 2px solid var(--email-gray);
-  border-radius: 12px;
+  border: 3px solid var(--email-gray);
+  border-radius: 0;
+  /* SQUADRATO */
   padding: 14px 30px;
   color: var(--email-gray);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
   margin-top: 15px;
   width: 100%;
+  text-transform: uppercase;
 }
 
 /* todo: Effetto hover sul bottone skip */
 .skip-btn:hover {
-  border-color: var(--email-light);
-  color: var(--email-light);
-  transform: translateY(-2px);
+  border-color: var(--email-gold);
+  color: var(--email-gold);
+  transform: translate(-2px, -2px);
+  background: #3a3641;
+  box-shadow: 4px 4px 0 var(--pixel-border);
 }
 
 /* todo: Messaggio di stato */
 .status-message {
   padding: 16px 20px;
-  border-radius: 12px;
+  border-radius: 0;
+  /* SQUADRATO */
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 700;
   text-align: center;
   margin-top: 20px;
   animation: fadeInUp 0.5s ease;
+  border: 3px solid var(--pixel-border);
 }
 
 /* todo: Stato di successo */
 .status-success {
-  background: rgba(76, 175, 80, 0.1);
-  border: 2px solid var(--email-success);
-  color: var(--email-success);
+  background: var(--email-success);
+  border-color: var(--pixel-border);
+  color: var(--email-light);
+  box-shadow: 4px 4px 0 var(--pixel-border);
 }
 
 /* todo: Stato di errore */
 .status-error {
-  background: rgba(255, 71, 87, 0.1);
-  border: 2px solid var(--email-error);
-  color: var(--email-error);
+  background: var(--email-error);
+  border-color: var(--pixel-border);
+  color: var(--email-light);
+  box-shadow: 4px 4px 0 var(--pixel-border);
 }
 
 /* todo: Stato di loading */
 .status-loading {
-  background: rgba(216, 169, 40, 0.1);
-  border: 2px solid var(--email-gold);
-  color: var(--email-gold);
+  background: var(--email-gold);
+  border-color: var(--pixel-border);
+  color: var(--email-dark);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
+  box-shadow: 4px 4px 0 var(--pixel-border);
 }
 
 /* todo: Spinner di caricamento */
@@ -268,17 +326,20 @@
   width: 20px;
   height: 20px;
   border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
+  border-top: 2px solid var(--email-dark);
+  /* Colore scuro per contrasto */
+  border-radius: 0;
+  /* SQUADRATO */
   animation: spin 1s linear infinite;
 }
 
-/* todo: Animazioni */
+/* todo: Animazioni (mantenute) */
 @keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -296,17 +357,9 @@
   .email-sender-container {
     padding: 15px;
   }
-  
+
   .email-form-card {
     padding: 30px 25px;
-  }
-  
-  .email-form-title {
-    font-size: 24px;
-  }
-  
-  .email-form-subtitle {
-    font-size: 14px;
   }
 }
 
@@ -314,38 +367,20 @@
 @media (max-width: 480px) {
   .email-form-card {
     padding: 25px 20px;
-    border-radius: 15px;
   }
-  
+
   .logo-title {
     font-size: 28px;
   }
-  
-  .logo-subtitle {
-    font-size: 12px;
-  }
-  
-  .icon {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .icon::before {
-    font-size: 20px;
-  }
-  
+
   .email-form-title {
     font-size: 20px;
   }
-  
+
   .email-input,
   .email-textarea,
   .email-submit-btn {
     padding: 14px 16px;
-  }
-  
-  .email-textarea {
-    min-height: 100px;
   }
 }
 
@@ -353,15 +388,11 @@
 .email-input:focus-visible,
 .email-textarea:focus-visible,
 .email-submit-btn:focus-visible {
-  outline: 3px solid var(--email-gold);
-  outline-offset: 2px;
+  outline: 4px solid var(--email-gold);
+  outline-offset: 4px;
+  border-color: var(--pixel-border);
+  /* Mantiene il bordo nero */
 }
 
-/* todo: Stili per alta risoluzione */
-@media (min-resolution: 2dppx) {
-  .email-form-card {
-    box-shadow: 
-      0 25px 80px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(216, 169, 40, 0.15);
-  }
-}
+/* todo: Stili per alta risoluzione (non necessari per Neo-Brutalist) */
+/* Rimosso @media (min-resolution: 2dppx) */
