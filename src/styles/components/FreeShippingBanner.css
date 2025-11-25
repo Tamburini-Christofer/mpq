@@ -1,131 +1,409 @@
+/* --- Variabili Stile Globali (Da inferire dai file precedenti) --- */
+:root {
+    --purple: #6c21ff;
+    --gold: #d8a928;
+    --dark: #141218;
+    --light: #ffffff;
+    --pixel-border: #000000;
+    --shadow-depth: 4px;
+    --input-bg: #2a2636;
+}
+
+/* Pagination Styles - Integrato con il design Neo-Brutalist */
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
+    
+    /* Sfondo solido senza blur */
+    background: var(--dark); 
+    border-radius: 0; /* SQUADRATO */
+    border: 3px solid var(--pixel-border); /* Bordo nero spesso */
+    
+    /* Ombra netta viola */
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--purple);
+}
+
+.pagination-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--light); /* Colore solido */
+    font-size: 1rem;
+    font-family: "Cinzel", serif; /* Uso Cinzel per coerenza */
+    font-weight: 700;
+}
+
+.items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.items-per-page label {
+    color: var(--gold);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.items-select {
+    /* Stile Neo-Brutalist per select */
+    background: var(--input-bg); /* Sfondo scuro per contrasto */
+    border: 3px solid var(--pixel-border);
+    border-radius: 0; /* SQUADRATO */
+    color: var(--light);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.1s;
+    font-family: monospace; /* Monospace per input/select */
+    font-weight: 500;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    
+    /* Icona freccia SVG (adattata per essere bianca/dark) */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d8a928' stroke-width='3'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+    
+    box-shadow: 2px 2px 0 var(--gold); /* Ombra solida */
+}
+
+.items-select option {
+    background: var(--dark);
+    color: var(--light);
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: monospace;
+}
+
+.items-select:hover {
+    background: var(--purple);
+    border-color: var(--gold);
+    transform: translate(-1px, -1px); /* Piccolo scatto */
+    box-shadow: 4px 4px 0 var(--pixel-border);
+}
+
+.items-select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--purple);
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Pulsanti Avanti/Indietro */
+.pagination-btn {
+    background: var(--purple); /* Sfondo solido */
+    border: 3px solid var(--pixel-border);
+    color: var(--light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 800;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+    font-family: "Cinzel", serif;
+    
+    /* Ombra netta Gold */
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold);
+    text-transform: uppercase;
+}
+
+.pagination-btn:hover:not(.disabled) {
+    background: #8c4dff;
+    border-color: var(--pixel-border);
+    transform: translate(-3px, -3px); /* Scatto più pronunciato */
+    box-shadow: 6px 6px 0 var(--gold);
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--input-bg);
+    border-color: var(--pixel-border);
+    box-shadow: 2px 2px 0 var(--pixel-border);
+    transform: none;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Pulsanti Numerici */
+.pagination-number {
+    background: var(--input-bg);
+    border: 3px solid var(--pixel-border);
+    color: var(--gold);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.1s ease;
+    font-family: "Cinzel", serif;
+    box-shadow: 2px 2px 0 var(--pixel-border);
+}
+
+.pagination-number:hover {
+    background: var(--purple);
+    border-color: var(--pixel-border);
+    color: var(--light);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--gold);
+}
+
+.pagination-number.active {
+    background: var(--gold);
+    border-color: var(--pixel-border);
+    color: var(--dark);
+    font-weight: 800;
+    box-shadow: 4px 4px 0 var(--purple); /* Ombra contrastante */
+    transform: translate(0, 0); /* Non si muove quando è attivo */
+}
+
+.pagination-dots {
+    color: var(--light);
+    opacity: 0.8;
+    font-size: 1.2rem;
+    padding: 0 0.5rem;
+    font-family: "Cinzel", serif;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .pagination-container {
+        padding: 1rem;
+        margin: 1.5rem 0;
+        gap: 1rem;
+    }
+    
+    .pagination-info {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .pagination-controls {
+        gap: 0.5rem;
+    }
+    
+    .pagination-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .pagination-number {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pagination-numbers {
+        gap: 0.25rem;
+    }
+    
+    .pagination-number {
+        width: 2.2rem;
+        height: 2.2rem;
+        font-size: 0.85rem;
+    }
+    
+    .pagination-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .items-per-page {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
 /* ========================================
-   FREE SHIPPING BANNER STYLES
-   ======================================== */
+    FREE SHIPPING BANNER STYLES (NEO-BRUTALIST)
+    ======================================== */
 
 .free-shipping-banner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 5px;
-  padding: 16px 20px;
-  margin: 16px 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+    /* Sfondo solido: usa il viola come base */
+    background: var(--purple); 
+    border-radius: 0; /* SQUADRATO */
+    padding: 16px 20px;
+    margin: 16px 0;
+    border: 3px solid var(--pixel-border);
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold); /* Ombra netta Gold */
+    transition: all 0.1s ease;
+    font-family: "Cinzel", serif;
 }
 
 .free-shipping-banner.active {
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    /* Quando attivo, usa un colore di successo solido (Gold o un verde hard) */
+    background: var(--gold); 
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--purple);
 }
 
 @keyframes pulse {
-  0%, 100% {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  50% {
-    box-shadow: 0 6px 12px rgba(52, 211, 153, 0.4);
-  }
+    0%, 100% {
+        box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold);
+    }
+    50% {
+        /* Ombra che pulsa Gold/Purple */
+        box-shadow: 6px 6px 0 var(--purple); 
+    }
 }
 
 /* Messaggio */
 .shipping-message {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: white;
-  margin-bottom: 12px;
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--light); /* Colore solido */
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .shipping-icon {
-  font-size: 20px;
-  animation: bounce 2s infinite;
+    font-size: 24px;
+    color: var(--gold); /* Icona colorata per contrasto */
+    animation: bounce 1.5s infinite;
 }
 
 @keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px); /* Bounce più netto */
+    }
 }
 
 .shipping-text {
-  flex: 1;
+    flex: 1;
+    text-transform: uppercase;
 }
 
 .shipping-text strong {
-  font-weight: 700;
-  font-size: 15px;
+    font-weight: 900;
+    font-size: 16px;
+    color: var(--light);
 }
 
 /* Barra di progresso */
 .progress-bar-container {
-  width: 100%;
-  height: 24px;
-  background-color: rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 8px;
-  position: relative;
+    width: 100%;
+    height: 20px; /* Altezza ridotta per un look più aggressivo */
+    background-color: var(--dark); /* Sfondo scuro e solido */
+    border-radius: 0; /* SQUADRATO */
+    overflow: hidden;
+    margin-bottom: 8px;
+    position: relative;
+    border: 2px solid var(--pixel-border);
 }
 
 .progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%);
-  border-radius: 12px;
-  transition: width 0.5s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+    height: 100%;
+    /* Fill solido (Gold) */
+    background: var(--gold);
+    border-radius: 0;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .free-shipping-banner.active .progress-bar-fill {
-  background: linear-gradient(90deg, #ffffff 0%, #f0fdf4 100%);
+    background: var(--purple); /* Quando attivo, fill viola */
 }
 
 .progress-text {
-  color: #1f2937;
-  font-weight: 700;
-  font-size: 12px;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    color: var(--dark); /* Testo scuro per forte contrasto */
+    font-weight: 800;
+    font-size: 12px;
+    text-shadow: none; /* Nessuna ombra */
+    font-family: monospace;
 }
 
 /* Indicatori soglia */
 .shipping-threshold-info {
-  display: flex;
-  justify-content: space-between;
-  color: white;
-  font-size: 12px;
-  font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    color: var(--light);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: monospace;
 }
 
 .current-amount {
-  opacity: 0.9;
+    color: #000000;
 }
 
 .threshold-amount {
-  opacity: 0.9;
+    color: #000000;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .free-shipping-banner {
-    padding: 14px 16px;
-  }
+    .free-shipping-banner {
+        padding: 14px 16px;
+    }
 
-  .shipping-message {
-    font-size: 13px;
-  }
+    .shipping-message {
+        font-size: 14px;
+    }
 
-  .shipping-text strong {
-    font-size: 14px;
-  }
+    .shipping-text strong {
+        font-size: 15px;
+    }
 
-  .progress-bar-container {
-    height: 20px;
-  }
+    .progress-bar-container {
+        height: 18px;
+    }
 
-  .progress-text {
-    font-size: 11px;
-  }
+    .progress-text {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    .free-shipping-banner {
+        padding: 12px 14px;
+    }
+    .shipping-message {
+        font-size: 13px;
+    }
+    .shipping-text strong {
+        font-size: 14px;
+    }
+    .progress-bar-container {
+        height: 16px;
+    }
+    .progress-text {
+        font-size: 10px;
+    }
 }
