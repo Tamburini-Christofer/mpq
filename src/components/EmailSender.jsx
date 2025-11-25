@@ -8,28 +8,21 @@ import "../styles/components/EmailSender.css";
 
 //todo Componente per l'invio di email tramite un form
 export default function EmailSender({ onClose }) {
-    //todo Stato per i dati del form
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-    //todo Stato per il messaggio di stato dell'invio
+  //todo Stato per i dati del form
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  //todo Stato per il messaggio di stato dell'invio
   const [status, setStatus] = useState("");
 
-    //todo Funzione per gestire i cambiamenti nei campi del form
+  //todo Funzione per gestire i cambiamenti nei campi del form
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-    //todo Funzione per inviare l'email
-  const sendEmail = (e) => {
+  //todo Funzione per inviare l'email
+  const sendEmail = async (e) => {
     e.preventDefault();
-    setStatus("Registrazione in corso...");
+    setStatus("Invio in corso...");
 
-    // Configurazione EmailJS per inviare l'email
-    // Costruisco un oggetto templateParams con chiavi comuni usate nei template EmailJS
     const templateParams = {
       name: formData.name,
       from_name: formData.name,
@@ -39,26 +32,45 @@ export default function EmailSender({ onClose }) {
       to_email: formData.email,
       user_email: formData.email,
 
+      // messaggio plain (se servisse nel template)
       message: formData.message || "",
-    }
 
-    emailjs
-      .send(
+      // Campi che il template EmailJS utilizza: nome_utente e year
+      nome_utente: formData.name,
+      year: new Date().getFullYear(),
+    };
+
+    try {
+      console.log('EmailSender: invio email a', templateParams.to_email, 'params:', templateParams);
+      const sendPromise = emailjs.send(
         "service_yrfxb13",
         "template_93d9uh2",
         templateParams,
         "-wnk8k24vEMFJaNQS"
-      )
-    //todo Gestione del successo o fallimento dell'invio
-      .then(() => {
-        setStatus("Registrazione completata! Controlla la tua email per il messaggio di benvenuto.");
-        setFormData({ name: "", email: "", message: "" });
-        // Chiudo il pop-up automaticamente dopo 1.2s
-        if (onClose) setTimeout(() => onClose(), 1200);
-      })
-      .catch(() => {
-        setStatus("Errore nella registrazione. Riprova più tardi.");
+      );
+
+      const timeoutMs = 20000; // 20s
+      const timeoutPromise = new Promise((_, reject) => {
+        const id = setTimeout(() => {
+          clearTimeout(id);
+          reject(new Error('timeout'));
+        }, timeoutMs);
       });
+
+      await Promise.race([sendPromise, timeoutPromise]);
+
+      console.log('EmailSender: invio completato');
+      setStatus("Registrazione completata! Controlla la tua email per il messaggio di benvenuto.");
+      setFormData({ name: "", email: "", message: "" });
+      if (onClose) setTimeout(() => onClose(), 1200);
+    } catch (err) {
+      console.error('EmailSender: errore invio email', err);
+      if (err && err.message === 'timeout') {
+        setStatus('Errore: timeout invio. Riprova.');
+      } else {
+        setStatus('Errore nell\'invio. Riprova più tardi.');
+      }
+    }
   };
 
   //todo Funzione per determinare il tipo di classe del messaggio di stato
@@ -74,10 +86,8 @@ export default function EmailSender({ onClose }) {
       <div className="email-form-card">
         {/* todo: Logo MyPocketQuest */}
         <h2 className="email-form-title">Unisciti alla Missione!</h2>
-        <p className="email-form-subtitle">
-          Compila il form per ricevere la tua email di benvenuto
-        </p>
-        
+        <p className="email-form-subtitle">Compila il form per ricevere la tua email di benvenuto</p>
+
         <form className="email-form" onSubmit={sendEmail}>
           <div className="input-group">
             <label className="input-label" htmlFor="name">Nome</label>
@@ -107,37 +117,27 @@ export default function EmailSender({ onClose }) {
             />
           </div>
 
-          {/* password removed: we only collect name and email for welcome */}
-
-          <button
-            className="email-submit-btn"
-            type="submit"
-            disabled={status === "Registrazione in corso..."}
-          >
-            {status === "Registrazione in corso..." ? (
+          <button className="email-submit-btn" type="submit" disabled={status.includes("corso")}>
+            {status.includes("corso") ? (
               <>
                 <span className="loading-spinner"></span>
-                Invio email tramite piccione viaggiatore...
+                Invio in corso...
               </>
             ) : (
               "Voglio la mia email di benvenuto!"
             )}
           </button>
         </form>
-        
+
         {/* todo: Pulsante per saltare la registrazione */}
-        <button
-          className="skip-btn"
-          type="button"
-          onClick={onClose}
-        >
+        <button className="skip-btn" type="button" onClick={onClose}>
           Salta presentazioni e partiamo subito con l'avventura!
         </button>
-        
+
         {/* todo: Mostro il messaggio di stato se presente */}
         {status && (
           <div className={`status-message ${getStatusClass()}`}>
-            {status === "Registrazione in corso..." && <span className="loading-spinner"></span>}
+            {status === "Invio in corso..." && <span className="loading-spinner"></span>}
             {status}
           </div>
         )}

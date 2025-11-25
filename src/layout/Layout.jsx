@@ -1,8 +1,8 @@
 //todo Importo Outlet da react-router-dom per il rendering delle route figlie
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
-import Swal from 'sweetalert2';
 import '../styles/components/SwalDark.css';
+import '../styles/components/CheckoutSuccess.css';
 import { cartAPI, emitCartUpdate } from '../services/api';
 import Toast from "../components/common/Toast";
 import { Toaster } from 'react-hot-toast';
@@ -27,6 +27,8 @@ const Layout = () => {
     }, [location.pathname]);
 
     const [notification, setNotification] = useState(null);
+    const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
+    const [checkoutCountdown, setCheckoutCountdown] = useState(6);
 
     useEffect(() => {
         const handler = (e) => {
@@ -65,44 +67,42 @@ const Layout = () => {
             const params = new URLSearchParams(window.location.search);
             const ok = params.get('checkout');
             if (ok === 'success') {
-                // show informative alert
-                Swal.fire({
-                    title: 'Pagamento avvenuto',
-                    html: 'Grazie! Il pagamento è andato a buon fine. Riceverai a breve una email con il riepilogo dell\'ordine.',
-                    icon: 'success',
-                    confirmButtonText: 'Ok',
-                    background: 'var(--bg-dark-card)',
-                    color: 'var(--text-light)',
-                    customClass: {
-                        popup: 'swal-dark-popup',
-                        title: 'swal-dark-title',
-                        content: 'swal-dark-content',
-                        confirmButton: 'swal-dark-confirm'
-                    }
-                }).then(async () => {
-                    try {
-                        // clear localStorage entirely as requested
-                        localStorage.clear();
-                    } catch (e) {
-                        console.warn('Errore durante la pulizia di localStorage', e);
-                    }
+                // show custom overlay with countdown then run cleanup
+                try {
+                    setCheckoutCountdown(6);
+                    setShowCheckoutSuccess(true);
+                } catch (e) { console.warn('Could not set checkout overlay', e) }
 
-                    // also clear server-side cart for this session and notify listeners
-                    try {
-                        await cartAPI.clear();
-                        emitCartUpdate();
-                    } catch (e) {
-                        console.warn('Errore svuotamento carrello server-side after checkout:', e);
-                    }
+                let intervalId = null;
+                let finished = false;
 
-                    // refresh the page so UI reflects emptied cart and any state changes
-                    try {
-                        window.location.replace(window.location.pathname);
-                    } catch (e) {
-                        // fallback to navigate if replace fails
-                        navigate(window.location.pathname, { replace: true });
-                    }
-                });
+                const startCountdown = () => {
+                    intervalId = setInterval(() => {
+                        setCheckoutCountdown((c) => {
+                            if (c <= 1) {
+                                // stop interval
+                                clearInterval(intervalId);
+                                finished = true;
+                                // perform cleanup when countdown reaches 0
+                                (async () => {
+                                    try { localStorage.clear(); } catch (e) { console.warn('Errore durante la pulizia di localStorage', e); }
+                                    try { await cartAPI.clear(); emitCartUpdate(); } catch (e) { console.warn('Errore svuotamento carrello server-side after checkout:', e); }
+                                    try { setShowCheckoutSuccess(false); } catch (e) { console.warn('Could not hide checkout overlay', e); }
+                                })();
+                                return 0;
+                            }
+                            return c - 1;
+                        });
+                    }, 1000);
+                };
+
+                startCountdown();
+
+                // cleanup if effect re-runs before countdown ends
+                return () => {
+                    if (intervalId) clearInterval(intervalId);
+                    if (!finished) setShowCheckoutSuccess(false);
+                };
             }
         } catch (err) {
             // non-blocking
@@ -116,9 +116,18 @@ const Layout = () => {
         <header>
             <NavBar />
         </header>
-        <main>
-            <Outlet />
-        </main>
+                <main>
+                        <Outlet />
+                </main>
+                {showCheckoutSuccess && (
+                    <div className="checkout-success-overlay" role="dialog" aria-live="polite">
+                        <div className="checkout-success-card">
+                            <div className="checkout-success-title">Pagamento avvenuto</div>
+                            <div className="checkout-success-msg">Grazie! Il pagamento è andato a buon fine. Riceverai a breve una email con il riepilogo dell'ordine.</div>
+                            <div className="checkout-success-timer">L'overlay si chiuderà automaticamente in {checkoutCountdown}s</div>
+                        </div>
+                    </div>
+                )}
         <footer>
             <Footer />
         </footer>
