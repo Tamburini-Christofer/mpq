@@ -1,59 +1,129 @@
+/* ==========================================
+   FOOTER - PIXEL / NEO-BRUTALIST STYLE
+   ========================================== */
+
 .app-footer {
-    background-color: #1a1a1a;
-    color: #aaaaaa;
-    padding: 30px 50px;
-    border-top: 1px solid #333;
+  background-color: #1a1a1a;
+  color: #aaaaaa;
+  padding: 40px 50px;
+  /* Bordo superiore spesso e netto */
+  border-top: 4px solid #000; 
+  font-family: "Courier New", Courier, monospace; /* Font Retro */
+  
+  /* Texture a griglia opzionale (come header) per coerenza */
+  background-image: linear-gradient(#222 1px, transparent 1px),
+  linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 10px 10px;
 }
 
 .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
+  /* max-width: 1200px; */
+  margin: 0 auto;
 }
 
-/* Da aggiungere se si aggiungoino contenuti a footer-links-section */
-/* .footer-links-section {
-    padding-bottom: 20px;
-    border-bottom: 1px solid #333;
-    margin-bottom: 20px;
-} */
-
+/* Link di utilità (Privacy, Terms, ecc.) */
 .footer-utility-link {
-    color: #aaaaaa;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.2s;
+  color: #aaaaaa;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.1s;
+  padding: 2px 4px;
+  position: relative;
 }
 
+/* Hover sui link: Effetto evidenziatore retro */
 .footer-utility-link:hover {
-    color: #FFD700;
+  color: #000;
+  background-color: #D8A928; /* Sfondo oro */
+  box-shadow: 3px 3px 0px #000; /* Ombra netta */
+  transform: translate(-1px, -1px);
 }
 
 .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-top: 20px;
 }
 
+/* --- SOCIAL ICONS (Pulsanti Quadrati) --- */
 .social-icons {
-    display: flex;
-    gap: 20px;
-    font-size: 1.5rem;
-
+  display: flex;
+  gap: 15px;
 }
 
 .social-icon {
-    color: #aaaaaa;
-    text-decoration: none;
-    transition: color 0.2s, transform 0.2s;
+  color: #fff;
+  background-color: #2d2d2d;
+  text-decoration: none;
+  
+  /* Rendiamo l'icona un pulsante fisico quadrato */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  font-size: 1.2rem;
+  
+  border: 2px solid #000; /* Bordo nero */
+  border-radius: 0; /* Squadrato */
+  box-shadow: 4px 4px 0px #000; /* Ombra Hard */
+  
+  transition: all 0.1s;
 }
 
+/* Hover Social: Si accende e si muove */
 .social-icon:hover {
-    color: #FFD700;
-    transform: scale(1.3);
+  background-color: #D8A928; /* Oro */
+  color: #000; /* Icona nera */
+  transform: translate(-2px, -2px); /* Si sposta in alto a sx */
+  box-shadow: 6px 6px 0px #fff; /* Ombra diventa bianca/luminosa */
 }
 
+.social-icon:active {
+  transform: translate(2px, 2px); /* Pressione fisica */
+  box-shadow: 0px 0px 0px #000;
+}
+
+/* --- COPYRIGHT --- */
 .footer-copyright {
-    font-size: 0.9rem;
-    margin: 0;
+  font-size: 0.8rem;
+  margin: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  /* Piccolo dettaglio decorativo */
+  border-left: 4px solid #772284; 
+  padding-left: 10px;
+  color: #fff;
+  text-shadow: 1px 1px 0px #000;
+}
+
+/* RESPONSIVE FOOTER */
+@media screen and (max-width: 768px) {
+  .app-footer {
+    padding: 30px 20px;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .social-icons {
+    justify-content: center;
+  }
+  
+  .footer-copyright {
+    border-left: none; /* Rimuovi bordo laterale su mobile */
+    border-top: 4px solid #772284; /* Metti bordo sopra */
+    padding-left: 0;
+    padding-top: 10px;
+    width: 100%;
+  }
 }
