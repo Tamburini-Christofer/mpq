@@ -280,7 +280,21 @@ export const cartAPI = {
       const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}`, {
         method: 'DELETE'
       });
-      if (!response.ok) throw new Error('Errore nella rimozione');
+
+      // If backend returned an error body, try to include it in the thrown Error
+      if (!response.ok) {
+        let msg = 'Errore nella rimozione';
+        try {
+          const body = await response.json();
+          if (body && body.message) msg = body.message;
+        } catch (e) {
+          // ignore JSON parse errors
+        }
+        const err = new Error(msg);
+        err.status = response.status;
+        throw err;
+      }
+
       return await response.json();
     } catch (error) {
       console.error('Errore API cart.remove:', error);

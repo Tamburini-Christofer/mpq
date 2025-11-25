@@ -603,3 +603,32 @@
     color: var(--pixel-gold);
     box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
 }
+
+/* Messaggio quando non ci sono card dopo i filtri */
+.no-cards {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+.no-cards-inner {
+    max-width: 720px;
+    background: linear-gradient(180deg, rgba(28,26,36,0.98), rgba(20,18,24,0.98));
+    border: 3px solid var(--pixel-border);
+    box-shadow: 8px 8px 0 var(--pixel-border);
+    padding: 28px 30px;
+    text-align: center;
+}
+.no-cards-inner h3 {
+    color: var(--pixel-gold);
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    font-family: "Cinzel", serif;
+    text-transform: uppercase;
+}
+.no-cards-inner p {
+    color: #d1d1d1;
+    font-size: 1rem;
+    line-height: 1.5;
+}

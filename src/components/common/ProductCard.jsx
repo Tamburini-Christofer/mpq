@@ -206,6 +206,8 @@ function ProductCard({
         className="product-card__image"
         src={product.image}
         alt={product.name}
+        loading="lazy"
+        decoding="async"
       />
 
       <div className="product-card__info">

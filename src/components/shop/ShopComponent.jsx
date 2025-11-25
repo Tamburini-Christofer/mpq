@@ -7,7 +7,8 @@ export default function ShopComponent({
   filters,
   onFiltersChange,
   searchValue,
-  onSearchChange
+  onSearchChange,
+  onResetFilters
 }) {
   return (
     <div className="shop-filters-container">
@@ -16,6 +17,7 @@ export default function ShopComponent({
         onFiltersChange={onFiltersChange}
         searchValue={searchValue}
         onSearchChange={onSearchChange}
+        onResetFilters={onResetFilters}
       />
     </div>
   );

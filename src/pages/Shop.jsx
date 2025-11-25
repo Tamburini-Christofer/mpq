@@ -62,6 +62,24 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // helper: whether current filters/search returned no products
+  const noProducts = !loading && Array.isArray(products) && products.length === 0;
+
+  const resetFilters = () => {
+    setFilters({
+      priceRange: { min: 0, max: 200 },
+      categories: [],
+      matureContent: false,
+      accessibility: false,
+      onSale: false,
+    });
+    setSearchValue("");
+    setSortValue("recent");
+    setItemsPerPage(10);
+    setCurrentPage(1);
+    loadProducts(1, true);
+  };
+
   const [notification, setNotification] = useState(null);
 
   // Inizializza lo stato dei filtri dalla query string (se presente)
@@ -331,7 +349,15 @@ const Shop = ({ defaultTab = "shop" }) => {
   const decreaseQuantity = async (productId) => {
     try {
       const item = cart.find((i) => i.id === productId);
-      if (item && item.quantity > 1) {
+      // guard: if item not found locally, refresh cart and bail out
+      if (!item) {
+        toast.error('Elemento non trovato nel carrello. Aggiorno la vista...');
+        await fetchCart();
+        emitCartUpdate();
+        return;
+      }
+
+      if (item.quantity > 1) {
         await cartAPI.decrease(productId);
         // emit remove action for decrement
         try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch {}
@@ -344,6 +370,10 @@ const Shop = ({ defaultTab = "shop" }) => {
       emitCartUpdate();
     } catch (error) {
       logError("Errore nel diminuire la quantità", error);
+      // show a user-friendly message when removal fails
+      try {
+        toast.error(error?.message || 'Errore nel diminuire la quantità');
+      } catch {}
     }
   };
 
@@ -431,16 +461,16 @@ const Shop = ({ defaultTab = "shop" }) => {
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
         }
       });
-
-      navigate("/shop");
+      
+      
     } catch (err) {
-      logError('Errore annullamento ordine', err);
+      logError('Errore svuotamento carrello', err);
+      try { toast.error('Errore durante lo svuotamento del carrello'); } catch {}
     }
   };
 
   return (
     <div className="shop-ui-container">
-      
 
       <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
         <div className="logo-box">
@@ -452,6 +482,23 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
 
         <div className="menu">
+          <div className="sidebar-search" style={{ margin: '18px 0' }}>
+            <label htmlFor="aside-search" className="sr-only">Cerca prodotti</label>
+            <div className="search-in-filters" role="search" aria-label="Cerca prodotti">
+              <span className="search-icon" aria-hidden>🔎</span>
+              <input
+                id="aside-search"
+                className="search-input"
+                type="search"
+                placeholder="Cerca..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                aria-label="Cerca prodotti"
+              />
+            </div>
+          </div>
+
+          
           <button
             className={activeTab === "shop" ? "menu-btn active" : "menu-btn"}
             onClick={() => {
@@ -472,7 +519,6 @@ const Shop = ({ defaultTab = "shop" }) => {
             Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
-          {/* show Checkout menu only when checkoutAvailable is true */}
           {checkoutAvailable && (
             <button
               className={`${activeTab === "checkout" ? "menu-btn active" : "menu-btn"} ${checkoutJustEnabled ? 'menu-btn-enter' : ''}`}
@@ -494,6 +540,7 @@ const Shop = ({ defaultTab = "shop" }) => {
             onFiltersChange={setFilters}
             searchValue={searchValue}
             onSearchChange={setSearchValue}
+            onResetFilters={resetFilters}
           />
         </div>
       )}
@@ -535,60 +582,67 @@ const Shop = ({ defaultTab = "shop" }) => {
               <div className="loading-container">
                 <p>Caricamento prodotti...</p>
               </div>
+            ) : noProducts ? (
+              <div className="no-cards-page">
+                <div className="no-cards-inner">
+                  <h1>Nessuna card trovata</h1>
+                  <p>Non abbiamo trovato prodotti che corrispondono ai filtri selezionati.</p>
+                  <p>Prova ad azzerare i filtri o cerca con parole diverse.</p>
+                  <div style={{ marginTop: 18 }}>
+                    <button className="load-more-btn" onClick={resetFilters}>Azzera filtri</button>
+                  </div>
+                </div>
+              </div>
             ) : (
               <>
                 <div className={`products products-${viewMode}`}>
-{products.map((p) => (
-  <ProductCard
-    key={p.id}
-    product={{
-      ...p,
-      // Controlla la quantità nel carrello
-      cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
-      // Controlla se è già nella wishlist (leggendo dal localStorage)
-      isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
-    }}
-    variant={viewMode === "grid" ? "grid" : "compact"}
-    onViewDetails={(slug) => navigate(`/details/${slug}`)}
-    onAddToCart={handleAddToCart}
-    onIncrease={increaseQuantity}
-    onDecrease={decreaseQuantity}
-    cart={cart}
-    // Qui uniamo la logica "migliore" del main
-    onToggleWishlist={(product) => {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      const exists = wishlist.some(w => w.id === product.id);
-      let updated;
-      let action;
+                  {products.map((p) => {
+                    return (
+                      <ProductCard
+                        key={p.id}
+                        product={{
+                          ...p,
+                          cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+                          isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
+                        }}
+                        variant={viewMode === "grid" ? "grid" : "compact"}
+                        onViewDetails={(slug) => navigate(`/details/${slug}`)}
+                        onAddToCart={handleAddToCart}
+                        onIncrease={increaseQuantity}
+                        onDecrease={decreaseQuantity}
+                        cart={cart}
+                        onToggleWishlist={(product) => {
+                          const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+                          const exists = wishlist.some(w => w.id === product.id);
+                          let updated;
+                          let action;
 
-      if (exists) {
-        updated = wishlist.filter(w => w.id !== product.id);
-        action = 'remove';
-      } else {
-        updated = [...wishlist, product];
-        action = 'add';
-      }
+                          if (exists) {
+                            updated = wishlist.filter(w => w.id !== product.id);
+                            action = 'remove';
+                          } else {
+                            updated = [...wishlist, product];
+                            action = 'add';
+                          }
 
-      localStorage.setItem("wishlist", JSON.stringify(updated));
+                          localStorage.setItem("wishlist", JSON.stringify(updated));
+                          window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
 
-      // Dispatch dettagliato per sincronizzare altri componenti (es. header)
-      window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
-
-      // Notifiche visive (prese dal main perché sono più carine)
-      if (action === 'add') {
-        toast.success(`${product.name} aggiunto alla wishlist`, {
-          icon: '🤍',
-          style: { background: '#ef4444', color: '#ffffff' }
-        });
-      } else {
-        toast(`${product.name} rimosso dalla wishlist`, {
-          icon: '❤',
-          style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
-        });
-      }
-    }}
-  />
-))}
+                          if (action === 'add') {
+                            toast.success(`${product.name} aggiunto alla wishlist`, {
+                              icon: '🤍',
+                              style: { background: '#ef4444', color: '#ffffff' }
+                            });
+                          } else {
+                            toast(`${product.name} rimosso dalla wishlist`, {
+                              icon: '❤',
+                              style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+                            });
+                          }
+                        }}
+                      />
+                    );
+                  })}
                 </div>
 
                 {/* Componente di paginazione */}
