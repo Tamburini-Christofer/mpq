@@ -451,13 +451,13 @@ export default function CheckoutForm({
                     transition: '0.25s',
                   }}
                 >
-              
+
                   Annulla e Cancella Ordine
                 </button>
-                     <PaymentButton
+                <PaymentButton
                   totalAmount={safeTotalAmount}
                   cartItems={safeCartItems}
-                  formData={formData}
+                  formData={formData}         
                   onClose={onClose}
                 />
               </div>

@@ -1,0 +1,48 @@
+
+.success-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 167, 79, 0.1);
+    flex-direction: column;
+}
+
+.container_success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+}
+
+.stato-pagamento {
+    margin-top: 200px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #d9aa29;
+    text-align: center;
+    max-width: 600px;
+    border-radius: 8px;
+}
+
+.success-wrapper button {
+    color: rgb(140, 40, 158);
+    font-weight: 700;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: #d9aa29;
+    margin-bottom: 132px;
+}
+
+.success-wrapper button a {
+    text-decoration: none;
+}
+
+.success-wrapper button a:visited {
+    text-decoration: none;
+    color: rgb(140, 40, 158);
+}
+
+.success-wrapper button:hover {
+    background-color: #f7c12e;
+    color: rgb(172, 48, 194);
+}

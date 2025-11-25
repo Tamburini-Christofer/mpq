@@ -9,6 +9,7 @@ import Contact from './pages/Contact.jsx'
 import Wishlist from './pages/Wishlist.jsx'
 import Staff from './pages/Staff.jsx'
 import NotFoundPages from './pages/NotFoundPages.jsx'
+import SuccessPayment from './pages/successPayment.jsx'
 
 function App () {
   const [showWelcomeModal, setShowWelcomeModal] = useState(true)
@@ -44,6 +45,7 @@ function App () {
             <Route path='/contatti' element={<Contact />} />
             <Route path='/staff' element={<Staff />} />
             <Route path='*' element={<NotFoundPages />} />
+            <Route path='/success' element={<SuccessPayment />} />
           </Route>
         </Routes>
       </BrowserRouter>
