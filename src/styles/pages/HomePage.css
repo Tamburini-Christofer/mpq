@@ -470,3 +470,10 @@
     .card-placeholder { width: 220px; }
     .scroll-btn { opacity: 1; visibility: visible; }
 }
+
+/* Forza le dimensioni delle product-card nella homepage (caroselli)
+   per garantire che Home mostri le card a 250x270 come nel commit precedente. */
+.homepage .cards-list .product-card.product-card--carousel {
+    width: 250px !important;
+    min-height: 270px !important;
+}

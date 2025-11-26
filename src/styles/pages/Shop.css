@@ -532,6 +532,7 @@
   cursor: pointer;
   box-shadow: 2px 2px 0 var(--pixel-border);
   transition: all 0.1s;
+  margin: 0 10px;
 }
 
 .quantity-btn:active,

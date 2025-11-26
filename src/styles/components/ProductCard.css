@@ -702,6 +702,7 @@
     border: 3px solid var(--pixel-border);
     border-left: 6px solid var(--pixel-gold);
     box-shadow: 4px 4px 0 #000;
+    padding: 22px;
 }
 
 .view-btn {
@@ -760,4 +761,117 @@ html body .products-grid .product-card,
 html body .content .products-grid .product-card {
     width: 250px !important;
     min-height: 270px !important;
+}
+
+/* ------------------------------------------
+   LIST LAYOUT (product-card--list)
+   Photo left, title/category under image,
+   description + price + actions on the right
+   ------------------------------------------ */
+
+/* List layout: fixed border and actions aligned to the bottom, parallel to the photo */
+.product-card--list {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 12px;
+    background: linear-gradient(180deg, #0f0d12 0%, #141218 100%);
+    /* bordo fisso, non cambia al hover */
+    border: 3px solid var(--pixel-border);
+    border-left: 6px solid var(--pixel-gold);
+    box-shadow: 6px 6px 0 #000;
+    min-height: 140px;
+}
+
+/* Disable hover border accent for list items so the border remains "fisso" */
+.product-card--list:hover {
+    border-color: var(--pixel-border);
+    box-shadow: 6px 6px 0 #000;
+}
+
+.product-card__list-left {
+    flex: 0 0 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Assicurati che il contenuto resti in cima, non in fondo */
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.product-card__list-left .product-card__image {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 3px solid var(--pixel-border);
+    box-shadow: 3px 3px 0 #000;
+}
+
+.product-card__left-meta {
+    text-align: center;
+}
+
+.product-card__left-meta .product-card__title {
+    font-size: 0.95rem;
+    color: var(--pixel-gold);
+    line-height: 1.1;
+    margin: 0;
+}
+
+.product-card__left-meta .product-card__category {
+    font-size: 0.75rem;
+    color: #ddd;
+    margin-top: 4px;
+}
+
+/* Right column: stretch vertically and place elements with space-between so
+   the actions stay at the bottom (parallel to the photo). */
+.product-card__list-right {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    /* Metti il contenuto principale in alto e le azioni in fondo */
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 140px; /* garantisce spazio verticale per posizionare le azioni in basso */
+}
+
+.product-card__list-right .product-card__desc {
+    color: #d1d1d1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.product-card__list-right .product-card__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end; /* elementi orizzontali a destra */
+    align-self: flex-end; /* posiziona il blocco azioni in fondo a destra */
+    margin: 0; /* azioni aderenti al fondo della colonna destra */
+}
+
+/* Se le azioni sono markup a lista (<li>), rendile orizzontali e con spacing */
+.product-card__list-right .product-card__actions li {
+    list-style: none;
+    display: inline-flex;
+    margin-left: 8px;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 700px) {
+    .product-card--list {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .product-card__list-left {
+        flex: 0 0 auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+    .product-card__list-left .product-card__image {
+        width: 100px;
+        height: 100px;
+    }
 }

@@ -487,7 +487,7 @@ const Shop = ({ defaultTab = "shop" }) => {
           <div className="sidebar-search" style={{ margin: '18px 0' }}>
             <label htmlFor="aside-search" className="sr-only">Cerca prodotti</label>
             <div className="search-in-filters" role="search" aria-label="Cerca prodotti">
-              <span className="search-icon" aria-hidden>🔎</span>
+              
               <input
                 id="aside-search"
                 className="search-input"
@@ -608,6 +608,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                           isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
                         }}
                         variant={viewMode === "grid" ? "grid" : "compact"}
+                        listLayout={viewMode === "list"}
                         onViewDetails={(slug) => navigate(`/details/${slug}`)}
                         onAddToCart={handleAddToCart}
                         onIncrease={increaseQuantity}
