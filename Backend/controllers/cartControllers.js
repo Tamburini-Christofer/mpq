@@ -65,12 +65,13 @@ exports.addToCart = async (req, res, next) => {
 
     const cart = carts.get(sessionId);
 
-    const exists = cart.find((i) => i.productId === productId);
+    // Correzione: confronta come numero
+    const exists = cart.find((i) => i.productId === parseInt(productId));
 
     if (exists) {
       exists.quantity += quantity;
     } else {
-      cart.push({ productId, quantity });
+      cart.push({ productId: parseInt(productId), quantity });
     }
 
     res.json({ message: "Aggiunto!", cart });
@@ -122,22 +123,23 @@ exports.increaseQuantity = async (req, res, next) => {
   try {
     const { sessionId, productId } = req.params;
 
-    // If cart doesn't exist, create it and add the item
     if (!carts.has(sessionId)) {
-      carts.set(sessionId, []);
+      const err = new Error("Carrello non trovato");
+      err.status = 404;
+      return next(err);
     }
 
     const cart = carts.get(sessionId);
-    let item = cart.find((i) => i.productId === parseInt(productId));
+    const item = cart.find((i) => i.productId === parseInt(productId));
 
     if (!item) {
-      // Add the item with quantity 1
-      item = { productId: parseInt(productId), quantity: 1 };
-      cart.push(item);
-      return res.json({ message: "Prodotto aggiunto e quantità impostata a 1", cart });
+      const err = new Error("Prodotto non nel carrello");
+      err.status = 404;
+      return next(err);
     }
 
     item.quantity += 1;
+
     res.json({ message: "Quantità aumentata", cart });
   } catch (err) {
     next(err);
@@ -149,16 +151,19 @@ exports.decreaseQuantity = async (req, res, next) => {
   try {
     const { sessionId, productId } = req.params;
 
-    // If cart doesn't exist, return empty cart (no-op)
     if (!carts.has(sessionId)) {
-      return res.json({ message: "Carrello vuoto", cart: [] });
+      const err = new Error("Carrello non trovato");
+      err.status = 404;
+      return next(err);
     }
 
     const cart = carts.get(sessionId);
     const item = cart.find((i) => i.productId === parseInt(productId));
 
     if (!item) {
-      return res.json({ message: "Prodotto non nel carrello", cart });
+      const err = new Error("Prodotto non nel carrello");
+      err.status = 404;
+      return next(err);
     }
 
     item.quantity -= 1;
@@ -181,9 +186,10 @@ exports.removeFromCart = async (req, res, next) => {
   try {
     const { sessionId, productId } = req.params;
 
-    // If cart doesn't exist, return empty cart (no-op)
     if (!carts.has(sessionId)) {
-      return res.json({ message: "Carrello vuoto", cart: [] });
+      const err = new Error("Carrello non trovato");
+      err.status = 404;
+      return next(err);
     }
 
     const cart = carts.get(sessionId);
@@ -192,7 +198,9 @@ exports.removeFromCart = async (req, res, next) => {
     );
 
     if (index === -1) {
-      return res.json({ message: "Prodotto non nel carrello", cart });
+      const err = new Error("Prodotto non nel carrello");
+      err.status = 404;
+      return next(err);
     }
 
     cart.splice(index, 1);

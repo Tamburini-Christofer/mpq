@@ -91,7 +91,12 @@ const Layout = () => {
                 // perform immediate cleanup: clear local storage and server-side cart, then show overlay
                 try {
                     (async () => {
-                        try { localStorage.clear(); } catch (e) { console.warn('Errore durante la pulizia di localStorage', e); }
+                        try {
+                            // preserve the welcome flag so the welcome modal isn't shown again
+                            const _seen = localStorage.getItem('hasSeenWelcome');
+                            localStorage.clear();
+                            if (_seen) localStorage.setItem('hasSeenWelcome', _seen);
+                        } catch (e) { console.warn('Errore durante la pulizia di localStorage', e); }
                         try { await cartAPI.clear(); emitCartUpdate(); } catch (e) { console.warn('Errore svuotamento carrello server-side after checkout:', e); }
                         try { setShowCheckoutSuccess(true); } catch (e) { console.warn('Could not show checkout overlay', e); }
                     })();
@@ -111,7 +116,12 @@ const Layout = () => {
 
     // Allow user to immediately close the overlay and return to shop
     const handleCloseNow = async () => {
-        try { localStorage.clear(); } catch (e) { console.warn('Errore durante la pulizia di localStorage', e); }
+        try {
+            // preserve the welcome flag so the welcome modal isn't shown again
+            const _seen = localStorage.getItem('hasSeenWelcome');
+            localStorage.clear();
+            if (_seen) localStorage.setItem('hasSeenWelcome', _seen);
+        } catch (e) { console.warn('Errore durante la pulizia di localStorage', e); }
         try { await cartAPI.clear(); emitCartUpdate(); } catch (e) { console.warn('Errore svuotamento carrello server-side on manual close:', e); }
         try { setShowCheckoutSuccess(false); } catch (e) { console.warn('Could not hide checkout overlay', e); }
         try { navigate('/shop'); } catch (e) { console.warn('Could not navigate after checkout', e); }
