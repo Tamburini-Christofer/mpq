@@ -71,58 +71,80 @@ const applyCartFromUrlIfPresent = async () => {
 
 export const productsAPI = {
   // Ottieni tutti i prodotti con paginazione
+  // Accetta un oggetto `options` o un semplice `categoryId` (per compatibilità).
   getAll: async (options = {}) => {
     try {
-      const {
-        categoryId = null,
-        page = 1,
-        limit = 10,
-        search = '',
-        sortBy = 'recent',
-        priceMin = null,
-        priceMax = null,
-        onSale = false,
-        matureContent = false,
-        accessibility = false
-      } = options;
+      const TTL = 700; // ms
+      // normalizza l'argomento: se è un ID (number/string) lo trattiamo come categoryId
+      let opts = options;
+      if (options === null || options === undefined) opts = {};
+      if (typeof options !== 'object') opts = { categoryId: options };
 
+      // costruisci query params dalla options
       const params = new URLSearchParams();
-      
-      if (categoryId) params.append('category_id', categoryId);
-      params.append('page', page.toString());
-      params.append('limit', limit.toString());
-      if (search.trim()) params.append('search', search.trim());
-      params.append('sortBy', sortBy);
-      if (priceMin !== null) params.append('priceMin', priceMin.toString());
-      if (priceMax !== null) params.append('priceMax', priceMax.toString());
-      if (onSale) params.append('onSale', 'true');
-      if (matureContent) params.append('matureContent', 'true');
-      if (accessibility) params.append('accessibility', 'true');
+      if (opts.page) params.set('page', String(opts.page));
+      if (opts.limit) params.set('limit', String(opts.limit));
+      // backend expects `search` (not `q`)
+      if (opts.search) params.set('search', String(opts.search));
+      // backend expects `sortBy`
+      if (opts.sortBy) params.set('sortBy', String(opts.sortBy));
+      if (opts.priceMin != null) params.set('priceMin', String(opts.priceMin));
+      if (opts.priceMax != null) params.set('priceMax', String(opts.priceMax));
+      // backend compares string 'true' for these flags
+      if (opts.onSale) params.set('onSale', 'true');
+      if (opts.matureContent) params.set('matureContent', 'true');
+      if (opts.accessibility) params.set('accessibility', 'true');
+      if (opts.categoryId) params.set('category_id', String(opts.categoryId));
 
-      const url = `${API_BASE_URL}/products?${params.toString()}`;
-      
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
-      return await response.json();
+      const url = `${API_BASE_URL}/products${params.toString() ? `?${params.toString()}` : ''}`;
+
+      // cache/dedupe per-URL
+      if (!productsAPI._cacheMap) productsAPI._cacheMap = {};
+      const entry = productsAPI._cacheMap[url] || { lastResult: null, lastTime: 0, lastPromise: null };
+      const now = Date.now();
+
+      if (entry.lastPromise) return entry.lastPromise;
+      if (entry.lastResult && (now - entry.lastTime) < TTL) return entry.lastResult;
+
+      const p = (async () => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
+          const data = await response.json();
+          entry.lastResult = data;
+          entry.lastTime = Date.now();
+          productsAPI._cacheMap[url] = entry;
+          return data;
+        } catch (error) {
+          console.error('Errore API getAll:', error);
+          throw error;
+        } finally {
+          entry.lastPromise = null;
+          productsAPI._cacheMap[url] = entry;
+        }
+      })();
+
+      entry.lastPromise = p;
+      productsAPI._cacheMap[url] = entry;
+      return p;
     } catch (error) {
-      console.error('Errore API getAll:', error);
+      console.error('Errore API getAll (outer):', error);
       throw error;
     }
   },
 
-  // Ottieni tutti i prodotti senza paginazione (per compatibilità)
+  // Ottieni tutti i prodotti senza paginazione (compatibilità)
+  // Reuse `getAll` (with a large `limit`) so we benefit from the per-URL
+  // dedupe/cache implemented there and avoid duplicate simultaneous requests.
   getAllUnpaginated: async (categoryId = null) => {
     try {
-      const url = categoryId 
-        ? `${API_BASE_URL}/products?category_id=${categoryId}&limit=1000`
-        : `${API_BASE_URL}/products?limit=1000`;
-      
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Errore nel caricamento dei prodotti');
-      const result = await response.json();
-      return result.products || result; // Gestisce sia il nuovo formato che il vecchio
+      const opts = { limit: 1000 };
+      if (categoryId) opts.categoryId = categoryId;
+      const data = await productsAPI.getAll(opts);
+      // `getAll` returns the same shape { products, pagination }
+      return data && data.products ? data.products : data;
     } catch (error) {
-      console.error('Errore API getAllUnpaginated:', error);
+      console.error('Errore API getAllUnpaginated (via getAll):', error);
       throw error;
     }
   },
@@ -145,20 +167,44 @@ export const productsAPI = {
 export const cartAPI = {
   // Ottieni carrello
   get: async () => {
-    console.log('API: cartAPI.get() called.');
-    try {
-      // Se l'URL contiene un carrello condiviso, applicalo una volta per la sessione
-      await applyCartFromUrlIfPresent();
-      const sessionId = getSessionId();
-      const response = await fetch(`${API_BASE_URL}/cart/${sessionId}`);
-      if (!response.ok) throw new Error('Errore nel caricamento del carrello');
-      const data = await response.json();
-      console.log('API: cartAPI.get() response data:', data);
-      return data;
-    } catch (error) {
-      console.error('Errore API cart.get:', error);
-      return [];
+    // simple in-flight dedupe + short TTL cache to avoid many duplicate requests
+    if (!cartAPI._cache) {
+      cartAPI._cache = { lastResult: null, lastTime: 0, lastPromise: null };
     }
+    const now = Date.now();
+    const TTL = 700; // ms - batch calls within this window
+
+    // if there's an ongoing fetch, return the same promise
+    if (cartAPI._cache.lastPromise) {
+      return cartAPI._cache.lastPromise;
+    }
+
+    // if we have a recent cached result, return it immediately
+    if (cartAPI._cache.lastResult && (now - cartAPI._cache.lastTime) < TTL) {
+      return cartAPI._cache.lastResult;
+    }
+
+    // otherwise perform fetch and store promise in cache
+    const p = (async () => {
+      try {
+        const sessionId = getSessionId();
+        const response = await fetch(`${API_BASE_URL}/cart/${sessionId}`);
+        if (!response.ok) throw new Error('Errore nel caricamento del carrello');
+        const data = await response.json();
+        cartAPI._cache.lastResult = data;
+        cartAPI._cache.lastTime = Date.now();
+        return data;
+      } catch (error) {
+        console.error('Errore API cart.get:', error);
+        return [];
+      } finally {
+        // clear the in-flight promise reference after resolution so next calls can start a new one when needed
+        cartAPI._cache.lastPromise = null;
+      }
+    })();
+
+    cartAPI._cache.lastPromise = p;
+    return p;
   },
 
   // Aggiungi al carrello
@@ -234,7 +280,21 @@ export const cartAPI = {
       const response = await fetch(`${API_BASE_URL}/cart/${sessionId}/items/${productId}`, {
         method: 'DELETE'
       });
-      if (!response.ok) throw new Error('Errore nella rimozione');
+
+      // If backend returned an error body, try to include it in the thrown Error
+      if (!response.ok) {
+        let msg = 'Errore nella rimozione';
+        try {
+          const body = await response.json();
+          if (body && body.message) msg = body.message;
+        } catch (e) {
+          // ignore JSON parse errors
+        }
+        const err = new Error(msg);
+        err.status = response.status;
+        throw err;
+      }
+
       return await response.json();
     } catch (error) {
       console.error('Errore API cart.remove:', error);
@@ -303,17 +363,71 @@ export const checkoutAPI = {
 };
 
 // Evento personalizzato per sincronizzare il carrello tra componenti
+import { logAction } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
+
+// small dedupe for emitted logs to avoid rapid duplicate console entries
+const _recentLog = { label: null, payload: null, time: 0 };
+const _shouldLog = (label, payload, windowMs = 800) => {
+  try {
+    const p = payload ? JSON.stringify({ id: payload.id, name: payload.name }) : '';
+    const now = Date.now();
+    if (label === _recentLog.label && p === _recentLog.payload && (now - _recentLog.time) < windowMs) {
+      return false;
+    }
+    _recentLog.label = label;
+    _recentLog.payload = p;
+    _recentLog.time = now;
+    return true;
+  } catch {
+    return true;
+  }
+};
+
+// Debounce/dedup control for emitCartUpdate dispatches
+let _emitCooldownMs = 600; // cooldown window
+let _lastEmitTime = 0;
+let _emitScheduled = false;
+
 export const emitCartUpdate = () => {
-  console.log('API: emitCartUpdate() called, dispatching CustomEvent "cartUpdate".');
-  window.dispatchEvent(new CustomEvent('cartUpdate'));
+  const now = Date.now();
+  // If we're within cooldown, schedule a single emit after cooldown (if not already scheduled)
+  if (now - _lastEmitTime < _emitCooldownMs) {
+    if (!_emitScheduled) {
+      _emitScheduled = true;
+      setTimeout(() => {
+        _emitScheduled = false;
+        emitCartUpdate();
+      }, _emitCooldownMs);
+    }
+    return;
+  }
+  _lastEmitTime = now;
+
+  // Fetch latest cart once and dispatch it to listeners to avoid multiple components re-fetching
+  (async () => {
+    try {
+      const data = await cartAPI.get();
+      window.dispatchEvent(new CustomEvent('cartUpdate', { detail: { cart: data } }));
+      if (_shouldLog(ACTIONS.CART_UPDATE, { note: 'cartUpdate dispatched' })) {
+        logAction(ACTIONS.CART_UPDATE, { note: 'cartUpdate dispatched' });
+      }
+    } catch {
+      // fallback: still dispatch event without data so listeners can decide to fetch
+      try { window.dispatchEvent(new CustomEvent('cartUpdate')); } catch { /* ignore */ }
+    }
+  })();
 };
 
 // Emit a cart action event with details { action: 'add'|'remove', product: { id, name } }
 export const emitCartAction = (action, product) => {
   try {
-    // debug: log emission
-    console.log('emitCartAction -> emitting', { action, product });
     window.dispatchEvent(new CustomEvent('cartAction', { detail: { action, product } }));
+    // map action to label
+    const label = action === 'add' ? ACTIONS.CART_ADD : ACTIONS.CART_REMOVE;
+    if (_shouldLog(label, product)) {
+      logAction(label, { id: product?.id, name: product?.name });
+    }
   } catch {
     // ignore
   }

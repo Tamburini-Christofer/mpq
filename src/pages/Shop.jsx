@@ -5,6 +5,8 @@ import "../styles/pages/Shop.css";
 import "../styles/components/cardExp.css";
 
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -21,6 +23,7 @@ const Shop = ({ defaultTab = "shop" }) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const mountedRef = useRef(false);
+  const itemsPerPageInitRef = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -32,6 +35,7 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [checkoutAvailable, setCheckoutAvailable] = useState(false);
   const [checkoutJustEnabled, setCheckoutJustEnabled] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -58,6 +62,24 @@ const Shop = ({ defaultTab = "shop" }) => {
   
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // helper: whether current filters/search returned no products
+  const noProducts = !loading && Array.isArray(products) && products.length === 0;
+
+  const resetFilters = () => {
+    setFilters({
+      priceRange: { min: 0, max: 200 },
+      categories: [],
+      matureContent: false,
+      accessibility: false,
+      onSale: false,
+    });
+    setSearchValue("");
+    setSortValue("recent");
+    setItemsPerPage(10);
+    setCurrentPage(1);
+    loadProducts(1, true);
+  };
 
   const [notification, setNotification] = useState(null);
 
@@ -165,6 +187,13 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   // Caricamento iniziale
   useEffect(() => {
+    // Evita il doppio caricamento iniziale: la prima esecuzione viene
+    // ignorata perché i prodotti sono già stati caricati dal parser della query string.
+    if (!itemsPerPageInitRef.current) {
+      itemsPerPageInitRef.current = true;
+      return;
+    }
+
     loadProducts(1);
   }, [itemsPerPage]); // Ricarica quando cambia items per pagina
 
@@ -216,8 +245,8 @@ const Shop = ({ defaultTab = "shop" }) => {
     try {
       const cartData = await cartAPI.get();
       setCart(cartData);
-    } catch {
-      console.error("Errore nel fetch del carrello");
+    } catch (err) {
+      logError('Errore nel fetch del carrello', err);
     }
   };
 
@@ -241,7 +270,14 @@ const Shop = ({ defaultTab = "shop" }) => {
 
   useEffect(() => {
     fetchCart();
-    window.addEventListener('cartUpdate', fetchCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) {
+        setCart(e.detail.cart);
+      } else {
+        fetchCart();
+      }
+    };
+    window.addEventListener('cartUpdate', handler);
     // listener per chiudere sidebar/mobile menu quando altre parti dell'app richiedono la navigazione
     const closeHandler = () => {
       setShowFilters(false);
@@ -261,7 +297,7 @@ const Shop = ({ defaultTab = "shop" }) => {
     };
     window.addEventListener('checkoutClosed', checkoutClosedHandler);
     return () => {
-      window.removeEventListener('cartUpdate', fetchCart);
+      window.removeEventListener('cartUpdate', handler);
       window.removeEventListener('closeSidebar', closeHandler);
       window.removeEventListener('checkoutClosed', checkoutClosedHandler);
     };
@@ -283,6 +319,23 @@ const Shop = ({ defaultTab = "shop" }) => {
     }
   }, [activeTab]);
 
+  // close mobile sidebar when changing tab
+  useEffect(() => {
+    setSidebarOpen(false);
+    setShowFilters(false);
+  }, [activeTab]);
+
+  // lock body scroll when any overlay is active
+  useEffect(() => {
+    const active = sidebarOpen || showFilters;
+    if (active) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    return () => document.body.classList.remove('no-scroll');
+  }, [sidebarOpen, showFilters]);
+
   const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
@@ -291,8 +344,8 @@ const Shop = ({ defaultTab = "shop" }) => {
       // central notification
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      console.error("Errore aggiunta al carrello:", error);
-      toast.error("Errore aggiunta al carrello");
+      logError('Errore aggiunta al carrello', error);
+      toast.error("Errore aggiunta al carretto");
     }
   };
 
@@ -305,19 +358,27 @@ const Shop = ({ defaultTab = "shop" }) => {
       try {
         const name = cart.find((i) => i.id === productId)?.name || 'Prodotto';
         emitCartAction('add', { id: productId, name });
-      } catch {}
+      } catch (err) { void err; }
     } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
+      logError("Errore nell'aumentare la quantità", error);
     }
   };
 
   const decreaseQuantity = async (productId) => {
     try {
       const item = cart.find((i) => i.id === productId);
-      if (item && item.quantity > 1) {
+      // guard: if item not found locally, refresh cart and bail out
+      if (!item) {
+        toast.error('Elemento non trovato nel carretto. Aggiorno la vista...');
+        await fetchCart();
+        emitCartUpdate();
+        return;
+      }
+
+      if (item.quantity > 1) {
         await cartAPI.decrease(productId);
         // emit remove action for decrement
-        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch {}
+        try { const name = item?.name || 'Prodotto'; emitCartAction('remove', { id: productId, name }); } catch (err) { void err; }
       } else {
         await cartAPI.remove(productId);
         const name = item?.name || 'Prodotto';
@@ -326,7 +387,11 @@ const Shop = ({ defaultTab = "shop" }) => {
       await fetchCart();
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
+      logError("Errore nel diminuire la quantità", error);
+      // show a user-friendly message when removal fails
+      try {
+        toast.error(error?.message || 'Errore nel diminuire la quantità');
+      } catch (err) { void err; }
     }
   };
 
@@ -337,8 +402,9 @@ const Shop = ({ defaultTab = "shop" }) => {
       const name = cart.find((i) => i.id === productId)?.name || "Prodotto";
       try {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id: productId, name } } }));
+        logAction(ACTIONS.CART_REMOVE_NAVBAR, { id: productId, name });
       } catch {
-        toast.error(`"${name}" rimosso dal carrello`);
+        toast.error(`"${name}" rimosso dal carretto`);
       }
       emitCartUpdate();
     } catch {
@@ -373,18 +439,20 @@ const Shop = ({ defaultTab = "shop" }) => {
   const handleCancelOrder = async () => {
     try {
       const result = await Swal.fire({
-        title: 'Svuotare il carrello?',
-        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        title: 'Svuotare il carretto?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carretto.',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Svuota carrello',
+        confirmButtonText: 'Svuota carretto',
         cancelButtonText: 'Annulla',
         reverseButtons: true,
         focusCancel: true,
         customClass: {
-          popup: 'swal-wishlist-popup',
-          confirmButton: 'swal-wishlist-confirm',
-          cancelButton: 'swal-wishlist-cancel'
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
         }
       });
 
@@ -402,29 +470,29 @@ const Shop = ({ defaultTab = "shop" }) => {
         html: `
           <div class="swal-check-wrap">
             <div class="swal-check-icon" aria-hidden="true">✓</div>
-            <div class="swal-check-label">Carrello svuotato</div>
+            <div class="swal-check-label">Carretto svuotato</div>
           </div>
         `,
         timer: 1400,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
         }
       });
-
-      navigate("/shop");
-    } catch (err) {
-      console.error("Errore annullamento ordine:", err);
+      
+      
+      } catch (err) {
+      logError('Errore svuotamento carrello', err);
+      try { toast.error('Errore durante lo svuotamento del carretto'); } catch (err) { void err; }
     }
   };
 
   return (
     <div className="shop-ui-container">
-      
 
-      <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="logo-box">
           <div className="icon"></div>
           <h1 className="title">
@@ -434,6 +502,23 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
 
         <div className="menu">
+          <div className="sidebar-search" style={{ margin: '18px 0' }}>
+            <label htmlFor="aside-search" className="sr-only">Cerca prodotti</label>
+            <div className="search-in-filters" role="search" aria-label="Cerca prodotti">
+              
+              <input
+                id="aside-search"
+                className="search-input"
+                type="search"
+                placeholder="Cerca..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                aria-label="Cerca prodotti"
+              />
+            </div>
+          </div>
+
+          
           <button
             className={activeTab === "shop" ? "menu-btn active" : "menu-btn"}
             onClick={() => {
@@ -451,10 +536,9 @@ const Shop = ({ defaultTab = "shop" }) => {
               navigate("/shop/cart");
             }}
           >
-            Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+            Carretto ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
-          {/* show Checkout menu only when checkoutAvailable is true */}
           {checkoutAvailable && (
             <button
               className={`${activeTab === "checkout" ? "menu-btn active" : "menu-btn"} ${checkoutJustEnabled ? 'menu-btn-enter' : ''}`}
@@ -476,8 +560,20 @@ const Shop = ({ defaultTab = "shop" }) => {
             onFiltersChange={setFilters}
             searchValue={searchValue}
             onSearchChange={setSearchValue}
+            onResetFilters={resetFilters}
           />
         </div>
+      )}
+
+      {/* mobile overlay for sidebar */}
+      {(sidebarOpen || showFilters) && (
+        <div
+          className="mobile-overlay"
+          onClick={() => {
+            setSidebarOpen(false);
+            setShowFilters(false);
+          }}
+        />
       )}
 
       <main className="content">
@@ -485,6 +581,18 @@ const Shop = ({ defaultTab = "shop" }) => {
           <div className="shop-section">
             <div className="view-controls">
               <div style={{ display: "flex", gap: "10px" }}>
+                  {/* Hamburger visible on small screens */}
+                  <button
+                    className="view-btn hamburger-btn"
+                    aria-label="Apri menu"
+                    onClick={() => {
+                      const opening = !sidebarOpen;
+                      setSidebarOpen(opening);
+                      if (opening) setShowFilters(false);
+                    }}
+                  >
+                    ☰
+                  </button>
                 <button
                   className={viewMode === "grid" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("grid")}
@@ -499,7 +607,11 @@ const Shop = ({ defaultTab = "shop" }) => {
                 </button>
                 <button
                   className={showFilters ? "view-btn active" : "view-btn"}
-                  onClick={() => setShowFilters(!showFilters)}
+                  onClick={() => {
+                    const next = !showFilters;
+                    setShowFilters(next);
+                    if (next) setSidebarOpen(false);
+                  }}
                 >
                   ⚙ Filtri
                 </button>
@@ -517,60 +629,68 @@ const Shop = ({ defaultTab = "shop" }) => {
               <div className="loading-container">
                 <p>Caricamento prodotti...</p>
               </div>
+            ) : noProducts ? (
+              <div className="no-cards-page">
+                <div className="no-cards-inner">
+                  <h1>Nessuna card trovata</h1>
+                  <p>Non abbiamo trovato prodotti che corrispondono ai filtri selezionati.</p>
+                  <p>Prova ad azzerare i filtri o cerca con parole diverse.</p>
+                  <div style={{ marginTop: 18 }}>
+                    <button className="load-more-btn" onClick={resetFilters}>Azzera filtri</button>
+                  </div>
+                </div>
+              </div>
             ) : (
               <>
                 <div className={`products products-${viewMode}`}>
-{products.map((p) => (
-  <ProductCard
-    key={p.id}
-    product={{
-      ...p,
-      // Controlla la quantità nel carrello
-      cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
-      // Controlla se è già nella wishlist (leggendo dal localStorage)
-      isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
-    }}
-    variant={viewMode === "grid" ? "grid" : "compact"}
-    onViewDetails={(slug) => navigate(`/details/${slug}`)}
-    onAddToCart={handleAddToCart}
-    onIncrease={increaseQuantity}
-    onDecrease={decreaseQuantity}
-    cart={cart}
-    // Qui uniamo la logica "migliore" del main
-    onToggleWishlist={(product) => {
-      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-      const exists = wishlist.some(w => w.id === product.id);
-      let updated;
-      let action;
+                  {products.map((p) => {
+                    return (
+                      <ProductCard
+                        key={p.id}
+                        product={{
+                          ...p,
+                          cartQty: cart.find((c) => c.id === p.id)?.quantity || 0,
+                          isInWishlist: (JSON.parse(localStorage.getItem("wishlist") || "[]").some(w => w.id === p.id)),
+                        }}
+                        variant={viewMode === "grid" ? "grid" : "compact"}
+                        listLayout={viewMode === "list"}
+                        onViewDetails={(slug) => navigate(`/details/${slug}`)}
+                        onAddToCart={handleAddToCart}
+                        onIncrease={increaseQuantity}
+                        onDecrease={decreaseQuantity}
+                        cart={cart}
+                        onToggleWishlist={(product) => {
+                          const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+                          const exists = wishlist.some(w => w.id === product.id);
+                          let updated;
+                          let action;
 
-      if (exists) {
-        updated = wishlist.filter(w => w.id !== product.id);
-        action = 'remove';
-      } else {
-        updated = [...wishlist, product];
-        action = 'add';
-      }
+                          if (exists) {
+                            updated = wishlist.filter(w => w.id !== product.id);
+                            action = 'remove';
+                          } else {
+                            updated = [...wishlist, product];
+                            action = 'add';
+                          }
 
-      localStorage.setItem("wishlist", JSON.stringify(updated));
+                          localStorage.setItem("wishlist", JSON.stringify(updated));
+                          window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
 
-      // Dispatch dettagliato per sincronizzare altri componenti (es. header)
-      window.dispatchEvent(new CustomEvent("wishlistUpdate", { detail: { action, product } } ));
-
-      // Notifiche visive (prese dal main perché sono più carine)
-      if (action === 'add') {
-        toast.success(`${product.name} aggiunto alla wishlist`, {
-          icon: '🤍',
-          style: { background: '#ef4444', color: '#ffffff' }
-        });
-      } else {
-        toast(`${product.name} rimosso dalla wishlist`, {
-          icon: '❤',
-          style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
-        });
-      }
-    }}
-  />
-))}
+                          if (action === 'add') {
+                            toast.success(`${product.name} aggiunto alla wishlist`, {
+                              icon: '🤍',
+                              style: { background: '#ef4444', color: '#ffffff' }
+                            });
+                          } else {
+                            toast(`${product.name} rimosso dalla wishlist`, {
+                              icon: '❤',
+                              style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
+                            });
+                          }
+                        }}
+                      />
+                    );
+                  })}
                 </div>
 
                 {/* Componente di paginazione */}
@@ -592,7 +712,20 @@ const Shop = ({ defaultTab = "shop" }) => {
 
         {activeTab === "cart" && (
           <div className="cart-section">
-            <h2 className="section-title-shop">Carrello</h2>
+            <div className="cart-header">
+              <button
+                className="back-btn"
+                onClick={() => {
+                  setActiveTab('shop');
+                  navigate('/shop');
+                }}
+                aria-label="Torna allo shop"
+              >
+                ←
+              </button>
+              <h2 className="section-title-shop">Carrello</h2>
+            </div>
+
 
             {cart.length > 0 && (
               <FreeShippingBanner subtotal={subtotal} threshold={40} promoApplied={false} />
@@ -600,7 +733,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
             {cart.length === 0 ? (
               <div className="empty-cart">
-                <p>Il carrello è vuoto.</p>
+                <p>Il carretto è vuoto.</p>
                 <p>Vai allo Shop per aggiungere prodotti!</p>
                 <img src="/public/icon/EmptyShop.png" alt="empty" />
               </div>
@@ -636,7 +769,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                 })}
 
                 <div className="cart-total">
-                  <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+                  <strong>Totale Carretto: {subtotal.toFixed(2)}€</strong>
                   {cart.length > 0 && (
                     <div style={{ marginTop: 12 }}>
                       <button

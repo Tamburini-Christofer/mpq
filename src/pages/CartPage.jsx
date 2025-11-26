@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CartPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { logAction } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import FreeShippingBanner from "../components/shop/FreeShippingBanner";
 
@@ -11,13 +13,13 @@ function CartPage() {
 
   // Notifications handled via react-hot-toast
 
-  // CARICA CARRELLO
+  // CARICA CARRETTO
   const loadCart = async () => {
     try {
       const data = await cartAPI.get();
       setCart(data);
     } catch {
-      toast.error("Errore caricamento carrello");
+      toast.error("Errore caricamento carretto");
     } finally {
       setLoading(false);
     }
@@ -27,7 +29,7 @@ function CartPage() {
     loadCart();
   }, []);
 
-  // OPERAZIONI CARRELLO
+  // OPERAZIONI CARRETTO
   const removeFromCart = async (id) => {
     try {
       await cartAPI.remove(id);
@@ -36,8 +38,9 @@ function CartPage() {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       try {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
+        logAction(ACTIONS.CART_REMOVE, { id, name });
       } catch {
-        toast.error(`"${name}" rimosso dal carrello`);
+        toast.error(`"${name}" rimosso dal carretto`);
       }
     } catch {
       toast.error("Errore rimozione");
@@ -53,7 +56,8 @@ function CartPage() {
     try {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
-    } catch {}
+      logAction(ACTIONS.CART_ADD, { id, name });
+    } catch (err) { void err; }
   };
 
   const decreaseQuantity = async (id) => {
@@ -71,7 +75,8 @@ function CartPage() {
     try {
       const name = cart.find(i => i.id === id)?.name || 'Prodotto';
       window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
-    } catch {}
+      logAction(ACTIONS.CART_REMOVE, { id, name });
+    } catch (err) { void err; }
   };
 
   // TOTALE
@@ -93,7 +98,7 @@ function CartPage() {
 
       
 
-      <h2 className="section-title">Carrello</h2>
+      <h2 className="section-title">Carretto</h2>
 
       {/* BANNER SPEDIZIONE */}
       {cart.length > 0 && (
@@ -103,10 +108,10 @@ function CartPage() {
         />
       )}
 
-      {/* CARRELLO VUOTO */}
+      {/* CARRETTO VUOTO */}
       {cart.length === 0 ? (
         <div className="empty-cart">
-          <p>Il carrello è vuoto.</p>
+          <p>Il carretto è vuoto.</p>
           <p>Aggiungi prodotti per procedere!</p>
           <img src="/public/icon/EmptyShop.png" alt="empty" />
         </div>
@@ -144,7 +149,7 @@ function CartPage() {
           })}
 
           <div className="cart-total">
-            <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+            <strong>Totale Carretto: {subtotal.toFixed(2)}€</strong>
           </div>
         </div>
       )}

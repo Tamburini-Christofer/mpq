@@ -1,253 +1,197 @@
 /* ========================================
-   VARIABILI GLOBALI
+   VARIABILI GLOBALI (Pixel Palette)
    ======================================== */
 :root {
   --staff-purple: #6c21ff;
   --staff-gold: #d8a928;
   --staff-dark: #141218;
   --staff-light: #ffffff;
-  --staff-gray: #8e8e93;
+  --staff-gray: #a1a1aa; /* Grigio più chiaro per contrasto su nero */
   --staff-card-bg: #1c1a24;
   --staff-input-bg: #2a2636;
+  --pixel-border: #000000;
+  --pixel-shadow: 5px 5px 0px #000000;
 }
 
 /* ========================================
    CONTAINER PRINCIPALE
    ======================================== */
-
-/* Container della pagina staff */
 .staff-page-container {
   min-height: 100vh;
   background: var(--staff-dark);
   padding: 0;
-  font-family: "Inter", sans-serif;
+  font-family: "Courier New", Courier, monospace; /* Font Retro */
+  background-image: linear-gradient(#222 1px, transparent 1px), linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 /* ========================================
-   HEADER
+   HEADER (Stile Game HUD)
    ======================================== */
-
-/* Header della pagina con background separato */
 .staff-header {
-  background: linear-gradient(135deg, #1a1720 0%, var(--staff-dark) 100%);
-  padding: 20px;
+  background: #1a1720;
+  padding: 40px 20px;
   text-align: center;
-  border-bottom: 3px solid rgba(216, 169, 40, 0.3);
+  border-bottom: 4px solid var(--pixel-border);
   position: relative;
   overflow: hidden;
+  /* Texture a griglia opzionale per effetto retro */
+  background-image: linear-gradient(#222 1px, transparent 1px),
+  linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 
-/* Titolo principale */
 .staff-main-title {
   font-size: 64px;
   font-weight: 900;
-  color: var(--staff-light);
+  color: var(--staff-gold);
   margin-bottom: 20px;
-  background: linear-gradient(135deg, var(--staff-light), var(--staff-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: "Cinzel", serif;
-  position: relative;
-  z-index: 1;
+  font-family: "Pixelify Sans", "Cinzel", serif; /* Preferibile Pixelify se importato */
+  text-shadow: 4px 4px 0px #000; /* Ombra dura */
   letter-spacing: -1px;
+  text-transform: uppercase;
 }
 
-/* Sottotitolo */
 .staff-subtitle {
-  font-size: 22px;
-  color: var(--staff-gray);
+  font-size: 18px;
+  color: var(--staff-light);
   max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
-  position: relative;
-  z-index: 1;
+  background: #000;
+  display: inline-block;
+  padding: 10px 20px;
+  border: 2px solid var(--staff-purple);
+  box-shadow: 5px 5px 0px rgba(108, 33, 255, 0.3);
 }
 
 /* ========================================
    GRIGLIA TEAM
    ======================================== */
-
-/* Griglia dei membri del team */
 .team-grid {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 20px 20px;
+  padding: 40px 20px;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
+  gap: 25px; /* Più spazio per le ombre */
 }
 
-/* Card del membro del team */
+/* Card del membro (Character Card) */
 .team-card {
   background: var(--staff-card-bg);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid rgba(216, 169, 40, 0.2);
-  transition: all 0.4s ease;
+  border-radius: 0; /* Squadrato */
+  overflow: visible; /* Permette all'ombra di uscire */
+  border: 3px solid var(--pixel-border);
+  box-shadow: 6px 6px 0px var(--pixel-border);
+  transition: transform 0.1s steps(2), box-shadow 0.1s steps(2);
   position: relative;
   text-decoration: none;
-  display: block;
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
 }
 
 .team-card:hover {
-  transform: translateY(-10px);
-  border-color: var(--staff-gold);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(216, 169, 40, 0.3);
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0px var(--staff-gold);
+  border-color: #000;
+  z-index: 10;
 }
 
 /* Wrapper immagine */
 .team-card-image-wrapper {
   position: relative;
+  border-bottom: 3px solid var(--pixel-border);
 }
 
-/* Immagine del membro */
 .team-card-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  display: block;
 }
 
-/* Overlay sull'immagine */
+/* Overlay rimosso o reso solido per stile pixel */
 .team-card-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(to top, var(--staff-card-bg), transparent);
-  pointer-events: none;
+  display: none; 
 }
 
-/* ========================================
-   HOVER TEAM CARD — EFFETTO COMPLETO
-   ======================================== */
-
-/* Sfocatura immagine + zoom */
-.team-card:hover .team-card-image {
-  filter: blur(4px) brightness(0.55);
-  transform: scale(1.06);
-  transition: all 0.45s ease;
-}
-
-/* Overlay più intenso */
-.team-card:hover .team-card-overlay {
-  background: linear-gradient(to top, rgba(20,18,24,0.9), transparent);
-  transition: background 0.4s ease;
-}
-
-/* Contenuto card nascosto di default */
+/* Contenuto della card */
 .team-card-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 15px;
   padding: 16px;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.45s ease;
-  z-index: 3;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Mostra tutto il contenuto in hover */
-.team-card:hover .team-card-content {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Movimento verso l’alto per nome e ruolo */
-.team-member-name,
-.team-member-role {
-  transition: transform 0.35s ease;
-}
-
-.team-card:hover .team-member-name,
-.team-card:hover .team-member-role {
-  transform: translateY(-8px);
-}
-
-/* Descrizione + skill fade-in */
-.team-member-description,
-.team-member-skills {
-  opacity: 0;
-  transition: opacity 0.35s ease 0.1s;
-}
-
-.team-card:hover .team-member-description,
-.team-card:hover .team-member-skills {
-  color: white;
-  opacity: 1;
-}
-
-
-/* Nome del membro */
 .team-member-name {
   color: var(--staff-light);
-  font-size: 18px;
+  font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 6px;
   font-family: "Cinzel", serif;
+  text-shadow: 1px 1px 0 #000;
 }
 
-/* Ruolo del membro */
 .team-member-role {
   color: var(--staff-gold);
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  margin-bottom: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--staff-gray);
+  padding-bottom: 5px;
+  display: inline-block;
 }
 
-/* Descrizione */
 .team-member-description {
   color: var(--staff-gray);
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 12px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin-bottom: 15px;
+  flex: 1;
 }
 
-/* Container skills */
+/* Badge Skills */
 .team-member-skills {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+  margin-top: auto;
 }
 
-/* Badge skill */
 .skill-badge {
-  background: rgba(108, 33, 255, 0.2);
-  color: var(--staff-light);
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  border: 1px solid rgba(108, 33, 255, 0.4);
-  transition: all 0.3s ease;
+  background: #2a2636;
+  color: var(--staff-purple);
+  padding: 4px 8px;
+  border-radius: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 2px solid var(--staff-purple);
+  box-shadow: 2px 2px 0px #000;
+  text-transform: uppercase;
 }
 
 .skill-badge:hover {
-  background: rgba(108, 33, 255, 0.4);
-  border-color: var(--staff-purple);
+  background: var(--staff-purple);
+  color: #fff;
+  border-color: #000;
+  box-shadow: 1px 1px 0px #000;
+  transform: translate(1px, 1px);
 }
 
 /* ========================================
    SEZIONE CARRIERE
    ======================================== */
-
-/* Container sezione carriere */
 .careers-section {
-  padding: 20px 50px;
-  margin-top: 20px;
+  background: var(--staff-dark);
+  border-top: 4px solid var(--pixel-border);
+  padding: 60px 50px;
+  margin-top: 60px;
   position: relative;
-  overflow: hidden;
 }
 
-/* Content wrapper */
 .careers-content {
   max-width: 1400px;
   margin: 0 auto;
@@ -257,268 +201,242 @@
   align-items: start;
 }
 
-/* Informazioni carriere */
-.careers-info {
-  padding-right: 20px;
-}
-
-/* Titolo carriere */
 .careers-title {
   font-size: 48px;
   font-weight: 900;
-  color: var(--staff-light);
+  color: var(--staff-gold);
   margin-bottom: 24px;
-  background: linear-gradient(135deg, var(--staff-purple), var(--staff-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  font-family: "Cinzel", serif;
-  letter-spacing: -1px;
+  font-family: "Pixelify Sans", sans-serif;
+  text-shadow: 4px 4px 0px #000;
+  border-left: 8px solid var(--staff-gold);
+  padding-left: 20px;
 }
 
-/* Descrizione carriere */
 .careers-description {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--staff-gray);
   line-height: 1.8;
+  margin-bottom: 40px;
+  font-family: "Courier New", monospace;
 }
 
-/* Container benefici */
+/* Container benefici (Inventory Slots style) */
 .careers-benefits {
   margin-top: 30px;
 }
 
-/* Titolo benefici */
 .benefits-title {
-  font-size: 28px;
-  color: var(--staff-light);
-  margin-bottom: 30px;
+  font-size: 24px;
+  color: var(--staff-gold);
+  margin-bottom: 20px;
   font-family: "Cinzel", serif;
-  background: linear-gradient(135deg, var(--staff-light), var(--staff-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
 }
 
-/* Lista benefici */
 .benefits-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 
-/* Singolo beneficio */
 .benefit-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 24px 16px;
-  background: rgba(108, 33, 255, 0.08);
-  border-radius: 16px;
-  border: 2px solid rgba(108, 33, 255, 0.2);
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
+  padding: 20px;
+  background: #1a1720;
+  border-radius: 0;
+  border: 3px solid #000;
+  box-shadow: 5px 5px 0px #000;
+  transition: all 0.1s;
 }
 
 .benefit-item:hover {
-  background: rgba(108, 33, 255, 0.15);
-  transform: translateY(-8px);
-  box-shadow: 0 12px 24px rgba(108, 33, 255, 0.3);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--staff-purple);
+  background: #221e30;
 }
 
-.benefit-item:hover::before {
-  transform: scaleX(1);
-}
-
-/* Icona beneficio */
 .benefit-icon {
   font-size: 40px;
   margin-bottom: 12px;
-  filter: grayscale(0);
-  transition: transform 0.4s ease;
-}
-
-.benefit-item:hover .benefit-icon {
-  transform: scale(1.1) rotate(5deg);
+  color: var(--staff-purple);
+  text-shadow: 2px 2px 0px #000;
 }
 
 .benefit-item strong {
   color: var(--staff-light);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   display: block;
   margin-bottom: 8px;
   font-family: "Cinzel", serif;
+  text-transform: uppercase;
 }
 
 .benefit-item p {
   color: var(--staff-gray);
-  font-size: 13px;
+  font-size: 12px;
   margin: 0;
-  line-height: 1.6;
 }
 
 /* ========================================
-   FORM CARRIERE
+   FORM CARRIERE (Terminal Style)
    ======================================== */
-
-/* Wrapper form */
 .careers-form-wrapper {
   position: sticky;
   top: 100px;
 }
 
-/* Card form */
 .careers-card {
-  background: linear-gradient(145deg, #1c1a24 0%, #221e30 100%);
-  border-radius: 24px;
+  background: #1c1a24;
+  border-radius: 0;
   padding: 40px;
-  border: 2px solid rgba(108, 33, 255, 0.3);
-  box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(108, 33, 255, 0.1);
+  border: 4px solid #000;
+  box-shadow: 10px 10px 0px #000;
   position: relative;
-  overflow: hidden;
-  margin-top: 100px;
 }
 
+/* Barra del titolo "finestra" stile retro */
 .careers-card::before {
-  content: "";
+  content: "/// APPLICATION_TERMINAL ///";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--staff-purple), var(--staff-gold), var(--staff-purple));
+  height: 30px;
+  background: var(--staff-purple);
+  color: #fff;
+  font-family: monospace;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  font-size: 12px;
+  border-bottom: 3px solid #000;
 }
 
-/* Titolo card */
 .careers-card-title {
-  font-size: 28px;
-  color: var(--staff-light);
+  font-size: 24px;
+  color: var(--staff-gold);
+  margin-top: 10px; /* Spazio per la barra sopra */
   margin-bottom: 10px;
   font-family: "Cinzel", serif;
+  text-transform: uppercase;
 }
 
-/* Sottotitolo card */
 .careers-card-subtitle {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--staff-gray);
   margin-bottom: 30px;
-  line-height: 1.6;
+  font-family: monospace;
 }
 
-/* Form */
+/* Form Inputs */
 .careers-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Riga form */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-/* Gruppo input */
 .input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-/* Label */
 .input-label {
   color: var(--staff-light);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-family: monospace;
 }
 
-/* Input e select */
 .careers-input,
 .careers-textarea {
-  background: rgba(42, 38, 54, 0.8);
-  border: 2px solid rgba(108, 33, 255, 0.2);
-  border-radius: 12px;
+  background: #000;
+  border: 2px solid var(--staff-gray);
+  border-radius: 0;
   color: var(--staff-light);
-  padding: 14px 18px;
-  font-size: 15px;
-  transition: all 0.3s ease;
+  padding: 12px;
+  font-size: 14px;
+  transition: all 0.1s;
   outline: none;
-  font-family: inherit;
+  font-family: "Courier New", monospace;
+  box-shadow: inset 3px 3px 0px rgba(255,255,255,0.1);
 }
 
 .careers-input:focus,
 .careers-textarea:focus {
   border-color: var(--staff-purple);
-  background: rgba(42, 38, 54, 1);
-  box-shadow: 0 0 0 4px rgba(108, 33, 255, 0.15);
+  background: #111;
+  box-shadow: 4px 4px 0px var(--staff-purple);
+  transform: translate(-2px, -2px);
 }
 
-.careers-input::placeholder,
-.careers-textarea::placeholder {
-  color: var(--staff-gray);
-  opacity: 0.7;
-}
-
-/* Textarea */
 .careers-textarea {
   resize: vertical;
   min-height: 120px;
-  line-height: 1.6;
 }
 
-/* Pulsante submit */
+/* Pulsante Submit (Arcade Button) */
 .careers-submit-btn {
-  background: linear-gradient(135deg, var(--staff-purple), #8c4dff);
-  color: var(--staff-light);
-  border: none;
+  background: var(--staff-purple);
+  color: #fff;
+  border: 3px solid #000;
   padding: 16px 32px;
   font-size: 16px;
-  font-weight: 600;
-  border-radius: 12px;
+  font-weight: 900;
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.1s;
   font-family: "Cinzel", serif;
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+  box-shadow: 6px 6px 0px #000;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+  text-transform: uppercase;
 }
 
 .careers-submit-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #fff; /* Hover luminoso */
+  background-color: #7c3aff;
 }
 
 .careers-submit-btn:active {
-  transform: translateY(-1px);
+  transform: translate(4px, 4px); /* Pressione fisica */
+  box-shadow: 0px 0px 0px #000;
 }
 
 .btn-icon {
   font-size: 20px;
-  transition: transform 0.3s ease;
-}
-
-.careers-submit-btn:hover .btn-icon {
-  transform: translateX(5px);
 }
 
 /* ========================================
    RESPONSIVE DESIGN
    ======================================== */
 
-/* Tablet (max 1024px) */
 @media (max-width: 1024px) {
+  .team-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 per riga tablet */
+  }
+  
   .careers-content {
     grid-template-columns: 1fr;
     gap: 40px;
@@ -527,167 +445,37 @@
   .careers-form-wrapper {
     position: static;
   }
-  
-  .careers-info {
-    padding-right: 0;
-  }
 }
 
-/* Tablet (max 768px) */
 @media (max-width: 768px) {
   .staff-main-title {
     font-size: 40px;
   }
   
-  .staff-subtitle {
-    font-size: 18px;
+  .team-grid {
+    grid-template-columns: 1fr 1fr; /* 1 per riga mobile */
+    gap: 30px;
+    width: 100%;
   }
   
-  .team-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .team-card-image-wrapper {
+    height: 350px; /* Immagini più grandi su mobile */
   }
   
   .careers-section {
-    padding: 60px 20px;
-  }
-  
-  .careers-content {
-    grid-template-columns: 1fr;
-    gap: 50px;
-  }
-  
-  .careers-title {
-    font-size: 36px;
-  }
-  
-  .benefits-list {
-    grid-template-columns: repeat(2, 1fr);
+    padding: 40px 20px;
   }
   
   .form-row {
     grid-template-columns: 1fr;
   }
   
-  .careers-card {
-    padding: 30px 20px;
-  }
-  
-  .careers-form-wrapper {
-    position: static;
-  }
-}
-
-/* Mobile (max 480px) */
-@media (max-width: 480px) {
-  .staff-header {
-    padding: 80px 15px 50px;
-  }
-  
-  .staff-main-title {
-    font-size: 32px;
-  }
-  
-  .staff-subtitle {
-    font-size: 16px;
-  }
-  
-  .team-grid {
-    padding: 40px 15px;
-  }
-  
-  .team-card-content {
-    padding: 20px;
-  }
-  
-  .team-member-name {
-    font-size: 20px;
-  }
-  
-  .careers-section {
-    padding: 50px 15px;
-  }
-  
-  .careers-title {
-    font-size: 28px;
-  }
-  
-  .benefits-title {
-    font-size: 22px;
-  }
-  
   .benefits-list {
     grid-template-columns: 1fr;
   }
-  
-  .benefit-item {
-    padding: 20px 15px;
-  }
-  
-  .benefit-icon {
-    font-size: 36px;
-  }
-  
+
   .careers-card {
-    padding: 30px 20px;
+    padding: 20px;
+    padding-top: 50px; /* Spazio per la barra "terminal" */
   }
-  
-  .careers-card-title {
-    font-size: 24px;
-  }
-}
-
-/* ---- Effetto hover card ---- */
-
-/* Sfocatura immagine */
-.team-card:hover .team-card-image {
-  filter: blur(4px) brightness(0.3);
-  transform: scale(1.05);
-}
-
-/* Contenuto: movimento verso l’alto */
-.team-card-content {
-  position: absolute;
-  bottom: 20px;
-  left: 0;
-  right: 0;
-  padding: 16px;
-  transition: all 0.4s ease;
-  opacity: 0;
-  transform: translateY(40px);
-}
-
-/* Mostra tutto il contenuto in hover */
-.team-card:hover .team-card-content {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Nome e ruolo più in alto */
-.team-card:hover .team-member-name {
-  transform: translateY(-10px);
-}
-
-.team-card:hover .team-member-role {
-  transform: translateY(-10px);
-}
-
-/* Transizioni */
-.team-member-name,
-.team-member-role,
-.team-member-description,
-.team-member-skills {
-  transition: all 0.4s ease;
-}
-
-/* Attiviamo fade-in della descrizione e delle skill */
-.team-member-description,
-.team-member-skills {
-  opacity: 0;
-  transition: opacity 0.4s ease 0.1s;
-}
-
-.team-card:hover .team-member-description,
-.team-card:hover .team-member-skills {
-  opacity: 1;
 }

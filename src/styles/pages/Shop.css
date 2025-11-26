@@ -1,11 +1,31 @@
-/* todo: Reset CSS globale per rimuovere margini e padding di default */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* =====================================================
+   PIXEL / NEO-BRUTALIST THEME CSS - BLOCCO AGGIUNTIVO
+   (Struttura Originale Intatta - Stile Rielaborato)
+   ===================================================== */
+
+/* --- Variabili Stile --- */
+:root {
+  --pixel-dark: #141218;
+  --pixel-light: #ffffff;
+  --pixel-gold: #D8A928;
+  --pixel-purple: #6c21ff;
+  /* Secondario */
+  --pixel-border: #000000;
+  --shadow-depth: 4px;
 }
 
-/* todo: Variabili colore globali del progetto */
+/* ===================================
+   RESET & LAYOUT BASE
+   =================================== */
+
+/* todo: Reset CSS globale per rimuovere margini e padding di default */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* todo: Variabili colore globali del progetto (Mantenute, usate per i nuovi elementi) */
 :root {
   --purple: #6c21ff;
   --gold: #d8a928;
@@ -21,8 +41,16 @@
   font-family: "Inter", sans-serif;
   color: var(--light);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  /* Aggiungo pattern di sfondo per il look retro */
+  background-image: linear-gradient(#222 1px, transparent 1px),
+    linear-gradient(90deg, #222 1px, transparent 1px);
+  background-size: 40px 40px;
 }
+
+/* ===================================
+   NOTIFICHE POPUP
+   =================================== */
 
 /* todo: Notifiche popup in alto a destra */
 .notification {
@@ -31,25 +59,29 @@
   right: 20px;
   z-index: 1000;
   padding: 15px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  border-radius: 0;
+  /* Squadrato */
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  /* Ombra Hard */
+  backdrop-filter: none;
+  /* Rimosso blur per stile piatto */
   animation: slideIn 0.3s ease-out;
   max-width: 400px;
-  border: 2px solid;
+  border: 3px solid var(--pixel-border);
 }
 
 .notification.success {
-  background: rgba(76, 175, 80, 0.9);
-  border-color: #4caf50;
-  color: white;
+  background: #10b981;
+  /* Verde solido */
+  border-color: #0c8c60;
+  color: var(--pixel-dark);
 }
 
 .notification.error {
-  background: rgba(244, 67, 54, 0.9);
-  border-color: #f44336;
-  color: white;
+  background: #ff4757;
+  /* Rosso solido */
+  border-color: #c93441;
+  color: var(--pixel-dark);
 }
 
 .notification-content {
@@ -71,207 +103,102 @@
 }
 
 .notification-close {
-  background: transparent;
-  border: none;
+  background: #00000022;
+  border: 2px solid var(--pixel-border);
   color: inherit;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  border-radius: 0;
+  transition: background-color 0.1s;
   flex-shrink: 0;
+  line-height: 1;
+  /* per centrare la X */
 }
 
 .notification-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--pixel-border);
+  color: var(--pixel-light);
 }
 
+/* L'animazione slideIn è mantenuta */
 @keyframes slideIn {
   from {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
   }
 }
 
+
+/* ===================================
+   SIDEBAR & NAVIGATION
+   =================================== */
+
 /* todo: Sidebar laterale con logo e menu di navigazione */
 .sidebar {
   width: 300px;
   background: #1a1720;
-  border-right: 2px solid var(--gold);
+  border-right: 4px solid var(--pixel-gold);
+  /* Bordo spesso Gold */
   padding: 30px 20px;
-  box-shadow: 0 0 20px rgba(216, 169, 40, 0.2);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  /* Rimosso glow, restano solo bordi e hard shadow implicita dal layout */
   transition: opacity 0.3s ease, visibility 0.3s ease;
   position: fixed;
   left: 0;
-  top: 100px;
-  height: 100%;
+  top: 0;
+  /* Modificato per iniziare da top 0, l'altezza è 100% */
+  height: 100vh;
   z-index: 2;
   flex-shrink: 0;
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-/* todo: Sidebar collassata quando i filtri sono aperti */
-.sidebar.collapsed {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  padding-top: 90px;
+  /* Spazio per logo/header */
 }
 
 /* todo: Contenitore logo e titolo del brand */
 .logo-box {
   text-align: center;
-  margin-bottom: 40px;
+  margin: 0 0 18px 0;
+  position: relative;
+  width: 100%;
+  padding: 6px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 /* todo: Titolo principale MyPocketQuest */
 .title {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 28px;
+  font-weight: 900;
   color: var(--light);
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--pixel-border);
+  font-family: "Cinzel", serif;
 }
 
 /* todo: Parte "Quest" del titolo in oro */
 .title span {
-  color: var(--gold);
+  color: var(--pixel-gold);
 }
 
 /* todo: Sottotitolo "Next Level: Real Life" */
 .subtitle {
   font-size: 12px;
-  opacity: 0.7;
+  opacity: 1;
+  color: #888;
+  font-family: monospace;
 }
-
-
-
-/* todo: Animazione fade semplice */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* ================================================
-   FILTERS PANEL — VERSIONE ORIGINALE MPQ IDENTICA
-   ================================================ */
-
-.filters-panel {
-  position: fixed;
-  width: 300px;
-  min-width: 300px;
-  background: #1b1a24;               /* colore identico allo screenshot */
-  border-right: 2px solid var(--purple);
-  
-  padding: 30px 25px;                 /* padding grande come l’originale */
-  display: flex;
-  flex-direction: column;
-  gap: 35px;                          /* grande separazione tra sezioni */
-                /* NON fixed */
-  height: auto;
-  top: auto;
-  left: auto;
-
-  box-shadow: 0 0 25px rgba(108, 33, 255, 0.15);
-  animation: fadeFilters 0.25s ease;
-}
-
-/* animazione originale */
-@keyframes fadeFilters {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-/* TITOLI SEZIONI */
-.filters-panel h4 {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--gold);
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 20px 0;
-}
-
-/* SEARCH BOX */
-.search-in-filters {
-  display: flex;
-  align-items: center;
-  padding: 12px 15px;
-  background: #1f1e28;
-  border: 1px solid var(--purple);
-  border-radius: 10px;
-  gap: 12px;
-}
-
-.search-icon {
-  color: var(--gold);
-  font-size: 20px;
-}
-
-.search-input {
-  background: transparent;
-  border: none;
-  outline: none;
-  color: white;
-  font-size: 15px;
-  width: 100%;
-}
-
-/* OPZIONI */
-.filter-option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  margin: 12px 0;
-}
-
-.filter-option input[type="checkbox"] {
-  accent-color: var(--purple);
-  cursor: pointer;
-}
-
-/* PREZZO MIN–MAX */
-.price-inputs {
-  display: flex;
-  gap: 15px;
-}
-
-.price-number-input {
-  width: 90px;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--purple);
-  background: #222;
-  color: white;
-  font-size: 15px;
-}
-
-.price-number-input:focus {
-  outline: 1px solid var(--gold);
-}
-
-/* PICCOLE LABEL (MIN/MAX) */
-.price-input-wrapper label {
-  color: var(--gold);
-  font-weight: 600;
-  font-size: 12px;
-  padding: 0 3px;
-  margin: 0 1px;
-}
-
-
-
 
 /* todo: Pulsanti del menu di navigazione */
-/* todo: Stile base per i pulsanti di menu (Shop, Carrello, Checkout) */
 .menu-btn {
   width: 100%;
   padding: 12px;
@@ -280,21 +207,36 @@
   color: var(--light);
   font-size: 16px;
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   cursor: pointer;
-  border-left: 3px solid transparent;
-  transition: 0.2s;
+  border-left: 5px solid transparent;
+  transition: all 0.1s;
+  /* Scattante */
+  border-radius: 0;
+  font-family: "Courier New", monospace;
+  text-transform: uppercase;
 }
 
 /* todo: Effetto hover sui pulsanti menu */
 .menu-btn:hover {
-  background: rgba(108, 33, 255, 0.1);
+  background: rgba(108, 33, 255, 0.2);
+  color: var(--pixel-gold);
+  border-left-color: var(--pixel-purple);
 }
 
 /* todo: Stile per il pulsante menu attivo (bordo oro a sinistra) */
 .menu-btn.active {
-  border-left: 3px solid var(--gold);
-  color: var(--gold);
+  border-left: 5px solid var(--pixel-gold);
+  color: var(--pixel-gold);
+  background: rgba(216, 169, 40, 0.1);
+  font-weight: bold;
+}
+
+/* todo: Sidebar collassata quando i filtri sono aperti (Mantenuto) */
+.sidebar.collapsed {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* Animazione per l'apparizione della voce Checkout */
@@ -311,90 +253,245 @@
 .content {
   flex: 1;
   padding: 40px;
-  margin-left: 280px;
+  margin-left: 300px;
+  /* Allineato con larghezza sidebar */
+}
+
+/* ===================================
+   FILTERS PANEL (MPQ Originale)
+   =================================== */
+
+.filters-panel {
+  position: fixed;
+  width: 300px;
+  min-width: 300px;
+  background: #1b1a24;
+  border-right: 4px solid var(--pixel-purple);
+  /* Bordo spesso Purple */
+  padding: 25px 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  /* Spazio ridotto per look più compatto */
+  height: 100vh;
+  top: auto;
+  left: auto;
+  box-shadow: 6px 0 0 var(--pixel-border);
+  /* Ombra Hard sulla destra */
+  animation: fadeFilters 0.25s ease;
+  border-radius: 0;
+}
+
+/* TITOLI SEZIONI */
+.filters-panel h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--pixel-gold);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 15px 0 5px 0;
+  border-bottom: 2px solid var(--pixel-gold);
+  padding-bottom: 5px;
+}
+
+/* SEARCH BOX */
+.search-in-filters {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  background: #000;
+  border: 2px solid var(--pixel-gold);
+  border-radius: 0;
+  /* Squadrato */
+  gap: 8px;
+  box-shadow: 2px 2px 0 var(--pixel-border);
+}
+
+.search-icon {
+  color: var(--pixel-gold);
+  font-size: 18px;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+  width: 100%;
+  font-family: monospace;
+}
+
+/* OPZIONI */
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  margin: 7px 0;
+}
+
+.filter-option input[type="checkbox"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--pixel-gold);
+  background: #000;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.filter-option input[type="checkbox"]:checked {
+  background: var(--pixel-purple);
+  border-color: var(--pixel-light);
+  box-shadow: 1px 1px 0 var(--pixel-gold);
+}
+
+/* PREZZO MIN–MAX */
+.price-number-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 0;
+  border: 2px solid var(--pixel-purple);
+  background: #000;
+  color: var(--pixel-gold);
+  font-size: 14px;
+  font-family: monospace;
+  box-shadow: 2px 2px 0 var(--pixel-border);
+}
+
+.price-number-input:focus {
+  outline: 2px solid var(--pixel-gold);
+  box-shadow: 3px 3px 0 var(--pixel-gold);
+}
+
+/* PICCOLE LABEL (MIN/MAX) */
+.price-input-wrapper label {
+  color: var(--pixel-light);
+  font-weight: 600;
+  font-size: 11px;
+  padding: 0 3px;
+  margin: 0 1px;
+  background: var(--pixel-purple);
+  border-radius: 0;
+  text-transform: uppercase;
 }
 
 
+/* ===================================
+   TITOLI & CONTROLLI VISTA
+   =================================== */
 
 /* todo: Titoli delle sezioni principali (Carrello, Checkout) */
-.section-title-shop  {
-  font-size: 28px;
-  color: var(--gold);
-  margin-bottom: 20px;
+.section-title-shop {
+  font-size: 32px;
+  color: var(--pixel-gold);
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-family: "Cinzel", serif;
+  text-shadow: 3px 3px 0 #000;
 }
 
-/* todo: Container delle card prodotti */
-.products {
+/* Mobile back button shown in cart header */
+.cart-header {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-left: 280px;
-  
-}
-
-
-.products .product-card__image {
-  height: 230px;
-}
-
-/* todo: Layout lista - card orizzontali */
-.products-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.product-card__info{
-  background-color: transparent;
-}
-
-.products-list .product-card {
-  width: 100%;
-  max-width: 100%;
-  flex-direction: row;
-}
-
-.products-list .product-card__image {
-  width: 100px;
-  height: 100px;
-  border-radius: 10px 0 0 10px;
-}
-
-.products-list .product-card__info {
-  flex: 1;
-  flex-direction: row;
   align-items: center;
-  justify-content: space-around;
-  border-radius: 0 0 10px 10px;
+  gap: 12px;
 }
 
-.card {
+.back-btn {
+  display: none;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.06);
+  color: var(--pixel-light);
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.back-btn:hover { background: rgba(255,255,255,0.03); }
+
+@media (max-width: 900px) {
+  .back-btn { display: inline-flex; }
+}
+
+/* todo: Container controlli per cambiare visualizzazione griglia/lista */
+.view-controls {
+  position: sticky;
+  top: 0;
+  left: auto;
+  background-color: #1c1a24;
+  /* Sfondo scuro per contrasto */
+  border: 3px solid var(--pixel-gold);
+  border-top: none;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
   justify-content: space-between;
-  background: #1c1a24;
-  border: 2px solid var(--purple);
-  padding: 20px;
-  border-radius: 12px;
-  width: 200px;
-  text-align: center;
-  box-shadow: 0 0 12px rgba(108, 33, 255, 0.3);
-  height: 200px;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  /* Reserve consistent height so sticky change won't shift content */
+  min-height: 56px;
+  height: auto;
+  padding: 10px 15px;
+  z-index: 100;
+  padding: 10px 15px;
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  width: auto;
+  /* Lascio che sia il contenuto a definirlo */
 }
 
-.card .price {
-  font-size: 18px;
-  margin: 10px 0;
-  color: var(--gold);
+/* Ensure view-controls occupies full content width and doesn't overlap products */
+@media (min-width: 900px) {
+  .content .view-controls {
+    width: 100%;
+  }
 }
 
-.card-actions {
+/* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */
+.view-btn {
+  background: #000;
+  border: 2px solid var(--pixel-purple);
+  color: var(--pixel-light);
+  padding: 8px 15px;
+  border-radius: 0;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
   display: flex;
-  justify-content: space-around;
-  gap: 10px;
-  width: 100%;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.1s ease;
+  font-family: "Courier New", monospace;
+  height: 40px;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--pixel-border);
 }
+
+/* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
+.view-btn:hover {
+  background: var(--pixel-purple);
+  border-color: var(--pixel-gold);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--pixel-border);
+}
+
+/* todo: Pulsante visualizzazione attivo (evidenziato in oro) */
+.view-btn.active {
+  background: var(--pixel-gold);
+  border-color: var(--pixel-border);
+  color: var(--pixel-dark);
+  box-shadow: 1px 1px 0 var(--pixel-border);
+  transform: none;
+}
+
+/* ===================================
+   CARRELLO (CART)
+   =================================== */
 
 /* todo: Stile per carrello vuoto (messaggio centrale) */
 .empty-cart {
@@ -402,382 +499,426 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding: 40px;
+  padding: 60px;
   color: #888;
+  background: #1c1a24;
+  border: 3px solid var(--pixel-purple);
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  border-radius: 0;
 }
 
 /* todo: Immagine decorativa per carrello e checkout vuoti */
 .empty-cart img,
 .empty-checkout img {
-  max-width: 15%;
-  margin-top: 20px;
-  margin: 0 auto;
+  max-width: 120px;
+  margin: 20px auto;
+  filter: grayscale(80%) drop-shadow(0 0 5px var(--pixel-purple));
+  image-rendering: pixelated;
 }
 
-/* todo: Paragrafi nel messaggio carrello vuoto */
-.empty-cart p {
-  margin-bottom: 10px;
-}
-
+/* todo: Singolo item nel carrello */
 .cart-item {
-  background: linear-gradient(145deg, #1c1a24, #17151d);
-  padding: 22px 24px;
-  border-radius: 12px;
-  border: 1px solid rgba(216, 169, 40, 0.25);
-  
+  background: #1c1a24;
+  /* Solido scuro */
+  padding: 18px 20px;
+  border-radius: 0;
+  border: 2px solid var(--pixel-purple);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 22px;
+  gap: 15px;
   margin: 10px 0;
-
-  /* Glow elegante */
-  box-shadow:
-    0 0 12px rgba(108, 33, 255, 0.25),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-
-  transition: 0.25s ease;
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  transition: all 0.1s;
 }
 
 /* Hover ancora più premium */
 .cart-item:hover {
-  transform: translateY(-3px);
-  box-shadow:
-    0 0 18px rgba(108, 33, 255, 0.45),
-    0 0 8px rgba(216, 169, 40, 0.35),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
-}
-/* todo: Sezione informazioni prodotto (nome e prezzo) */
-.item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--pixel-gold);
+  border-color: var(--pixel-gold);
 }
 
 /* todo: Nome del prodotto nel carrello */
 .item-name {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--pixel-light);
+  text-transform: uppercase;
 }
 
 /* todo: Prezzo singolo del prodotto */
 .item-price {
-  color: var(--gold);
-  font-size: 14px;
+  color: var(--pixel-gold);
+  font-size: 15px;
+  font-family: monospace;
 }
-
-/* todo: Container per i controlli + e - della quantità */
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-
 
 /* todo: Pulsanti + e - per modificare la quantità */
-
-.quantity-btn, .quantity-btn-c {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #7c3aed 0%, #e7c46c 100%);
-  color: #fff;
-  font-size: 1.3rem;
+.quantity-btn,
+.quantity-btn-c {
+  width: 32px;
+  height: 32px;
+  border-radius: 0;
+  border: 2px solid var(--pixel-border);
+  background: var(--pixel-gold);
+  color: #000;
+  font-size: 1.2rem;
   cursor: pointer;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.25), 0 2px 8px rgba(231, 196, 108, 0.18);
-  transition: transform 0.18s cubic-bezier(.4,2,.3,1), box-shadow 0.18s cubic-bezier(.4,2,.3,1), background 0.18s;
-  outline: none;
-  position: relative;
+  box-shadow: 2px 2px 0 var(--pixel-border);
+  transition: all 0.1s;
+  margin: 0 10px;
 }
 
-.quantity-btn:active, .quantity-btn-c:active {
-  transform: scale(0.92);
-  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.18);
+.quantity-btn:active,
+.quantity-btn-c:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0;
 }
 
-.quantity-btn:hover, .quantity-btn-c:hover {
-  background: linear-gradient(135deg, #e7c46c 0%, #7c3aed 100%);
-  color: #7c3aed;
-  box-shadow: 0 10px 28px rgba(231, 196, 108, 0.25), 0 4px 16px rgba(124, 58, 237, 0.18);
-  border: 2px solid #e7c46c;
+.quantity-btn:hover,
+.quantity-btn-c:hover {
+  background: var(--pixel-purple);
+  color: var(--pixel-light);
+  border-color: var(--pixel-light);
   z-index: 2;
-}
-
-/* todo: Effetto hover sui pulsanti quantità */
-.quantity-btn:hover {
-  background: #8c4dff;
+  transform: scale(1.05);
+  box-shadow: 3px 3px 0 var(--pixel-border);
 }
 
 /* todo: Display del numero di quantità corrente */
 .quantity {
-  font-size: 16px;
-  font-weight: 600;
-  min-width: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 25px;
   text-align: center;
+  color: var(--pixel-gold);
+  font-family: monospace;
 }
 
-/* todo: Sezione totale e pulsante rimuovi a destra dell'item */
-.item-total {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+/* Ensure quantity-controls layout is stable and number centered
+   Apply styles also to spans inside .quantity-controls when .quantity class isn't present */
+.quantity-controls {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
+}
+
+.quantity-controls span,
+.quantity-controls .quantity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 32px;
+  line-height: 1;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--pixel-gold);
+  font-family: monospace;
+}
+
+/* Make buttons and number slightly larger on very small screens and add spacing to avoid overlap */
+@media (max-width: 480px) {
+  .quantity-btn,
+  .quantity-btn-c {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  .quantity-controls {
+    gap: 10px;
+  }
 }
 
 /* todo: Prezzo totale dell'item (prezzo x quantità) */
 .total-price {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--gold);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pixel-gold);
+  font-family: monospace;
+}
+
+/* Responsive: stack cart item elements to avoid overlap on small screens */
+@media (max-width: 768px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .item-name {
+    font-size: 16px;
+    word-break: break-word;
+    flex: 1 1 auto;
+    padding-right: 8px;
+  }
+
+  .item-price {
+    font-size: 15px;
+    flex: 0 0 auto;
+  }
+
+  .quantity-controls {
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .quantity-controls span,
+  .quantity-controls .quantity {
+    min-width: 36px;
+    height: 36px;
+  }
+
+  .item-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .remove-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    flex: 0 0 auto;
+  }
+
+  .total-price {
+    font-size: 18px;
+    flex: 1 1 auto;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-item { padding: 12px; }
+  .item-name { font-size: 15px; }
+  .item-price { font-size: 14px; }
+  .quantity-btn,
+  .quantity-btn-c { width: 36px; height: 36px; }
+  .quantity-controls span, .quantity-controls .quantity { min-width: 40px; }
+  .remove-btn { padding: 7px 10px; font-size: 13px; }
 }
 
 /* todo: Pulsante per rimuovere completamente un prodotto dal carrello */
 .remove-btn {
   background: transparent;
-  border: 1px solid #ff4757;
+  border: 2px solid #ff4757;
   color: #ff4757;
-  padding: 5px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 0;
   cursor: pointer;
-  font-size: 12px;
-  transition: 0.2s;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.1s;
+  box-shadow: 2px 2px 0 var(--pixel-border);
 }
 
 /* todo: Effetto hover sul pulsante rimuovi (sfondo rosso) */
 .remove-btn:hover {
   background: #ff4757;
   color: var(--light);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #000;
 }
 
 /* todo: Box totale generale del carrello in basso */
 .cart-total {
-  margin-top: 20px;
-  padding: 15px;
-  background: #2a2636;
-  border-radius: 8px;
+  margin-top: 30px;
+  padding: 20px;
+  background: #000;
+  border-radius: 0;
   text-align: right;
-  font-size: 20px;
-  color: var(--gold);
+  font-size: 24px;
+  color: var(--pixel-gold);
+  border: 3px solid var(--pixel-gold);
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  font-family: "Cinzel", serif;
 }
+
+
+/* ===================================
+   CHECKOUT
+   =================================== */
 
 /* todo: Container principale sezione checkout */
 .checkout-section {
-  max-width: 600px;
+  max-width: 800px;
   display: contents;
 }
 
 /* todo: Messaggio quando il checkout è vuoto */
 .empty-checkout {
   text-align: center;
-  padding: 40px;
+  padding: 60px;
   color: #888;
-}
-
-/* todo: Paragrafi nel messaggio checkout vuoto */
-.empty-checkout p {
-  margin-bottom: 10px;
+  background: #1c1a24;
+  border: 3px solid var(--pixel-purple);
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  border-radius: 0;
 }
 
 /* todo: Sottotitolo "Riepilogo Ordine" nel checkout */
 .checkout-subtitle {
-  color: var(--light);
+  color: var(--pixel-light);
   margin-bottom: 20px;
-  font-size: 20px;
-}
-
-/* todo: Container lista prodotti nel checkout */
-.checkout-items {
-  margin-bottom: 30px;
+  font-size: 22px;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--pixel-purple);
+  padding-bottom: 5px;
 }
 
 /* todo: Singolo item nel riepilogo checkout */
 .checkout-item {
-  padding: 15px 20px 15px 0;
-  margin-bottom: 10px;
+  padding: 10px 0;
+  margin-bottom: 5px;
   display: flex;
   justify-content: space-between;
-}
-
-/* todo: Sezione info prodotto nel checkout (nome e dettagli) */
-.checkout-item-info {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
+  border-bottom: 1px dashed #333;
 }
 
 /* todo: Nome del prodotto nel checkout */
 .checkout-item-name {
   font-size: 16px;
-  font-weight: 600;
-  color: var(--light);
+  font-weight: 700;
+  color: var(--pixel-light);
 }
 
 /* todo: Dettagli prodotto (quantità x prezzo) */
 .checkout-item-details {
   font-size: 14px;
-  color: #888;
-}
-
-/* todo: Container per totale e pulsante rimuovi nel checkout */
-.checkout-item-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+  color: #aaa;
+  font-family: monospace;
 }
 
 /* todo: Totale del singolo prodotto nel checkout */
 .checkout-item-total {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--gold);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--pixel-gold);
+  font-family: monospace;
 }
 
 /* todo: Pulsante X per rimuovere prodotto dal checkout (circolare) */
 .checkout-remove-btn {
-  background: transparent;
-  border: 1px solid #ff4757;
+  background: #000;
+  border: 2px solid #ff4757;
   color: #ff4757;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  border-radius: 0;
+  /* Squadrato */
   cursor: pointer;
   font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.2s;
+  transition: all 0.1s;
+  line-height: 1;
 }
 
 /* todo: Effetto hover sul pulsante X del checkout */
 .checkout-remove-btn:hover {
   background: #ff4757;
-  color: var(--light);
+  color: var(--pixel-light);
 }
 
 /* todo: Sezione riepilogo finale con totale e pulsanti */
 .checkout-summary {
   width: 100%;
   padding: 25px 30px;
-  background: linear-gradient(145deg, #1c1a24, #17151d);
-  border: 2px solid rgba(216, 169, 40, 0.25);
+  background: #1c1a24;
+  border: 3px solid var(--pixel-gold);
+  border-radius: 0;
   display: flex;
   flex-direction: column;
-
   animation: fadeSummary 0.35s ease-out;
-}
-
-.checkout-summary h3{
-  color: var(--gold);
-  font-size: 24px;
-  margin-bottom: 15px;
-}
-
-@keyframes fadeSummary {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
+  margin-bottom: 40px;
 }
 
 /* todo: Sezione codice promozionale */
 .promo-code-section {
   width: 100%;
-  background: rgba(255, 215, 0, 0.05);
-  border: 1px solid var(--gold);
-  border-radius: 8px;
-  padding: 20px;
+  background: #000000;
+  border: 2px solid var(--pixel-gold);
+  border-radius: 0;
+  padding: 15px;
   margin-bottom: 20px;
-}
-
-.promo-code-section h3 {
-  margin: 0 0 15px 0;
-  color: var(--gold);
-  font-size: 18px;
+  box-shadow: 2px 2px 0 var(--pixel-gold);
 }
 
 /* todo: Gruppo input + bottone per codice promozionale */
 .promo-code-input-group {
   display: flex;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 /* todo: Input per inserire il codice */
 .promo-code-input {
   flex: 1;
-  padding: 12px;
-  border: 2px solid var(--gold);
-  background: rgba(0, 0, 0, 0.3);
-  color: var(--light);
-  border-radius: 6px;
-  font-size: 16px;
+  padding: 10px;
+  border: 2px solid var(--pixel-purple);
+  background: #111;
+  color: var(--pixel-light);
+  border-radius: 0;
+  font-size: 14px;
   text-transform: uppercase;
-}
-
-.promo-code-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.promo-code-input::placeholder {
-  color: #888;
-  text-transform: none;
+  font-family: monospace;
 }
 
 /* todo: Bottone per applicare il codice */
 .promo-code-btn {
-  padding: 12px 24px;
-  background: var(--gold);
-  color: var(--dark);
-  border: none;
-  border-radius: 6px;
+  padding: 10px 20px;
+  background: var(--pixel-purple);
+  color: var(--pixel-light);
+  border: 2px solid var(--pixel-border);
+  border-radius: 0;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.1s;
   white-space: nowrap;
+  box-shadow: 3px 3px 0 var(--pixel-border);
 }
 
 .promo-code-btn:hover:not(:disabled) {
-  background: #e6c200;
-  transform: scale(1.05);
-}
-
-.promo-code-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  background: #4d00ff;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--pixel-gold);
 }
 
 /* todo: Messaggio di successo/errore codice promo */
 .promo-message {
-  margin: 10px 0 0 0;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 14px;
+  margin: 8px 0 0 0;
+  padding: 8px;
+  border-radius: 0;
+  font-size: 12px;
   font-weight: 600;
+  border-left: 5px solid;
 }
 
 .promo-message.success {
   background: rgba(74, 222, 128, 0.1);
-  border: 1px solid #4ade80;
+  border-color: #4ade80;
   color: #4ade80;
 }
 
 .promo-message.error {
   background: rgba(255, 71, 87, 0.1);
-  border: 1px solid #ff4757;
+  border-color: #ff4757;
   color: #ff4757;
 }
 
@@ -792,10 +933,11 @@
 .checkout-shipping {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: 8px 0;
   font-size: 16px;
-  color: var(--light);
-  border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+  color: var(--pixel-light);
+  border-bottom: 1px dashed #555;
+  font-family: monospace;
 }
 
 .checkout-total-final {
@@ -803,23 +945,61 @@
   justify-content: space-between;
   padding: 15px 0;
   margin-top: 10px;
-  border-top: 2px solid var(--gold);
+  border-top: 4px solid var(--pixel-gold);
 }
 
 /* todo: Titolo con il totale generale dell'ordine */
 .checkout-total h3,
 .checkout-total-final h3 {
-  color: var(--gold);
-  font-size: 24px;
+  color: var(--pixel-gold);
+  font-size: 26px;
   margin: 0;
+  font-family: "Cinzel", serif;
+  text-shadow: 1px 1px 0 #000;
 }
 
-/* todo: Container per i pulsanti finali (Svuota e Conferma) */
-.checkout-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-  align-items: center;
+/* todo: Pulsante "Svuota Carretto" (rosso, outline) */
+.clear-cart-btn {
+  background: #000;
+  border: 2px solid #ff4757;
+  color: #ff4757;
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.1s;
+  box-shadow: 3px 3px 0 var(--pixel-border);
+}
+
+/* todo: Effetto hover sul pulsante svuota (sfondo rosso) */
+.clear-cart-btn:hover {
+  background: #ff4757;
+  color: var(--light);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #000;
+}
+
+/* todo: Pulsante "Conferma Acquisto" (oro, principale) */
+.confirm-btn {
+  background: var(--pixel-gold);
+  border: 2px solid var(--pixel-border);
+  padding: 10px 18px;
+  font-size: 15px;
+  border-radius: 0;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.1s;
+  box-shadow: 3px 3px 0 var(--pixel-border);
+  color: var(--pixel-dark);
+}
+
+/* todo: Effetto hover sul pulsante conferma (oro più chiaro) */
+.confirm-btn:hover {
+  background: #ffe066;
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 #fff;
+  color: var(--pixel-dark);
 }
 
 /* todo: Icona FreeShipping mostrata quando il promo è attivo */
@@ -828,154 +1008,13 @@
   height: 60px;
   object-fit: contain;
   animation: bounce 2s ease-in-out infinite;
-}
-
-/* todo: Animazione bounce per l'icona FreeShipping */
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-/* todo: Pulsante "Svuota Carretto" (rosso, outline) */
-.clear-cart-btn {
-  background: transparent;
-  border: 2px solid #ff4757;
-  color: #ff4757;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sul pulsante svuota (sfondo rosso) */
-.clear-cart-btn:hover {
-  background: #ff4757;
-  color: var(--light);
-}
-
-/* todo: Pulsante "Conferma Acquisto" (oro, principale) */
-.confirm-btn {
-  background: var(--gold);
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
-}
-
-/* todo: Effetto hover sul pulsante conferma (oro più chiaro) */
-.confirm-btn:hover {
-  background: #e6b632;
-}
-
-/* todo: Layout griglia per visualizzazione card (default) */
-.products.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-  padding: 0px 20px;
-}
-
-/* todo: Layout lista per visualizzazione prodotti in linea orizzontale */
-.products.list {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 0px 20px;
-  max-width: 1200px;
-}
-
-/* todo: Container controlli per cambiare visualizzazione griglia/lista */
-.view-controls {
-    position: sticky;
-    top: 0;
-    left: 69%;
-    background-color: transparent;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    justify-content: flex-end;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    z-index: 100;
-    padding: 15px 20px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    width: 48%;
-}
-
-/* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */
-.view-btn {
-  background: #1c1a24;
-  border: 2px solid var(--purple);
-  color: var(--light);
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-  font-family: "Cinzel", serif;
-  height: 50px;
-}
-
-/* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
-.view-btn:hover {
-  background: var(--purple);
-  border-color: var(--gold);
-  transform: translateY(-2px);
-}
-
-/* todo: Pulsante visualizzazione attivo (evidenziato in oro) */
-.view-btn.active {
-  background: var(--purple);
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
-/* todo: Icona nei pulsanti visualizzazione (⊞ o ☰) */
-.view-icon {
-  font-size: 16px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 0 5px var(--pixel-gold));
 }
 
 /* ===================================
-   LEGACY CODE - .fancy-card rimosso
-   Ora si usa ProductCard component
+   LEGACY/MISC ADJUSTMENTS
    =================================== */
-
-/* todo: Singolo dettaglio (ID, Categoria, Disponibilità) */
-.detail-item {
-  font-size: 0.9rem;
-  color: #b8a67d;
-  margin: 0;
-}
-
-/* todo: Label del dettaglio (in grassetto e oro) */
-.detail-label {
-  font-weight: bold;
-  color: #c9a347;
-  margin-right: 5px;
-}
-
-/* todo: Pulsante aggiungi in lista (più largo con testo completo) */
-.products.list .buy-btn {
-  margin: 0;
-  padding: 12px 25px;
-  font-size: 1rem;
-  white-space: nowrap;
-  min-width: 200px;
-}
 
 /* todo: Container per il pulsante "Carica altri prodotti" */
 .load-more-container {
@@ -987,44 +1026,283 @@
 
 /* todo: Pulsante per caricare altri prodotti */
 .load-more-btn {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  color: #ffffff;
-  border: none;
+  background: var(--pixel-purple);
+  color: var(--pixel-light);
+  border: 3px solid var(--pixel-border);
   padding: 16px 40px;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 12px;
+  border-radius: 0;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
   font-family: "Cinzel", serif;
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+  box-shadow: 6px 6px 0 var(--pixel-border);
+  text-transform: uppercase;
 }
 
 .load-more-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(108, 33, 255, 0.5);
-  background: linear-gradient(135deg, #7c31ff, #9c5dff);
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--pixel-gold);
+  background: #7e4bd1;
 }
 
 .load-more-btn:active {
-  transform: translateY(-1px);
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0;
 }
 
-/* todo: Colore di sfondo generale della pagina */
-body {
-  background-color: #141218;
+/* Elementi di testo colorati */
+.qt,
+.sub {
+  color: var(--pixel-gold);
 }
 
-.qt{
-  color: var(--gold);
-  margin-left: 20px;
+/* ===================================
+   Responsive adjustments for Shop
+   Targets sidebar/filters/content stacking on small screens
+   =================================== */
+
+/* Stack sidebar / filters above content on tablets and phones */
+@media (max-width: 900px) {
+  .shop-ui-container {
+    flex-direction: column;
+    align-items: stretch;
+    background-size: 20px 20px;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 18px 16px;
+    border-right: none;
+    border-bottom: 4px solid var(--pixel-gold);
+    padding-top: 40px;
+  }
+
+  /* Support older class name used by FilterSidebar component */
+  .filters-panel,
+  .filters-sidebar {
+    position: relative;
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    padding: 16px;
+    border-right: none;
+    border-bottom: 4px solid var(--pixel-purple);
+    box-shadow: none;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 16px;
+    width: 100%;
+  }
+
+  /* Ensure content margin reset overrides other CSS files */
+  .shop-ui-container .content {
+    margin-left: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* Make top controls flow naturally and not overlap */
+  .view-controls {
+    position: static;
+    left: auto;
+    top: auto;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 12px;
+    box-shadow: none;
+  }
+
+  .view-btn {
+    padding: 8px 12px;
+    height: 36px;
+  }
+
+  .notification {
+    right: 12px;
+    left: auto;
+    max-width: calc(100% - 24px);
+  }
 }
 
-.sub{
-  color: var(--gold);
+/* Smaller phones: tighten paddings and ensure grid uses full width */
+@media (max-width: 480px) {
+  .sidebar,
+  .filters-panel,
+  .filters-sidebar {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .section-title-shop {
+    font-size: 24px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .load-more-btn {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
 }
 
-.products-grid,
-.products-list{
-  margin-left: 0px;
+/* ================================
+   Off-canvas sidebar & filters
+   ================================ */
+@media (max-width: 900px) {
+  .sidebar {
+    /* start hidden off-canvas to the left */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 280ms ease-in-out;
+    z-index: 1200;
+    background: #1a1720;
+    box-shadow: 8px 0 0 rgba(0,0,0,0.6);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* overlay when sidebar is open */
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1100;
+  }
+
+  /* prevent background scroll when overlay is active */
+  body.no-scroll {
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  /* Filters panel slides from right as overlay */
+  .filters-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 320px;
+    max-width: 92%;
+    background: #1b1a24;
+    border-left: 4px solid var(--pixel-purple);
+    padding: 18px;
+    z-index: 1250;
+    box-shadow: -8px 0 0 rgba(0,0,0,0.6);
+    overflow-y: auto;
+  }
+
+  /* hide the filters-panel inline placement used on large screens */
+  .filters-panel .shop-filters-container {
+    padding: 0;
+  }
+
+  /* ensure main content can't be scrolled when overlay active (body lock handled by small inline script if needed) */
+  .content {
+    width: 100%;
+  }
+
+  /* make hamburger button visible and slightly different style */
+  .hamburger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 18px;
+  }
+
+}
+
+@media (min-width: 901px) {
+  /* hide overlay element on desktop if present */
+  .mobile-overlay { display: none; }
+}
+
+/* Prevent grid from jumping or centering vertically when content changes */
+@media (min-width: 0px) {
+  .products-grid {
+    align-content: start; /* keep items from centering vertically */
+    justify-content: center; /* keep entire grid centered horizontally */
+    scrollbar-gutter: stable both-edges; /* reduce layout shift when scrollbar appears */
+  }
+.no-cards-page {
+  padding: 60px 40px;
+  min-height: calc(60vh - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.no-cards-page .no-cards-inner {
+  text-align: center;
+  background: #111;
+  padding: 48px;
+  border: 4px solid var(--pixel-purple);
+  box-shadow: 8px 8px 0 var(--pixel-border);
+}
+
+.no-cards-page h1 {
+  font-size: 36px;
+  color: var(--pixel-gold);
+  margin-bottom: 12px;
+}
+
+.no-cards-page p {
+  color: #bbb;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+/* small helper for screen-reader-only label */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* filters panel footer (reset button at bottom) */
+.filters-reset-row {
+  margin-top: 18px;
+  display: flex;
+  justify-content: stretch;
+  gap: 8px;
+}
+
+.filters-reset-row .reset-filters-btn,
+.filters-reset-row .load-more-btn {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 15px;
+  background: var(--pixel-purple);
+  color: var(--pixel-light);
+  border: 3px solid var(--pixel-border);
+  box-shadow: 4px 4px 0 var(--pixel-border);
+  cursor: pointer;
+}
+
+.filters-reset-row .reset-filters-btn:hover {
+  background: #c24343;
+  transform: translate(-1px, -1px);
 }

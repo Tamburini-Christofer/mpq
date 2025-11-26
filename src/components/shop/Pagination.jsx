@@ -1,5 +1,6 @@
 import React from 'react';
 import '../../styles/components/Pagination.css';
+import CustomSelect from '../../components/common/CustomSelect';
 
 const Pagination = ({ 
   currentPage, 
@@ -61,18 +62,23 @@ const Pagination = ({
         
         <div className="items-per-page">
           <label htmlFor="items-select">Prodotti per pagina:</label>
-          <select 
+          <CustomSelect
             id="items-select"
-            value={itemsPerPage} 
-            onChange={(e) => onItemsPerPageChange(parseInt(e.target.value))}
-            className="items-select"
-          >
-            {itemsPerPageOptions.map(option => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+            ariaLabel="Seleziona prodotti per pagina"
+            value={itemsPerPage}
+            options={itemsPerPageOptions}
+            onChange={(v) => {
+              const parsed = parseInt(v);
+              onItemsPerPageChange(parsed);
+              // after changing items per page, go to top so user sees updated list
+              try {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } catch {
+                window.scrollTo(0, 0);
+              }
+            }}
+            placeholder={String(itemsPerPage)}
+          />
         </div>
       </div>
 

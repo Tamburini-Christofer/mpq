@@ -1,6 +1,9 @@
 //todo Importo Outlet da react-router-dom per il rendering delle route figlie
-import { Outlet, useLocation } from "react-router-dom"
+import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
+import '../styles/components/SwalDark.css';
+import '../styles/components/CheckoutSuccess.css';
+import { cartAPI, emitCartUpdate } from '../services/api';
 import Toast from "../components/common/Toast";
 import { Toaster } from 'react-hot-toast';
 import { toast } from 'react-hot-toast';
@@ -24,30 +27,30 @@ const Layout = () => {
     }, [location.pathname]);
 
     const [notification, setNotification] = useState(null);
+    const [showCheckoutSuccess, setShowCheckoutSuccess] = useState(false);
+    const [checkoutCountdown, setCheckoutCountdown] = useState(6);
 
     useEffect(() => {
         const handler = (e) => {
             const detail = e?.detail || {};
             const message = detail.message || 'Operazione completata';
             const type = detail.type || 'info';
-            const duration = detail.duration || 3000;
+            const duration = detail.duration || 4000;
             setNotification({ message, type, duration });
         };
         window.addEventListener('showNotification', handler);
         // central listener for cart add/remove events to show lateral toasts
         const cartHandler = (e) => {
             const d = e?.detail || {};
-            console.log('Layout cartHandler received cartAction', d);
             // Ignore events originating from Details: Details shows its own toast
             if (d.origin === 'details') return;
             const action = d.action;
             const product = d.product || {};
             const name = product.name || product || 'Prodotto';
-            console.log('Layout cartHandler -> about to show toast for', { action, name });
             if (action === 'add') {
-                toast.success(`"${name}" aggiunto al carrello!`);
+                toast.success(`"${name}" aggiunto al carretto!`);
             } else if (action === 'remove') {
-                toast.error(`"${name}" rimosso dal carrello`);
+                toast.error(`"${name}" rimosso dal carretto`);
             }
         };
             window.addEventListener('cartAction', cartHandler);
@@ -57,14 +60,88 @@ const Layout = () => {
             };
     }, []);
 
+    // Detect Stripe Checkout success (frontend receives ?checkout=success)
+    const navigate = useNavigate();
+    useEffect(() => {
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const ok = params.get('checkout');
+            if (ok === 'success') {
+                // Remove checkout params from URL immediately so refresh won't retrigger the overlay
+                try {
+                    params.delete('checkout');
+                    params.delete('session_id');
+                    const base = window.location.pathname;
+                    const newSearch = params.toString();
+                    const newUrl = newSearch ? `${base}?${newSearch}` : base;
+                    window.history.replaceState({}, document.title, newUrl);
+                } catch (e) {
+                    console.warn('Could not clean URL params after checkout success', e);
+                }
+
+                // show custom overlay with countdown then run cleanup
+                try {
+                    // Avoid synchronous setState inside effect to prevent cascading renders
+                    setTimeout(() => {
+                        setCheckoutCountdown(6);
+                        setShowCheckoutSuccess(true);
+                    }, 0);
+                } catch (e) { console.warn('Could not set checkout overlay', e) }
+
+                let intervalId = null;
+                let finished = false;
+
+                const startCountdown = () => {
+                    intervalId = setInterval(() => {
+                        setCheckoutCountdown((c) => {
+                            if (c <= 1) {
+                                // stop interval
+                                clearInterval(intervalId);
+                                finished = true;
+                                // perform cleanup when countdown reaches 0
+                                (async () => {
+                                    try { localStorage.clear(); } catch (e) { console.warn('Errore durante la pulizia di localStorage', e); }
+                                    try { await cartAPI.clear(); emitCartUpdate(); } catch (e) { console.warn('Errore svuotamento carrello server-side after checkout:', e); }
+                                    try { setShowCheckoutSuccess(false); } catch (e) { console.warn('Could not hide checkout overlay', e); }
+                                })();
+                                return 0;
+                            }
+                            return c - 1;
+                        });
+                    }, 1000);
+                };
+
+                startCountdown();
+
+                // cleanup if effect re-runs before countdown ends
+                return () => {
+                    if (intervalId) clearInterval(intervalId);
+                    if (!finished) setShowCheckoutSuccess(false);
+                };
+            }
+        } catch (err) {
+            // non-blocking
+            console.warn('Error checking checkout success param', err);
+        }
+        // run when location.search changes
+    }, [location.search, navigate]);
+
     return (
         <>
         <header>
             <NavBar />
         </header>
-        <main>
-            <Outlet />
-        </main>
+                <main>
+                        <Outlet />
+                </main>
+                {showCheckoutSuccess && (
+                    <div className="checkout-success-overlay" role="dialog" aria-live="polite">
+                        <div className="checkout-success-card">
+                            <div className="checkout-success-title">Pagamento avvenuto</div>
+                            <div className="checkout-success-msg">Grazie! Il pagamento è andato a buon fine. Riceverai a breve una email con il riepilogo dell'ordine.</div>
+                        </div>
+                    </div>
+                )}
         <footer>
             <Footer />
         </footer>

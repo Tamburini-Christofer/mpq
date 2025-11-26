@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../styles/pages/CheckoutPage.css";
 
 import { cartAPI, emitCartUpdate } from "../services/api";
+import { error as logError } from '../utils/logger';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -17,17 +18,21 @@ function CheckoutPage() {
       setCart(data);
       // emitCartUpdate(); // RIMOSSO: evita loop infinito
     } catch (err) {
-      console.error("Errore caricamento carrello:", err);
+      logError("Errore caricamento carrello", err);
     }
   };
 
   useEffect(() => {
     loadCart();
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
 
-    window.addEventListener("cartUpdate", loadCart);
+    window.addEventListener("cartUpdate", handler);
 
     return () => {
-      window.removeEventListener("cartUpdate", loadCart);
+      window.removeEventListener("cartUpdate", handler);
     };
   }, []);
 
@@ -49,7 +54,7 @@ function CheckoutPage() {
     try {
       const result = await Swal.fire({
         title: 'Annullare l\'ordine?',
-        text: 'Se continui verrà svuotato il carrello e l\'ordine sarà annullato.',
+        text: 'Se continui verrà svuotato il carretto e l\'ordine sarà annullato.',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Annulla ordine',
@@ -57,9 +62,11 @@ function CheckoutPage() {
         reverseButtons: true,
         focusCancel: true,
         customClass: {
-          popup: 'swal-wishlist-popup',
-          confirmButton: 'swal-wishlist-confirm',
-          cancelButton: 'swal-wishlist-cancel'
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
         }
       });
 
@@ -78,7 +85,7 @@ function CheckoutPage() {
       // Notify app that checkout is closed/finished so menu can hide
       try {
         window.dispatchEvent(new CustomEvent('checkoutClosed'));
-      } catch (e) {}
+      } catch (err) { void err; }
 
       // Mostra feedback con spunta animata
       await Swal.fire({
@@ -90,7 +97,7 @@ function CheckoutPage() {
         `,
         timer: 1400,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
@@ -101,18 +108,27 @@ function CheckoutPage() {
       window.history.back();
 
     } catch (err) {
-      console.error("Errore annullamento ordine:", err);
+      logError("Errore annullamento ordine", err);
       toast.error('Errore nell\'annullamento dell\'ordine');
     }
   };
 
   return (
     <div className="checkout-section">
-      <h2 className="section-title">Checkout</h2>
+      <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+        <button
+          className="back-btn"
+          onClick={() => window.history.back()}
+          aria-label="Torna indietro"
+        >
+          ←
+        </button>
+        <h2 className="section-title">Checkout</h2>
+      </div>
 
       {cart.length === 0 ? (
         <div className="empty-checkout">
-          <p>Il carrello è vuoto.</p>
+          <p>Il carretto è vuoto.</p>
           <p>Aggiungi prodotti e riprova.</p>
           <img src="/public/icon/InShop.png" alt="empty" />
         </div>

@@ -40,6 +40,25 @@
   }
 }
 
+/* Smooth reflow for large -> medium screens */
+@media (max-width: 1400px) {
+  .product-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .product-grid--compact {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  .product-grid--grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .product-grid--compact {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
 /* todo: Responsive - mobile */
 @media (max-width: 768px) {
   .product-grid--grid {

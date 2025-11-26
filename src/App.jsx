@@ -12,31 +12,47 @@ import NotFoundPages from './pages/NotFoundPages.jsx'
 import SuccessPayment from './pages/successPayment.jsx'
 
 function App () {
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true)
+  const [showWelcome, setShowWelcome] = useState(() => {
+    try {
+      const everSeen = !!localStorage.getItem('hasSeenWelcome')
+      // Show the welcome popup only if the user has never seen it before.
+      // Subsequent manual openings are allowed via the `openWelcome` event (e.g. Level Up button).
+      return !everSeen
+    } catch (err) {
+      console.warn('Error checking welcome popup flag', err)
+      return false
+    }
+  })
+
+  const closeWelcome = () => {
+    try {
+      // mark as shown permanently so it won't reappear on future page opens
+      localStorage.setItem('hasSeenWelcome', 'true')
+    } catch (e) {
+      console.warn('Could not set session welcome flag', e)
+    }
+    setShowWelcome(false)
+  }
 
   useEffect(() => {
-    const hasSeenWelcome = localStorage.getItem('hasSeenWelcome')
-    if (hasSeenWelcome) {
-      setShowWelcomeModal(false)
+    // allow other components (eg. NavBar) to request the welcome popup be shown
+    const handler = () => setShowWelcome(true)
+    window.addEventListener('openWelcome', handler)
+    return () => {
+      window.removeEventListener('openWelcome', handler)
     }
   }, [])
 
-  const handleCloseModal = () => {
-    setShowWelcomeModal(false)
-    localStorage.setItem('hasSeenWelcome', 'true')
-  }
-
   return (
     <>
-      {/* eventuale WelcomeModal se lo usi ancora */}
-
+      {showWelcome && <EmailSender onClose={closeWelcome} />}
       <BrowserRouter>
         <Routes>
           <Route path='/details/:slug' element={<Dettagli />} />
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
 
-            {/* 🟣 SHOP + VARIANTI */}
+            {/*  SHOP + VARIANTI */}
             <Route path='/shop' element={<Shop />} />
             <Route path='/shop/cart' element={<Shop defaultTab="cart" />} />
             <Route path='/shop/checkout' element={<Shop defaultTab="checkout" />} />

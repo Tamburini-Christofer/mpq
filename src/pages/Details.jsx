@@ -2,6 +2,8 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import ProductCard from "../components/common/ProductCard";
 import "../styles/pages/Details.css";
@@ -34,12 +36,14 @@ function Details() {
   const [animClass, setAnimClass] = useState("");
   const relatedRef = useRef(null);
 
+  const carouselPaused = useRef(false);
+
   const loadCart = async () => {
     try {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      console.error("Errore caricamento carrello:", error);
+      logError("Errore caricamento carretto", error);
     }
   };
 
@@ -52,7 +56,7 @@ function Details() {
         const allProducts = await productsAPI.getAllUnpaginated();
         setProductsData(allProducts);
       } catch (error) {
-        console.error("Errore caricamento prodotto:", error);
+        logError("Errore caricamento prodotto", error);
         setProduct(null);
       } finally {
         setLoading(false);
@@ -63,9 +67,15 @@ function Details() {
   }, [slug]);
 
   useEffect(() => {
-    window.addEventListener('cartUpdate', loadCart);
-    return () => window.removeEventListener('cartUpdate', loadCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
+    window.addEventListener('cartUpdate', handler);
+    return () => window.removeEventListener('cartUpdate', handler);
   }, []);
+
+  // related carousel nav visibility is handled after relatedProducts is computed
 
   // use react-hot-toast for notifications
 
@@ -101,11 +111,10 @@ function Details() {
       await cartAPI.add(product.id, quantity);
       emitCartUpdate();
       // Use centralized emit so Layout's Toaster shows the notification (same logic as Home)
-      console.log('Details.addToCart -> emitting add for', { id: product.id, name: product.name, quantity });
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      console.error("Errore aggiunta al carrello:", error);
-      toast.error("Errore nell'aggiunta al carrello");
+      logError("Errore aggiunta al carretto", error);
+      toast.error("Errore nell'aggiunta al carretto");
     }
   };
 
@@ -133,18 +142,44 @@ function Details() {
     });
   }, [product, productsData]);
 
-  const scrollCarousel = (ref, direction) => {
-    if (ref.current) {
-      const cardWidth = window.innerWidth < 768 ? 200 : 270;
-      const cardsToScroll = window.innerWidth < 768 ? 1 : 4;
-      const scrollAmount = cardWidth * cardsToScroll;
 
-      ref.current.scrollBy({
-        left: direction * scrollAmount,
-        behavior: "smooth",
-      });
-    }
+  const scrollCarousel = (ref, direction) => {
+    if (!ref.current) return;
+    const container = ref.current;
+    const first = container.querySelector('.product-card');
+    const gap = parseInt(getComputedStyle(container).gap) || 12;
+    const cardWidth = first ? first.offsetWidth : Math.floor(container.clientWidth / 2);
+    const scrollAmount = cardWidth + gap;
+    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
   };
+
+  const updateRelatedNavVisibility = () => {
+    const el = relatedRef.current;
+    if (!el) return setShowRelatedNav(false);
+    const isOverflowing = el.scrollWidth > el.clientWidth + 2;
+    setShowRelatedNav(isOverflowing);
+  };
+
+  // monitor related carousel overflow so we only show nav buttons when needed
+  useEffect(() => {
+    updateRelatedNavVisibility();
+    const handleResize = () => updateRelatedNavVisibility();
+    window.addEventListener('resize', handleResize);
+    const el = relatedRef.current;
+    if (el) el.addEventListener('scroll', updateRelatedNavVisibility);
+
+    let mo;
+    if (el && window.MutationObserver) {
+      mo = new MutationObserver(updateRelatedNavVisibility);
+      mo.observe(el, { childList: true, subtree: true });
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (el) el.removeEventListener('scroll', updateRelatedNavVisibility);
+      if (mo) mo.disconnect();
+    };
+  }, [relatedProducts]);
 
   const handleTouchStart = (e, ref) => {
     if (ref.current) {
@@ -167,17 +202,73 @@ function Details() {
     }
   };
 
+  // Auto-scroll: scorre di una card ogni 3 secondi; pausa quando l'utente passa il mouse
+  useEffect(() => {
+    const container = relatedRef.current;
+    if (!container || relatedProducts.length === 0) return;
+
+    const getGap = () => parseInt(getComputedStyle(container).gap) || 12;
+
+    const updateScrollPadding = () => {
+      const first = container.querySelector('.product-card');
+      const cardWidth = first ? first.offsetWidth : Math.floor(container.clientWidth / 2);
+      const pad = Math.max(0, Math.floor((container.clientWidth - cardWidth) / 2));
+      // add a small visual buffer to avoid clipping of badges/shadows on edges
+      const buffer = 40; // px, tweakable (increased to avoid clipping)
+      const padWithBuffer = pad + buffer;
+      // scrollPadding accepts css logical property names in JS as scrollPaddingLeft/Right
+      container.style.scrollPaddingLeft = `${padWithBuffer}px`;
+      container.style.scrollPaddingRight = `${padWithBuffer}px`;
+      // set inline padding so first/last elements are fully visible (no clipping)
+      container.style.paddingLeft = `${padWithBuffer}px`;
+      container.style.paddingRight = `${padWithBuffer}px`;
+      container.style.boxSizing = 'border-box';
+    };
+
+    updateScrollPadding();
+    const onResize = () => updateScrollPadding();
+    window.addEventListener('resize', onResize);
+
+    const tick = () => {
+      if (carouselPaused.current) return;
+      const first = container.querySelector('.product-card');
+      if (!first) return;
+      const gap = getGap();
+      const cardWidth = first.offsetWidth;
+      const scrollAmount = cardWidth + gap;
+      // se siamo alla fine -> torna all'inizio
+      if (Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    };
+
+    const interval = setInterval(tick, 3000);
+
+    const enter = () => (carouselPaused.current = true);
+    const leave = () => (carouselPaused.current = false);
+    container.addEventListener('pointerenter', enter);
+    container.addEventListener('pointerleave', leave);
+
+    return () => {
+      clearInterval(interval);
+      container.removeEventListener('pointerenter', enter);
+      container.removeEventListener('pointerleave', leave);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [relatedProducts]);
+
   const handleAddToCartFromCarousel = async (prod) => {
     try {
       await cartAPI.add(prod.id, 1);
       emitCartUpdate();
       // Informazioni emesse con origin in modo che Layout non mostri il toast duplicato
       // Centralized emit (same as HomePage): let Layout handle the toast
-      console.log('Details.handleAddToCartFromCarousel -> emitting add for', { id: prod.id, name: prod.name });
       emitCartAction('add', { id: prod.id, name: prod.name });
-    } catch (error) {
-      console.error("Errore aggiunta correlato:", error);
-      toast.error("Errore nell'aggiunta al carrello");
+      } catch (error) {
+      logError("Errore aggiunta correlato", error);
+      toast.error("Errore nell'aggiunta al carretto");
     }
   };
 
@@ -187,11 +278,10 @@ function Details() {
       emitCartUpdate();
       const prod = productsData.find(p => p.id === productId) || cart.find(i => i.id === productId);
       const name = prod?.name || 'Prodotto';
-      console.log('Details.handleIncrease -> emitting add for', { id: productId, name });
       emitCartAction('add', { id: productId, name });
-    } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      } catch (error) {
+      logError("Errore nell'aumentare la quantità", error);
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -203,17 +293,15 @@ function Details() {
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
         // Central emit: let Layout show global toast
-        console.log('Details.handleDecrease -> emitting remove (decrease) for', { id: productId, name });
         emitCartAction('remove', { id: productId, name });
       } else {
         await cartAPI.remove(productId);
-        console.log('Details.handleDecrease -> emitting remove (delete) for', { id: productId, name });
         emitCartAction('remove', { id: productId, name });
       }
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      logError("Errore nel diminuire la quantità", error);
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -247,6 +335,50 @@ function Details() {
           <div className="product-main-image">
             <img src={product.image} alt={product.name} />
           </div>
+          {relatedProducts.length > 0 && (
+            <section className="quests-section related-section-wrapper carousel-under-image">
+              <h2 className="section-title">Prodotti correlati</h2>
+              <div className="related-carousel-row">
+                <button
+                  className="scroll-btn scroll-left"
+                  onClick={() => scrollCarousel(relatedRef, -1)}
+                  aria-label="Scorri a sinistra"
+                >
+                  &lt;
+                </button>
+
+                <div
+                  ref={relatedRef}
+                  className="cards-list related-cards-list carousel-list"
+                  onTouchStart={(e) => handleTouchStart(e, relatedRef)}
+                  onTouchMove={(e) => handleTouchMove(e, relatedRef)}
+                  onTouchEnd={() => handleTouchEnd(relatedRef)}
+                >
+                    {relatedProducts.map((prod, index) => (
+                    <ProductCard
+                      key={index}
+                      product={prod}
+                      badge="related"
+                      variant="carousel-compact"
+                      cart={cart}
+                      onViewDetails={(slug) => handleViewDetails(slug)}
+                      onAddToCart={() => handleAddToCartFromCarousel(prod)}
+                      onIncrease={handleIncrease}
+                      onDecrease={handleDecrease}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  className="scroll-btn scroll-right"
+                  onClick={() => scrollCarousel(relatedRef, 1)}
+                  aria-label="Scorri a destra"
+                >
+                  &gt;
+                </button>
+              </div>
+            </section>
+          )}
         </div>
 
         <div className="product-info">
@@ -311,7 +443,10 @@ function Details() {
               <h2 className="section-title">Prodotti correlati</h2>
               <button
                 className="scroll-btn scroll-left"
+                type="button"
+                aria-label="Scorri a sinistra"
                 onClick={() => scrollCarousel(relatedRef, -1)}
+                style={{ display: showRelatedNav ? undefined : 'none' }}
               >
                 &lt;
               </button>
@@ -338,7 +473,10 @@ function Details() {
               </div>
               <button
                 className="scroll-btn scroll-right"
+                type="button"
+                aria-label="Scorri a destra"
                 onClick={() => scrollCarousel(relatedRef, 1)}
+                style={{ display: showRelatedNav ? undefined : 'none' }}
               >
                 &gt;
               </button>

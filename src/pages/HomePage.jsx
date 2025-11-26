@@ -6,6 +6,8 @@ import heroVideoAnime from '../videos/video-hero-anime.mp4';
 import heroVideoFilm from '../videos/video-hero-film.mp4';
 //todo Importiamo le API per gestire prodotti e carrello
 import { productsAPI, cartAPI, emitCartUpdate, emitCartAction } from '../services/api';
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 //todo Importiamo ProductCard componente unificato per le card prodotto
 import ProductCard from '../components/common/ProductCard';
@@ -46,8 +48,15 @@ function HomePage() {
 
     // Aggiungi listener per l'aggiornamento del carrello
     useEffect(() => {
-        window.addEventListener('cartUpdate', loadCart);
-        return () => window.removeEventListener('cartUpdate', loadCart);
+        const handler = (e) => {
+            if (e && e.detail && e.detail.cart) {
+                setCart(e.detail.cart);
+            } else {
+                loadCart();
+            }
+        };
+        window.addEventListener('cartUpdate', handler);
+        return () => window.removeEventListener('cartUpdate', handler);
     }, []);
 
     //todo Carica prodotti dal backend
@@ -57,9 +66,9 @@ function HomePage() {
                 setLoading(true);
                 const data = await productsAPI.getAllUnpaginated();
                 setProductsData(data);
-                } catch (error) {
-                console.error('Errore caricamento prodotti:', error);
-                toast.error('Errore nel caricamento dei prodotti');
+                    } catch (error) {
+                    logError('Errore caricamento prodotti', error);
+                    toast.error('Errore nel caricamento dei prodotti');
             } finally {
                 setLoading(false);
             }
@@ -182,7 +191,7 @@ function HomePage() {
             emitCartUpdate();
             
                 // central notification
-                    emitCartAction('add', { id: product.id, name: product.name });
+                            emitCartAction('add', { id: product.id, name: product.name });
         } catch (error) {
             console.error('Errore aggiunta al carrello:', error);
                 toast.error('Errore nell\'aggiunta al carretto');
@@ -196,11 +205,11 @@ function HomePage() {
             // centralized notification for plus action
             try {
                 const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
-                emitCartAction('add', { id: productId, name });
-            } catch {}
+                    emitCartAction('add', { id: productId, name });
+            } catch (err) { void err; }
         } catch (error) {
             console.error("Errore nell'aumentare la quantità:", error);
-            toast.error("Errore nell'aggiornamento del carrello");
+            toast.error("Errore nell'aggiornamento del carretto");
         }
     };
 
@@ -213,16 +222,16 @@ function HomePage() {
                 try {
                     const name = item?.name || 'Prodotto';
                     emitCartAction('remove', { id: productId, name });
-                } catch {}
+                } catch (err) { void err; }
             } else {
                 await cartAPI.remove(productId);
                 const name = item?.name || 'Prodotto';
-                emitCartAction('remove', { id: productId, name });
+                    emitCartAction('remove', { id: productId, name });
             }
             emitCartUpdate();
         } catch (error) {
             console.error("Errore nel diminuire la quantità:", error);
-            toast.error("Errore nell'aggiornamento del carrello");
+            toast.error("Errore nell'aggiornamento del carretto");
         }
     };
 
@@ -241,11 +250,56 @@ function HomePage() {
                     <button 
                         className="btn-get-started"
                         onClick={() => {
-                            document.querySelector('#prodotti')?.scrollIntoView({ 
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }}
+                                const target = document.querySelector('#prodotti');
+                                if (!target) return;
+
+                                // Calcolo altezza header (navbar) se presente
+                                const navbar = document.querySelector('.navbar');
+                                const navbarHeight = navbar ? navbar.getBoundingClientRect().height : 0;
+
+                                // Rilevo altri eventuali banner sticky (cookie, top-banner, ecc.)
+                                const stickySelectors = [
+                                    '.cookie-banner',
+                                    '.cookie-consent',
+                                    '#cookie-banner',
+                                    '.top-banner',
+                                    '.site-header',
+                                    '.fixed-banner',
+                                    '.sticky-banner'
+                                ];
+
+                                let extraStickyHeight = 0;
+                                stickySelectors.forEach(sel => {
+                                    const el = document.querySelector(sel);
+                                    if (!el) return;
+                                    const style = window.getComputedStyle(el);
+                                    // consideriamo solo elementi visibili e posizionati in alto come fixed/sticky
+                                    if ((style.position === 'fixed' || style.position === 'sticky') && el.offsetHeight > 0) {
+                                        // assicuriamoci che l'elemento sia posizionato in alto della pagina
+                                        const rect = el.getBoundingClientRect();
+                                        if (rect.bottom > 0 && rect.top >= -5) {
+                                            extraStickyHeight += rect.height;
+                                        }
+                                    }
+                                });
+
+                                const totalHeaderOffset = navbarHeight + extraStickyHeight;
+
+                                // Calcolo la posizione verticale desiderata in modo che
+                                // la sezione `target` sia centrata nella viewport, compensando l'header fisso e banner
+                                const targetRect = target.getBoundingClientRect();
+                                const targetTopRelativeToDoc = window.scrollY + targetRect.top;
+                                // Piccolo offset verticale aggiuntivo per spostare leggermente
+                                // la posizione finale verso il basso (migliore centratura visiva)
+                                const extraYOffset = 30; // px
+
+                                const scrollTo = Math.max(
+                                    0,
+                                    Math.round(targetTopRelativeToDoc - (window.innerHeight / 2) + (targetRect.height / 2) - totalHeaderOffset + extraYOffset)
+                                );
+
+                                window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+                            }}
                     >
                         GET STARTED
                     </button>

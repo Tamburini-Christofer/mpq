@@ -1,0 +1,114 @@
+/* Dark theme styles for SweetAlert2 popups, matching site look (neo-brutalist) */
+.swal-dark-popup {
+  background-color: var(--dark, #141218) !important;
+  background-image: none !important;
+  color: var(--light, #ffffff) !important;
+  border-radius: 0 !important;
+  /* bold pixel-style border to match site */
+  border: 4px solid var(--purple, #6c21ff) !important;
+  box-shadow: 6px 6px 0 var(--pixel-border, #000) !important;
+  font-family: var(--font-primary, 'Inter, sans-serif') !important;
+  padding: 20px !important;
+  width: min(720px, 94%) !important;
+}
+
+.swal-dark-title {
+  color: var(--gold, #d8a928) !important;
+  font-family: var(--font-heading, 'Cinzel, serif') !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.swal-dark-content {
+  color: #d1cfe0 !important;
+  font-size: 0.98rem !important;
+  margin-top: 8px !important;
+  line-height: 1.45 !important;
+}
+
+/* Confirm / primary button (purple -> gold gradient matching site accents) */
+.swal-dark-confirm {
+  /* Match .btn-fast-checkout (page "ingredient") */
+  background: var(--gold, #d8a928) !important;
+  color: var(--dark, #141218) !important;
+  border: 3px solid var(--pixel-border, #000) !important;
+  box-shadow: 6px 6px 0 var(--pixel-border, #000) !important;
+  padding: 10px 16px !important;
+  border-radius: 0 !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+}
+
+.swal-dark-confirm:hover {
+  transform: translate(-2px, -2px);
+  background: #e6b840 !important; /* same hover tone as .btn-fast-checkout:hover */
+  box-shadow: 6px 6px 0 var(--purple, #6c21ff) !important;
+}
+
+/* Cancel / secondary button */
+.swal-dark-cancel {
+  background: transparent !important;
+  color: var(--light, #fff) !important;
+  border: 2px dashed rgba(255,255,255,0.06) !important;
+  padding: 8px 14px !important;
+  border-radius: 0 !important;
+  font-weight: 700 !important;
+}
+
+/* Centered success check feedback used across the app */
+.swal-check-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.swal-check-icon {
+  width: 56px;
+  height: 56px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--purple, #6c21ff);
+  color: var(--gold, #d8a928);
+  font-weight: 900;
+  font-size: 28px;
+  border-radius: 6px;
+  background: transparent;
+  transform: scale(0.85);
+  opacity: 0;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.swal-check-icon.animate {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.swal-check-label {
+  color: var(--light, #fff);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+/* Ensure SweetAlert success icon lines use theme color */
+.swal2-icon.swal2-success {
+  background-color: transparent !important;
+}
+.swal2-success .swal2-success-ring {
+  border-color: rgba(108,33,255,0.18) !important;
+}
+.swal2-success .swal2-success-line-tip, .swal2-success .swal2-success-line-long {
+  background: var(--gold, #d8a928) !important;
+}
+
+/* Make popup buttons match spacing of page buttons */
+.swal2-actions { gap: 10px !important; }
+
+/* Small screens: slightly reduce padding */
+@media (max-width: 480px) {
+  .swal-dark-popup { padding: 14px !important; }
+  .swal-check-icon { width: 48px; height: 48px; font-size: 22px; }
+}

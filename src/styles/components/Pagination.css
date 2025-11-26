@@ -1,4 +1,15 @@
-/* Pagination Styles - Integrato con il design esistente del shop */
+/* --- Variabili Stile Globali (Da inferire dai file precedenti) --- */
+:root {
+    --purple: #6c21ff;
+    --gold: #d8a928;
+    --dark: #141218;
+    --light: #ffffff;
+    --pixel-border: #000000;
+    --shadow-depth: 4px;
+    --input-bg: #2a2636;
+}
+
+/* Pagination Styles - Integrato con il design Neo-Brutalist */
 .pagination-container {
   display: flex;
   flex-direction: column;
@@ -9,27 +20,33 @@
   border-radius: 12px;
   border: 2px solid rgba(108, 33, 255, 0.3);
   backdrop-filter: blur(10px);
+  position: relative;
+  /* Ensure pagination and its select appear above off-canvas overlays */
+  z-index: 1400;
 }
 
 .pagination-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  font-family: "Inter", sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--light); /* Colore solido */
+    font-size: 1rem;
+    font-family: "Cinzel", serif; /* Uso Cinzel per coerenza */
+    font-weight: 700;
 }
 
 .items-per-page {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
 }
 
 .items-per-page label {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
-  font-weight: 500;
+    color: var(--gold);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .items-select {
@@ -51,142 +68,154 @@
   background-position: right 0.7rem center;
   background-size: 1em;
   padding-right: 2.5rem;
+  position: relative;
+  z-index: 1401; /* above overlay so native dropdown is not clipped */
 }
 
 .items-select option {
-  background: #141218;
-  color: white;
-  padding: 0.5rem;
-  font-size: 1rem;
-  font-family: "Inter", sans-serif;
+    background: var(--dark);
+    color: var(--light);
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: monospace;
 }
 
 .items-select:hover {
-  background: linear-gradient(135deg, #7c31ff, #9c5dff);
-  border-color: rgba(108, 33, 255, 0.8);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(108, 33, 255, 0.3);
+    background: var(--purple);
+    border-color: var(--gold);
+    transform: translate(-1px, -1px); /* Piccolo scatto */
+    box-shadow: 4px 4px 0 var(--pixel-border);
 }
 
 .items-select:focus {
-  outline: none;
-  border-color: #d8a928;
-  box-shadow: 0 0 0 3px rgba(216, 169, 40, 0.3);
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--purple);
 }
 
 .pagination-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
 }
 
+/* Pulsanti Avanti/Indietro */
 .pagination-btn {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  border: 2px solid rgba(108, 33, 255, 0.5);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-  font-family: "Cinzel", serif;
-  box-shadow: 0 4px 15px rgba(108, 33, 255, 0.2);
+    background: var(--purple); /* Sfondo solido */
+    border: 3px solid var(--pixel-border);
+    color: var(--light);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 800;
+    transition: all 0.1s ease;
+    white-space: nowrap;
+    font-family: "Cinzel", serif;
+    
+    /* Ombra netta Gold */
+    box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--gold);
+    text-transform: uppercase;
 }
 
 .pagination-btn:hover:not(.disabled) {
-  background: linear-gradient(135deg, #7c31ff, #9c5dff);
-  border-color: rgba(108, 33, 255, 0.8);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(108, 33, 255, 0.4);
+    background: #8c4dff;
+    border-color: var(--pixel-border);
+    transform: translate(-3px, -3px); /* Scatto più pronunciato */
+    box-shadow: 6px 6px 0 var(--gold);
 }
 
 .pagination-btn.disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background: rgba(108, 33, 255, 0.2);
-  border-color: rgba(108, 33, 255, 0.2);
-  box-shadow: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--input-bg);
+    border-color: var(--pixel-border);
+    box-shadow: 2px 2px 0 var(--pixel-border);
+    transform: none;
 }
 
 .pagination-numbers {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
+/* Pulsanti Numerici */
 .pagination-number {
-  background: rgba(20, 18, 24, 0.6);
-  border: 2px solid rgba(108, 33, 255, 0.3);
-  color: white;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-family: "Cinzel", serif;
+    background: var(--input-bg);
+    border: 3px solid var(--pixel-border);
+    color: var(--gold);
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0; /* SQUADRATO */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.1s ease;
+    font-family: "Cinzel", serif;
+    box-shadow: 2px 2px 0 var(--pixel-border);
 }
 
 .pagination-number:hover {
-  background: linear-gradient(135deg, #6c21ff, #8c4dff);
-  border-color: rgba(108, 33, 255, 0.8);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(108, 33, 255, 0.3);
+    background: var(--purple);
+    border-color: var(--pixel-border);
+    color: var(--light);
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 var(--gold);
 }
 
 .pagination-number.active {
-  background: linear-gradient(135deg, #d8a928, #e8b938);
-  border-color: #d8a928;
-  color: #141218;
-  font-weight: 700;
-  box-shadow: 0 6px 20px rgba(216, 169, 40, 0.4);
+    background: var(--gold);
+    border-color: var(--pixel-border);
+    color: var(--dark);
+    font-weight: 800;
+    box-shadow: 4px 4px 0 var(--purple); /* Ombra contrastante */
+    transform: translate(0, 0); /* Non si muove quando è attivo */
 }
 
 .pagination-dots {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 1.2rem;
-  padding: 0 0.5rem;
-  font-family: "Cinzel", serif;
+    color: var(--light);
+    opacity: 0.8;
+    font-size: 1.2rem;
+    padding: 0 0.5rem;
+    font-family: "Cinzel", serif;
 }
 
 /* Responsive design */
 @media (max-width: 768px) {
-  .pagination-container {
-    padding: 1rem;
-    margin: 1.5rem 0;
-    gap: 1rem;
-  }
-  
-  .pagination-info {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-  
-  .pagination-controls {
-    gap: 0.5rem;
-  }
-  
-  .pagination-btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-  }
-  
-  .pagination-number {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 0.9rem;
-  }
+    .pagination-container {
+        padding: 1rem;
+        margin: 1.5rem 0;
+        gap: 1rem;
+    }
+    
+    .pagination-info {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .pagination-controls {
+        gap: 0.5rem;
+    }
+    
+    .pagination-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .pagination-number {
+        width: 2.5rem;
+        height: 2.5rem;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -208,5 +237,21 @@
   .items-per-page {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  /* Make items-per-page select full-width and easier to tap on small screens */
+  .items-per-page {
+    width: 100%;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  .items-select {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    font-size: 1rem;
   }
 }

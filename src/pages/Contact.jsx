@@ -59,7 +59,7 @@ export default function Contact() {
           </p>
 
             <div className="contact-detail-item">
-              <div className="contact-icon"><img src="/public/icon/EmailOffice.png" alt="" /></div>
+              <div className="contact-icon"><img src="/public/icon/EmailOffice.png" alt="Omino che passa un email" /></div>
               <div>
                 <h3>Tempo di risposta</h3>
                 <p>Entro 24-48 ore</p>
@@ -68,7 +68,7 @@ export default function Contact() {
           
           <div className="contact-details">
             <div className="contact-detail-item">
-              <div className="contact-icon"><img src="/public/icon/EmailSend.png" alt="" /></div>
+              <div className="contact-icon"><img src="/public/icon/EmailSend.png" alt="Omino che consegna email" /></div>
               <div>
                 <h3>Email</h3>
                 <p>mypocketfive@gmail.com</p>

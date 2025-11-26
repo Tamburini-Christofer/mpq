@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/common/ProductCard";
 import { cartAPI, emitCartUpdate, emitCartAction } from "../services/api";
+import { logAction, error as logError } from '../utils/logger';
+import ACTIONS from '../utils/actionTypes';
 import { toast } from 'react-hot-toast';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -23,7 +25,7 @@ function Wishlist() {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      console.error("Errore caricamento carrello:", error);
+      logError("Errore caricamento carretto", error);
     }
   };
 
@@ -32,12 +34,16 @@ function Wishlist() {
     loadCart();
     window.addEventListener("storage", loadWishlist);
     window.addEventListener("wishlistUpdate", loadWishlist);
-    window.addEventListener("cartUpdate", loadCart);
+    const handler = (e) => {
+      if (e && e.detail && e.detail.cart) setCart(e.detail.cart);
+      else loadCart();
+    };
+    window.addEventListener("cartUpdate", handler);
 
     return () => {
       window.removeEventListener("storage", loadWishlist);
       window.removeEventListener("wishlistUpdate", loadWishlist);
-      window.removeEventListener("cartUpdate", loadCart);
+      window.removeEventListener("cartUpdate", handler);
     };
   }, []);
 
@@ -55,8 +61,8 @@ function Wishlist() {
       // notifica centralizzata per mostrare il toast laterale
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      toast.error("Errore nell'aggiunta al carrello");
-      console.error(error);
+      toast.error("Errore nell'aggiunta al carretto");
+      logError('Errore aggiunta wishlist->carretto', error);
     }
   };
 
@@ -71,6 +77,7 @@ function Wishlist() {
         icon: '❤',
         style: { background: '#ffffff', color: '#ef4444', border: '1px solid #ef4444' }
       });
+      logAction(ACTIONS.WISHLIST_REMOVE, { id: product.id, name: product.name });
   };
 
   const handleClearWishlist = async () => {
@@ -84,9 +91,11 @@ function Wishlist() {
       reverseButtons: true,
       focusCancel: true,
       customClass: {
-        popup: 'swal-wishlist-popup',
-        confirmButton: 'swal-wishlist-confirm',
-        cancelButton: 'swal-wishlist-cancel'
+        popup: 'swal-dark-popup',
+        title: 'swal-dark-title',
+        content: 'swal-dark-content',
+        confirmButton: 'swal-dark-confirm',
+        cancelButton: 'swal-dark-cancel'
       }
     });
 
@@ -104,7 +113,7 @@ function Wishlist() {
         `,
         timer: 1200,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) {
@@ -120,8 +129,8 @@ function Wishlist() {
     if (wishlistItems.length === 0) return;
     try {
       const result = await Swal.fire({
-        title: `Aggiungere ${wishlistItems.length} prodotti al carrello?`,
-        text: 'Questa azione aggiungerà tutti i prodotti presenti nella wishlist al carrello.',
+        title: `Aggiungere ${wishlistItems.length} prodotti al carretto?`,
+        text: 'Questa azione aggiungerà tutti i prodotti presenti nella wishlist al carretto.',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Aggiungi tutti',
@@ -129,9 +138,11 @@ function Wishlist() {
         reverseButtons: true,
         focusCancel: true,
         customClass: {
-          popup: 'swal-wishlist-popup',
-          confirmButton: 'swal-wishlist-confirm',
-          cancelButton: 'swal-wishlist-cancel'
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
         }
       });
 
@@ -154,20 +165,20 @@ function Wishlist() {
         html: `
           <div class="swal-check-wrap">
             <div class="swal-check-icon" aria-hidden="true">✓</div>
-            <div class="swal-check-label">Prodotti aggiunti al carrello</div>
+            <div class="swal-check-label">Prodotti aggiunti al carretto</div>
           </div>
         `,
         timer: 1400,
         showConfirmButton: false,
-        customClass: { popup: 'swal-wishlist-popup' },
+        customClass: { popup: 'swal-dark-popup' },
         didOpen: (popup) => {
           const icon = popup.querySelector('.swal-check-icon');
           if (icon) setTimeout(() => icon.classList.add('animate'), 40);
         }
       });
     } catch (error) {
-      toast.error("Errore durante l'aggiunta dei prodotti");
-      console.error(error);
+      toast.error("Errore durante l'aggiunta dei prodotti al carretto");
+      logError('Errore moveAllToCart', error);
     }
   };
 
@@ -179,10 +190,10 @@ function Wishlist() {
       try {
         const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
         emitCartAction('add', { id: productId, name });
-      } catch {}
+      } catch (err) { void err; }
     } catch (error) {
-      console.error("Errore nell'aumentare la quantità:", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      logError("Errore nell'aumentare la quantità", error);
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -191,6 +202,7 @@ function Wishlist() {
       const item = cart.find(i => i.id === productId);
       if (item && item.quantity > 1) {
         await cartAPI.decrease(productId);
+        logAction(ACTIONS.CART_REMOVE, { id: productId });
       } else {
         await cartAPI.remove(productId);
         const name = item?.name || 'Prodotto';
@@ -199,8 +211,8 @@ function Wishlist() {
       await loadCart();
       emitCartUpdate();
     } catch (error) {
-      console.error("Errore nel diminuire la quantità:", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      logError("Errore nel diminuire la quantità", error);
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -221,7 +233,7 @@ function Wishlist() {
           {wishlistItems.length > 0 && (
             <div className="wishlist-header-buttons">
               <button className="btn-clear-wishlist" onClick={handleClearWishlist}>Svuota Wishlist</button>
-              <button className="btn-move-all" onClick={handleMoveAllToCart}>Aggiungi tutto al carrello</button>
+              <button className="btn-move-all" onClick={handleMoveAllToCart}>Aggiungi tutto al carretto</button>
             </div>
           )}
         </div>
