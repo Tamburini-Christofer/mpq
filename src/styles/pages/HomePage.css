@@ -201,7 +201,7 @@
 /* Container Scrollabile */
 .cards-list {
     display: flex;
-    gap: 85px;
+    gap: 95px;
     overflow-x: auto;
     padding: 30px 10px; /* Padding verticale per le ombre */
     margin: 0;
