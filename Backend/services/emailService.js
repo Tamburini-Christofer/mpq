@@ -52,10 +52,11 @@ async function sendPaymentConfirmationEmail({ to, amount, currency = 'EUR', paym
     body, html { margin:0; padding:0; background:#0A0911; font-family:system-ui,sans-serif; color:#FFFFFF; }
     .wrapper { padding:32px 0; }
     a { color:#D4A74F; }
-    .hx { color: #FFF;}
+    ul {color: #fff;}
+    .gs li{ color: #FFF;}
     p { color: #FFFFFF;}
     .products {font-size:14px; line-height:1.7; color:#FFFFFF !important; margin-bottom:14px;}
-    .white {color:#FFFFFF !important;}
+    .white { color:#FFF !important;}
     .container { max-width:620px; margin:auto; background:#1B0B2E; border-radius:24px; border:2px solid #2D1546; overflow:hidden; box-shadow:0 0 30px rgba(0,0,0,0.45); }
     .minimal-header { padding:60px 20px 50px; text-align:center; background:#4A127A; border-bottom:2px solid #D4A74F; position:relative; }
     .minimal-header:before { content:""; position:absolute; top:-40px; left:50%; transform:translateX(-50%); width:260px; height:260px; background:radial-gradient(circle,rgba(212,167,79,0.45),transparent 70%); filter:blur(28px); opacity:0.6; }
@@ -113,7 +114,7 @@ async function sendPaymentConfirmationEmail({ to, amount, currency = 'EUR', paym
           Codice transazione: <code>${paymentIntentId}</code>
         </p>
 
-        <p class="products">
+        <p class="products white">
           Prodotti acquistati: ${productListHtml}
         </p>
 
