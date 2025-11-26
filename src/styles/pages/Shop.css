@@ -276,7 +276,6 @@
   height: 100vh;
   /* Desktop placement: show as an overlay on the right side */
   top: 88px; /* below the top nav / view-controls */
-  right: 79%;
   left: auto;
   z-index: 900;
   box-shadow: 6px 0 0 var(--pixel-border);
