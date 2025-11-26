@@ -249,7 +249,24 @@ export const cartAPI = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      if (!response.ok) throw new Error('Errore nell\'aumento della quantità');
+
+      // If item or cart is missing on server, try to recover: create the item instead
+      if (!response.ok) {
+        let body = null;
+        try { body = await response.json(); } catch (e) { /* ignore */ }
+        const msg = body && body.message ? body.message : '';
+        // If backend reports product not in cart or cart not found, fallback to add
+        if (response.status === 404 && /Prodotto non nel carrello|Carrello non trovato/i.test(msg)) {
+          // create the item on the server
+          try {
+            return await cartAPI.add(productId, 1);
+          } catch (e) {
+            console.warn('Fallback add after increase failed', e);
+            throw e;
+          }
+        }
+        throw new Error('Errore nell\'aumento della quantità');
+      }
       return await response.json();
     } catch (error) {
       console.error('Errore API cart.increase:', error);
@@ -265,7 +282,16 @@ export const cartAPI = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
-      if (!response.ok) throw new Error('Errore nella diminuzione della quantità');
+      if (!response.ok) {
+        let body = null;
+        try { body = await response.json(); } catch (e) { /* ignore */ }
+        const msg = body && body.message ? body.message : '';
+        // If cart or item not found, return current cart state to keep UI in sync
+        if (response.status === 404 && /Carrello non trovato|Prodotto non nel carrello/i.test(msg)) {
+          try { return await cartAPI.get(); } catch (e) { /* ignore */ }
+        }
+        throw new Error('Errore nella diminuzione della quantità');
+      }
       return await response.json();
     } catch (error) {
       console.error('Errore API cart.decrease:', error);
@@ -284,11 +310,12 @@ export const cartAPI = {
       // If backend returned an error body, try to include it in the thrown Error
       if (!response.ok) {
         let msg = 'Errore nella rimozione';
-        try {
-          const body = await response.json();
-          if (body && body.message) msg = body.message;
-        } catch (e) {
-          // ignore JSON parse errors
+        let body = null;
+        try { body = await response.json(); } catch (e) { /* ignore */ }
+        if (body && body.message) msg = body.message;
+        // If cart not found, return an empty cart to keep UI consistent
+        if (response.status === 404 && /Carrello non trovato/i.test(msg)) {
+          return [];
         }
         const err = new Error(msg);
         err.status = response.status;
