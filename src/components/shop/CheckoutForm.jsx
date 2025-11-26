@@ -449,13 +449,13 @@ export default function CheckoutForm({
                   className="cancel-order-btn danger"
                   onClick={onCancelOrder}
                 >
-              
+
                   Annulla e Cancella Ordine
                 </button>
-                     <PaymentButton
+                <PaymentButton
                   totalAmount={safeTotalAmount}
                   cartItems={safeCartItems}
-                  formData={formData}
+                  formData={formData}         
                   onClose={onClose}
                 />
               </div>

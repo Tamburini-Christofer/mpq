@@ -9,8 +9,7 @@ import Contact from './pages/Contact.jsx'
 import Wishlist from './pages/Wishlist.jsx'
 import Staff from './pages/Staff.jsx'
 import NotFoundPages from './pages/NotFoundPages.jsx'
-import EmailSender from './components/EmailSender.jsx'
-import './styles/components/SwalDark.css'
+import SuccessPayment from './pages/successPayment.jsx'
 
 function App () {
   const [showWelcome, setShowWelcome] = useState(() => {
@@ -62,6 +61,7 @@ function App () {
             <Route path='/contatti' element={<Contact />} />
             <Route path='/staff' element={<Staff />} />
             <Route path='*' element={<NotFoundPages />} />
+            <Route path='/success' element={<SuccessPayment />} />
           </Route>
         </Routes>
       </BrowserRouter>
