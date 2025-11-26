@@ -81,8 +81,11 @@ const Layout = () => {
 
                 // show custom overlay with countdown then run cleanup
                 try {
-                    setCheckoutCountdown(6);
-                    setShowCheckoutSuccess(true);
+                    // Avoid synchronous setState inside effect to prevent cascading renders
+                    setTimeout(() => {
+                        setCheckoutCountdown(6);
+                        setShowCheckoutSuccess(true);
+                    }, 0);
                 } catch (e) { console.warn('Could not set checkout overlay', e) }
 
                 let intervalId = null;
