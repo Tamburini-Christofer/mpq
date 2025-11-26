@@ -259,29 +259,33 @@
 
 /* ===================================
    FILTERS PANEL (MPQ Originale)
+   Desktop-only rules (scoped) to prevent accidental overrides
    =================================== */
 
-.filters-panel {
-  position: fixed;
-  width: 300px;
-  min-width: 300px;
-  background: #1b1a24;
-  border-right: 4px solid var(--pixel-purple);
-  /* Bordo spesso Purple */
-  padding: 25px 25px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  /* Spazio ridotto per look più compatto */
-  height: 100vh;
-  /* Desktop placement: show as an overlay on the right side */
-  top: 88px; /* below the top nav / view-controls */
-  left: auto;
-  z-index: 900;
-  box-shadow: 6px 0 0 var(--pixel-border);
-  /* Ombra Hard sulla destra */
-  animation: fadeFilters 0.25s ease;
-  border-radius: 0;
+@media (min-width: 901px) {
+  .filters-panel {
+    position: fixed;
+    width: 300px;
+    min-width: 300px;
+    background: #1b1a24;
+    border-right: 4px solid var(--pixel-purple);
+    /* Bordo spesso Purple */
+    padding: 25px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    /* Spazio ridotto per look più compatto */
+    height: calc(100vh - 88px);
+    /* Desktop placement: show as an overlay on the right side */
+    top: 88px; /* below the top nav / view-controls */
+    right: 79.5%;
+    left: auto;
+    z-index: 900;
+    box-shadow: 6px 0 0 var(--pixel-border);
+    /* Ombra Hard sulla destra */
+    animation: fadeFilters 0.25s ease;
+    border-radius: 0;
+  }
 }
 
 /* TITOLI SEZIONI */
@@ -401,6 +405,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  margin-top: 20px;
 }
 
 .back-btn {
@@ -757,6 +762,108 @@
   border: 3px solid var(--pixel-gold);
   box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
   font-family: "Cinzel", serif;
+}
+
+/* Desktop: make cart items align controls consistently to the right
+   Use CSS Grid so the quantity controls and remove/total column are fixed
+   while the product info grows. Keeps buttons vertically aligned across items. */
+@media (min-width: 901px) {
+  .cart-items {
+    display: block;
+  }
+
+  .cart-item {
+    display: grid;
+    /* flexible columns: product info grows, controls have constrained but flexible widths */
+    grid-template-columns: 1fr minmax(120px, 220px) minmax(120px, 260px);
+    gap: 16px;
+    align-items: center;
+    padding: 18px 20px;
+    margin: 12px 0;
+    transition: transform 120ms ease, box-shadow 120ms ease;
+    min-width: 0; /* allow children to shrink without forcing overflow */
+  }
+
+  .cart-item .item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .cart-item .item-info .item-name { font-size: 18px; }
+  .cart-item .item-info .item-price { font-size: 15px; }
+
+  .cart-item .quantity-controls {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .cart-item .item-total {
+    justify-self: end;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .cart-item .remove-btn {
+    min-width: 0;
+    max-width: 100%;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Make the cart total sticky on larger viewports so checkout button is always reachable */
+  .cart-total {
+    position: sticky;
+    bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cart-total .payment-btn,
+  .cart-item .remove-btn {
+    box-shadow: 3px 3px 0 var(--pixel-border);
+    border: 2px solid var(--pixel-border);
+    background: var(--pixel-purple);
+    color: var(--pixel-light);
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.08s ease;
+  }
+
+  .cart-total .payment-btn:hover,
+  .cart-item .remove-btn:hover {
+    transform: translate(-1px, -1px);
+  }
+}
+
+/* Mobile: ensure buttons are full width and stacked for easy tapping */
+@media (max-width: 900px) {
+  .cart-item .remove-btn {
+    width: 30%;
+    padding: 10px 12px;
+    box-sizing: border-box;
+  }
+
+  .cart-total .payment-btn {
+    width: 100%;
+    display: block;
+    padding: 12px 14px;
+    box-sizing: border-box;
+    border: 2px solid var(--pixel-border);
+    background: var(--pixel-gold);
+    color: var(--pixel-dark);
+    font-weight: 800;
+  }
 }
 
 
