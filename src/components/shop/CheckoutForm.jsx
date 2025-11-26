@@ -83,11 +83,20 @@ export default function CheckoutForm({
       >
         {/* HEADER */}
         <div className="checkout-form-header">
-          <div>
-            <h2 className="checkout-form-title">Completa il tuo ordine</h2>
-            <p className="checkout-form-subtitle">
-              Un ultimo passo e la tua prossima avventura è pronta a partire.
-            </p>
+          <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+            <button
+              className="back-btn"
+              onClick={onClose}
+              aria-label="Torna indietro"
+            >
+              ←
+            </button>
+            <div>
+              <h2 className="checkout-form-title">Completa il tuo ordine</h2>
+              <p className="checkout-form-subtitle">
+                Un ultimo passo e la tua prossima avventura è pronta a partire.
+              </p>
+            </div>
           </div>
           <button
             className="close-btn"

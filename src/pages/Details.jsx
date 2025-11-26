@@ -35,6 +35,7 @@ function Details() {
   const [quantity, setQuantity] = useState(1);
   const [animClass, setAnimClass] = useState("");
   const relatedRef = useRef(null);
+  const [showRelatedNav, setShowRelatedNav] = useState(false);
 
   const loadCart = async () => {
     try {
@@ -72,6 +73,8 @@ function Details() {
     window.addEventListener('cartUpdate', handler);
     return () => window.removeEventListener('cartUpdate', handler);
   }, []);
+
+  // related carousel nav visibility is handled after relatedProducts is computed
 
   // use react-hot-toast for notifications
 
@@ -138,6 +141,7 @@ function Details() {
     });
   }, [product, productsData]);
 
+
   const scrollCarousel = (ref, direction) => {
     if (ref.current) {
       const cardWidth = window.innerWidth < 768 ? 200 : 270;
@@ -150,6 +154,34 @@ function Details() {
       });
     }
   };
+
+  const updateRelatedNavVisibility = () => {
+    const el = relatedRef.current;
+    if (!el) return setShowRelatedNav(false);
+    const isOverflowing = el.scrollWidth > el.clientWidth + 2;
+    setShowRelatedNav(isOverflowing);
+  };
+
+  // monitor related carousel overflow so we only show nav buttons when needed
+  useEffect(() => {
+    updateRelatedNavVisibility();
+    const handleResize = () => updateRelatedNavVisibility();
+    window.addEventListener('resize', handleResize);
+    const el = relatedRef.current;
+    if (el) el.addEventListener('scroll', updateRelatedNavVisibility);
+
+    let mo;
+    if (el && window.MutationObserver) {
+      mo = new MutationObserver(updateRelatedNavVisibility);
+      mo.observe(el, { childList: true, subtree: true });
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (el) el.removeEventListener('scroll', updateRelatedNavVisibility);
+      if (mo) mo.disconnect();
+    };
+  }, [relatedProducts]);
 
   const handleTouchStart = (e, ref) => {
     if (ref.current) {
@@ -312,7 +344,10 @@ function Details() {
               <h2 className="section-title">Prodotti correlati</h2>
               <button
                 className="scroll-btn scroll-left"
+                type="button"
+                aria-label="Scorri a sinistra"
                 onClick={() => scrollCarousel(relatedRef, -1)}
+                style={{ display: showRelatedNav ? undefined : 'none' }}
               >
                 &lt;
               </button>
@@ -339,7 +374,10 @@ function Details() {
               </div>
               <button
                 className="scroll-btn scroll-right"
+                type="button"
+                aria-label="Scorri a destra"
                 onClick={() => scrollCarousel(relatedRef, 1)}
+                style={{ display: showRelatedNav ? undefined : 'none' }}
               >
                 &gt;
               </button>

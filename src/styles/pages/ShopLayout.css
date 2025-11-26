@@ -38,3 +38,21 @@
   flex: 1;
   padding: 20px 30px;
 }
+
+/* Responsive: stack left menu above content on small screens */
+@media (max-width: 900px) {
+  .shop-layout-container {
+    flex-direction: column;
+  }
+
+  .shop-left-menu {
+    width: 100%;
+    padding: 14px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .shop-right-panel {
+    padding: 12px;
+  }
+}

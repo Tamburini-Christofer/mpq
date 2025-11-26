@@ -9,6 +9,9 @@
   border-radius: 12px;
   border: 2px solid rgba(108, 33, 255, 0.3);
   backdrop-filter: blur(10px);
+  position: relative;
+  /* Ensure pagination and its select appear above off-canvas overlays */
+  z-index: 1400;
 }
 
 .pagination-info {
@@ -24,6 +27,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  position: relative;
 }
 
 .items-per-page label {
@@ -51,6 +55,8 @@
   background-position: right 0.7rem center;
   background-size: 1em;
   padding-right: 2.5rem;
+  position: relative;
+  z-index: 1401; /* above overlay so native dropdown is not clipped */
 }
 
 .items-select option {
@@ -208,5 +214,21 @@
   .items-per-page {
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  /* Make items-per-page select full-width and easier to tap on small screens */
+  .items-per-page {
+    width: 100%;
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  .items-select {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    font-size: 1rem;
   }
 }

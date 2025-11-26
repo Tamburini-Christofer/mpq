@@ -409,3 +409,63 @@
   background: var(--dark);
   border-radius: 0;
 }
+
+/* Responsive fixes: prevent horizontal overflow and stack fields */
+.checkout-back-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--checkout-light, #fff);
+}
+
+@media (max-width: 900px) {
+  .checkout-overlay {
+    padding: 18px 12px;
+    align-items: flex-start;
+  }
+
+  .checkout-form-container {
+    max-width: calc(100% - 24px);
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .checkout-form {
+    padding: 18px;
+    border-radius: 8px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .checkout-input,
+  .checkout-textarea {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .checkout-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-overlay {
+    padding: 12px 8px;
+  }
+
+  .checkout-form {
+    padding: 12px;
+  }
+
+  .checkout-form-title {
+    font-size: 18px;
+  }
+}

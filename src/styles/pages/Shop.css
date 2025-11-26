@@ -41,7 +41,7 @@
   font-family: "Inter", sans-serif;
   color: var(--light);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
   /* Aggiungo pattern di sfondo per il look retro */
   background-image: linear-gradient(#222 1px, transparent 1px),
     linear-gradient(90deg, #222 1px, transparent 1px);
@@ -158,21 +158,21 @@
   flex-shrink: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  padding-top: 150px;
+  padding-top: 90px;
   /* Spazio per logo/header */
 }
 
 /* todo: Contenitore logo e titolo del brand */
 .logo-box {
   text-align: center;
-  margin-bottom: 40px;
-  position: absolute;
-  /* Ritorna nella posizione corretta */
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 0 0 18px 0;
+  position: relative;
   width: 100%;
-  padding: 0 20px;
+  padding: 6px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
 
 /* todo: Titolo principale MyPocketQuest */
@@ -394,11 +394,35 @@
   text-shadow: 3px 3px 0 #000;
 }
 
+/* Mobile back button shown in cart header */
+.cart-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn {
+  display: none;
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.06);
+  color: var(--pixel-light);
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.back-btn:hover { background: rgba(255,255,255,0.03); }
+
+@media (max-width: 900px) {
+  .back-btn { display: inline-flex; }
+}
+
 /* todo: Container controlli per cambiare visualizzazione griglia/lista */
 .view-controls {
   position: sticky;
   top: 0;
-  left: 69%;
+  left: auto;
   background-color: #1c1a24;
   /* Sfondo scuro per contrasto */
   border: 3px solid var(--pixel-gold);
@@ -407,14 +431,25 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 20px;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: space-between;
   flex-wrap: wrap;
+  box-sizing: border-box;
+  /* Reserve consistent height so sticky change won't shift content */
+  min-height: 56px;
+  height: auto;
+  padding: 10px 15px;
   z-index: 100;
   padding: 10px 15px;
   box-shadow: var(--shadow-depth) var(--shadow-depth) 0 var(--pixel-border);
   width: auto;
   /* Lascio che sia il contenuto a definirlo */
+}
+
+/* Ensure view-controls occupies full content width and doesn't overlap products */
+@media (min-width: 900px) {
+  .content .view-controls {
+    width: 100%;
+  }
 }
 
 /* todo: Pulsanti per cambiare visualizzazione (Griglia/Lista) */
@@ -560,12 +595,122 @@
   font-family: monospace;
 }
 
+/* Ensure quantity-controls layout is stable and number centered
+   Apply styles also to spans inside .quantity-controls when .quantity class isn't present */
+.quantity-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quantity-controls span,
+.quantity-controls .quantity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 32px;
+  line-height: 1;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--pixel-gold);
+  font-family: monospace;
+}
+
+/* Make buttons and number slightly larger on very small screens and add spacing to avoid overlap */
+@media (max-width: 480px) {
+  .quantity-btn,
+  .quantity-btn-c {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  .quantity-controls {
+    gap: 10px;
+  }
+}
+
 /* todo: Prezzo totale dell'item (prezzo x quantità) */
 .total-price {
   font-size: 20px;
   font-weight: 700;
   color: var(--pixel-gold);
   font-family: monospace;
+}
+
+/* Responsive: stack cart item elements to avoid overlap on small screens */
+@media (max-width: 768px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .item-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .item-name {
+    font-size: 16px;
+    word-break: break-word;
+    flex: 1 1 auto;
+    padding-right: 8px;
+  }
+
+  .item-price {
+    font-size: 15px;
+    flex: 0 0 auto;
+  }
+
+  .quantity-controls {
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .quantity-controls span,
+  .quantity-controls .quantity {
+    min-width: 36px;
+    height: 36px;
+  }
+
+  .item-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .remove-btn {
+    padding: 8px 12px;
+    font-size: 14px;
+    flex: 0 0 auto;
+  }
+
+  .total-price {
+    font-size: 18px;
+    flex: 1 1 auto;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-item { padding: 12px; }
+  .item-name { font-size: 15px; }
+  .item-price { font-size: 14px; }
+  .quantity-btn,
+  .quantity-btn-c { width: 36px; height: 36px; }
+  .quantity-controls span, .quantity-controls .quantity { min-width: 40px; }
+  .remove-btn { padding: 7px 10px; font-size: 13px; }
 }
 
 /* todo: Pulsante per rimuovere completamente un prodotto dal carrello */
@@ -909,4 +1054,189 @@
 .qt,
 .sub {
   color: var(--pixel-gold);
+}
+
+/* ===================================
+   Responsive adjustments for Shop
+   Targets sidebar/filters/content stacking on small screens
+   =================================== */
+
+/* Stack sidebar / filters above content on tablets and phones */
+@media (max-width: 900px) {
+  .shop-ui-container {
+    flex-direction: column;
+    align-items: stretch;
+    background-size: 20px 20px;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 18px 16px;
+    border-right: none;
+    border-bottom: 4px solid var(--pixel-gold);
+    padding-top: 40px;
+  }
+
+  /* Support older class name used by FilterSidebar component */
+  .filters-panel,
+  .filters-sidebar {
+    position: relative;
+    width: 100%;
+    min-width: unset;
+    height: auto;
+    padding: 16px;
+    border-right: none;
+    border-bottom: 4px solid var(--pixel-purple);
+    box-shadow: none;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 16px;
+    width: 100%;
+  }
+
+  /* Ensure content margin reset overrides other CSS files */
+  .shop-ui-container .content {
+    margin-left: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* Make top controls flow naturally and not overlap */
+  .view-controls {
+    position: static;
+    left: auto;
+    top: auto;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 0;
+    margin-bottom: 12px;
+    box-shadow: none;
+  }
+
+  .view-btn {
+    padding: 8px 12px;
+    height: 36px;
+  }
+
+  .notification {
+    right: 12px;
+    left: auto;
+    max-width: calc(100% - 24px);
+  }
+}
+
+/* Smaller phones: tighten paddings and ensure grid uses full width */
+@media (max-width: 480px) {
+  .sidebar,
+  .filters-panel,
+  .filters-sidebar {
+    padding: 12px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .section-title-shop {
+    font-size: 24px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .load-more-btn {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+}
+
+/* ================================
+   Off-canvas sidebar & filters
+   ================================ */
+@media (max-width: 900px) {
+  .sidebar {
+    /* start hidden off-canvas to the left */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 280px;
+    transform: translateX(-100%);
+    transition: transform 280ms ease-in-out;
+    z-index: 1200;
+    background: #1a1720;
+    box-shadow: 8px 0 0 rgba(0,0,0,0.6);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  /* overlay when sidebar is open */
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1100;
+  }
+
+  /* prevent background scroll when overlay is active */
+  body.no-scroll {
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  /* Filters panel slides from right as overlay */
+  .filters-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    width: 320px;
+    max-width: 92%;
+    background: #1b1a24;
+    border-left: 4px solid var(--pixel-purple);
+    padding: 18px;
+    z-index: 1250;
+    box-shadow: -8px 0 0 rgba(0,0,0,0.6);
+    overflow-y: auto;
+  }
+
+  /* hide the filters-panel inline placement used on large screens */
+  .filters-panel .shop-filters-container {
+    padding: 0;
+  }
+
+  /* ensure main content can't be scrolled when overlay active (body lock handled by small inline script if needed) */
+  .content {
+    width: 100%;
+  }
+
+  /* make hamburger button visible and slightly different style */
+  .hamburger-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 18px;
+  }
+
+}
+
+@media (min-width: 901px) {
+  /* hide overlay element on desktop if present */
+  .mobile-overlay { display: none; }
+}
+
+/* Prevent grid from jumping or centering vertically when content changes */
+@media (min-width: 0px) {
+  .products-grid {
+    align-content: start; /* keep items from centering vertically */
+    justify-content: center; /* keep entire grid centered horizontally */
+    scrollbar-gutter: stable both-edges; /* reduce layout shift when scrollbar appears */
+  }
 }

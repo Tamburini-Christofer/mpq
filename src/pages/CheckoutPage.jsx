@@ -113,7 +113,16 @@ function CheckoutPage() {
 
   return (
     <div className="checkout-section">
-      <h2 className="section-title">Checkout</h2>
+      <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+        <button
+          className="back-btn"
+          onClick={() => window.history.back()}
+          aria-label="Torna indietro"
+        >
+          ←
+        </button>
+        <h2 className="section-title">Checkout</h2>
+      </div>
 
       {cart.length === 0 ? (
         <div className="empty-checkout">

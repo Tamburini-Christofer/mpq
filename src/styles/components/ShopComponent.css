@@ -96,3 +96,31 @@
     color: var(--light);
     font-weight: bold;
 }
+
+/* Responsive tweaks for select and filter container */
+@media (max-width: 900px) {
+    .custom-select {
+        width: 100%;
+    }
+
+    .sort-wrapper {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .shop-filters-container {
+        width: 100%;
+        padding: 0 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .select-display {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+
+    .select-arrow {
+        font-size: 18px;
+    }
+}

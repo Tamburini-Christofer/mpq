@@ -35,6 +35,7 @@ const Shop = ({ defaultTab = "shop" }) => {
   const [checkoutAvailable, setCheckoutAvailable] = useState(false);
   const [checkoutJustEnabled, setCheckoutJustEnabled] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [searchValue, setSearchValue] = useState("");
 
@@ -300,6 +301,23 @@ const Shop = ({ defaultTab = "shop" }) => {
     }
   }, [activeTab]);
 
+  // close mobile sidebar when changing tab
+  useEffect(() => {
+    setSidebarOpen(false);
+    setShowFilters(false);
+  }, [activeTab]);
+
+  // lock body scroll when any overlay is active
+  useEffect(() => {
+    const active = sidebarOpen || showFilters;
+    if (active) {
+      document.body.classList.add('no-scroll');
+    } else {
+      document.body.classList.remove('no-scroll');
+    }
+    return () => document.body.classList.remove('no-scroll');
+  }, [sidebarOpen, showFilters]);
+
   const handleAddToCart = async (product) => {
     try {
       await cartAPI.add(product.id, 1);
@@ -442,7 +460,7 @@ const Shop = ({ defaultTab = "shop" }) => {
     <div className="shop-ui-container">
       
 
-      <aside className={`sidebar ${showFilters ? "collapsed" : ""}`}>
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
         <div className="logo-box">
           <div className="icon"></div>
           <h1 className="title">
@@ -498,11 +516,34 @@ const Shop = ({ defaultTab = "shop" }) => {
         </div>
       )}
 
+      {/* mobile overlay for sidebar */}
+      {(sidebarOpen || showFilters) && (
+        <div
+          className="mobile-overlay"
+          onClick={() => {
+            setSidebarOpen(false);
+            setShowFilters(false);
+          }}
+        />
+      )}
+
       <main className="content">
         {activeTab === "shop" && (
           <div className="shop-section">
             <div className="view-controls">
               <div style={{ display: "flex", gap: "10px" }}>
+                  {/* Hamburger visible on small screens */}
+                  <button
+                    className="view-btn hamburger-btn"
+                    aria-label="Apri menu"
+                    onClick={() => {
+                      const opening = !sidebarOpen;
+                      setSidebarOpen(opening);
+                      if (opening) setShowFilters(false);
+                    }}
+                  >
+                    ☰
+                  </button>
                 <button
                   className={viewMode === "grid" ? "view-btn active" : "view-btn"}
                   onClick={() => setViewMode("grid")}
@@ -517,7 +558,11 @@ const Shop = ({ defaultTab = "shop" }) => {
                 </button>
                 <button
                   className={showFilters ? "view-btn active" : "view-btn"}
-                  onClick={() => setShowFilters(!showFilters)}
+                  onClick={() => {
+                    const next = !showFilters;
+                    setShowFilters(next);
+                    if (next) setSidebarOpen(false);
+                  }}
                 >
                   ⚙ Filtri
                 </button>
@@ -610,7 +655,19 @@ const Shop = ({ defaultTab = "shop" }) => {
 
         {activeTab === "cart" && (
           <div className="cart-section">
-            <h2 className="section-title-shop">Carrello</h2>
+            <div className="cart-header">
+              <button
+                className="back-btn"
+                onClick={() => {
+                  setActiveTab('shop');
+                  navigate('/shop');
+                }}
+                aria-label="Torna allo shop"
+              >
+                ←
+              </button>
+              <h2 className="section-title-shop">Carrello</h2>
+            </div>
 
             {cart.length > 0 && (
               <FreeShippingBanner subtotal={subtotal} threshold={40} promoApplied={false} />

@@ -26,7 +26,8 @@
 
 /* Container card */
 .product-card {
-    width: 250px;
+    width: 100%;
+    max-width: 260px;
     min-height: 270px;
     background: #1c1a24; /* Sfondo solido scuro */
     border-radius: 0; /* Squadrato */
@@ -516,10 +517,60 @@
 }
 
 /* Product Grid Layout */
+
+/* Products container and grid
+   Use fixed card width columns and center the grid so cards occupy the
+   center column area on small screens instead of stretching to the edges. */
+.products {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 12px;
+    box-sizing: border-box;
+}
+
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    /* create as many 250px columns as fit, center the grid in the container */
+    grid-template-columns: repeat(auto-fit, 250px);
+    justify-content: center;
+    justify-items: center;
     gap: 20px;
+    padding: 12px 0;
+    /* Keep row heights predictable to avoid reflow when items change */
+    grid-auto-rows: minmax(1px, auto);
+}
+
+/* Ensure individual cards don't cause big vertical reflows */
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Responsive product grid adjustments (override fixed 5-columns on small screens) */
+@media (max-width: 1200px) {
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .products-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 .products-list {
