@@ -778,16 +778,13 @@ html body .content .products-grid .product-card {
     background: linear-gradient(180deg, #0f0d12 0%, #141218 100%);
     /* bordo fisso, non cambia al hover */
     border: 3px solid var(--pixel-border);
-    border-left: 6px solid var(--pixel-gold);
+    border: 2px solid var(--pixel-gold);
     box-shadow: 6px 6px 0 #000;
     min-height: 140px;
 }
 
 /* Disable hover border accent for list items so the border remains "fisso" */
-.product-card--list:hover {
-    border-color: var(--pixel-border);
-    box-shadow: 6px 6px 0 #000;
-}
+
 
 .product-card__list-left {
     flex: 0 0 140px;
