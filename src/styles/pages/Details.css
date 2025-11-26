@@ -42,8 +42,8 @@ body {
 /* Bottone torna alla home */
 .back-to-home-btn {
     position: absolute;
-    top: 50px; /* Posizione fissa o assoluta più in alto */
-    left: 320px; /* Adatta la posizione per non sovrapporsi */
+    top: 12%; /* Posizione fissa o assoluta più in alto */
+    left: 11.7%; /* Adatta la posizione per non sovrapporsi */
     z-index: 1000;
     background: var(--purple); /* Sfondo Viola Solido */
     color: var(--light);
@@ -180,10 +180,16 @@ body {
 
 /* --- Colonna sinistra: immagini --- */
 .product-gallery {
-    flex: 1 1 320px;
+    /* Colonna sinistra: fissata a larghezza fissa per contenere
+       immagine principale + carosello correlati */
+    flex: 0 0 420px;
+    max-width: 420px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    /* Evita che elementi del carosello escano dalla colonna e si sovrappongano
+       alla colonna destra (titoli/testo). */
+    overflow: hidden;
 }
 
 .product-main-image {
@@ -236,7 +242,9 @@ body {
 
 /* --- Colonna destra: info --- */
 .product-info {
-    flex: 1 1 320px;
+    /* Colonna destra: flessibile, occupa lo spazio rimanente */
+    flex: 1 1 0;
+    min-width: 320px;
     display: flex;
     flex-direction: column;
     gap: 18px;
@@ -643,12 +651,15 @@ body {
 
 .related-cards-list {
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px 0;
+    gap: 16px;
+    padding: 10px 6px;
     width: 100%;
+    /* Carousel behavior: horizontal scroll when overflow */
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    /* mobile smoothness hint removed for compatibility */
+    flex-wrap: nowrap;
 }
 
 .related-section-wrapper {
@@ -656,6 +667,63 @@ body {
     flex-direction: column;
     align-items: center;
     text-align: center;
+}
+
+/* Carousel-specific styling when placed under the main image */
+.carousel-under-image .related-section-wrapper {
+    align-items: stretch;
+    width: 100%;
+}
+
+.carousel-under-image .related-carousel-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center; /* centra il carosello sotto il titolo */
+}
+
+.carousel-list {
+    display: flex;
+    gap: 8px; /* gap ulteriormente ridotto per più densità */
+    padding: 12px 6px;
+    overflow-x: auto;
+    /* Manteniamo lo snap per un'esperienza di scorrimento fluida */
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 6px; /* evita che il primo elemento tocchi il bordo */
+    align-items: center; /* centra verticalmente le card nel carosello */
+}
+
+/* Assicura che il carosello sia centrato rispetto al titolo/testo
+   e che non si allarghi oltre la colonna sinistra */
+.carousel-under-image .carousel-list {
+    margin: 0 auto;
+    width: 100%;
+    max-width: calc(100% - 182px);
+}
+
+/* Mostra esattamente 2 elementi visibili nel viewport del carosello */
+.carousel-list > * {
+    scroll-snap-align: center; /* snap al centro per mettere la card visibile al centro */
+    /* Variante compatta precedente: mostra più card (due visibili) usando
+       percentuali. Questa è la versione precedente alle ultime modifiche. */
+    flex: 0 0 40%;
+    max-width: 40%;
+    box-sizing: border-box;
+}
+
+/* Scroll buttons styling (small, unobtrusive near carousel) */
+.carousel-under-image .scroll-btn {
+    background: var(--dark);
+    color: var(--light);
+    border: 2px solid var(--pixel-border);
+    padding: 8px 10px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--pixel-border);
+}
+
+.carousel-under-image .scroll-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--gold);
 }
 
 .related-section-wrapper .section-title {
@@ -676,5 +744,25 @@ body {
 
     .product-title {
         font-size: 1.8rem;
+    }
+}
+
+/* Stacking responsivo: sotto questa larghezza le colonne diventano blocchi */
+@media (max-width: 920px) {
+    .product-page {
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+    }
+
+    .product-gallery,
+    .product-info {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    /* Rendiamo i pulsanti del carosello meno invadenti su mobile */
+    .carousel-under-image .scroll-btn {
+        display: none;
     }
 }

@@ -327,7 +327,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
       logError('Errore aggiunta al carrello', error);
-      toast.error("Errore aggiunta al carrello");
+      toast.error("Errore aggiunta al carretto");
     }
   };
 
@@ -351,7 +351,7 @@ const Shop = ({ defaultTab = "shop" }) => {
       const item = cart.find((i) => i.id === productId);
       // guard: if item not found locally, refresh cart and bail out
       if (!item) {
-        toast.error('Elemento non trovato nel carrello. Aggiorno la vista...');
+        toast.error('Elemento non trovato nel carretto. Aggiorno la vista...');
         await fetchCart();
         emitCartUpdate();
         return;
@@ -386,7 +386,7 @@ const Shop = ({ defaultTab = "shop" }) => {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id: productId, name } } }));
         logAction(ACTIONS.CART_REMOVE_NAVBAR, { id: productId, name });
       } catch {
-        toast.error(`"${name}" rimosso dal carrello`);
+        toast.error(`"${name}" rimosso dal carretto`);
       }
       emitCartUpdate();
     } catch {
@@ -421,11 +421,11 @@ const Shop = ({ defaultTab = "shop" }) => {
   const handleCancelOrder = async () => {
     try {
       const result = await Swal.fire({
-        title: 'Svuotare il carrello?',
-        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        title: 'Svuotare il carretto?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carretto.',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Svuota carrello',
+        confirmButtonText: 'Svuota carretto',
         cancelButtonText: 'Annulla',
         reverseButtons: true,
         focusCancel: true,
@@ -452,7 +452,7 @@ const Shop = ({ defaultTab = "shop" }) => {
         html: `
           <div class="swal-check-wrap">
             <div class="swal-check-icon" aria-hidden="true">✓</div>
-            <div class="swal-check-label">Carrello svuotato</div>
+            <div class="swal-check-label">Carretto svuotato</div>
           </div>
         `,
         timer: 1400,
@@ -465,9 +465,9 @@ const Shop = ({ defaultTab = "shop" }) => {
       });
       
       
-    } catch (err) {
+      } catch (err) {
       logError('Errore svuotamento carrello', err);
-      try { toast.error('Errore durante lo svuotamento del carrello'); } catch (err) { void err; }
+      try { toast.error('Errore durante lo svuotamento del carretto'); } catch (err) { void err; }
     }
   };
 
@@ -518,7 +518,7 @@ const Shop = ({ defaultTab = "shop" }) => {
               navigate("/shop/cart");
             }}
           >
-            Carrello ({cart.reduce((sum, item) => sum + item.quantity, 0)})
+            Carretto ({cart.reduce((sum, item) => sum + item.quantity, 0)})
           </button>
 
           {checkoutAvailable && (
@@ -666,7 +666,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
         {activeTab === "cart" && (
           <div className="cart-section">
-            <h2 className="section-title-shop">Carrello</h2>
+            <h2 className="section-title-shop">Carretto</h2>
 
             {cart.length > 0 && (
               <FreeShippingBanner subtotal={subtotal} threshold={40} promoApplied={false} />
@@ -674,7 +674,7 @@ const Shop = ({ defaultTab = "shop" }) => {
 
             {cart.length === 0 ? (
               <div className="empty-cart">
-                <p>Il carrello è vuoto.</p>
+                <p>Il carretto è vuoto.</p>
                 <p>Vai allo Shop per aggiungere prodotti!</p>
                 <img src="/public/icon/EmptyShop.png" alt="empty" />
               </div>
@@ -710,7 +710,7 @@ const Shop = ({ defaultTab = "shop" }) => {
                 })}
 
                 <div className="cart-total">
-                  <strong>Totale Carrello: {subtotal.toFixed(2)}€</strong>
+                  <strong>Totale Carretto: {subtotal.toFixed(2)}€</strong>
                   {cart.length > 0 && (
                     <div style={{ marginTop: 12 }}>
                       <button

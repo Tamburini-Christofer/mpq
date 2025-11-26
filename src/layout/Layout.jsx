@@ -35,7 +35,7 @@ const Layout = () => {
             const detail = e?.detail || {};
             const message = detail.message || 'Operazione completata';
             const type = detail.type || 'info';
-            const duration = detail.duration || 3000;
+            const duration = detail.duration || 4000;
             setNotification({ message, type, duration });
         };
         window.addEventListener('showNotification', handler);
@@ -48,9 +48,9 @@ const Layout = () => {
             const product = d.product || {};
             const name = product.name || product || 'Prodotto';
             if (action === 'add') {
-                toast.success(`"${name}" aggiunto al carrello!`);
+                toast.success(`"${name}" aggiunto al carretto!`);
             } else if (action === 'remove') {
-                toast.error(`"${name}" rimosso dal carrello`);
+                toast.error(`"${name}" rimosso dal carretto`);
             }
         };
             window.addEventListener('cartAction', cartHandler);

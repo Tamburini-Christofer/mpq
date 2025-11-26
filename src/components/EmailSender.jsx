@@ -22,9 +22,24 @@ export default function EmailSender({ onClose }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Funzione semplice per validare la struttura di un indirizzo email
+  const isValidEmail = (email) => {
+    if (!email) return false;
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   //todo Funzione per inviare l'email
   const sendEmail = async (e) => {
     e.preventDefault();
+    // Controllo validità email: se non valida, mostro messaggio specifico
+    if (!isValidEmail(formData.email)) {
+      setStatus('errore inserimento valore email');
+      setIsError(true);
+      setIsLoading(false);
+      return;
+    }
+
     setStatus("Invio in corso...");
     setIsLoading(true);
     setIsError(false);
@@ -69,11 +84,11 @@ export default function EmailSender({ onClose }) {
       await Promise.race([sendPromise, timeoutPromise]);
 
       console.log('EmailSender: invio completato');
-      setStatus("Registrazione completata! Controlla la tua email per il messaggio di benvenuto.");
+      setStatus("Invio completato! Controlla la tua email per il messaggio di benvenuto.");
       setIsSuccess(true);
       setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
-      if (onClose) setTimeout(() => onClose(), 1200);
+      if (onClose) setTimeout(() => onClose(), 4000);
     } catch (err) {
       console.error('EmailSender: errore invio email', err);
       if (err && err.message === 'timeout') {

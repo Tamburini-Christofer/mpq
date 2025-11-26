@@ -11,7 +11,7 @@ import "../../styles/components/CheckoutForm.css";
 /**
  * @param {function} onClose        - chiude l'overlay
  * @param {number}   totalAmount    - totale ordine (prodotti + spedizione)
- * @param {array}    cartItems      - prodotti nel carrello
+ * @param {array}    cartItems      - prodotti nel carretto
  * @param {number}   shippingCost   - costo spedizione (default 4.99)
  * @param {boolean}  isFreeShipping - true se spedizione gratis
  */
@@ -359,7 +359,7 @@ export default function CheckoutForm({
                 <div className="summary-list">
                   {safeCartItems.length === 0 && (
                     <p className="summary-empty">
-                      Nessun prodotto nel carrello.
+                      Nessun prodotto nel carretto.
                     </p>
                   )}
 

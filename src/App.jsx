@@ -16,19 +16,19 @@ function App () {
   const [showWelcome, setShowWelcome] = useState(() => {
     try {
       const everSeen = !!localStorage.getItem('hasSeenWelcome')
-      const sessionSeen = !!sessionStorage.getItem('welcomeShown')
-      // show only if not seen ever and not seen in this session (i.e. first full page load)
-      return !(everSeen || sessionSeen)
-    } catch (e) {
-      console.warn('Error checking welcome popup flag', e)
+      // Show the welcome popup only if the user has never seen it before.
+      // Subsequent manual openings are allowed via the `openWelcome` event (e.g. Level Up button).
+      return !everSeen
+    } catch (err) {
+      console.warn('Error checking welcome popup flag', err)
       return false
     }
   })
 
   const closeWelcome = () => {
     try {
-      // mark as shown for this session only so it won't reappear on route navigation
-      sessionStorage.setItem('welcomeShown', 'true')
+      // mark as shown permanently so it won't reappear on future page opens
+      localStorage.setItem('hasSeenWelcome', 'true')
     } catch (e) {
       console.warn('Could not set session welcome flag', e)
     }
@@ -53,7 +53,7 @@ function App () {
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
 
-            {/* 🟣 SHOP + VARIANTI */}
+            {/*  SHOP + VARIANTI */}
             <Route path='/shop' element={<Shop />} />
             <Route path='/shop/cart' element={<Shop defaultTab="cart" />} />
             <Route path='/shop/checkout' element={<Shop defaultTab="checkout" />} />

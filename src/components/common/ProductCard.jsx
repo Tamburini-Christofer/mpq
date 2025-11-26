@@ -278,7 +278,7 @@ function ProductCard({
                     setShowQtyControls(true);
                   } catch (err) {
                     console.error('Errore aggiunta al carrello:', err);
-                    toast.error("Errore nell'aggiunta al carrello");
+                    toast.error("Errore nell'aggiunta al carretto");
                   }
                 }}
               >
@@ -305,7 +305,7 @@ function ProductCard({
                     }
                   } catch (err) {
                     console.error('Errore nella diminuzione quantità:', err);
-                    toast.error("Errore nell'aggiornamento del carrello");
+                    toast.error("Errore nell'aggiornamento del carretto");
                   }
                 }}>
                   -
@@ -324,9 +324,9 @@ function ProductCard({
                       // centralized notification for plus action when card handles API directly
                       emitCartAction('add', { id: product.id, name: product.name });
                     }
-                  } catch (err) {
+                    } catch (err) {
                     console.error('Errore nell\'aumento quantità:', err);
-                    toast.error("Errore nell'aggiornamento del carrello");
+                    toast.error("Errore nell'aggiornamento del carretto");
                   }
                 }}>
                   +

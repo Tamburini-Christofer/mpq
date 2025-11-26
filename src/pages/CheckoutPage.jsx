@@ -54,7 +54,7 @@ function CheckoutPage() {
     try {
       const result = await Swal.fire({
         title: 'Annullare l\'ordine?',
-        text: 'Se continui verrà svuotato il carrello e l\'ordine sarà annullato.',
+        text: 'Se continui verrà svuotato il carretto e l\'ordine sarà annullato.',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Annulla ordine',
@@ -119,7 +119,7 @@ function CheckoutPage() {
 
       {cart.length === 0 ? (
         <div className="empty-checkout">
-          <p>Il carrello è vuoto.</p>
+          <p>Il carretto è vuoto.</p>
           <p>Aggiungi prodotti e riprova.</p>
           <img src="/public/icon/InShop.png" alt="empty" />
         </div>

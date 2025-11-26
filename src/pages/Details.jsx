@@ -35,13 +35,14 @@ function Details() {
   const [quantity, setQuantity] = useState(1);
   const [animClass, setAnimClass] = useState("");
   const relatedRef = useRef(null);
+  const carouselPaused = useRef(false);
 
   const loadCart = async () => {
     try {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      logError("Errore caricamento carrello", error);
+      logError("Errore caricamento carretto", error);
     }
   };
 
@@ -109,8 +110,8 @@ function Details() {
       // Use centralized emit so Layout's Toaster shows the notification (same logic as Home)
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      logError("Errore aggiunta al carrello", error);
-      toast.error("Errore nell'aggiunta al carrello");
+      logError("Errore aggiunta al carretto", error);
+      toast.error("Errore nell'aggiunta al carretto");
     }
   };
 
@@ -139,16 +140,13 @@ function Details() {
   }, [product, productsData]);
 
   const scrollCarousel = (ref, direction) => {
-    if (ref.current) {
-      const cardWidth = window.innerWidth < 768 ? 200 : 270;
-      const cardsToScroll = window.innerWidth < 768 ? 1 : 4;
-      const scrollAmount = cardWidth * cardsToScroll;
-
-      ref.current.scrollBy({
-        left: direction * scrollAmount,
-        behavior: "smooth",
-      });
-    }
+    if (!ref.current) return;
+    const container = ref.current;
+    const first = container.querySelector('.product-card');
+    const gap = parseInt(getComputedStyle(container).gap) || 12;
+    const cardWidth = first ? first.offsetWidth : Math.floor(container.clientWidth / 2);
+    const scrollAmount = cardWidth + gap;
+    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
   };
 
   const handleTouchStart = (e, ref) => {
@@ -172,6 +170,63 @@ function Details() {
     }
   };
 
+  // Auto-scroll: scorre di una card ogni 3 secondi; pausa quando l'utente passa il mouse
+  useEffect(() => {
+    const container = relatedRef.current;
+    if (!container || relatedProducts.length === 0) return;
+
+    const getGap = () => parseInt(getComputedStyle(container).gap) || 12;
+
+    const updateScrollPadding = () => {
+      const first = container.querySelector('.product-card');
+      const cardWidth = first ? first.offsetWidth : Math.floor(container.clientWidth / 2);
+      const pad = Math.max(0, Math.floor((container.clientWidth - cardWidth) / 2));
+      // add a small visual buffer to avoid clipping of badges/shadows on edges
+      const buffer = 40; // px, tweakable (increased to avoid clipping)
+      const padWithBuffer = pad + buffer;
+      // scrollPadding accepts css logical property names in JS as scrollPaddingLeft/Right
+      container.style.scrollPaddingLeft = `${padWithBuffer}px`;
+      container.style.scrollPaddingRight = `${padWithBuffer}px`;
+      // set inline padding so first/last elements are fully visible (no clipping)
+      container.style.paddingLeft = `${padWithBuffer}px`;
+      container.style.paddingRight = `${padWithBuffer}px`;
+      container.style.boxSizing = 'border-box';
+    };
+
+    updateScrollPadding();
+    const onResize = () => updateScrollPadding();
+    window.addEventListener('resize', onResize);
+
+    const tick = () => {
+      if (carouselPaused.current) return;
+      const first = container.querySelector('.product-card');
+      if (!first) return;
+      const gap = getGap();
+      const cardWidth = first.offsetWidth;
+      const scrollAmount = cardWidth + gap;
+      // se siamo alla fine -> torna all'inizio
+      if (Math.ceil(container.scrollLeft + container.clientWidth) >= container.scrollWidth) {
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      }
+    };
+
+    const interval = setInterval(tick, 3000);
+
+    const enter = () => (carouselPaused.current = true);
+    const leave = () => (carouselPaused.current = false);
+    container.addEventListener('pointerenter', enter);
+    container.addEventListener('pointerleave', leave);
+
+    return () => {
+      clearInterval(interval);
+      container.removeEventListener('pointerenter', enter);
+      container.removeEventListener('pointerleave', leave);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [relatedProducts]);
+
   const handleAddToCartFromCarousel = async (prod) => {
     try {
       await cartAPI.add(prod.id, 1);
@@ -179,9 +234,9 @@ function Details() {
       // Informazioni emesse con origin in modo che Layout non mostri il toast duplicato
       // Centralized emit (same as HomePage): let Layout handle the toast
       emitCartAction('add', { id: prod.id, name: prod.name });
-    } catch (error) {
+      } catch (error) {
       logError("Errore aggiunta correlato", error);
-      toast.error("Errore nell'aggiunta al carrello");
+      toast.error("Errore nell'aggiunta al carretto");
     }
   };
 
@@ -192,9 +247,9 @@ function Details() {
       const prod = productsData.find(p => p.id === productId) || cart.find(i => i.id === productId);
       const name = prod?.name || 'Prodotto';
       emitCartAction('add', { id: productId, name });
-    } catch (error) {
+      } catch (error) {
       logError("Errore nell'aumentare la quantità", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -214,7 +269,7 @@ function Details() {
       emitCartUpdate();
     } catch (error) {
       logError("Errore nel diminuire la quantità", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -248,6 +303,50 @@ function Details() {
           <div className="product-main-image">
             <img src={product.image} alt={product.name} />
           </div>
+          {relatedProducts.length > 0 && (
+            <section className="quests-section related-section-wrapper carousel-under-image">
+              <h2 className="section-title">Prodotti correlati</h2>
+              <div className="related-carousel-row">
+                <button
+                  className="scroll-btn scroll-left"
+                  onClick={() => scrollCarousel(relatedRef, -1)}
+                  aria-label="Scorri a sinistra"
+                >
+                  &lt;
+                </button>
+
+                <div
+                  ref={relatedRef}
+                  className="cards-list related-cards-list carousel-list"
+                  onTouchStart={(e) => handleTouchStart(e, relatedRef)}
+                  onTouchMove={(e) => handleTouchMove(e, relatedRef)}
+                  onTouchEnd={() => handleTouchEnd(relatedRef)}
+                >
+                    {relatedProducts.map((prod, index) => (
+                    <ProductCard
+                      key={index}
+                      product={prod}
+                      badge="related"
+                      variant="carousel-compact"
+                      cart={cart}
+                      onViewDetails={(slug) => handleViewDetails(slug)}
+                      onAddToCart={() => handleAddToCartFromCarousel(prod)}
+                      onIncrease={handleIncrease}
+                      onDecrease={handleDecrease}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  className="scroll-btn scroll-right"
+                  onClick={() => scrollCarousel(relatedRef, 1)}
+                  aria-label="Scorri a destra"
+                >
+                  &gt;
+                </button>
+              </div>
+            </section>
+          )}
         </div>
 
         <div className="product-info">
@@ -307,44 +406,6 @@ function Details() {
               Contenuti esclusivi sbloccabili • Aggiornamenti futuri inclusi
             </div>
           </div>
-          {relatedProducts.length > 0 && (
-            <section className="quests-section related-section-wrapper">
-              <h2 className="section-title">Prodotti correlati</h2>
-              <button
-                className="scroll-btn scroll-left"
-                onClick={() => scrollCarousel(relatedRef, -1)}
-              >
-                &lt;
-              </button>
-              <div
-                ref={relatedRef}
-                className="cards-list related-cards-list"
-                onTouchStart={(e) => handleTouchStart(e, relatedRef)}
-                onTouchMove={(e) => handleTouchMove(e, relatedRef)}
-                onTouchEnd={() => handleTouchEnd(relatedRef)}
-              >
-                {relatedProducts.map((prod, index) => (
-                  <ProductCard
-                    key={index}
-                    product={prod}
-                    badge="related"
-                    variant="carousel"
-                    cart={cart}
-                    onViewDetails={(slug) => handleViewDetails(slug)}
-                    onAddToCart={() => handleAddToCartFromCarousel(prod)}
-                    onIncrease={handleIncrease}
-                    onDecrease={handleDecrease}
-                  />
-                ))}
-              </div>
-              <button
-                className="scroll-btn scroll-right"
-                onClick={() => scrollCarousel(relatedRef, 1)}
-              >
-                &gt;
-              </button>
-            </section>
-          )}
         </div>
       </div>
     </>

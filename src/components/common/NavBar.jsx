@@ -77,7 +77,7 @@ function NavBar() {
       setCartItems(cart);
       setCartTotal(totalPrice.toFixed(2));
     } catch (err) {
-      console.error('Errore nel recuperare dati carrello:', err);
+      console.error('Errore nel recuperare dati carretto:', err);
       setCartCount(0);
       setCartItems([]);
       setCartTotal(0);
@@ -166,7 +166,7 @@ function NavBar() {
         logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
         } catch {
         // fallback: show toast directly if dispatch fails
-        toast.error(`"${name}" rimosso dal carrello`);
+        toast.error(`"${name}" rimosso dal carretto`);
       }
     }, 250);
   };
@@ -174,11 +174,11 @@ function NavBar() {
   const clearCartFromNav = async () => {
     try {
       const result = await Swal.fire({
-        title: 'Svuotare il carrello?',
-        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carrello.',
+        title: 'Svuotare il carretto?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carretto.',
         icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Svuota carrello',
+        confirmButtonText: 'Svuota carretto',
         cancelButtonText: 'Annulla',
         reverseButtons: true,
         focusCancel: true,
@@ -198,19 +198,19 @@ function NavBar() {
       await updateCartData();
 
       // centralized event so other components can react
-      try {
+        try {
         window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'clear' } }));
         logAction(ACTIONS.CART_CLEAR_NAVBAR, {});
       } catch {
         // fallback
-        toast.success('Carrello svuotato');
+        toast.success('Carretto svuotato');
       }
 
       await Swal.fire({
         html: `
-          <div class="swal-check-wrap">
+            <div class="swal-check-wrap">
             <div class="swal-check-icon" aria-hidden="true">✓</div>
-            <div class="swal-check-label">Carrello svuotato</div>
+            <div class="swal-check-label">Carretto svuotato</div>
           </div>
         `,
         timer: 1400,
@@ -223,8 +223,8 @@ function NavBar() {
       });
 
     } catch (err) {
-      console.error('Errore svuotamento carrello:', err);
-      toast.error('Errore nello svuotare il carrello');
+      console.error('Errore svuotamento carretto:', err);
+      toast.error('Errore nello svuotare il carretto');
     }
   };
 
@@ -281,10 +281,10 @@ function NavBar() {
 
             {showCartPreview && (
               <div className={`cart-preview ${animateClose ? "closing" : ""}`}>
-                <h4>Carrello</h4>
+                <h4>Carretto</h4>
 
                 {cartItems.length === 0 ? (
-                  <p className="empty-cart">Il carrello è vuoto.</p>
+                  <p className="empty-cart">Il carretto è vuoto.</p>
                 ) : (
                   <ul className="cart-preview-list">
                     {cartItems.map(item => (
@@ -345,28 +345,34 @@ function NavBar() {
                   className="btn-checkout"
                   onClick={goToCheckout}
                 >
-                  Vai al Carrello
+                  Vai al Carretto
                 </button>
 
                 <button
                   className="btn-clear-cart-preview"
                   onClick={async (e) => { e.preventDefault(); await clearCartFromNav(); }}
                 >
-                  Svuota carrello
+                  Svuota carretto
                 </button>
 
               </div>
             )}
           </div>
 
+          {/* Il bottone di apertura manuale del popup di benvenuto è stato rimosso
+              Il popup verrà mostrato solo al refresh della pagina */}
           <button
-            className="btn-show-welcome"
-            title="Mostra benvenuto"
-            onClick={() => window.dispatchEvent(new Event('openWelcome'))}
+            className="btn-levelup"
+            onClick={() => {
+              try {
+                window.dispatchEvent(new Event('openWelcome'))
+              } catch {
+                // ignore
+              }
+            }}
           >
-            Benvenuto
+            Level Up!
           </button>
-          <button className="btn-levelup">Level Up!</button>
         </div>
 
       </nav>

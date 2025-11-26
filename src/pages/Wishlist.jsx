@@ -25,7 +25,7 @@ function Wishlist() {
       const cartData = await cartAPI.get();
       setCart(cartData);
     } catch (error) {
-      logError("Errore caricamento carrello", error);
+      logError("Errore caricamento carretto", error);
     }
   };
 
@@ -61,8 +61,8 @@ function Wishlist() {
       // notifica centralizzata per mostrare il toast laterale
       emitCartAction('add', { id: product.id, name: product.name });
     } catch (error) {
-      toast.error("Errore nell'aggiunta al carrello");
-      logError('Errore aggiunta wishlist->carrello', error);
+      toast.error("Errore nell'aggiunta al carretto");
+      logError('Errore aggiunta wishlist->carretto', error);
     }
   };
 
@@ -129,8 +129,8 @@ function Wishlist() {
     if (wishlistItems.length === 0) return;
     try {
       const result = await Swal.fire({
-        title: `Aggiungere ${wishlistItems.length} prodotti al carrello?`,
-        text: 'Questa azione aggiungerà tutti i prodotti presenti nella wishlist al carrello.',
+        title: `Aggiungere ${wishlistItems.length} prodotti al carretto?`,
+        text: 'Questa azione aggiungerà tutti i prodotti presenti nella wishlist al carretto.',
         icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Aggiungi tutti',
@@ -165,7 +165,7 @@ function Wishlist() {
         html: `
           <div class="swal-check-wrap">
             <div class="swal-check-icon" aria-hidden="true">✓</div>
-            <div class="swal-check-label">Prodotti aggiunti al carrello</div>
+            <div class="swal-check-label">Prodotti aggiunti al carretto</div>
           </div>
         `,
         timer: 1400,
@@ -177,7 +177,7 @@ function Wishlist() {
         }
       });
     } catch (error) {
-      toast.error("Errore durante l'aggiunta dei prodotti");
+      toast.error("Errore durante l'aggiunta dei prodotti al carretto");
       logError('Errore moveAllToCart', error);
     }
   };
@@ -193,7 +193,7 @@ function Wishlist() {
       } catch (err) { void err; }
     } catch (error) {
       logError("Errore nell'aumentare la quantità", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -212,7 +212,7 @@ function Wishlist() {
       emitCartUpdate();
     } catch (error) {
       logError("Errore nel diminuire la quantità", error);
-      toast.error("Errore nell'aggiornamento del carrello");
+      toast.error("Errore nell'aggiornamento del carretto");
     }
   };
 
@@ -233,7 +233,7 @@ function Wishlist() {
           {wishlistItems.length > 0 && (
             <div className="wishlist-header-buttons">
               <button className="btn-clear-wishlist" onClick={handleClearWishlist}>Svuota Wishlist</button>
-              <button className="btn-move-all" onClick={handleMoveAllToCart}>Aggiungi tutto al carrello</button>
+              <button className="btn-move-all" onClick={handleMoveAllToCart}>Aggiungi tutto al carretto</button>
             </div>
           )}
         </div>
