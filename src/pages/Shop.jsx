@@ -493,13 +493,13 @@ const Shop = ({ defaultTab = "shop" }) => {
     <div className="shop-ui-container">
 
       <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-        <div className="logo-box">
+        {/* <div className="logo-box">
           <div className="icon"></div>
           <h1 className="title">
             MyPocket<span>Quest</span>
           </h1>
           <p className="subtitle">Next Level: Real Life</p>
-        </div>
+        </div> */}
 
         <div className="menu">
           <div className="sidebar-search" style={{ margin: '18px 0' }}>

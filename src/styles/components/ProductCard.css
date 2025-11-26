@@ -834,6 +834,20 @@ html body .content .products-grid .product-card {
     min-height: 140px;
 }
 
+/* Ensure list-mode cards take full width of the content/panel area */
+.products-list .product-card,
+.product-card--list {
+    width: 100% !important;
+    max-width: none !important;
+    box-sizing: border-box;
+}
+
+/* When the products list is inside a content/panel with padding, make sure
+   the card respects padding but fills available width */
+.content .products-list .product-card {
+    width: 100% !important;
+}
+
 /* Disable hover border accent for list items so the border remains "fisso" */
 
 
@@ -921,5 +935,56 @@ html body .content .products-grid .product-card {
     .product-card__list-left .product-card__image {
         width: 100px;
         height: 100px;
+    }
+}
+
+/* -----------------------------------------------------------------
+   Compact / Grid responsive adjustments
+   Keep base styles desktop-first above; move small-screen overrides
+   into these media queries so responsive rules don't leak into base
+   ----------------------------------------------------------------- */
+@media (max-width: 900px) {
+    /* Reduce compact layout image and right-column width on narrow screens */
+    .product-card__compact-layout {
+        grid-template-columns: 100px 1fr 140px;
+        gap: 12px;
+    }
+
+    .compact-left .compact-image,
+    .product-card--compact .product-card__image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .product-card--compact .product-card__actions {
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Stack compact layout vertically on very small screens */
+    .product-card__compact-layout {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        gap: 10px;
+    }
+
+    .compact-left,
+    .compact-center,
+    .compact-right {
+        width: 100%;
+        display: block;
+    }
+
+    .product-card--compact {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .product-card--compact .product-card__actions {
+        display: flex;
+        justify-content: flex-start;
+        gap: 8px;
+        min-width: auto;
     }
 }

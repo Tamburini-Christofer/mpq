@@ -274,8 +274,11 @@
   gap: 25px;
   /* Spazio ridotto per look più compatto */
   height: 100vh;
-  top: auto;
+  /* Desktop placement: show as an overlay on the right side */
+  top: 88px; /* below the top nav / view-controls */
+  right: 79%;
   left: auto;
+  z-index: 900;
   box-shadow: 6px 0 0 var(--pixel-border);
   /* Ombra Hard sulla destra */
   animation: fadeFilters 0.25s ease;
@@ -470,6 +473,13 @@
   height: 40px;
   text-transform: uppercase;
   box-shadow: 2px 2px 0 var(--pixel-border);
+}
+
+/* By default hide the hamburger control on desktop; it's enabled only
+   inside the mobile media query below. This prevents the hamburger from
+   intercepting clicks intended for the Filters button on large screens. */
+.hamburger-btn {
+  display: none;
 }
 
 /* todo: Effetto hover sui pulsanti visualizzazione (sollevamento) */
@@ -1080,6 +1090,7 @@
     padding-top: 40px;
   }
 
+
   /* Support older class name used by FilterSidebar component */
   .filters-panel,
   .filters-sidebar {
@@ -1240,6 +1251,7 @@
     justify-content: center; /* keep entire grid centered horizontally */
     scrollbar-gutter: stable both-edges; /* reduce layout shift when scrollbar appears */
   }
+}
 .no-cards-page {
   padding: 60px 40px;
   min-height: calc(60vh - 40px);
