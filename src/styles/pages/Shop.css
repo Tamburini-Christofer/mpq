@@ -1248,7 +1248,7 @@
 @media (min-width: 0px) {
   .products-grid {
     align-content: start; /* keep items from centering vertically */
-    justify-content: center; /* keep entire grid centered horizontally */
+    justify-content: stretch; /* allow grid items to fill available width on small screens */
     scrollbar-gutter: stable both-edges; /* reduce layout shift when scrollbar appears */
   }
 }

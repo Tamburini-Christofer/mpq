@@ -42,12 +42,8 @@
     box-shadow: 5px 5px 0px var(--pixel-border); /* Ombra Hard */
 }
 
-/* --- Forza le dimensioni originali nella griglia principale (Home) --- */
-.products-grid .product-card,
-.content .products-grid .product-card {
-    width: 250px !important;
-    min-height: 270px !important;
-}
+/* Note: Avoid forcing fixed widths here — grid controls column sizing.
+   Home-specific fixed card sizes are handled in `HomePage.css` when needed. */
 
 /* Lista verticali (es. pagine list) mantengono il comportamento a piena larghezza */
 .products-list .product-card {
@@ -132,11 +128,7 @@
 
 /* Quando la card è all'interno del carosello a scorrimento, adatta la larghezza
    al contenitore calcolato dal carosello (override della width fissa). */
-.carousel-list > .product-card {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-}
+/* carousel child sizing removed per request */
 
 /* Hover card */
 .product-card:hover {
@@ -641,14 +633,13 @@
 
 .products-grid {
     display: grid;
-    /* create as many 250px columns as fit, center the grid in the container */
-    grid-template-columns: repeat(auto-fit, 250px);
-    justify-content: center;
-    justify-items: center;
+    /* responsive columns: each column is at least 200px and grows to fill available space */
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
     padding: 12px 0;
-    /* Keep row heights predictable to avoid reflow when items change */
-    grid-auto-rows: minmax(1px, auto);
+    width: 100%;
+    box-sizing: border-box;
+    align-items: start;
 }
 
 /* Ensure individual cards don't cause big vertical reflows */
@@ -808,11 +799,8 @@
    principale (Home) tornino a 250x270 anche se altre regole vengono
    caricate successivamente o con !important differenti.
    ------------------------------------------------------------------ */
-html body .products-grid .product-card,
-html body .content .products-grid .product-card {
-    width: 250px !important;
-    min-height: 270px !important;
-}
+/* Home-specific fixed card sizes are handled in HomePage.css to avoid
+   forcing a fixed-width across the entire app. */
 
 /* ------------------------------------------
    LIST LAYOUT (product-card--list)

@@ -91,4 +91,56 @@
   --z-modal: 1000;
   --z-notification: 2000;
   --z-tooltip: 3000;
+  /* Responsive breakpoints */
+  --bp-mobile: 480px;
+  --bp-mobile-large: 640px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-desktop-wide: 1280px;
+
+  /* Container widths */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+}
+
+/* Utility responsive helpers */
+@media (max-width: 480px) {
+  :root {
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --font-lg: 1.15rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  :root {
+    --spacing-sm: 9px;
+    --spacing-md: 13px;
+  }
+}
+
+/* Utility classes */
+.container {
+  width: 100%;
+  max-width: var(--container-xl);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-md);
+  padding-right: var(--spacing-md);
+}
+
+.img-responsive {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.hide-mobile { display: block; }
+.show-mobile { display: none; }
+@media (max-width: 768px) {
+  .hide-mobile { display: none !important; }
+  .show-mobile { display: block !important; }
 }

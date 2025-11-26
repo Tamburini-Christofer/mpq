@@ -201,7 +201,7 @@
 /* Container Scrollabile */
 .cards-list {
     display: flex;
-    gap: 25px;
+    gap: 85px;
     overflow-x: auto;
     padding: 30px 10px; /* Padding verticale per le ombre */
     margin: 0;
@@ -218,12 +218,15 @@
 
 /* --- CARD PRODOTTO (Stile Unificato) --- */
 .card-placeholder {
-    width: 260px; /* Larghezza aumentata per stile blocky */
-    min-height: 400px;
+    /* Responsive sizing: allow cards to scale between a sensible min and max
+       keep visual weight on desktop but be compact on small screens */
+    width: clamp(180px, 22vw, 260px);
+    min-height: clamp(260px, 35vh, 400px);
+    max-width: 100%;
+    flex: 0 0 auto; /* ensure horizontal scroller cards keep their size */
     background: #1c1c1c;
     border-radius: 0; /* Squadrato */
     overflow: visible;
-    flex-shrink: 0;
     transition: all 0.1s;
     cursor: pointer;
     border: 3px solid var(--pixel-border);
@@ -432,8 +435,9 @@
 
     /* Card Mobile */
     .card-placeholder {
-        width: 180px;
-        min-height: 320px;
+        /* On small phones, make cards slightly smaller but keep clamp as fallback */
+        width: clamp(150px, 60vw, 200px);
+        min-height: 300px;
     }
     .card-image { height: 140px !important; }
     .card-info { padding: 10px; }
@@ -467,13 +471,13 @@
 @media screen and (min-width: 769px) and (max-width: 1024px) {
     .homepage { padding: 0 30px; }
     .hero-title { font-size: 6rem; }
-    .card-placeholder { width: 220px; }
+    .card-placeholder { width: clamp(180px, 28vw, 220px); }
     .scroll-btn { opacity: 1; visibility: visible; }
 }
 
-/* Forza le dimensioni delle product-card nella homepage (caroselli)
-   per garantire che Home mostri le card a 250x270 come nel commit precedente. */
+/* Allow carousel cards to scale but keep a desktop-friendly maximum */
 .homepage .cards-list .product-card.product-card--carousel {
-    width: 250px !important;
-    min-height: 270px !important;
+    width: clamp(200px, 20vw, 250px);
+    min-height: 240px;
+    flex: 0 0 auto;
 }

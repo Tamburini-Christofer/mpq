@@ -25,6 +25,7 @@ function NavBar() {
 
   const openTimer = useRef(null);
   const closeTimer = useRef(null);
+  const cartWrapperRef = useRef(null);
 
   const FALLBACK_IMAGE = "/fallback-product.png";
 
@@ -108,6 +109,26 @@ function NavBar() {
   const handleHoverLeave = () => {
     closeCartPreview();
   };
+
+  // Toggle cart preview on click (mobile friendly) and close on outside click / Escape
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (!cartWrapperRef.current) return;
+      if (cartWrapperRef.current.contains(e.target)) return;
+      if (showCartPreview) setShowCartPreview(false);
+    };
+
+    const onKey = (e) => {
+      if (e.key === 'Escape' && showCartPreview) setShowCartPreview(false);
+    };
+
+    document.addEventListener('click', onDocClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('click', onDocClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [showCartPreview]);
 
   const increaseQty = async (id) => {
     setLoadingItemId(id);
@@ -269,10 +290,16 @@ function NavBar() {
 
           <div
             className="cart-wrapper"
+            ref={cartWrapperRef}
             onMouseEnter={handleHoverOpen}
             onMouseLeave={handleHoverLeave}
           >
-            <button className="cart-icon-link">
+            <button
+              className="cart-icon-link"
+              aria-haspopup="true"
+              aria-expanded={showCartPreview}
+              onClick={(e) => { e.stopPropagation(); setShowCartPreview((s) => !s); }}
+            >
               <span className="cart-icon">
                 <FaShoppingCart />
                 {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
@@ -292,11 +319,14 @@ function NavBar() {
                         key={item.id}
                         className={`cart-preview-item fade-in ${item.removing ? "removing" : ""}`}
                       >
-                        <img
-                          src={item.image || FALLBACK_IMAGE}
-                          onError={(e) => e.target.src = FALLBACK_IMAGE}
-                          alt={item.name}
-                        />
+                                    <img
+                                      src={item.image || FALLBACK_IMAGE}
+                                      onError={(e) => e.target.src = FALLBACK_IMAGE}
+                                      alt={item.name}
+                                      loading="lazy"
+                                      decoding="async"
+                                      className="img-responsive"
+                                    />
                         <div className="info">
                           <span>{item.name}</span>
                           <div className="qty-controls">

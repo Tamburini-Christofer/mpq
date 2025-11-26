@@ -31,6 +31,7 @@ function Details() {
   const [productsData, setProductsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
+  const [showRelatedNav, setShowRelatedNav] = useState(false);
 
   const [quantity, setQuantity] = useState(1);
   const [animClass, setAnimClass] = useState("");
@@ -210,19 +211,9 @@ function Details() {
     const getGap = () => parseInt(getComputedStyle(container).gap) || 12;
 
     const updateScrollPadding = () => {
-      const first = container.querySelector('.product-card');
-      const cardWidth = first ? first.offsetWidth : Math.floor(container.clientWidth / 2);
-      const pad = Math.max(0, Math.floor((container.clientWidth - cardWidth) / 2));
-      // add a small visual buffer to avoid clipping of badges/shadows on edges
-      const buffer = 40; // px, tweakable (increased to avoid clipping)
-      const padWithBuffer = pad + buffer;
-      // scrollPadding accepts css logical property names in JS as scrollPaddingLeft/Right
-      container.style.scrollPaddingLeft = `${padWithBuffer}px`;
-      container.style.scrollPaddingRight = `${padWithBuffer}px`;
-      // set inline padding so first/last elements are fully visible (no clipping)
-      container.style.paddingLeft = `${padWithBuffer}px`;
-      container.style.paddingRight = `${padWithBuffer}px`;
-      container.style.boxSizing = 'border-box';
+      // previously we set inline scroll/padding to center items; removed to avoid
+      // excessive inline styles. Keep notes here in case we reintroduce a
+      // programmatic centering approach in the future.
     };
 
     updateScrollPadding();
@@ -333,7 +324,7 @@ function Details() {
       <div className="product-page">
         <div className="product-gallery">
           <div className="product-main-image">
-            <img src={product.image} alt={product.name} />
+            <img src={product.image} alt={product.name} loading="lazy" className="img-responsive" decoding="async" />
           </div>
           {relatedProducts.length > 0 && (
             <section className="quests-section related-section-wrapper carousel-under-image">
@@ -440,7 +431,6 @@ function Details() {
           </div>
           {relatedProducts.length > 0 && (
             <section className="quests-section related-section-wrapper">
-              <h2 className="section-title">Prodotti correlati</h2>
               <button
                 className="scroll-btn scroll-left"
                 type="button"
@@ -450,27 +440,6 @@ function Details() {
               >
                 &lt;
               </button>
-              <div
-                ref={relatedRef}
-                className="cards-list related-cards-list"
-                onTouchStart={(e) => handleTouchStart(e, relatedRef)}
-                onTouchMove={(e) => handleTouchMove(e, relatedRef)}
-                onTouchEnd={() => handleTouchEnd(relatedRef)}
-              >
-                {relatedProducts.map((prod, index) => (
-                  <ProductCard
-                    key={index}
-                    product={prod}
-                    badge="related"
-                    variant="carousel"
-                    cart={cart}
-                    onViewDetails={(slug) => handleViewDetails(slug)}
-                    onAddToCart={() => handleAddToCartFromCarousel(prod)}
-                    onIncrease={handleIncrease}
-                    onDecrease={handleDecrease}
-                  />
-                ))}
-              </div>
               <button
                 className="scroll-btn scroll-right"
                 type="button"

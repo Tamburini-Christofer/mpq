@@ -649,18 +649,7 @@ body {
     font-size: 16px;
 }
 
-.related-cards-list {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 6px;
-    width: 100%;
-    /* Carousel behavior: horizontal scroll when overflow */
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    /* mobile smoothness hint removed for compatibility */
-    flex-wrap: nowrap;
-}
+.related-cards-list { /* removed per request */ }
 
 .related-section-wrapper {
     display: flex;
@@ -682,34 +671,16 @@ body {
     justify-content: center; /* centra il carosello sotto il titolo */
 }
 
-.carousel-list {
-    display: flex;
-    gap: 8px; /* gap ulteriormente ridotto per più densità */
-    padding: 12px 6px;
-    overflow-x: auto;
-    /* Manteniamo lo snap per un'esperienza di scorrimento fluida */
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 6px; /* evita che il primo elemento tocchi il bordo */
-    align-items: center; /* centra verticalmente le card nel carosello */
-}
+.carousel-list { /* removed per request */ }
+.related-cards-list { /* removed per request */ }
 
 /* Assicura che il carosello sia centrato rispetto al titolo/testo
    e che non si allarghi oltre la colonna sinistra */
-.carousel-under-image .carousel-list {
-    margin: 0 auto;
-    width: 100%;
-    max-width: calc(100% - 182px);
-}
+.related-cards-list { /* removed per request */ }
 
 /* Mostra esattamente 2 elementi visibili nel viewport del carosello */
-.carousel-list > * {
-    scroll-snap-align: center; /* snap al centro per mettere la card visibile al centro */
-    /* Variante compatta precedente: mostra più card (due visibili) usando
-       percentuali. Questa è la versione precedente alle ultime modifiche. */
-    flex: 0 0 40%;
-    max-width: 40%;
-    box-sizing: border-box;
-}
+.carousel-list > * { /* removed per request */ }
+.related-cards-list > * { /* removed per request */ }
 
 /* Scroll buttons styling (small, unobtrusive near carousel) */
 .carousel-under-image .scroll-btn {

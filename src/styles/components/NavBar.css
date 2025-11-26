@@ -725,6 +725,33 @@
     
 }
 
+/* Make mini-cart responsive and usable on small screens */
+@media (max-width: 900px) {
+    .cart-preview {
+        position: fixed;
+        top: 64px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+        max-width: 540px;
+        border-radius: 6px;
+        box-shadow: 8px 8px 0 rgba(0,0,0,0.6);
+        transform: none !important;
+        opacity: 1 !important;
+        animation: none !important;
+        z-index: 1300;
+    }
+
+    /* Ensure the cart wrapper is above overlays */
+    .cart-wrapper { z-index: 1400; }
+
+    /* Make cart preview list scrollable within viewport */
+    .cart-preview { max-height: calc(100vh - 120px); overflow-y: auto; }
+
+    /* Slightly reduce image size inside preview */
+    .cart-preview-item img { width: 56px; height: 56px; }
+}
+
 /* Schermi Mobile Extra Small (Fino a 480px) */
 @media (max-width: 480px) {
 
