@@ -42,6 +42,102 @@
     box-shadow: 5px 5px 0px var(--pixel-border); /* Ombra Hard */
 }
 
+/* --- Forza le dimensioni originali nella griglia principale (Home) --- */
+.products-grid .product-card,
+.content .products-grid .product-card {
+    width: 250px !important;
+    min-height: 270px !important;
+}
+
+/* Lista verticali (es. pagine list) mantengono il comportamento a piena larghezza */
+.products-list .product-card {
+    width: 100% !important;
+    min-height: 120px !important;
+}
+
+/* Variante compatta per il carosello: dimensioni ridotte */
+/* Variante carousel (full-size) - Home usa questa variante per mostrare
+   prodotti con le dimensioni standard 250x270. */
+.product-card--carousel {
+    width: 250px; /* visual width; carousels possono comunque impostare lo slot */
+    min-height: 270px;
+    box-shadow: 5px 5px 0px var(--pixel-border);
+    border-width: 3px;
+}
+
+.product-card--carousel .product-card__image {
+    height: 180px;
+}
+
+.product-card--carousel .product-card__info {
+    padding: 12px;
+}
+
+.product-card--carousel .product-card__title {
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.product-card--carousel .product-card__price--discount,
+.product-card--carousel .product-card__price {
+    font-size: 1.2rem !important;
+}
+
+.product-card--carousel .product-card__btn {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+}
+
+.product-card--carousel .product-card__image,
+.product-card--carousel .product-card__info {
+    border-width: 2px;
+}
+
+/* Variante compatta per il carosello (usata nella pagina Details per i
+   prodotti correlati). Mostra card più piccole per densità visiva. */
+.product-card--carousel-compact {
+    width: 100% !important; /* riempie lo slot del carosello */
+    min-height: 120px;
+    box-shadow: 2px 2px 0px var(--pixel-border);
+    border-width: 1px;
+}
+
+.product-card--carousel-compact .product-card__image {
+    height: 72px;
+}
+
+.product-card--carousel-compact .product-card__info {
+    padding: 4px;
+}
+
+.product-card--carousel-compact .product-card__title {
+    font-size: 0.78rem;
+    line-height: 1.05;
+}
+
+.product-card--carousel-compact .product-card__price--discount,
+.product-card--carousel-compact .product-card__price {
+    font-size: 0.95rem !important;
+}
+
+.product-card--carousel-compact .product-card__btn {
+    padding: 4px 6px;
+    font-size: 0.68rem;
+}
+
+.product-card--carousel-compact .product-card__image,
+.product-card--carousel-compact .product-card__info {
+    border-width: 2px;
+}
+
+/* Quando la card è all'interno del carosello a scorrimento, adatta la larghezza
+   al contenitore calcolato dal carosello (override della width fissa). */
+.carousel-list > .product-card {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
 /* Hover card */
 .product-card:hover {
     transform: translate(-2px, -2px);
@@ -232,20 +328,30 @@
     width: 100%;
     display: flex;
     align-items: center;
-    background: #111;
-    border: 2px solid var(--pixel-gold);
+    /* Gradient leggero per profondità, coerente con tema scuro */
+    background: linear-gradient(180deg, #0f0d12 0%, #141218 100%);
+    /* Pixel/neo-brutalist: bordo principale scuro con accento oro sul lato sinistro */
+    border: 3px solid var(--pixel-border);
+    border-left: 6px solid var(--pixel-gold);
     border-radius: 0;
-    padding: 15px;
-    gap: 20px;
+    padding: 16px;
+    gap: 18px;
     min-height: 120px;
-    box-shadow: 5px 5px 0px var(--pixel-border);
-    margin-bottom: 15px;
+    box-shadow: 6px 6px 0px #000;
+    margin-bottom: 14px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.product-card--compact:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 10px 10px 0px var(--pixel-gold);
+    border-color: var(--pixel-gold);
 }
 
 .product-card--compact.expanded {
-    background: #181622;
+    background: linear-gradient(180deg, #16131a 0%, #1a1720 100%);
     border: 3px solid var(--pixel-purple);
-    box-shadow: 8px 8px 0px var(--pixel-border);
+    box-shadow: 10px 10px 0px var(--pixel-border);
 }
 
 /* Immagine Compact */
@@ -253,7 +359,9 @@
     width: 100px;
     height: 100px;
     border-radius: 0;
-    border: 2px solid var(--pixel-border);
+    border: 3px solid var(--pixel-border);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.9);
+    background: linear-gradient(180deg, rgba(0,0,0,0.25), transparent);
 }
 .product-card--compact .product-card__image.expanded {
     width: 140px;
@@ -274,14 +382,14 @@
 /* Compact layout: three columns (left image, center specs, right price/actions) */
 .product-card__compact-layout {
     display: grid;
-    grid-template-columns: 120px 1fr 220px;
-    gap: 18px;
+    grid-template-columns: 110px 1fr 200px;
+    gap: 16px;
     align-items: start;
     width: 100%;
 }
 
 .compact-left { display: flex; align-items: center; justify-content: center; }
-.compact-image { width: 110px; height: 110px; object-fit: cover; border: 2px solid var(--pixel-border); }
+.compact-image { width: 110px; height: 110px; object-fit: cover; border: 3px solid var(--pixel-border); box-shadow: 2px 2px 0 #000; }
 
 .compact-center { display:flex; flex-direction: column; gap:8px; }
 .compact-title-row { display:flex; align-items:flex-start; gap:12px; }
@@ -297,7 +405,7 @@
 .compact-right { display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
 .price-block { text-align:right; }
 .price-old { text-decoration: line-through; color:#999; font-size:0.95rem; }
-.price-new { color: var(--pixel-gold); font-size:1.4rem; font-weight:900; }
+.price-new { color: var(--pixel-gold); font-size:1.4rem; font-weight:900; text-shadow: 1px 1px 0 #000; }
 .stock-indicator { margin-top:6px; font-size:0.85rem; }
 .stock-indicator.in-stock { color:#16a34a; }
 .stock-indicator.out-of-stock { color:#ef4444; }
@@ -380,6 +488,8 @@
     width: 100%;
     padding: 10px 0;
     box-shadow: 3px 3px 0 #000;
+    border-radius: 0;
+    font-weight: 900;
 }
 
 /* Controlli quantità (Stile Arcade) */
@@ -635,7 +745,15 @@
 .view-controls {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding: 10px 12px;
+    background: linear-gradient(180deg, rgba(20,18,24,0.6), rgba(16,14,20,0.4));
+    border: 3px solid var(--pixel-border);
+    border-left: 6px solid var(--pixel-gold);
+    box-shadow: 4px 4px 0 #000;
+    padding: 22px;
 }
 
 .view-btn {
@@ -653,4 +771,155 @@
     border-color: var(--pixel-gold);
     color: var(--pixel-gold);
     box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+/* Messaggio quando non ci sono card dopo i filtri */
+.no-cards {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+.no-cards-inner {
+    max-width: 720px;
+    background: linear-gradient(180deg, rgba(28,26,36,0.98), rgba(20,18,24,0.98));
+    border: 3px solid var(--pixel-border);
+    box-shadow: 8px 8px 0 var(--pixel-border);
+    padding: 28px 30px;
+    text-align: center;
+}
+.no-cards-inner h3 {
+    color: var(--pixel-gold);
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    font-family: "Cinzel", serif;
+    text-transform: uppercase;
+}
+.no-cards-inner p {
+    color: #d1d1d1;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------
+   FORZA DIMENSIONI HOME GRID
+   Regola a specificità maggiore per garantire che le card nella griglia
+   principale (Home) tornino a 250x270 anche se altre regole vengono
+   caricate successivamente o con !important differenti.
+   ------------------------------------------------------------------ */
+html body .products-grid .product-card,
+html body .content .products-grid .product-card {
+    width: 250px !important;
+    min-height: 270px !important;
+}
+
+/* ------------------------------------------
+   LIST LAYOUT (product-card--list)
+   Photo left, title/category under image,
+   description + price + actions on the right
+   ------------------------------------------ */
+
+/* List layout: fixed border and actions aligned to the bottom, parallel to the photo */
+.product-card--list {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 12px;
+    background: linear-gradient(180deg, #0f0d12 0%, #141218 100%);
+    /* bordo fisso, non cambia al hover */
+    border: 3px solid var(--pixel-border);
+    border: 2px solid var(--pixel-gold);
+    box-shadow: 6px 6px 0 #000;
+    min-height: 140px;
+}
+
+/* Disable hover border accent for list items so the border remains "fisso" */
+
+
+.product-card__list-left {
+    flex: 0 0 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Assicurati che il contenuto resti in cima, non in fondo */
+    justify-content: flex-start;
+    gap: 8px;
+}
+
+.product-card__list-left .product-card__image {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 3px solid var(--pixel-border);
+    box-shadow: 3px 3px 0 #000;
+}
+
+.product-card__left-meta {
+    text-align: center;
+}
+
+.product-card__left-meta .product-card__title {
+    font-size: 0.95rem;
+    color: var(--pixel-gold);
+    line-height: 1.1;
+    margin: 0;
+}
+
+.product-card__left-meta .product-card__category {
+    font-size: 0.75rem;
+    color: #ddd;
+    margin-top: 4px;
+}
+
+/* Right column: stretch vertically and place elements with space-between so
+   the actions stay at the bottom (parallel to the photo). */
+.product-card__list-right {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    /* Metti il contenuto principale in alto e le azioni in fondo */
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 140px; /* garantisce spazio verticale per posizionare le azioni in basso */
+}
+
+.product-card__list-right .product-card__desc {
+    color: #d1d1d1;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.product-card__list-right .product-card__actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end; /* elementi orizzontali a destra */
+    align-self: flex-end; /* posiziona il blocco azioni in fondo a destra */
+    margin: 0; /* azioni aderenti al fondo della colonna destra */
+}
+
+/* Se le azioni sono markup a lista (<li>), rendile orizzontali e con spacing */
+.product-card__list-right .product-card__actions li {
+    list-style: none;
+    display: inline-flex;
+    margin-left: 8px;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 700px) {
+    .product-card--list {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .product-card__list-left {
+        flex: 0 0 auto;
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+    .product-card__list-left .product-card__image {
+        width: 100px;
+        height: 100px;
+    }
 }

@@ -35,7 +35,7 @@ const Layout = () => {
             const detail = e?.detail || {};
             const message = detail.message || 'Operazione completata';
             const type = detail.type || 'info';
-            const duration = detail.duration || 3000;
+            const duration = detail.duration || 4000;
             setNotification({ message, type, duration });
         };
         window.addEventListener('showNotification', handler);
@@ -48,9 +48,9 @@ const Layout = () => {
             const product = d.product || {};
             const name = product.name || product || 'Prodotto';
             if (action === 'add') {
-                toast.success(`"${name}" aggiunto al carrello!`);
+                toast.success(`"${name}" aggiunto al carretto!`);
             } else if (action === 'remove') {
-                toast.error(`"${name}" rimosso dal carrello`);
+                toast.error(`"${name}" rimosso dal carretto`);
             }
         };
             window.addEventListener('cartAction', cartHandler);
@@ -67,10 +67,25 @@ const Layout = () => {
             const params = new URLSearchParams(window.location.search);
             const ok = params.get('checkout');
             if (ok === 'success') {
+                // Remove checkout params from URL immediately so refresh won't retrigger the overlay
+                try {
+                    params.delete('checkout');
+                    params.delete('session_id');
+                    const base = window.location.pathname;
+                    const newSearch = params.toString();
+                    const newUrl = newSearch ? `${base}?${newSearch}` : base;
+                    window.history.replaceState({}, document.title, newUrl);
+                } catch (e) {
+                    console.warn('Could not clean URL params after checkout success', e);
+                }
+
                 // show custom overlay with countdown then run cleanup
                 try {
-                    setCheckoutCountdown(6);
-                    setShowCheckoutSuccess(true);
+                    // Avoid synchronous setState inside effect to prevent cascading renders
+                    setTimeout(() => {
+                        setCheckoutCountdown(6);
+                        setShowCheckoutSuccess(true);
+                    }, 0);
                 } catch (e) { console.warn('Could not set checkout overlay', e) }
 
                 let intervalId = null;
@@ -124,7 +139,6 @@ const Layout = () => {
                         <div className="checkout-success-card">
                             <div className="checkout-success-title">Pagamento avvenuto</div>
                             <div className="checkout-success-msg">Grazie! Il pagamento è andato a buon fine. Riceverai a breve una email con il riepilogo dell'ordine.</div>
-                            <div className="checkout-success-timer">L'overlay si chiuderà automaticamente in {checkoutCountdown}s</div>
                         </div>
                     </div>
                 )}

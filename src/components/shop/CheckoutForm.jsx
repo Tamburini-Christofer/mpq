@@ -11,7 +11,7 @@ import "../../styles/components/CheckoutForm.css";
 /**
  * @param {function} onClose        - chiude l'overlay
  * @param {number}   totalAmount    - totale ordine (prodotti + spedizione)
- * @param {array}    cartItems      - prodotti nel carrello
+ * @param {array}    cartItems      - prodotti nel carretto
  * @param {number}   shippingCost   - costo spedizione (default 4.99)
  * @param {boolean}  isFreeShipping - true se spedizione gratis
  */
@@ -368,7 +368,7 @@ export default function CheckoutForm({
                 <div className="summary-list">
                   {safeCartItems.length === 0 && (
                     <p className="summary-empty">
-                      Nessun prodotto nel carrello.
+                      Nessun prodotto nel carretto.
                     </p>
                   )}
 
@@ -448,17 +448,6 @@ export default function CheckoutForm({
                   type="button"
                   className="cancel-order-btn danger"
                   onClick={onCancelOrder}
-                  style={{
-                    background: 'linear-gradient(135deg, #ff3b3b, #c80000)',
-                    color: 'white',
-                    border: 'none',
-                    fontWeight: 700,
-                    fontFamily: 'Cinzel, serif',
-                    padding: '14px 26px',
-                    borderRadius: '12px',
-                    boxShadow: '0 8px 25px rgba(255, 59, 59, 0.25)',
-                    transition: '0.25s',
-                  }}
                 >
               
                   Annulla e Cancella Ordine

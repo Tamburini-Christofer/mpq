@@ -2,6 +2,7 @@ import '../../styles/components/NavBar.css';
 import Logo from '../../img/Logo_no_bg.png';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
+import Swal from 'sweetalert2';
 import { useState, useEffect, useRef } from 'react';
 import { cartAPI, emitCartUpdate } from '../../services/api';
 import { logAction } from '../../utils/logger';
@@ -75,7 +76,8 @@ function NavBar() {
       setCartCount(totalItems);
       setCartItems(cart);
       setCartTotal(totalPrice.toFixed(2));
-    } catch (error) {
+    } catch (err) {
+      console.error('Errore nel recuperare dati carretto:', err);
       setCartCount(0);
       setCartItems([]);
       setCartTotal(0);
@@ -117,7 +119,7 @@ function NavBar() {
         try {
           window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'add', product: { id, name } } }));
           logAction(ACTIONS.CART_ADD_NAVBAR, { id, name });
-        } catch {}
+        } catch (err) { void err; }
     } catch (error) {
       console.error("Errore nell'aumentare la quantità:", error);
     } finally {
@@ -138,7 +140,7 @@ function NavBar() {
         try {
           window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'remove', product: { id, name } } }));
           logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
-        } catch {}
+        } catch (err) { void err; }
       }
     } catch (error) {
       console.error("Errore nel diminuire la quantità:", error);
@@ -164,9 +166,66 @@ function NavBar() {
         logAction(ACTIONS.CART_REMOVE_NAVBAR, { id, name });
         } catch {
         // fallback: show toast directly if dispatch fails
-        toast.error(`"${name}" rimosso dal carrello`);
+        toast.error(`"${name}" rimosso dal carretto`);
       }
     }, 250);
+  };
+
+  const clearCartFromNav = async () => {
+    try {
+      const result = await Swal.fire({
+        title: 'Svuotare il carretto?',
+        text: 'Questa azione rimuoverà tutti i prodotti presenti nel carretto.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Svuota carretto',
+        cancelButtonText: 'Annulla',
+        reverseButtons: true,
+        focusCancel: true,
+        customClass: {
+          popup: 'swal-dark-popup',
+          title: 'swal-dark-title',
+          content: 'swal-dark-content',
+          confirmButton: 'swal-dark-confirm',
+          cancelButton: 'swal-dark-cancel'
+        }
+      });
+
+      if (!result.isConfirmed) return;
+
+      await cartAPI.clear();
+      emitCartUpdate();
+      await updateCartData();
+
+      // centralized event so other components can react
+        try {
+        window.dispatchEvent(new CustomEvent('cartAction', { detail: { action: 'clear' } }));
+        logAction(ACTIONS.CART_CLEAR_NAVBAR, {});
+      } catch {
+        // fallback
+        toast.success('Carretto svuotato');
+      }
+
+      await Swal.fire({
+        html: `
+            <div class="swal-check-wrap">
+            <div class="swal-check-icon" aria-hidden="true">✓</div>
+            <div class="swal-check-label">Carretto svuotato</div>
+          </div>
+        `,
+        timer: 1400,
+        showConfirmButton: false,
+        customClass: { popup: 'swal-dark-popup' },
+        didOpen: (popup) => {
+          const icon = popup.querySelector('.swal-check-icon');
+          if (icon) setTimeout(() => icon.classList.add('animate'), 40);
+        }
+      });
+
+    } catch (err) {
+      console.error('Errore svuotamento carretto:', err);
+      toast.error('Errore nello svuotare il carretto');
+    }
   };
 
   const goToCheckout = () => {
@@ -176,8 +235,10 @@ function NavBar() {
     } catch {
       // ignore
     }
-    navigate("/shop/checkout");
+    navigate("/shop/cart");
   };
+
+  
 
   return (
     <>
@@ -204,6 +265,8 @@ function NavBar() {
             </span>
           </NavLink>
 
+          
+
           <div
             className="cart-wrapper"
             onMouseEnter={handleHoverOpen}
@@ -218,10 +281,10 @@ function NavBar() {
 
             {showCartPreview && (
               <div className={`cart-preview ${animateClose ? "closing" : ""}`}>
-                <h4>Carrello</h4>
+                <h4>Carretto</h4>
 
                 {cartItems.length === 0 ? (
-                  <p className="empty-cart">Il carrello è vuoto.</p>
+                  <p className="empty-cart">Il carretto è vuoto.</p>
                 ) : (
                   <ul className="cart-preview-list">
                     {cartItems.map(item => (
@@ -282,16 +345,37 @@ function NavBar() {
                   className="btn-checkout"
                   onClick={goToCheckout}
                 >
-                  Vai al Checkout
+                  Vai al Carretto
+                </button>
+
+                <button
+                  className="btn-clear-cart-preview"
+                  onClick={async (e) => { e.preventDefault(); await clearCartFromNav(); }}
+                >
+                  Svuota carretto
                 </button>
 
               </div>
             )}
           </div>
 
-          
-          <button className="btn-levelup">Level Up!</button>
+
+          {/* Il bottone di apertura manuale del popup di benvenuto è stato rimosso
+              Il popup verrà mostrato solo al refresh della pagina */}
+          <button
+            className="btn-levelup"
+            onClick={() => {
+              try {
+                window.dispatchEvent(new Event('openWelcome'))
+              } catch {
+                // ignore
+              }
+            }}
+          >
+            Level Up!
+          </button>
         </div>
+
       </nav>
     </>
   );

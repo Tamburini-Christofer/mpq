@@ -329,7 +329,7 @@
   align-items: center;
   gap: 10px;
   font-size: 15px;
-  margin: 10px 0;
+  margin: 7px 0;
 }
 
 .filter-option input[type="checkbox"] {
@@ -567,6 +567,7 @@
   cursor: pointer;
   box-shadow: 2px 2px 0 var(--pixel-border);
   transition: all 0.1s;
+  margin: 0 10px;
 }
 
 .quantity-btn:active,
@@ -1239,4 +1240,69 @@
     justify-content: center; /* keep entire grid centered horizontally */
     scrollbar-gutter: stable both-edges; /* reduce layout shift when scrollbar appears */
   }
+.no-cards-page {
+  padding: 60px 40px;
+  min-height: calc(60vh - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.no-cards-page .no-cards-inner {
+  text-align: center;
+  background: #111;
+  padding: 48px;
+  border: 4px solid var(--pixel-purple);
+  box-shadow: 8px 8px 0 var(--pixel-border);
+}
+
+.no-cards-page h1 {
+  font-size: 36px;
+  color: var(--pixel-gold);
+  margin-bottom: 12px;
+}
+
+.no-cards-page p {
+  color: #bbb;
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+/* small helper for screen-reader-only label */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* filters panel footer (reset button at bottom) */
+.filters-reset-row {
+  margin-top: 18px;
+  display: flex;
+  justify-content: stretch;
+  gap: 8px;
+}
+
+.filters-reset-row .reset-filters-btn,
+.filters-reset-row .load-more-btn {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 15px;
+  background: var(--pixel-purple);
+  color: var(--pixel-light);
+  border: 3px solid var(--pixel-border);
+  box-shadow: 4px 4px 0 var(--pixel-border);
+  cursor: pointer;
+}
+
+.filters-reset-row .reset-filters-btn:hover {
+  background: #c24343;
+  transform: translate(-1px, -1px);
 }

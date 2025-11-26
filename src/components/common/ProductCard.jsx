@@ -30,6 +30,7 @@ function ProductCard({
   qty = 0,
   showActions = true,
   onToggleWishlist,
+  listLayout = false,
 }) {
   // Configurazione badge
   const badgeConfig = {
@@ -181,7 +182,79 @@ function ProductCard({
 
   // Gestione quantità: ora delegata alle funzioni prop
 
-  // Unico wrapper per tutte le varianti
+  // Variante 'list' (usata nella vista lista dello Shop): struttura a due colonne
+  if (listLayout) {
+    return (
+      <div className={`product-card product-card--list ${cardTypeClass}`}>
+        {badgeData && (
+          <span className={`product-card__badge ${badgeData.className}`}>
+            {hasDiscount ? `-${discount}%` : badgeData.text}
+          </span>
+        )}
+
+        <button
+          className={`product-card__wishlist-btn ${isInWishlist ? "active" : ""}`}
+          onClick={(e) => { e.stopPropagation(); toggleWishlist(); }}
+          aria-pressed={isInWishlist}
+          aria-label={isInWishlist ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}
+        >
+          <span className="heart">{isInWishlist ? "♥" : "♡"}</span>
+        </button>
+
+        <div className="product-card__list-left">
+          <img
+            className="product-card__image"
+            src={product.image}
+            alt={product.name}
+            loading="lazy"
+            decoding="async"
+          />
+
+          <div className="product-card__left-meta">
+            <h3 className="product-card__title">{product.name}</h3>
+            <div className="product-card__category">{product.category || (product.category_id === 1 ? 'Film' : product.category_id === 2 ? 'Serie TV' : product.category_id === 3 ? 'Anime' : '')}</div>
+          </div>
+        </div>
+
+        <div className="product-card__list-right">
+          {hasDiscount ? (
+            <div className="product-card__price-container">
+              <span className="product-card__price--discount">{finalPrice.toFixed(2)}€</span>
+              <span className="product-card__price--original" data-original-price="true">{originalPrice.toFixed(2)}€</span>
+            </div>
+          ) : (
+            <p className="product-card__price">{originalPrice.toFixed(2)}€</p>
+          )}
+
+          <p className="product-card__desc">{product.description}</p>
+
+          <div className="product-card__actions">
+            <button
+              className="product-card__btn product-card__btn--details"
+              onClick={(e) => { e.stopPropagation(); onViewDetails && onViewDetails(product.slug || product.id); }}
+            >
+              Dettagli
+            </button>
+
+            {!qty || qty === 0 ? (
+              <button
+                className="product-card__btn product-card__btn--cart"
+                onClick={async (e) => { e.stopPropagation(); try { if (onAddToCart) await onAddToCart(product); else { await cartAPI.add(product.id, 1); emitCartUpdate(); emitCartAction('add', { id: product.id, name: product.name }); } } catch (err) { console.error(err); toast.error('Errore nell\'aggiunta al carretto'); } }}
+              >
+                Acquista
+              </button>
+            ) : (
+              <div className="product-qty-controls">
+                <button className="qty-btn" onClick={async (e) => { e.stopPropagation(); try { if (onDecrease) await onDecrease(product.id); else { await cartAPI.decrease(product.id); emitCartUpdate(); emitCartAction('remove', { id: product.id, name: product.name }); } } catch (err) { console.error(err); toast.error('Errore'); } }}>{"-"}</button>
+                <span className="qty-display">{qty}</span>
+                <button className="qty-btn" onClick={async (e) => { e.stopPropagation(); try { if (onIncrease) await onIncrease(product.id); else { await cartAPI.increase(product.id); emitCartUpdate(); emitCartAction('add', { id: product.id, name: product.name }); } } catch (err) { console.error(err); toast.error('Errore'); } }}>{"+"}</button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={`product-card product-card--${variant} ${cardTypeClass}`}
       onClick={variant === "compact" ? () => setExpanded((prev) => !prev) : undefined}
@@ -206,6 +279,8 @@ function ProductCard({
         className="product-card__image"
         src={product.image}
         alt={product.name}
+        loading="lazy"
+        decoding="async"
       />
 
       <div className="product-card__info">
@@ -276,7 +351,7 @@ function ProductCard({
                     setShowQtyControls(true);
                   } catch (err) {
                     console.error('Errore aggiunta al carrello:', err);
-                    toast.error("Errore nell'aggiunta al carrello");
+                    toast.error("Errore nell'aggiunta al carretto");
                   }
                 }}
               >
@@ -303,7 +378,7 @@ function ProductCard({
                     }
                   } catch (err) {
                     console.error('Errore nella diminuzione quantità:', err);
-                    toast.error("Errore nell'aggiornamento del carrello");
+                    toast.error("Errore nell'aggiornamento del carretto");
                   }
                 }}>
                   -
@@ -322,9 +397,9 @@ function ProductCard({
                       // centralized notification for plus action when card handles API directly
                       emitCartAction('add', { id: product.id, name: product.name });
                     }
-                  } catch (err) {
+                    } catch (err) {
                     console.error('Errore nell\'aumento quantità:', err);
-                    toast.error("Errore nell'aggiornamento del carrello");
+                    toast.error("Errore nell'aggiornamento del carretto");
                   }
                 }}>
                   +

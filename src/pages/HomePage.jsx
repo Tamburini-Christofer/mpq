@@ -206,10 +206,10 @@ function HomePage() {
             try {
                 const name = cart.find(i => i.id === productId)?.name || 'Prodotto';
                     emitCartAction('add', { id: productId, name });
-            } catch {}
+            } catch (err) { void err; }
         } catch (error) {
             console.error("Errore nell'aumentare la quantità:", error);
-            toast.error("Errore nell'aggiornamento del carrello");
+            toast.error("Errore nell'aggiornamento del carretto");
         }
     };
 
@@ -222,7 +222,7 @@ function HomePage() {
                 try {
                     const name = item?.name || 'Prodotto';
                     emitCartAction('remove', { id: productId, name });
-                } catch {}
+                } catch (err) { void err; }
             } else {
                 await cartAPI.remove(productId);
                 const name = item?.name || 'Prodotto';
@@ -231,7 +231,7 @@ function HomePage() {
             emitCartUpdate();
         } catch (error) {
             console.error("Errore nel diminuire la quantità:", error);
-            toast.error("Errore nell'aggiornamento del carrello");
+            toast.error("Errore nell'aggiornamento del carretto");
         }
     };
 
@@ -250,11 +250,56 @@ function HomePage() {
                     <button 
                         className="btn-get-started"
                         onClick={() => {
-                            document.querySelector('#prodotti')?.scrollIntoView({ 
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }}
+                                const target = document.querySelector('#prodotti');
+                                if (!target) return;
+
+                                // Calcolo altezza header (navbar) se presente
+                                const navbar = document.querySelector('.navbar');
+                                const navbarHeight = navbar ? navbar.getBoundingClientRect().height : 0;
+
+                                // Rilevo altri eventuali banner sticky (cookie, top-banner, ecc.)
+                                const stickySelectors = [
+                                    '.cookie-banner',
+                                    '.cookie-consent',
+                                    '#cookie-banner',
+                                    '.top-banner',
+                                    '.site-header',
+                                    '.fixed-banner',
+                                    '.sticky-banner'
+                                ];
+
+                                let extraStickyHeight = 0;
+                                stickySelectors.forEach(sel => {
+                                    const el = document.querySelector(sel);
+                                    if (!el) return;
+                                    const style = window.getComputedStyle(el);
+                                    // consideriamo solo elementi visibili e posizionati in alto come fixed/sticky
+                                    if ((style.position === 'fixed' || style.position === 'sticky') && el.offsetHeight > 0) {
+                                        // assicuriamoci che l'elemento sia posizionato in alto della pagina
+                                        const rect = el.getBoundingClientRect();
+                                        if (rect.bottom > 0 && rect.top >= -5) {
+                                            extraStickyHeight += rect.height;
+                                        }
+                                    }
+                                });
+
+                                const totalHeaderOffset = navbarHeight + extraStickyHeight;
+
+                                // Calcolo la posizione verticale desiderata in modo che
+                                // la sezione `target` sia centrata nella viewport, compensando l'header fisso e banner
+                                const targetRect = target.getBoundingClientRect();
+                                const targetTopRelativeToDoc = window.scrollY + targetRect.top;
+                                // Piccolo offset verticale aggiuntivo per spostare leggermente
+                                // la posizione finale verso il basso (migliore centratura visiva)
+                                const extraYOffset = 30; // px
+
+                                const scrollTo = Math.max(
+                                    0,
+                                    Math.round(targetTopRelativeToDoc - (window.innerHeight / 2) + (targetRect.height / 2) - totalHeaderOffset + extraYOffset)
+                                );
+
+                                window.scrollTo({ top: scrollTo, behavior: 'smooth' });
+                            }}
                     >
                         GET STARTED
                     </button>

@@ -80,9 +80,13 @@ exports.getProducts = async (req, res, next) => {
             case 'price-asc':
                 query += " ORDER BY p.price ASC";
                 break;
-                 case 'discount-desc':
+
+            case 'discount-asc':
+                query += " ORDER BY p.discount ASC";
+                break;
+            case 'discount-desc':
                 query += " ORDER BY p.discount DESC";
-                break; 
+                break;
             case 'price-desc':
                 query += " ORDER BY p.price DESC";
                 break;

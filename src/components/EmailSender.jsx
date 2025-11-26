@@ -8,20 +8,42 @@ import "../styles/components/EmailSender.css";
 
 //todo Componente per l'invio di email tramite un form
 export default function EmailSender({ onClose }) {
-  //todo Stato per i dati del form
+  // Stato per i dati del form
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  //todo Stato per il messaggio di stato dell'invio
+  // Stato testuale per messaggi brevi all'utente
   const [status, setStatus] = useState("");
+  // Flag booleani per gestire il rendering dello stato in modo affidabile
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   //todo Funzione per gestire i cambiamenti nei campi del form
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Funzione semplice per validare la struttura di un indirizzo email
+  const isValidEmail = (email) => {
+    if (!email) return false;
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
+
   //todo Funzione per inviare l'email
   const sendEmail = async (e) => {
     e.preventDefault();
+    // Controllo validità email: se non valida, mostro messaggio specifico
+    if (!isValidEmail(formData.email)) {
+      setStatus('errore inserimento valore email');
+      setIsError(true);
+      setIsLoading(false);
+      return;
+    }
+
     setStatus("Invio in corso...");
+    setIsLoading(true);
+    setIsError(false);
+    setIsSuccess(false);
 
     const templateParams = {
       name: formData.name,
@@ -35,8 +57,10 @@ export default function EmailSender({ onClose }) {
       // messaggio plain (se servisse nel template)
       message: formData.message || "",
 
-      // Campi che il template EmailJS utilizza: nome_utente e year
+      // Campi che il template EmailJS utilizza: nome_utente, nome e year
+      // mantenere sia `nome_utente` che `nome` per compatibilità con template diversi
       nome_utente: formData.name,
+      nome: formData.name,
       year: new Date().getFullYear(),
     };
 
@@ -60,9 +84,11 @@ export default function EmailSender({ onClose }) {
       await Promise.race([sendPromise, timeoutPromise]);
 
       console.log('EmailSender: invio completato');
-      setStatus("Registrazione completata! Controlla la tua email per il messaggio di benvenuto.");
+      setStatus("Invio completato! Controlla la tua email per il messaggio di benvenuto.");
+      setIsSuccess(true);
+      setIsLoading(false);
       setFormData({ name: "", email: "", message: "" });
-      if (onClose) setTimeout(() => onClose(), 1200);
+      if (onClose) setTimeout(() => onClose(), 4000);
     } catch (err) {
       console.error('EmailSender: errore invio email', err);
       if (err && err.message === 'timeout') {
@@ -70,14 +96,16 @@ export default function EmailSender({ onClose }) {
       } else {
         setStatus('Errore nell\'invio. Riprova più tardi.');
       }
+      setIsError(true);
+      setIsLoading(false);
     }
   };
 
   //todo Funzione per determinare il tipo di classe del messaggio di stato
   const getStatusClass = () => {
-    if (status.includes("completata")) return "status-success";
-    if (status.includes("Errore")) return "status-error";
-    if (status.includes("corso")) return "status-loading";
+    if (isSuccess) return "status-success";
+    if (isError) return "status-error";
+    if (isLoading) return "status-loading";
     return "";
   };
 
@@ -117,8 +145,8 @@ export default function EmailSender({ onClose }) {
             />
           </div>
 
-          <button className="email-submit-btn" type="submit" disabled={status.includes("corso")}>
-            {status.includes("corso") ? (
+          <button className="email-submit-btn" type="submit" disabled={isLoading}>
+            {isLoading ? (
               <>
                 <span className="loading-spinner"></span>
                 Invio in corso...
@@ -137,7 +165,7 @@ export default function EmailSender({ onClose }) {
         {/* todo: Mostro il messaggio di stato se presente */}
         {status && (
           <div className={`status-message ${getStatusClass()}`}>
-            {status === "Invio in corso..." && <span className="loading-spinner"></span>}
+            {isLoading && <span className="loading-spinner"></span>}
             {status}
           </div>
         )}

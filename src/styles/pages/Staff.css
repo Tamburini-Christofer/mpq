@@ -453,12 +453,13 @@
   }
   
   .team-grid {
-    grid-template-columns: 1fr; /* 1 per riga mobile */
+    grid-template-columns: 1fr 1fr; /* 1 per riga mobile */
     gap: 30px;
+    width: 100%;
   }
   
   .team-card-image-wrapper {
-    height: 280px; /* Immagini più grandi su mobile */
+    height: 350px; /* Immagini più grandi su mobile */
   }
   
   .careers-section {

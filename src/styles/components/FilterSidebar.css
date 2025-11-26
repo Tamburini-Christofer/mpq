@@ -25,6 +25,31 @@
     box-shadow: 6px 0 0 var(--pixel-border); /* Ombra hard a destra */
 }
 
+/* Assicura che il pulsante di reset stia sempre in fondo al pannello */
+.filters-sidebar .filters-reset-row {
+    margin-top: auto; /* spinge il contenuto precedente verso l'alto */
+    display: flex;
+    gap: 8px;
+}
+
+.filters-sidebar .reset-filters-btn,
+.filters-sidebar .load-more-btn {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    background: var(--purple);
+    color: var(--light);
+    border: 3px solid var(--pixel-border);
+    box-shadow: 3px 3px 0 var(--pixel-border);
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.filters-sidebar .reset-filters-btn:hover {
+    background: #5a2ee0;
+    transform: translate(-1px, -1px);
+}
+
 /* TITOLO SEZIONE */
 .filter-group h4 {
     color: var(--gold);
@@ -102,7 +127,7 @@
 }
 
 .search-icon {
-    color: var(--gold);
+    color: var(--pixel-gold);
     font-size: 20px;
 }
 

@@ -16,6 +16,7 @@ export default function FilterSidebar({
   onSearchChange,
   onFiltersChange,
   initialFilters = {}
+  , onResetFilters
 }) {
   const [filters, setFilters] = useState({
     ...DEFAULT_FILTERS,
@@ -185,6 +186,20 @@ export default function FilterSidebar({
           />
           <label>Contenuti accessibili</label>
         </div>
+      </div>
+      {/* RESET BUTTON (in fondo al pannello) */}
+      <div className="filters-reset-row">
+        <button
+          className="reset-filters-btn"
+          onClick={() => {
+            // reset local filters state and notify parent
+            setFilters({ ...DEFAULT_FILTERS });
+            if (typeof onFiltersChange === 'function') onFiltersChange({ ...DEFAULT_FILTERS });
+            if (typeof onResetFilters === 'function') onResetFilters();
+          }}
+        >
+          Azzera filtri
+        </button>
       </div>
     </aside>
   );
