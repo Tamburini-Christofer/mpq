@@ -67,6 +67,18 @@ const Layout = () => {
             const params = new URLSearchParams(window.location.search);
             const ok = params.get('checkout');
             if (ok === 'success') {
+                // Remove checkout params from URL immediately so refresh won't retrigger the overlay
+                try {
+                    params.delete('checkout');
+                    params.delete('session_id');
+                    const base = window.location.pathname;
+                    const newSearch = params.toString();
+                    const newUrl = newSearch ? `${base}?${newSearch}` : base;
+                    window.history.replaceState({}, document.title, newUrl);
+                } catch (e) {
+                    console.warn('Could not clean URL params after checkout success', e);
+                }
+
                 // show custom overlay with countdown then run cleanup
                 try {
                     setCheckoutCountdown(6);
@@ -124,7 +136,6 @@ const Layout = () => {
                         <div className="checkout-success-card">
                             <div className="checkout-success-title">Pagamento avvenuto</div>
                             <div className="checkout-success-msg">Grazie! Il pagamento è andato a buon fine. Riceverai a breve una email con il riepilogo dell'ordine.</div>
-                            <div className="checkout-success-timer">L'overlay si chiuderà automaticamente in {checkoutCountdown}s</div>
                         </div>
                     </div>
                 )}
