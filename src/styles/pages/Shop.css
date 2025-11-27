@@ -312,6 +312,7 @@
   /* Squadrato */
   gap: 8px;
   box-shadow: 2px 2px 0 var(--pixel-border);
+  margin: 30px 0;
 }
 
 .search-icon {
